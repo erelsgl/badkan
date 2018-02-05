@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html dir='rtl' lang='he'>
+
+<head>
+	<title>הגשת שיעורי בית</title>
+	<script src='jquery-3.2.1.min.js'></script>
+	<script src='utils.js'></script>
+	<meta charset="utf-8"></meta>
+</head>
+
+<body>
+<h1>הגשת שיעורי בית</h1>
+	<form style='border: solid 1px blue; margin: 10px; padding: 5px'>
+		<div style="text-align:center">
+הכניסו כאן קישור להודרת המאגר שלכם בגיטהאב
+            (חייב להתחיל ב https:// ולהסתיים ב .git):
+            <br/>
+			<input dir="ltr" id='giturl' style='width:30%'/>
+    	</div>
+		<div style='text-align:center'>
+			<button id='submit'>שליחה</button>
+		</div>
+	</form>
+
+	<h2>תוצאות ההגשה</h2>
+	<div id='output' dir='ltr' style='border: dashed 1px green; margin: 10px; padding: 5px; font-family: courier'>
+
+	</div>
+
+	<script>
+ 	    var websocketurl = "ws://127.0.0.1:5678/"
+
+		$("button#submit").click(() => {
+			var submission_json = JSON.stringify({
+				homework_name: "00-multiply",
+				git_url: $("input#giturl").val(),
+			});
+			logClient("color:#888", submission_json)
+            var websocket = new WebSocket(websocketurl);
+            websocket.onopen = (event) => {
+        		logServer("color:blue", "Connection opened!");
+                logClient("color:green; font-style:italic", submission_json)
+                websocket.send(submission_json);
+            }
+            websocket.onclose = (event) => {
+                if (event.code===1000)
+        		    logServer("color:blue", "Connection done!");
+        		else if (event.code===1006)
+        		    logServer("color:red", "Connection closed abnormally!");
+        		else
+        		    logServer("color:red", "Connection closed abnormally! Code="+event.code+". Reason="+websocketCloseReason(event.code));
+        		log("&nbsp;","&nbsp;")
+            }
+            websocket.onerror = (event) => {
+        		logServer("color:red", "Error in websocket.");
+            }
+            websocket.onmessage = (event) => {
+        		logServer("color:black; margin:0 1em 0 1em", event.data);
+            }
+
+			return false;
+		})
+
+	</script>
+
+</body>
+</html>
