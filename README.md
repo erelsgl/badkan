@@ -17,7 +17,7 @@ so let's install them first:
     apt install git git-gui python3 python3-pip python3-dev
     pip3 install websockets
 
-Badkan executes the homework assignments in an isolated environment. This is handled by *docker*
+Badkan executes the submitted exercises in an isolated environment. This is handled by *docker*
 Let's install docker then. On Ubuntu, do:
 
     apt update
@@ -44,6 +44,7 @@ Now, run the docker image (this opens a bash shell inside the docker container):
 
 In a second terminal, run the websockets server for checking and grading submissions: 
     
+    cd backend
     python3 server.py
     
 In a third terminal, run the http server for submissions (you can choose any port other than 80):
@@ -63,18 +64,20 @@ You can try to submit the following solution to the sample assignment:
 
 You should see that the grade is 100%.
 
-## Adding homework assignments
+## Adding exercises
 
-A homework assignment is contained in a folder.
-The name of the folder is the name of the assignment.
-The default installation contains a single example assignment:
-"00-multiply". 
-
+An *exercise* corresponds to a subfolder of the "exercises" folder.
 Inside the folder, there should be an executable program
 called "grade". This program is responsible for checking and grading the submissions.
-It will be run from inside the user's folder.
+For example, it can contain a "make" command, and some commands for running the executable and comparing against expected outputs.
+
+Each student submits a solution using a git url of a repository. 
+Badkan clones/pulls the repository, enters the folder,
+and runs the "grade" program from there.
  
 To copy an assignment folder to docker, do:
 
     docker cp <assignment-folder> badkan:/
 
+The default installation contains a single example exercise:
+"00-multiply". 

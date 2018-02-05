@@ -30,10 +30,13 @@
 	<script>
 	    var PORT = 5678;   // same as in ../server.py
  	    var websocketurl = "ws://"+location.hostname+":"+PORT+"/"
+ 	    var exercise = getParameterByName("exercise")
+ 	    if (!exercise)
+ 	       exercise = "00-multiply"; // default exercise
 
 		$("button#submit").click(() => {
 			var submission_json = JSON.stringify({
-				homework_name: "00-multiply",
+				exercise: exercise,
 				git_url: $("input#giturl").val(),
 			});
 			logClient("color:#888", submission_json)
