@@ -8,8 +8,7 @@ SINCE: 2018-01
 """
 import websockets, subprocess, asyncio, os, urllib,  json
 
-
-PORT = 5678
+PORT = 5678   # same port as in frontend/index.html
 
 async def tee(websocket, message):
     print("> " + message)

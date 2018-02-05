@@ -54,6 +54,14 @@ In a third terminal, run the http server for submissions (you can choose any por
 Optional: check that it is working by pointing your browser to:
 
     http://localhost
+    
+(if you chose a different port number, put it after the "localhost").
+
+You can try to submit the following solution to the sample assignment:
+
+    https://github.com/erelsgl/cpp-homework-00.git
+
+You should see that the grade is 100%.
 
 ## Adding homework assignments
 

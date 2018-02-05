@@ -28,7 +28,8 @@
 	</div>
 
 	<script>
- 	    var websocketurl = "ws://127.0.0.1:5678/"
+	    var PORT = 5678;   // same as in ../server.py
+ 	    var websocketurl = "ws://"+location.hostname+":"+PORT+"/"
 
 		$("button#submit").click(() => {
 			var submission_json = JSON.stringify({
