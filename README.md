@@ -64,20 +64,24 @@ You can try to submit the following solution to the sample assignment:
 
 You should see that the grade is 100%.
 
-## Adding exercises
+## Exercises
 
 An *exercise* corresponds to a subfolder of the "exercises" folder.
 Inside the folder, there should be an executable program
-called "grade". This program is responsible for checking and grading the submissions.
-For example, it can contain a "make" command, and some commands for running the executable and comparing against expected outputs.
+called *grade*. This program is responsible for checking and grading the submissions.
+For example, it can contain a "make" command, 
+and some commands for running the executable and comparing against expected outputs.
 
-Each student submits a solution using a git url of a repository. 
-Badkan clones/pulls the repository, enters the folder,
-and runs the "grade" program from there.
- 
-To copy an assignment folder to docker, do:
+To submit an exercise, a student should:
 
-    docker cp <assignment-folder> badkan:/
+1. put the solution in a git repository (e.g. in GitHub);
+2. submit the clone-url of this repository into the frontend.
 
-The default installation contains a single example exercise:
-"00-multiply". 
+The system then:
+
+3. clones the repository into the docker container;
+4. copies all files from the exercise folder into the repository folder;
+5. enters the repository folder and runs "grade".
+
+The default installation contains two example exercises:
+"00-multiply" and "00-reverse". 

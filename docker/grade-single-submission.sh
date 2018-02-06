@@ -33,4 +33,7 @@ echo "! ls -latr"
 ls -latr
 
 echo "! grade"
-../../../$HOMEWORKNAME/grade
+cp ../../../$HOMEWORKNAME/* .
+./grade
+
+

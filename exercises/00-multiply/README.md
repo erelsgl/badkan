@@ -1,4 +1,4 @@
-This is a sample homework assignment.
+This is a sample exercise.
 The assignment is:
 
 write a C++ program that receives two numbers through standard input

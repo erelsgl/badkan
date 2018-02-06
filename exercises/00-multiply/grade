@@ -1,7 +1,5 @@
 #!/bin/bash
 
-HERE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
 echo "! make"
 make
 
@@ -10,7 +8,7 @@ echo "! run on inputs"
 let right=0
 let wrong=0
 
-OUTPUT=`./main.exe < $HERE/1-input`
+OUTPUT=`./main.exe < 1-input`
 EXPECTED=`cat $HERE/1-output`
 echo "Input 1: your output=$OUTPUT, expected output=$EXPECTED"
 if [ "$OUTPUT" == "$EXPECTED" ]; then
@@ -19,7 +17,7 @@ else
     let wrong++
 fi
 
-OUTPUT=`./main.exe < $HERE/2-input`
+OUTPUT=`./main.exe < 2-input`
 EXPECTED=`cat $HERE/2-output`
 echo "Input 2: your output=$OUTPUT, expected output=$EXPECTED"
 if [ "$OUTPUT" == "$EXPECTED" ]; then

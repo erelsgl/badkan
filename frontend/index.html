@@ -30,7 +30,7 @@
 	<script>
 	    var PORT = 5678;   // same as in ../server.py
  	    var websocketurl = "ws://"+location.hostname+":"+PORT+"/"
- 	    var exercise = getParameterByName("exercise")
+ 	    var exercise = getParameterByName("exercise");     // in utils.js
  	    if (!exercise)
  	       exercise = "00-multiply"; // default exercise
 
@@ -39,10 +39,10 @@
 				exercise: exercise,
 				git_url: $("input#giturl").val(),
 			});
-			logClient("color:#888", submission_json)
+			logClient("color:#888", submission_json);  // in utils.js
             var websocket = new WebSocket(websocketurl);
             websocket.onopen = (event) => {
-        		logServer("color:blue", "Connection opened!");
+        		logServer("color:blue", "Connection opened!"); // in utils.js
                 logClient("color:green; font-style:italic", submission_json)
                 websocket.send(submission_json);
             }
