@@ -20,7 +20,6 @@ SRCS=reverse.cpp main.cpp
 OBJS=$(subst .c%,.o,$(SRCS))
 
 all: $(MAINEXECUTABLE)
-	$(MAINEXECUTABLE)
 
 $(MAINEXECUTABLE): $(OBJS)
 	$(CXX) $(LDFLAGS) $(OBJS) $(LDLIBS) -o $(MAINEXECUTABLE)

@@ -2,14 +2,15 @@
 <html dir='rtl' lang='he'>
 
 <head>
-	<title>הגשת שיעורי בית</title>
+	<title>הגשת תרגיל</title>
 	<script src='jquery-3.2.1.min.js'></script>
 	<script src='utils.js'></script>
 	<meta charset="utf-8"></meta>
 </head>
 
 <body>
-<h1>הגשת שיעורי בית</h1>
+<h1>הגשת תרגיל</h1>
+<h2>קוד התרגיל: <span id="exercise"></span></h2>
 	<form style='border: solid 1px blue; margin: 10px; padding: 5px'>
 		<div style="text-align:center">
 הכניסו כאן קישור להודרת המאגר שלכם בגיטהאב
@@ -33,6 +34,7 @@
  	    var exercise = getParameterByName("exercise");     // in utils.js
  	    if (!exercise)
  	       exercise = "00-multiply"; // default exercise
+ 	    $("#exercise").html(exercise);
 
 		$("button#submit").click(() => {
 			var submission_json = JSON.stringify({
