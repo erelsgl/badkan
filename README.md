@@ -47,18 +47,18 @@ The system has three different parts that should be launched separately
 
 1. Run the docker image (this opens a bash shell inside the docker container):
 
-    sudo docker run --name badkan --rm -i -t erelsgl/badkan bash
+        sudo docker run --name badkan --rm -i -t erelsgl/badkan bash
 
 2. In a second terminal, run the websockets server for checking and grading submissions. 
 Note: it must be run as root since it uses docker. 
 
-    cd backend
-    sudo python3 server.py
+        cd backend
+        sudo python3 server.py
     
 3. In a third terminal, run the http server for submissions (you can choose any port other than 80):
 
-    cd frontend
-    python3 -m http.server 80
+        cd frontend
+        python3 -m http.server 80
 
 To check that it is working, point your browser to:
 
