@@ -9,7 +9,7 @@ let right=0
 let wrong=0
 
 OUTPUT=`./main.exe < 1-input`
-EXPECTED=`cat $HERE/1-output`
+EXPECTED=`cat 1-output`
 echo "Input 1: your output=$OUTPUT, expected output=$EXPECTED"
 if [ "$OUTPUT" == "$EXPECTED" ]; then
     let right++
@@ -18,7 +18,7 @@ else
 fi
 
 OUTPUT=`./main.exe < 2-input`
-EXPECTED=`cat $HERE/2-output`
+EXPECTED=`cat 2-output`
 echo "Input 2: your output=$OUTPUT, expected output=$EXPECTED"
 if [ "$OUTPUT" == "$EXPECTED" ]; then
     let right++

@@ -19,12 +19,3 @@ ENV NAME World
 CMD /bin/bash
 
 
-# TO BUILD:
-# sudo docker build -t erelsgl/badkan:1.0 .
-# sudo docker image tag erelsgl/badkan:1.0 erelsgl/badkan:latest
-#
-# TO RUN:
-# sudo docker run --name badkan --rm -i -t erelsgl/badkan bash
-#
-# TO COPY FOLDER (e.g. a new homework folder):
-# sudo docker cp 00-multiply badkan:/

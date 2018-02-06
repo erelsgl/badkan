@@ -27,6 +27,7 @@ Let's install docker then. On Ubuntu, do:
     
 Optional: check that docker is installed correctly:
 
+    service docker status
     docker run hello-world
 
 Next. pull a docker image from the public docker repository:
@@ -36,25 +37,32 @@ Next. pull a docker image from the public docker repository:
 This can take a very long time.
 Alternatively, you can build the image yourself:
 
+    cd docker
     docker build -t erelsgl/badkan:latest .
-
-Now, run the docker image (this opens a bash shell inside the docker container):
-
-    docker run --name badkan --rm -i -t erelsgl/badkan bash
-
-In a second terminal, run the websockets server for checking and grading submissions: 
     
+## Launch
+
+The system has three different parts that should be launched separately 
+(in the future there should be a single launch script.
+
+1. Run the docker image (this opens a bash shell inside the docker container):
+
+    sudo docker run --name badkan --rm -i -t erelsgl/badkan bash
+
+2. In a second terminal, run the websockets server for checking and grading submissions. 
+Note: it must be run as root since it uses docker. 
+
     cd backend
-    python3 server.py
+    sudo python3 server.py
     
-In a third terminal, run the http server for submissions (you can choose any port other than 80):
+3. In a third terminal, run the http server for submissions (you can choose any port other than 80):
 
     cd frontend
-    python3 -m http.server 80 &
-    
-Optional: check that it is working by pointing your browser to:
+    python3 -m http.server 80
 
-    http://localhost
+To check that it is working, point your browser to:
+
+    http://localhost?exercise=00-multiply
     
 (if you chose a different port number, put it after the "localhost").
 
@@ -63,6 +71,7 @@ You can try to submit the following solution to the sample assignment:
     https://github.com/erelsgl/cpp-homework-00.git
 
 You should see that the grade is 100%.
+
 
 ## Exercises
 

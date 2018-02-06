@@ -29,9 +29,6 @@ else
     git pull 2>&1
 fi
 
-echo "! ls -latr"
-ls -latr
-
 echo "! grade"
 cp ../../../$HOMEWORKNAME/* .
 ./grade

@@ -44,13 +44,13 @@
 			logClient("color:#888", submission_json);  // in utils.js
             var websocket = new WebSocket(websocketurl);
             websocket.onopen = (event) => {
-        		logServer("color:blue", "Connection opened!"); // in utils.js
+        		logServer("color:blue", "Submission starting!"); // in utils.js
                 logClient("color:green; font-style:italic", submission_json)
                 websocket.send(submission_json);
             }
             websocket.onclose = (event) => {
                 if (event.code===1000)
-        		    logServer("color:blue", "Connection done!");
+        		    logServer("color:blue", "Submission completed!");
         		else if (event.code===1006)
         		    logServer("color:red", "Connection closed abnormally!");
         		else
