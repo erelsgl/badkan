@@ -60,7 +60,7 @@ async def run(websocket, path):
     print ("> Closing connection")
 
 
-websocketserver = websockets.server.serve(run, '127.0.0.1', PORT, origins=None)
+websocketserver = websockets.server.serve(run, '0.0.0.0', PORT, origins=None)
 print("{} listening at {}".format(type(websocketserver), PORT))
 
 asyncio.get_event_loop().run_until_complete(websocketserver)
