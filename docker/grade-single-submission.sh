@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 # INPUT: git-username and git-repository.
-# ACTION: either clone the repository of that username into "submissions" and cd into it,
-#         or cd into it and pull.
+# ACTION: clone the repository of that username into "submissions", cd into it, and run the
 
 HOMEWORKNAME=$1
 USERNAME=$2
@@ -32,5 +31,3 @@ cd $REPOSITORY
 echo "! grade"
 cp ../../../$HOMEWORKNAME/* .
 ./grade
-
-

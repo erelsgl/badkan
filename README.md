@@ -118,3 +118,28 @@ The system then:
 
 The default installation contains two example exercises:
 "00-multiply" and "00-reverse". 
+
+## Maintenance
+
+To enter the running docker container:
+
+    sudo docker attach badkan
+    
+To exit back to the host:
+
+    exit
+
+To copy files from the host into the container:
+
+    docker cp <local-file> badkan:/<remote-file>
+    
+To replace the container with an updated container:
+
+    sudo docker pull erelsgl/badkan:latest
+    sudo docker images    # note the old image with the <none> tag
+    sudo docker rmi <old-image-id>
+    sudo docker run --name badkan --rm -i -t erelsgl/badkan bash
+    
+To replace an old exercise-grader with a new one: 
+put the new grader code in the "exercises" folder on the *host*.
+The server will automatically copy it to the docker container.

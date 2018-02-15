@@ -1,3 +1,8 @@
+/**
+ * A main program for grading the "00-reverse" exercise.
+ * AUTHOR: Erel Segal-Halevi
+ */
+
 #include "reverse.h"
 #include <iostream>
 using namespace std;

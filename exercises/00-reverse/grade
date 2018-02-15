@@ -4,4 +4,5 @@ echo "! make"
 make
 
 echo "! run main program for testing"
-./main.exe
+./a.out
+

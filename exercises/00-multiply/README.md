@@ -1,7 +1,8 @@
 This is a sample exercise.
 The assignment is:
 
-> Write a C++ program that receives two numbers through standard input
+> Write a makefile that creates a program called "main.exe",
+that receives two numbers through standard input
 and outputs their product to standard output. 
 
 A sample solution is in this GitHub repo:
