@@ -16,18 +16,18 @@ fi
 echo "! cd $USERNAME"
 cd $USERNAME
 
-if [ ! -d $REPOSITORY ]; then
-    URL=https://github.com/$USERNAME/$REPOSITORY.git
-    echo "! git clone $URL"
-    git clone $URL 2>&1
-    echo "! cd $REPOSITORY"
-    cd $REPOSITORY
-else
-    echo "! cd $REPOSITORY"
-    cd $REPOSITORY
-    echo "! git pull"
-    git pull 2>&1
+if [ -d $REPOSITORY ]; then
+    rm -rf $REPOSITORY
+    # echo "! cd $REPOSITORY"
+    # cd $REPOSITORY
+    # echo "! git pull"
+    # git pull 2>&1
 fi
+URL=https://github.com/$USERNAME/$REPOSITORY.git
+echo "! git clone $URL"
+git clone $URL 2>&1
+echo "! cd $REPOSITORY"
+cd $REPOSITORY
 
 echo "! grade"
 cp ../../../$HOMEWORKNAME/* .
