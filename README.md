@@ -43,6 +43,12 @@ Alternatively, you can build the image yourself:
     docker build -t erelsgl/badkan:latest .
     sudo docker images       # check that you see the badkan image
 
+If you want to use a process-monitor to run the servers, you can use pm2:
+
+    sudo apt install npm 
+    sudo npm install -g --no-optional pm2@latest
+
+
 
 ## Start
 

@@ -11,7 +11,8 @@ import websockets, subprocess, asyncio, os, urllib,  json, re
 PORT = 5678   # same port as in frontend/index.html
 EXERCISE_DIR = "../exercises"
 
-GIT_REGEXP = re.compile("http.*github[.]com/(.*)/(.*)([.]git)?", re.IGNORECASE)
+GIT_REGEXP = re.compile("http.*github[.]com/(.*)/(.*)", re.IGNORECASE)
+GIT_CLEAN  = re.compile(".git.*", re.IGNORECASE)
 
 async def tee(websocket, message):
     """
@@ -41,7 +42,7 @@ async def check_submission(websocket:object, exercise:str, git_url:str):
 
     matches = GIT_REGEXP.search(git_url)
     username = matches.group(1)
-    repository = matches.group(2)
+    repository = GIT_CLEAN.sub("",matches.group(2))
 
     # Grade the submission inside the docker container named "badkan"
     with subprocess.Popen(["docker", "exec", "badkan",
