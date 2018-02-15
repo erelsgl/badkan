@@ -6,9 +6,14 @@ if [ -z "$FRONTEND_PORT" ]; then
    FRONTEND_PORT=80
 fi
 
+# 1. Start the docker process:
+docker run --name badkan --rm -itd erelsgl/badkan bash
+
+# 2. Start the backend server:
 cd backend
 nohup python3 server.py &
 
+# 2. Start the frontend server:
 cd ../frontend
 nohup python3 -m http.server $FRONTEND_PORT &
 echo "Try me by: lynx http://localhost:$FRONTEND_PORT"

@@ -52,18 +52,10 @@ If you want to use a process-monitor to run the servers, you can use pm2:
 
 ## Start
 
-The system has three different parts that should be launched separately 
-(in the future there should be a single launch script.
+The system has three different parts: docker, backend and frontend.
 
-1. Run the docker image (this opens a bash shell inside the docker container):
+They can all be started with:
 
-        sudo docker run --name badkan --rm -i -t erelsgl/badkan bash
-        ls      # verify that you see grade-single-submission.sh
-
-2. In a second terminal, run the backend server (websockets server for checking and grading submissions)
-and the frontend server (http server for submissions). Note: it must be run as root since it uses docker. 
-
-    sudo docker container ls     # check that you see badkan running
     cd badkan
     sudo bash start.sh <FRONTEND_PORT>
 
@@ -71,10 +63,14 @@ For example:
 
     sudo bash start.sh 80
 
-To check that it is working, point your browser to:
+Verify that the docker container is running:
 
-    http://localhost:<FRONTEND_PORT>?exercise=00-multiply
-    
+    sudo docker container ls
+
+Verify that the front-end is running:
+
+    <your-browser> http://localhost:<FRONTEND_PORT>?exercise=00-multiply
+
 (If you installed badkan on a remote server, use its IP address instead of localhost).
 
 You can try to submit the following solution to the sample assignment:
@@ -127,7 +123,7 @@ To enter the running docker container:
     
 To exit back to the host:
 
-    exit
+    Ctrl+P+Q
 
 To copy files from the host into the container:
 
