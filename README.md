@@ -53,24 +53,22 @@ The system has three different parts that should be launched separately
         sudo docker run --name badkan --rm -i -t erelsgl/badkan bash
         ls      # verify that you see grade-single-submission.sh
 
-2. In a second terminal, run the websockets server for checking and grading submissions. 
-Note: it must be run as root since it uses docker. 
+2. In a second terminal, run the backend server (websockets server for checking and grading submissions)
+and the frontend server (http server for submissions). Note: it must be run as root since it uses docker. 
 
-        sudo docker container ls     # check that you see badkan running 
-        cd badkan/backend
-        sudo python3 server.py
-    
-3. In a third terminal, run the http server for submissions (you can choose any port other than 80):
+        sudo docker container ls     # check that you see badkan running
+        cd badkan
+        bash start.sh <FRONTEND_PORT>
 
-        cd badkan/frontend
-        sudo python3 -m http.server 80
+For example:
+
+        bash start.sh 80
 
 To check that it is working, point your browser to:
 
-    http://localhost?exercise=00-multiply
+    http://localhost:<FRONTEND_PORT>?exercise=00-multiply
     
-(If you installed badkan on a remote server, use its IP address instead of localhost. 
- If you chose a different port number, put it after the "localhost").
+(If you installed badkan on a remote server, use its IP address instead of localhost).
 
 You can try to submit the following solution to the sample assignment:
 
