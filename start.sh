@@ -10,5 +10,5 @@ cd backend
 nohup python3 server.py &
 
 cd ../frontend
-nohup python3 -m http.server FRONTEND_PORT &
+nohup python3 -m http.server $FRONTEND_PORT &
 echo "Try me by: lynx http://localhost:$FRONTEND_PORT"
