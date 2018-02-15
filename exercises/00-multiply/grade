@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "*** Grade exercise 00-multiply version 2 *** "
+
 echo "! make"
 make
 
