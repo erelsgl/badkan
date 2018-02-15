@@ -43,7 +43,8 @@ Alternatively, you can build the image yourself:
     docker build -t erelsgl/badkan:latest .
     sudo docker images       # check that you see the badkan image
 
-## Launch
+
+## Start
 
 The system has three different parts that should be launched separately 
 (in the future there should be a single launch script.
@@ -56,13 +57,13 @@ The system has three different parts that should be launched separately
 2. In a second terminal, run the backend server (websockets server for checking and grading submissions)
 and the frontend server (http server for submissions). Note: it must be run as root since it uses docker. 
 
-        sudo docker container ls     # check that you see badkan running
-        cd badkan
-        bash start.sh <FRONTEND_PORT>
+    sudo docker container ls     # check that you see badkan running
+    cd badkan
+    sudo bash start.sh <FRONTEND_PORT>
 
 For example:
 
-        bash start.sh 80
+    sudo bash start.sh 80
 
 To check that it is working, point your browser to:
 
@@ -75,6 +76,18 @@ You can try to submit the following solution to the sample assignment:
     https://github.com/erelsgl/cpp-homework-00.git
 
 You should see that the grade is 100%.
+
+
+## Restart
+
+When you upgrade badkan, you have to restart it. Since both badkan servers
+run in python, you can stop it by just:
+
+    sudo killall python3
+    
+then start it again by:
+
+    sudo bash start.sh 80
 
 
 ## Exercises
