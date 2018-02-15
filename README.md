@@ -5,7 +5,8 @@ A server for automatic checking and grading of programming assignments.
 
 Clone the rep:
 
-    clone https://github.com/erelsgl/badkan.git
+    git clone https://github.com/erelsgl/badkan.git
+    cd badkan
     
 We will do everything as root:
 
@@ -14,13 +15,14 @@ We will do everything as root:
 Badkan uses python and its websockets library, 
 so let's install them first:
 
+    apt update
     apt install git git-gui python3 python3-pip python3-dev
+    pip3 install --upgrade pip
     pip3 install websockets
 
-Badkan executes the submitted exercises in an isolated environment. This is handled by *docker*
+Badkan executes the submitted exercises in an isolated environment. This is handled by [docker](https://www.docker.com/).
 Let's install docker then. On Ubuntu, do:
 
-    apt update
     curl -fsSL https://get.docker.com/ | sh
     systemctl start docker
     systemctl enable docker
@@ -30,16 +32,16 @@ Optional: check that docker is installed correctly:
     service docker status
     docker run hello-world
 
-Next. pull a docker image from the public docker repository:
+Next, pull a docker image of badkan from the public docker repository:
 
     docker pull erelsgl/badkan
 
-This can take a very long time.
+This can take a very long time since the image is large.
 Alternatively, you can build the image yourself:
 
     cd docker
     docker build -t erelsgl/badkan:latest .
-    
+
 ## Launch
 
 The system has three different parts that should be launched separately 
