@@ -11,9 +11,11 @@ docker run --name badkan --rm -itd erelsgl/badkan bash
 
 # 2. Start the backend server:
 cd backend
+rm nohup.out
 nohup python3 server.py &
 
 # 2. Start the frontend server:
 cd ../frontend
+rm nohup.out
 nohup python3 -m http.server $FRONTEND_PORT &
 echo "Try me by: lynx http://localhost:$FRONTEND_PORT"
