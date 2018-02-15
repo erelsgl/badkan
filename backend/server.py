@@ -6,10 +6,12 @@ A server for submission and checking of exercises.
 AUTHOR: Erel Segal-Halevi
 SINCE: 2018-01
 """
-import websockets, subprocess, asyncio, os, urllib,  json
+import websockets, subprocess, asyncio, os, urllib,  json, re
 
 PORT = 5678   # same port as in frontend/index.html
 EXERCISE_DIR = "../exercises"
+
+GIT_REGEXP = re.compile("http.*github[.]com/(.*)/(.*)([.]git)?", re.IGNORECASE)
 
 async def tee(websocket, message):
     """
@@ -30,16 +32,16 @@ async def check_submission(websocket:object, exercise:str, git_url:str):
         await tee(websocket, "exercise '{}' not found".format(exercise))
         return
 
-    # Copy the files related to gradine from the exercise folder to the docker container.
+    # Copy the files related to grading from the exercise folder to the docker container.
     with subprocess.Popen(["docker", "cp", EXERCISE_DIR+"/"+exercise, "badkan:/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True) as proc:
         for line in proc.stdout:
             print(line)
         for line in proc.stderr:
             print(line)
 
-    path = urllib.parse.urlparse(git_url).path[1:-4]  # skip initial "/" and final ".git"
-    (username,repository) = os.path.split(path)
-    #await tee(websocket, "Cloning {} into {}/{}".format(git_url, username, repository))
+    matches = GIT_REGEXP.search(git_url)
+    username = matches.group(1)
+    repository = matches.group(2)
 
     # Grade the submission inside the docker container named "badkan"
     with subprocess.Popen(["docker", "exec", "badkan",
