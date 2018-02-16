@@ -67,9 +67,18 @@ Verify that the docker container is running:
 
     sudo docker container ls
 
+Verify that the back-end is running:
+
+    less backend/nohup.out
+
 Verify that the front-end is running:
 
+    sudo less frontend/nohup.out
     <your-browser> http://localhost:<FRONTEND_PORT>?exercise=00-multiply
+
+For example:
+
+    lynx http://localhost?exercise=00-multiply
 
 (If you installed badkan on a remote server, use its IP address instead of localhost).
 
