@@ -20,6 +20,7 @@
     	</div>
 		<div style='text-align:center'>
 			<button id='submit'>שליחה</button>
+			<button id='clear'>ניקוי</button>
 		</div>
 	</form>
 
@@ -35,6 +36,12 @@
  	    if (!exercise)
  	       exercise = "00-multiply"; // default exercise
  	    $("#exercise").html(exercise);
+
+
+		$("button#clear").click(() => {
+			$("div#output").html()
+			return false;
+		})
 
 		$("button#submit").click(() => {
 			var submission_json = JSON.stringify({
