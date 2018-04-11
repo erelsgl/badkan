@@ -107,6 +107,10 @@ then start it again by:
 
     sudo bash start.sh 80
 
+You can run both by:
+
+    bash restart.sh 80
+
 
 ## Exercises
 
