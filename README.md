@@ -84,9 +84,16 @@ For example:
 
 You can try to submit the following solution to the sample assignment:
 
-    https://github.com/erelsgl/cpp-homework-00.git
+    https://github.com/ereltest/multiply.git
 
 You should see that the grade is 100%.
+
+
+## Logs
+
+The backend logs are at backend/nohup.out
+
+The frontend logs are at frontend/nohup.out
 
 
 ## Restart
