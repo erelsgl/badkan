@@ -45,8 +45,10 @@ async def check_submission(websocket:object, exercise:str, git_url:str):
     repository = GIT_CLEAN.sub("",matches.group(2))
 
     # Grade the submission inside the docker container named "badkan"
-    with subprocess.Popen(["docker", "exec", "badkan",
-        "bash", "grade-single-submission.sh", exercise, username, repository], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True) as proc:
+    NICENESS = "5";   # execute the grader with a decreased priority so that it does not stop the frontend
+    with subprocess.Popen(
+        ["docker", "exec", "badkan", "nice", "-n", NICENESS, "bash", "grade-single-submission.sh", exercise, username, repository],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True) as proc:
         for line in proc.stdout:
             await tee(websocket, line.strip())
         for line in proc.stderr:

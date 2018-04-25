@@ -30,4 +30,4 @@ cd $REPOSITORY
 
 echo "! grade"
 cp ../../../$HOMEWORKNAME/* .
-./grade
+timeout ./grade
