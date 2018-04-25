@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 FRONTEND_PORT=$1
+FRONTEND_Test_PORT=$2
 if [ -z "$FRONTEND_PORT" ]; then
    FRONTEND_PORT=80
 fi
@@ -23,4 +24,9 @@ cd ../frontend
 sudo rm nohup.out
 sudo nohup python3 -u -m http.server $FRONTEND_PORT &
 # -u = unbuffered. See https://stackoverflow.com/a/107717/827927
+
+cd Test
+sudo rm nohup.out
+sudo nohup python3 -u -m http.server $FRONTEND_Test_PORT &
+
 echo "Try me by: lynx http://localhost:$FRONTEND_PORT"
