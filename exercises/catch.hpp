@@ -20,7 +20,7 @@ int main() {
     for (int i=0; i<tests.size(); ++i)
         tests[i]();
     int numTotal = numPass + numFail;
-    cout << "assertions: " << numTotal << " | " << numPass << " passed | " << numFail << " failed" << endl;
+    cout << "assertions: " << numTotal << " | " << numPass << " passed | " << numFail << " failed";
 }
 
 #define REQUIRE(condition) \
