@@ -30,10 +30,10 @@
 	</div>
 
 	<script>
- 	    var port = getParameterByName("port");     // in utils.js
- 	    if (!port)
- 	       port = 5678; // default port - same as in ../server.py
- 	    var websocketurl = "ws://"+location.hostname+":"+port+"/"
+ 	    var backendPort = getParameterByName("backend");     // in utils.js
+ 	    if (!backendPort )
+ 	       backendPort = 5678; // default port - same as in ../server.py
+ 	    var websocketurl = "ws://"+location.hostname+":"+backendPort +"/"
  	    var exercise = getParameterByName("exercise");     // in utils.js
  	    if (!exercise)
  	       exercise = "00-multiply"; // default exercise
