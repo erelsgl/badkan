@@ -7,7 +7,7 @@ AUTHOR: Erel Segal-Halevi
 SINCE: 2018-01
 """
 import websockets, subprocess, asyncio, os, urllib,  json, re
-import csv
+import csv, time
 import sys
 
 PORT = sys.argv[1] if len(sys.argv)>=2 else 5678   # same port as in frontend/index.html
@@ -68,9 +68,10 @@ async def appendGradeTofile(grade,submission):
         print("this is an anonymous submission")
         return
     print("this is NOT an anonymous submission")
+    timestamp = time.asctime(time.localtime())
     file = open('grades'+ submission["exercise"] +'.csv', 'a+')
     gradesCsv = csv.writer(file)
-    gradesCsv.writerow([submission["ID_1"],submission["ID_2"],submission["ID_3"],submission["student_names"],grade])
+    gradesCsv.writerow([submission["ID_1"],submission["ID_2"],submission["ID_3"],submission["student_names"],grade.rstrip(),timestamp])
     file.close()
 
 async def run(websocket, path):

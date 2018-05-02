@@ -34,7 +34,7 @@ fi
 echo "! grade"
 
 # Copy all grading files from the homework folder to the current student's folder:
-cp ../../../$HOMEWORKNAME/* .
+cp -r ../../../$HOMEWORKNAME/* .
 
 # Run the actual grading script for the specific homework:
 ./grade
