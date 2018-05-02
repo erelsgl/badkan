@@ -2,9 +2,9 @@
 # INPUT: git-username and git-repository.
 # ACTION: clone the repository of that username into "submissions", cd into it, and run the
 
-HOMEWORKNAME=$1
-USERNAME=$2
-REPOSITORY=$3
+export HOMEWORKNAME=$1
+export USERNAME=$2
+export REPOSITORY=$3
 
 cd submissions
 
@@ -29,5 +29,9 @@ echo "! cd $REPOSITORY"
 cd $REPOSITORY
 
 echo "! grade"
+
+# Copy all grading files from the homework folder to the current student's folder:
 cp ../../../$HOMEWORKNAME/* .
-timeout ./grade
+
+# Run the actual grading script for the specific homework:
+./grade
