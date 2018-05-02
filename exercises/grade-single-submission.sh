@@ -16,17 +16,20 @@ echo "! cd $USERNAME"
 cd $USERNAME
 
 if [ -d $REPOSITORY ]; then
-    rm -rf $REPOSITORY
-    # echo "! cd $REPOSITORY"
-    # cd $REPOSITORY
-    # echo "! git pull"
-    # git pull 2>&1
+    # rm -rf $REPOSITORY
+    echo "! cd $REPOSITORY"
+    cd $REPOSITORY
+    echo "! git fetch"
+    git fetch
+    echo "! git reset --hard origin/master"
+    git reset --hard origin/master
+else
+    URL=https://github.com/$USERNAME/$REPOSITORY.git
+    echo "! git clone $URL"
+    git clone $URL
+    echo "! cd $REPOSITORY"
+    cd $REPOSITORY
 fi
-URL=https://github.com/$USERNAME/$REPOSITORY.git
-echo "! git clone $URL"
-git clone $URL 2>&1
-echo "! cd $REPOSITORY"
-cd $REPOSITORY
 
 echo "! grade"
 

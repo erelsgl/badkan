@@ -74,11 +74,11 @@ Verify that the back-end is running:
 Verify that the front-end is running:
 
     sudo less frontend/nohup.out
-    <your-browser> http://localhost:<FRONTEND_PORT>?exercise=00-multiply
+    <your-browser> http://localhost:<FRONTEND_PORT>?exercise=multiply
 
 For example:
 
-    lynx http://localhost?exercise=00-multiply
+    lynx http://localhost?exercise=multiply
 
 (If you installed badkan on a remote server, use its IP address instead of localhost).
 
@@ -123,7 +123,7 @@ and some commands for running the executable and comparing against expected outp
 To submit an exercise, a student should:
 
 1. put the solution in a git repository (e.g. in GitHub);
-2. open the frontend with the exercise code, e.g. http://server?exercise=00-reverse 
+2. open the frontend with the exercise code, e.g. http://server?exercise=reverse 
 3. submit the clone-url of this repository.
 
 The system then:
@@ -133,7 +133,7 @@ The system then:
 6. enters the repository folder and runs "grade".
 
 The default installation contains two example exercises:
-"00-multiply" and "00-reverse". 
+"multiply" and "reverse". 
 
 ## Maintenance
 

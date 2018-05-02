@@ -9,8 +9,8 @@ RUN mkdir submissions
 # Set the working directory to /
 WORKDIR /
 
-# Copy the current directory contents into the container at /app
-COPY grade-single-submission.sh /
+# Copy the current directory contents into the container at /
+# COPY grade-single-submission.sh /
 
 # Define environment variable
 ENV NAME World

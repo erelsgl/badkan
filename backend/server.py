@@ -40,7 +40,7 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
     grade = "putGradeHere"
 
     # Copy the files related to grading from the exercise folder to the docker container.
-    with subprocess.Popen(["docker", "cp", EXERCISE_DIR+"/"+exercise, "badkan:/"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True) as proc:
+    with subprocess.Popen(["docker", "cp", EXERCISE_DIR+"/grade-single-submission.sh", EXERCISE_DIR+"/"+exercise, "badkan:/"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True) as proc:
         for line in proc.stdout:
             print(line)
 
