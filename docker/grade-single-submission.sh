@@ -29,5 +29,5 @@ echo "! cd $REPOSITORY"
 cd $REPOSITORY
 
 echo "! grade"
-cp ../../../$HOMEWORKNAME/* .
-timeout ./grade
+cp -r ../../../$HOMEWORKNAME/* .
+./grade
