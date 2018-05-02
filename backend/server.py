@@ -57,9 +57,9 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
             if(gradeLinePrefix in line):
                 grade = line[len(gradeLinePrefix):]
             await tee(websocket, line.strip())
-    await appendGradeTofile(grade,submission)
+    await appendGradeTofile(grade,submission,git_url)
 
-async def appendGradeTofile(grade,submission):
+async def appendGradeTofile(grade,submission,git_url):
     '''
     append submission grade to csv file 
     :param grade: string representing student grade
@@ -72,7 +72,7 @@ async def appendGradeTofile(grade,submission):
     timestamp = time.asctime(time.localtime())
     file = open('grades'+ submission["exercise"] +'.csv', 'a+')
     gradesCsv = csv.writer(file)
-    gradesCsv.writerow([submission["ID_1"],submission["ID_2"],submission["ID_3"],submission["student_names"],grade.rstrip(),timestamp])
+    gradesCsv.writerow([submission["ID_1"],submission["ID_2"],submission["ID_3"],submission["student_names"],git_url,grade.rstrip(),timestamp])
     file.close()
 
 async def run(websocket, path):
