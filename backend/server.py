@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 
 """
@@ -41,13 +40,10 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
     grade = "putGradeHere"
 
     # Copy the files related to grading from the exercise folder to the docker container.
-    with subprocess.Popen(["docker", "cp", EXERCISE_DIR+"/"+exercise, "badkan:/"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True) as proc:
+    with subprocess.Popen(["docker", "cp", EXERCISE_DIR+"/"+exercise, "badkan:/"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True) as proc:
         for line in proc.stdout:
-            if(gradeLinePrefix in line):
-                grade = line[len(gradeLinePrefix):]
             print(line)
-        for line in proc.stderr:
-            print(line)
+
     matches = GIT_REGEXP.search(git_url)
     username = matches.group(1)
     repository = GIT_CLEAN.sub("",matches.group(2))
@@ -55,15 +51,11 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
     # Grade the submission inside the docker container named "badkan"
     with subprocess.Popen(["docker", "exec", "badkan",
         "nice",  "-n", "5",
-        "bash", "grade-single-submission.sh", exercise, username, repository], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True) as proc:
+        "bash", "grade-single-submission.sh", exercise, username, repository], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True) as proc:
         for line in proc.stdout:
             if(gradeLinePrefix in line):
                 grade = line[len(gradeLinePrefix):]
             await tee(websocket, line.strip())
-
-        for line in proc.stderr:
-            await tee(websocket, line.strip())
-
     await appendGradeTofile(grade,submission)
 
 async def appendGradeTofile(grade,submission):
