@@ -23,6 +23,17 @@ async def tee(websocket, message):
     print("> " + message)
     await websocket.send(message)
 
+
+def docker_command(command_words):
+    """
+    :param command_words: a list of words to be executed by docker.
+    :return: a stream that contains all output of the command (stdout and stderr together)
+    """
+    return subprocess.Popen(
+        ["docker"] + command_words,
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+
+
 async def check_submission(websocket:object, exercise:str, git_url:str , submission):
     """
     Check a submitted solution to the given exercise from the given git_url.
@@ -39,20 +50,23 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
     gradeLinePrefix = "your grade is :"
     grade = "putGradeHere"
 
-    # Copy the files related to grading from the exercise folder to the docker container.
-    with subprocess.Popen(["docker", "cp", EXERCISE_DIR+"/grade-single-submission.sh", "badkan:/"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True) as proc:
-        for line in proc.stdout:  print(line)
-    with subprocess.Popen(["docker", "cp", EXERCISE_DIR+"/"+exercise, "badkan:/"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True) as proc:
-        for line in proc.stdout:  print(line)
-
     matches = GIT_REGEXP.search(git_url)
     username = matches.group(1)
     repository = GIT_CLEAN.sub("",matches.group(2))
+    repository_folder = "/submissions/"+username+"/"+repository
 
-    # Grade the submission inside the docker container named "badkan"
-    with subprocess.Popen(["docker", "exec", "badkan",
-        "nice",  "-n", "5",
-        "bash", "/grade-single-submission.sh", exercise, username, repository], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True) as proc:
+    # Clone or pull the student's submission from github to the docker container "badkan":
+    with docker_command(["exec", "badkan", "source", "get-submission.sh", username, repository]) as proc:
+        for line in proc.stdout:
+            await tee(websocket, line.strip())
+
+
+    # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
+    with docker_command(["cp", EXERCISE_DIR + "/" + exercise, "badkan:"+repository_folder]) as proc:
+        for line in proc.stdout:  print(line)
+
+    # Grade the submission inside the docker container "badkan"
+    with docker_command(["exec", "badkan", "cd " + repository_folder + "; nice -n 5 ./grade"]) as proc:
         for line in proc.stdout:
             if(gradeLinePrefix in line):
                 grade = line[len(gradeLinePrefix):]
