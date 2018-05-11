@@ -56,7 +56,7 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
     repository_folder = "/submissions/"+username+"/"+repository
 
     # Clone or pull the student's submission from github to the docker container "badkan":
-    with docker_command(["exec", "badkan", "source", "get-submission.sh", username, repository]) as proc:
+    with docker_command(["exec", "badkan", "bash", "get-submission.sh", username, repository]) as proc:
         for line in proc.stdout:
             await tee(websocket, line.strip())
 

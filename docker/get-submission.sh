@@ -18,12 +18,10 @@ cd $USERNAME
 if [ -d $REPOSITORY ]; then
     echo "! cd $REPOSITORY"
     cd $REPOSITORY
-    echo "! git fetch"
+    echo "! git fetch, reset, clean"
     git fetch
-    echo "! git reset --hard origin/master"
     git reset --hard origin/master
-    echo "! git clean -fxd"
-    git clean -fxd
+    git clean -fxdq
 else
     URL=https://github.com/$USERNAME/$REPOSITORY.git
     echo "! git clone $URL"
