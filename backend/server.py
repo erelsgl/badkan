@@ -71,9 +71,9 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
             if(gradeLinePrefix in line):
                 grade = line[len(gradeLinePrefix):]
             await tee(websocket, line.strip())
-    await appendGradeTofile(grade,submission,git_url)
+    await appendGradeTofile(grade,submission,git_url,websocket)
 
-async def appendGradeTofile(grade,submission,git_url):
+async def appendGradeTofile(grade,submission,git_url,websocket):
     '''
     append submission grade to csv file 
     :param grade: string representing student grade
@@ -82,12 +82,13 @@ async def appendGradeTofile(grade,submission,git_url):
     if (any(arg not in submission for arg in ("ID_1" , "ID_2" , "ID_3" , "student_names" , "exercise" ))):
         print("this is an anonymous submission")
         return
-    print("this is NOT an anonymous submission")
     timestamp = time.asctime(time.localtime())
     file = open('grades'+ submission["exercise"] +'.csv', 'a+')
     gradesCsv = csv.writer(file)
     gradesCsv.writerow([submission["ID_1"],submission["ID_2"],submission["ID_3"],submission["student_names"],git_url,grade.rstrip(),timestamp])
     file.close()
+    userMessage = "We recorded your IDs: {0}, {1}, {2} and your grade: {3} \n date of submission is {4}".format(submission["ID_1"],submission["ID_2"],submission["ID_3"],grade.rstrip(),timestamp)
+    await tee (websocket,userMessage)
 
 async def run(websocket, path):
     """
@@ -104,3 +105,4 @@ print("{} listening at {}".format(type(websocketserver), PORT))
 
 asyncio.get_event_loop().run_until_complete(websocketserver)
 asyncio.get_event_loop().run_forever()
+
