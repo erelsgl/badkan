@@ -61,11 +61,11 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
             await tee(websocket, line.strip())
 
     # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
-    with docker_command(["cp", EXERCISE_DIR + "/" + exercise + "/*", "badkan:"+repository_folder]) as proc:
+    with docker_command(["cp", EXERCISE_DIR + "/" + exercise, "badkan:"+repository_folder+"/exercise_files"]) as proc:
         for line in proc.stdout:  print(line)
 
     # Grade the submission inside the docker container "badkan"
-    with docker_command(["exec", "badkan", "bash", "-c", "cd " + repository_folder + "; nice -n 5 ./grade"]) as proc:
+    with docker_command(["exec", "badkan", "bash", "-c", "cd " + repository_folder + "; cp -r exercise_files/* .; nice -n 5 ./grade"]) as proc:
         for line in proc.stdout:
             if(gradeLinePrefix in line):
                 grade = line[len(gradeLinePrefix):]
