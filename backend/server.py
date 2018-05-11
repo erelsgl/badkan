@@ -86,8 +86,9 @@ async def appendGradeTofile(grade,submission,git_url,websocket):
     gradesCsv = csv.writer(file)
     gradesCsv.writerow([submission["ID_1"],submission["ID_2"],submission["ID_3"],submission["student_names"],git_url,grade.rstrip(),timestamp])
     file.close()
-    userMessage = "We recorded your IDs: {0}, {1}, {2} and your grade: {3} \n date of submission is {4}".format(submission["ID_1"],submission["ID_2"],submission["ID_3"],grade.rstrip(),timestamp)
-    await tee (websocket,userMessage)
+    userMessage = "We recorded your IDs: {0}, {1}, {2} and your grade: {3}.<br/> Date of submission is {4}.".format(submission["ID_1"],submission["ID_2"],submission["ID_3"],grade.rstrip(),timestamp)
+    htmlMessage = "<div class='grade'>"+userMessage+"</div>"
+    await tee (websocket,htmlMessage)
 
 async def run(websocket, path):
     """
