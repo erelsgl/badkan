@@ -8,7 +8,7 @@ if [ -z "$FRONTEND_PORT" ]; then
 fi
 
 # 1. Start the docker process:
-sudo docker run --name badkan --rm -itd erelsgl/badkan bash
+sudo docker run --name badkan -p 8010:8010 --rm -itd erelsgl/badkan bash
 
 # 2. Start the backend server:
 cd backend
@@ -43,5 +43,7 @@ sudo nohup python3 -u -m http.server 8006 &
 sudo nohup python3 -u -m http.server 8007 &
 sudo nohup python3 -u -m http.server 8008 &
 sudo nohup python3 -u -m http.server 8009 &
+
+sudo docker exec badkan bash -c 'cd /www; python3 -u -m http.server 8010'
 
 echo "Try me by: lynx http://localhost:$FRONTEND_PORT"

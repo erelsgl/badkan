@@ -38,3 +38,5 @@ sudo python3 -u -m http.server 8007 > nohup.out&
 sudo python3 -u -m http.server 8008 > nohup.out&
 sudo python3 -u -m http.server 8009 > nohup.out&
 
+sudo docker exec badkan bash -c 'cd /www; python3 -u -m http.server 8010'
+
