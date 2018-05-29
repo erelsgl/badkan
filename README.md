@@ -42,6 +42,7 @@ Alternatively, you can build the image yourself:
     cd badkan/docker
     docker build -t erelsgl/badkan:latest .
     sudo docker images       # check that you see the badkan image
+    
 
 If you want to use a process-monitor to run the servers, you can use pm2:
 

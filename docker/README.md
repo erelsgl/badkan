@@ -1,6 +1,6 @@
 These files are used to build the docker container.
 
-The script grade-single-submission.sh is copied to the docker 
+The script get-submission.sh is copied to the docker 
 container and executed from there.
 
 To build or re-build the image do:
