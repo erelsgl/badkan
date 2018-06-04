@@ -67,7 +67,7 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
         for line in proc.stdout:  print(line)
 
     # Grade the submission inside the docker container "badkan"
-    with docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", "mv grading_files/* .; rmdir grading_files; nice -n 5 ./grade "+username+" "+repository]) as proc:
+    with docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade "+username+" "+repository]) as proc:
         for line in proc.stdout:
             if(gradeLinePrefix in line):
                 grade = line[len(gradeLinePrefix):]

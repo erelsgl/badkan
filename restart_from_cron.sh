@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+sudo docker run --name badkan -p 8010:8010 --rm -itd erelsgl/badkan bash
+
 FRONTEND_PORT=$1
 FRONTEND_Test_PORT=$2
 
