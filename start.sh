@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 
-FRONTEND_PORT=$1
-FRONTEND_Test_PORT=$2
-
-if [ -z "$FRONTEND_PORT" ]; then
-   FRONTEND_PORT=80
-fi
-
 # 1. Start the docker process:
-sudo docker run --name badkan -p 8010:8010 --rm -itd erelsgl/badkan bash
+PORT_EXPOSED_FROM_DOCKER=8010
+sudo docker run --name badkan -p $PORT_EXPOSED_FROM_DOCKER:$PORT_EXPOSED_FROM_DOCKER --rm -itd erelsgl/badkan bash
+# Start the http server from within docker (optional):
+sudo docker exec badkan bash -c "cd /www; python3 -u -m http.server $PORT_EXPOSED_FROM_DOCKER"
 
 # 2. Start the backend server:
 cd backend
@@ -25,13 +21,8 @@ sudo nohup python3 -u server.py 5678 &
 sudo nohup python3 -u server.py 5679 &
 # -u = unbuffered. See https://stackoverflow.com/a/107717/827927
 
-# 2. Start the frontend server:
+# 3. Start the frontend server:
 cd ../frontend
-sudo rm nohup.out
-sudo nohup python3 -u -m http.server $FRONTEND_PORT &
-# -u = unbuffered. See https://stackoverflow.com/a/107717/827927
-
-cd Test
 sudo rm nohup.out
 sudo nohup python3 -u -m http.server 8000 &
 sudo nohup python3 -u -m http.server 8001 &
@@ -43,7 +34,6 @@ sudo nohup python3 -u -m http.server 8006 &
 sudo nohup python3 -u -m http.server 8007 &
 sudo nohup python3 -u -m http.server 8008 &
 sudo nohup python3 -u -m http.server 8009 &
+# -u = unbuffered. See https://stackoverflow.com/a/107717/827927
 
-sudo docker exec badkan bash -c 'cd /www; python3 -u -m http.server 8010'
-
-echo "Try me by: lynx http://localhost:$FRONTEND_PORT"
+echo "Try me at: lynx http://localhost:8000?backend=5670"

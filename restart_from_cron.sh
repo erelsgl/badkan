@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-FRONTEND_PORT=$1
-FRONTEND_Test_PORT=$2
-
 sudo killall python3
 
 # 1. Start the backend server:

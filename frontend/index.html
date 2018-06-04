@@ -2,23 +2,39 @@
 <html dir='rtl' lang='he'>
 
 <head>
-	<title>הגשת תרגיל לבדיקה בלבד - ללא רישום</title>
+	<title>הגשת תרגיל</title>
 	<script src='jquery-3.2.1.min.js'></script>
 	<script src='utils.js'></script>
-	<link rel='stylesheet' type='text/css' href='style.css'/>
+        <link rel='stylesheet' type='text/css' href='style.css'/>
 	<meta charset="utf-8"></meta>
 </head>
 
 <body>
-<h1>הגשת תרגיל לבדיקה בלבד - ללא רישום</h1>
+<h1>הגשת תרגיל</h1>
 <h2>קוד התרגיל: <span id="exercise"></span></h2>
-	<form style='border: solid 1px blue; margin: 10px; padding: 5px'>
+	<form style='border: solid 1px blue; margin: 10px; padding: 5px' dir="rtl">
 		<div style="text-align:center">
 הכניסו כאן קישור-שיבוט למאגר שלכם בגיטהאב
             (חייב להתחיל ב https:// ולהסתיים ב .git):
             <br/>
 			<input dir="ltr" id='giturl' style='width:90%'/>
-    	</div>
+		</div>
+		<div style="text-align:center">
+			<label>ת"ז 1:</label>
+			<input id="ID-1" type="text" maxlength="9" value="" required/>
+		</div>
+		<div style="text-align:center">
+				<label>ת"ז 2:</label>
+				<input id="ID-2" type="text" maxlength="9" value=""/>
+		</div>
+		<div style="text-align:center">
+				<label>ת"ז 3:</label>
+				<input id="ID-3" type="text" maxlength="9" value=""/>
+		</div>
+		<div style="text-align:center">
+			<label>שמות סטודנטים:</label>
+			<input id="student_names" type="text" value="" />
+		</div>
 		<div style='text-align:center'>
 			<button id='submit'>שליחה</button>
 			<button id='clear'>ניקוי</button>
@@ -50,6 +66,10 @@
 			var submission_json = JSON.stringify({
 				exercise: exercise,
 				git_url: $("input#giturl").val(),
+				ID_1: $("input#ID-1").val(),
+				ID_2: $("input#ID-2").val(),
+				ID_3: $("input#ID-3").val(),
+				student_names: $("input#student_names").val(),
 			});
 			logClient("color:#888", submission_json);  // in utils.js
             var websocket = new WebSocket(websocketurl);
