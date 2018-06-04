@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
 
-sudo killall python3
-sudo bash start.sh
-
+killall python3
+bash start.sh
