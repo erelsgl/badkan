@@ -1,16 +1,15 @@
 div.grade {background:#eef;border:#00f solid 1px; padding:2px; margin:2px}
 
-div.testcase {
-background:#eef;
+div.testcase {background:#eef;
 border:#ff0081 ;
 border-top-width: 0px;
     border-left-width: 0px;
     border-right-width: 0px;
-    border-bottom-width: 2px;
+    border-bottom-width: 1px;
      padding:2px;
       margin:2px;
      }
-    
+
 /* Style the button that is used to open and close the collapsible content */
 .collapsible {
   background-color: #eee;
@@ -36,5 +35,8 @@ border-top-width: 0px;
   overflow: hidden;
   background-color: #f1f1f1;
 }
+
+
+
 
 
