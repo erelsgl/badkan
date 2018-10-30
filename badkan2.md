@@ -2,7 +2,7 @@
 
 ## Goals
 * Enable and encourage students to practice and improve their programming skills in a gamified environment.
-* Allow instructors in programming coursese to easily create and grade homework assignments.
+* Allow instructors in programming courses to easily create and grade homework assignments.
 
 ## Comparison to similar systems
 There are various systems that allow automatic grading of programming exersices, for example, hackerrank.com. Badkan will differ in the following ways:
