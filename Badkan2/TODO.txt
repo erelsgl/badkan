@@ -1,0 +1,10 @@
+** mess with university and sending\recivieng requests from remote sql server
+** free mysql server for testing??
+
+
+Sign in - Samuel 
+with github:
+https://developer.github.com/v3/guides/basics-of-authentication/
+without github (MySQL\check something else).
+Create / edit excercise : 
+
