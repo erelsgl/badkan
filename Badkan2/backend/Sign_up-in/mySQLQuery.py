@@ -1,55 +1,73 @@
 import pymysql.cursors
 
-port = "3306"
-hostname = "localhost"	 # 127.0.0.1
-username = 'root'
-password = 'root'
-database = 'Badkan2'
-
-connection = pymysql.connect(host=hostname,
-                             user=username,
-                             password=password,
-                             db=database,
-                             charset='utf8mb4',
-                             cursorclass=pymysql.cursors.DictCursor)
+mysql_port = "3306"
+mysql_hostname = "localhost"	 # 127.0.0.1
+mysql_username = 'root'
+mysql_password = 'root'
+mysql_database = 'Badkan2'
 
 
 def make_a_query(query):
     """
-    :param query:
+    :param query: String.
+    :return the result of the query.
     """
+    connection = pymysql.connect(host=mysql_hostname,
+                                 user=mysql_username,
+                                 password=mysql_password,
+                                 db=mysql_database,
+                                 charset='utf8mb4',
+                                 cursorclass=pymysql.cursors.DictCursor)
     try:
         with connection.cursor() as cursor:
             cursor.execute(query)
             connection.commit()
             result = cursor.fetchone()
-            print(result)
+            return result
     finally:
         connection.close()
 
 
-def sign_up(user_name, mail, user_password, user_id="", name="", family_name="", university="", birthday=""):
+def sign_up(badkan_username, badkan_password, mail="", user_id="", name="", family_name="", university="", birthday=""):
     """
-    :param user_name: the user name of the user PK and NN STRING.
-    :param mail: the mail of the user PK and NN STRING.
-    :param user_password: the password of the user NN STRING.
-    :param user_id: exemple 342533064 STRING not mandatory.
+    :param badkan_username: the user name of the user PK and NN STRING.
+    :param badkan_password: the password of the user NN STRING.
+    :param mail: the mail of the user STRING.
+    :param user_id: example 342533064 STRING not mandatory.
     :param name: Samuel STRING not mandatory.
     :param family_name: Bismuth STRING not mandatory.
     :param university: Ariel STRING not mandatory.
     :param birthday: The birthday is a DATE (YYYY-MM-DD) not mandatory.
     The DATE must be with a good format.
+    :return: error + false if the user can't register (usually because of the username is already in use
+    , else, if the registration is done, return true.)
     """
     try:
         make_a_query("INSERT INTO `Badkan2`.`Registration`"
-                     " (`user_name`, `mail`, `password`, `user_id`, "
+                     " (`user_name`, `password`, `mail`, `user_id`, "
                      "`name`, `family_name`, `university`, `birthday`)"
-                     " VALUES ('" + user_name + "', '" + mail + "', '" + user_password + "', '" + user_id + "',"
+                     " VALUES ('" + badkan_username + "', '" + badkan_password + "', '" + mail + "', '" + user_id + "',"
                      " '" + name + "', '" + family_name + "', '" + university + "', '" + birthday + "');")
+        return True
     except pymysql.err.IntegrityError:
-        print("Error: The mail or user-name is already in use...")
+        print("Error: The user-name is already in use...")
+        return False
 
-def sign_in():
+
+def sign_in(badkan_username, badkan_password):
+    """
+    :param badkan_username: String.
+    :param badkan_password: String.
+    :return: false if there is no match, else return true.
+    """
+    if str(make_a_query("SELECT user_name FROM Badkan2.Registration WHERE user_name = '"
+                        + badkan_username + "' AND password = '" + badkan_password + "';")) == 'None':
+        return False
+    else:
+        return True
 
 
-sign_up('JOni', 'ehud@gmail.com', 'guilad', "930488675", 'Ehud', 'Plaskin', 'Ariel', '1996-05-13')
+# Attention: mysql doesn't make difference between Joni and JonI.
+# Fix if cause it's also true for password !! -> gUilad == guilad.
+print(sign_up('Yehonatan', 'Maayan_melove', 'joni@gmail.com', "930488675", 'Joni', 'Shaag', 'Ariel', '1986-05-13'))
+print(sign_in('Joni', 'gUilad'))
