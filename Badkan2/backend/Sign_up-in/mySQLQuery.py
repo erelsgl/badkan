@@ -25,7 +25,7 @@ def make_a_query(query):
         connection.close()
 
 
-def new_registration(user_name, mail, user_password, user_id="", name="", family_name="", university="", birthday=""):
+def sign_up(user_name, mail, user_password, user_id="", name="", family_name="", university="", birthday=""):
     """
     The user_name and mail are PK and NN.
     The password is NN.
@@ -33,11 +33,15 @@ def new_registration(user_name, mail, user_password, user_id="", name="", family
     The birthday is a DATE (YYYY-MM-DD), all the rest a STRING.
     The DATE must be with a good format.
     """
-    make_a_query("INSERT INTO `Badkan2`.`Registration`"
-                 " (`user_name`, `mail`, `password`, `user_id`, "
-                 "`name`, `family_name`, `university`, `birthday`)"
-                 " VALUES ('" + user_name + "', '" + mail + "', '" + user_password + "', '" + user_id + "',"
-                 " '" + name + "', '" + family_name + "', '" + university + "', '" + birthday + "');")
+    try:
+        make_a_query("INSERT INTO `Badkan2`.`Registration`"
+                     " (`user_name`, `mail`, `password`, `user_id`, "
+                     "`name`, `family_name`, `university`, `birthday`)"
+                     " VALUES ('" + user_name + "', '" + mail + "', '" + user_password + "', '" + user_id + "',"
+                     " '" + name + "', '" + family_name + "', '" + university + "', '" + birthday + "');")
+    except pymysql.err.IntegrityError:
+        print("Error: The mail or user-name is already in use...")
 
+def sign_in()
 
-new_registration('EhudHahamoud', 'ehud@gmail.com', 'guilad', "930488675", 'Ehud', 'Plaskin', 'Ariel', '1996-05-13')
+sign_up('JOni', 'ehud@gmail.com', 'guilad', "930488675", 'Ehud', 'Plaskin', 'Ariel', '1996-05-13')
