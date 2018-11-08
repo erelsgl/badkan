@@ -15,6 +15,9 @@ connection = pymysql.connect(host=hostname,
 
 
 def make_a_query(query):
+    """
+    :param query:
+    """
     try:
         with connection.cursor() as cursor:
             cursor.execute(query)
@@ -27,10 +30,14 @@ def make_a_query(query):
 
 def sign_up(user_name, mail, user_password, user_id="", name="", family_name="", university="", birthday=""):
     """
-    The user_name and mail are PK and NN.
-    The password is NN.
-    All the rest is not mandatory.
-    The birthday is a DATE (YYYY-MM-DD), all the rest a STRING.
+    :param user_name: the user name of the user PK and NN STRING.
+    :param mail: the mail of the user PK and NN STRING.
+    :param user_password: the password of the user NN STRING.
+    :param user_id: exemple 342533064 STRING not mandatory.
+    :param name: Samuel STRING not mandatory.
+    :param family_name: Bismuth STRING not mandatory.
+    :param university: Ariel STRING not mandatory.
+    :param birthday: The birthday is a DATE (YYYY-MM-DD) not mandatory.
     The DATE must be with a good format.
     """
     try:
@@ -42,6 +49,7 @@ def sign_up(user_name, mail, user_password, user_id="", name="", family_name="",
     except pymysql.err.IntegrityError:
         print("Error: The mail or user-name is already in use...")
 
-def sign_in()
+def sign_in():
+
 
 sign_up('JOni', 'ehud@gmail.com', 'guilad', "930488675", 'Ehud', 'Plaskin', 'Ariel', '1996-05-13')
