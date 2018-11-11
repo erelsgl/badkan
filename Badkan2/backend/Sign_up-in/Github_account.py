@@ -19,7 +19,7 @@ authorization_url, state = github.authorization_url(authorization_base_url)
 print('Please go here and authorize,', authorization_url)
 
 # Get the authorization verifier code from the callback url
-redirect_response = input('Paste the full redirect URL here:')
+redirect_response = input('Paste the full redirect URL here:').strip()
 
 # Fetch the access token
 github.fetch_token(token_url, client_secret=client_secret,
