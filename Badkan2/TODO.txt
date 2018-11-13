@@ -6,5 +6,11 @@ Sign in - Samuel
 with github:
 https://developer.github.com/v3/guides/basics-of-authentication/
 without github (MySQL\check something else).
-Create / edit excercise : 
+Create / edit excercise and course
 
+
+Meeting 2:
+Ehud: SQL tables.
+point 4.
+
+Samuel point 5.
