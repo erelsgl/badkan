@@ -67,7 +67,32 @@ def sign_in(badkan_username, badkan_password):
         return True
 
 
+def register_file(file_id, author_id, exercise_id, name, size, file_type, file_path,):
+    """
+    :param file_id: unique id of the file.
+    :param author_id: unique id of the author.
+    :param exercise_id: unique id of the exercise
+    :param name: name of the file (maybe unnecessary?? we have in path), STRING.
+    :param size: size in bytes.
+    :param file_type: type of file String(.h,.cpp..).
+    :param file_path: path for file in host, STRING.
+    :return: error + false if the file can't register (usually because of the username is already in use,
+    else, if the registration is done, return true.)
+    """
+    try:
+        make_a_query("INSERT INTO `Badkan2`.`Files`"
+                     " (`file_id`,`author_id`, `exercise_id`, `name`, `size`, "
+                     "`type`, `path`)"
+                     " VALUES ('" + file_id + "','" + author_id + "', '" + exercise_id + "', '" + name + "', "
+                     "'" + size + "'," " '" + file_type + "', '" + file_path + "');")
+        return True
+    except pymysql.err.IntegrityError:
+        print("Error: The file-name is already in use...")
+        return False
+
+
 # Attention: mysql doesn't make difference between Joni and JonI.
 # Fix if cause it's also true for password !! -> gUilad == guilad.
 print(sign_up('Yehonatan', 'Maayan_melove', 'joni@gmail.com', "930488675", 'Joni', 'Shaag', 'Ariel', '1986-05-13'))
 print(sign_in('Joni', 'gUilad'))
+print(register_file('123', '123', '123', 'Source', '123', 'cpp', '\home\ehud'))
