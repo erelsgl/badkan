@@ -1,3 +1,0 @@
-http://necolas.github.io/css3-social-signin-buttons/#button
-Don;t forget to run the server: python -m SimpleHTTPServer 7900
-
