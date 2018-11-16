@@ -6,7 +6,7 @@ Sign in - Samuel
 with github:
 https://developer.github.com/v3/guides/basics-of-authentication/
 without github (MySQL\check something else).
-<<<<<<< HEAD
+
 Create / edit excercise - Ehud
 *stil to do - when file is uploaded update it on sql
 *we have website but how we intagrate it??
@@ -14,7 +14,6 @@ Create / edit excercise - Ehud
 
 =======
 Create / edit excercise and course
->>>>>>> f7a42326ea105f4feac216464d20afbcbb76da04
 
 
 Meeting 2:
