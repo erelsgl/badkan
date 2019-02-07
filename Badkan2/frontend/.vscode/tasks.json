@@ -4,5 +4,5 @@
     "windows": {
         "command": "firefox.exe"
     },
-    "args": ["public/index.html"]
+    "args": ["public/register.html"]
 }
