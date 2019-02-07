@@ -67,7 +67,7 @@ def sign_in(badkan_username, badkan_password):
         return True
 
 
-def register_file(file_id, author_id, exercise_id, name, size, file_type, file_path,):
+def register_file(file_id, author_id, exercise_id, name, size, file_type, file_path):
     """
     :param file_id: unique id of the file.
     :param author_id: unique id of the author.

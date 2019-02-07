@@ -1,11 +1,18 @@
 ** mess with university and sending\recivieng requests from remote sql server
 ** free mysql server for testing??
-
+https://github.com/Submitty/Submitty??
 
 Sign in - Samuel 
 with github:
 https://developer.github.com/v3/guides/basics-of-authentication/
 without github (MySQL\check something else).
+
+Create / edit excercise - Ehud
+*stil to do - when file is uploaded update it on sql
+*we have website but how we intagrate it??
+
+
+=======
 Create / edit excercise and course
 
 
