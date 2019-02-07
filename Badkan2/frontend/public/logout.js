@@ -4,9 +4,8 @@ document.getElementById("btnLogOut").addEventListener('click', e=>{
 });
 
 firebase.auth().onAuthStateChanged(user=>{ 
-    console.log("status change");
     if(!user){
       console.log("not user");
       document.location.href = "register.html";
     }
-  });
+});
