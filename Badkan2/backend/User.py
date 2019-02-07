@@ -16,6 +16,6 @@ class User:
         self.user_id = user_id
         self.name = name
         self.family_name = family_name
-        self.university = university
+        self.university = q
         self.birthday = birthday
         self.courses = courses
