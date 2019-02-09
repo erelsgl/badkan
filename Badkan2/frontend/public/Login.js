@@ -31,7 +31,7 @@ document.getElementById("btnSignUp").addEventListener('click', e=>{
     return;
   } 
 
-  /** Check if the id is not in use, must be PK!! */
+  /** TODO CHANGE IT Check if the id is not in use, must be PK!! */
 
   firebase.database().ref("users/").once("value", snapshot => {
     if (snapshot.exists()) {
@@ -58,6 +58,7 @@ document.getElementById("btnSignUp").addEventListener('click', e=>{
       let currentUser = new User(name, lastName, id, email);
       var user = firebase.auth().currentUser;
       writeUserData(currentUser, user.uid);
+      document.location.href = "home.html";
     });
   
   });
@@ -76,7 +77,9 @@ document.getElementById("btnLogin").addEventListener('click', e=>{
   const email = document.getElementById("txtEmail").value;
   const pass = document.getElementById("txtPassword").value;
   const promise = firebase.auth().signInWithEmailAndPassword(email, pass);
-  promise.catch(e=>{ console.log(e.massage)})
+  promise.catch(e=>{ console.log(e.massage)}).then(function(){      
+    document.location.href = "home.html";
+  })
 });
 
 /**
@@ -95,32 +98,36 @@ document.getElementById('withGithub').addEventListener( 'click', e=>{
 
   const provider = new firebase.auth.GithubAuthProvider();
   const promise = firebase.auth().signInWithPopup(provider);
+  var mailGihtub = document.getElementById("mailGithub");
   promise.then(function(result) {
-    /*
-    TODO:
-    Here we need to create the object user or load it.
-    */
+
    /**
     * Two cases here: if the user is new need to register him in the realtime database
     * and then go to home, if the user is old need to go to home.
     */
+
+    if(result.additionalUserInfo.isNewUser) {
+      console.log(result)
+      document.location.href = "completeInfo.html"
+    }
+    else {
+      document.location.href = "home.html";
+    }
+   
     console.log(result)
-    // ...
+    
   }).catch(function(error) {
+    if(error.message === "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.") {
+      mailGihtub.className = "show";
+      setTimeout(function(){ mailGihtub.className = mailGihtub.className.replace("show", ""); }, 2500);
+      return;
+    }
     console.log("error");
     console.log(error.message);
-          // ...
+
   });
 })
 
-/**
- * ON STATE CHANGE.
- */
-firebase.auth().onAuthStateChanged(user=>{ 
-  if(user){
-    document.location.href = "home.html";
-  }
-});
   
 
 

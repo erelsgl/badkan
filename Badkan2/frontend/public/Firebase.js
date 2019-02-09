@@ -25,7 +25,7 @@ function writeUserData(user, userId) {
 function loadCurrentUser(userId) {
   firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
     var user = snapshot.val().user;
-    document.getElementById("name").innerHTML = user.name  + " " + user.lastName + " " + user.id;
+    document.getElementById("name").innerHTML = user.name  + " " + user.lastName + " " + user.id + " " + user.email;
     return user;
   });
 }
