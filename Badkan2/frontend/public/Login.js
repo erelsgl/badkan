@@ -1,12 +1,12 @@
-// Must change this and create a class user.
-function User(name, lastName, id, email) {
-  this.name = name;
-  this.lastName = lastName;
-  this.id = id;
-  this.email = email;
-}
+/**
+ * This js file is linked with the home page.
+ */
+
+// Import the User object.
+import User from './User.js'
 
 /**
+ * BUTTON SIGNUP.
  * Here we first authentificate the user, then we register the user in the
  * realtime database, then, we redirected the user to the home page.
  */
@@ -25,21 +25,22 @@ document.getElementById("btnSignUp").addEventListener('click', e=>{
   });
 
   /** TODO: Check if the id is not in use, must be PK!! */
+  /** TODO: Check if there is no empty field!! */
 
-  var currentUser = new User(name, lastName, id, email);
+  let currentUser = new User(name, lastName, id, email);
   writeUserData(currentUser, id);
 
 });
 
-firebase.auth().onAuthStateChanged(user=>{ 
-  if(user){
-    console.log("user");
-    document.location.href = "home.html";
-  }
-});
-
+/**
+ * BUTTON LOGIN.
+ * Here we're checking if the mail and password correspond 
+ * and send he user to the home page.
+ */
 document.getElementById("btnLogin").addEventListener('click', e=>{
+
   console.log("Log in");
+
   const email = document.getElementById("txtEmail").value;
   const pass = document.getElementById("txtPassword").value;
   const promise = firebase.auth().signInWithEmailAndPassword(email, pass);
@@ -47,6 +48,7 @@ document.getElementById("btnLogin").addEventListener('click', e=>{
 });
 
 /**
+ * BUTTON GITHUB.
  * Attention !! Must use an HTTP or HTTPS adress. 
  * It can't be on the local server but with a web server.
  * Run configuration:
@@ -56,7 +58,9 @@ document.getElementById("btnLogin").addEventListener('click', e=>{
  * and go to the html file and we're done.
  */
 document.getElementById('withGithub').addEventListener( 'click', e=>{ 
+
   console.log("Log with github");
+
   const provider = new firebase.auth.GithubAuthProvider();
   const promise = firebase.auth().signInWithPopup(provider);
   promise.then(function(result) {
@@ -76,6 +80,18 @@ document.getElementById('withGithub').addEventListener( 'click', e=>{
           // ...
   });
 })
+
+/**
+ * ON STATE CHANGE.
+ */
+firebase.auth().onAuthStateChanged(user=>{ 
+  if(user){
+    console.log("user");
+    document.location.href = "home.html";
+  }
+});
+  
+
 
 
 
