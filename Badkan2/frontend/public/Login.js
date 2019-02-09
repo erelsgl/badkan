@@ -20,15 +20,46 @@ document.getElementById("btnSignUp").addEventListener('click', e=>{
   const lastName = document.getElementById("txtLastName").value;
   const id = document.getElementById("txtId").value;
 
-  firebase.auth().createUserWithEmailAndPassword(email, pass).catch(function(error) {
-    console.log(error.message);
-  });
+  var emptyField = document.getElementById("emptyField");
+  var mailUsed = document.getElementById("mailUsed");
+  var passShort = document.getElementById("passShort");
+  var idUsed = document.getElementById("idUsed");
+
+  if(email === "" || pass === "" || name === "" || lastName === "" || id === "") {
+    emptyField.className = "show";
+    setTimeout(function(){ emptyField.className = emptyField.className.replace("show", ""); }, 2500);
+    return;
+  } 
 
   /** TODO: Check if the id is not in use, must be PK!! */
-  /** TODO: Check if there is no empty field!! */
 
-  let currentUser = new User(name, lastName, id, email);
-  writeUserData(currentUser, id);
+  firebase.database().ref("users/").once("value", snapshot => {
+    if (snapshot.exists()) {
+      if(Object.keys(snapshot.val())[0] === id) {
+        idUsed.className = "show";
+        setTimeout(function(){ idUsed.className = idUsed.className.replace("show", ""); }, 2500);
+        return;
+      }
+    }
+   
+    firebase.auth().createUserWithEmailAndPassword(email, pass).catch(function(error) {
+      console.log(error.message);
+      if(error.message === "The email address is already in use by another account.") {
+        mailUsed.className = "show";
+        setTimeout(function(){ mailUsed.className = mailUsed.className.replace("show", ""); }, 2500);
+        return;
+      }
+      if(error.message === "Password should be at least 6 characters") {
+        passShort.className = "show";
+        setTimeout(function(){ passShort.className = passShort.className.replace("show", ""); }, 2500);
+        return;
+      }
+    });
+
+    let currentUser = new User(name, lastName, id, email);
+    writeUserData(currentUser, id);
+  
+  });
 
 });
 
