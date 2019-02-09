@@ -23,23 +23,10 @@ document.getElementById("confirm").addEventListener('click', e=>{
     return;
   } 
 
-  /** TODO CHANGE IT Check if the id is not in use, must be PK!! */
+  var user = firebase.auth().currentUser;
+  let currentUser = new User(name, lastName, id, user.email);
+  writeUserData(currentUser, user.uid);
 
-  firebase.database().ref("users/").once("value", snapshot => {
-    if (snapshot.exists()) {
-      if(Object.keys(snapshot.val())[0] === id) {
-        idUsed.className = "show";
-        setTimeout(function(){ idUsed.className = idUsed.className.replace("show", ""); }, 2500);
-        return;
-      }
-    }
-
-    var user = firebase.auth().currentUser;
-    let currentUser = new User(name, lastName, id, user.email);
-    writeUserData(currentUser, user.uid);
-
-    document.location.href = "home.html";
-
-    });
+  document.location.href = "home.html";
 
 });
