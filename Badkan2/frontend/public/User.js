@@ -7,6 +7,5 @@ constructor(name, lastName, id, email) {
     this.id = id;
     this.email = email;
   }
-
 }
 export default User;

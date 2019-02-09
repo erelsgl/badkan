@@ -31,7 +31,7 @@ document.getElementById("btnSignUp").addEventListener('click', e=>{
     return;
   } 
 
-  /** TODO: Check if the id is not in use, must be PK!! */
+  /** Check if the id is not in use, must be PK!! */
 
   firebase.database().ref("users/").once("value", snapshot => {
     if (snapshot.exists()) {
@@ -54,10 +54,11 @@ document.getElementById("btnSignUp").addEventListener('click', e=>{
         setTimeout(function(){ passShort.className = passShort.className.replace("show", ""); }, 2500);
         return;
       }
+    }).then(function() {
+      let currentUser = new User(name, lastName, id, email);
+      var user = firebase.auth().currentUser;
+      writeUserData(currentUser, user.uid);
     });
-
-    let currentUser = new User(name, lastName, id, email);
-    writeUserData(currentUser, id);
   
   });
 
@@ -117,7 +118,6 @@ document.getElementById('withGithub').addEventListener( 'click', e=>{
  */
 firebase.auth().onAuthStateChanged(user=>{ 
   if(user){
-    console.log("user");
     document.location.href = "home.html";
   }
 });
