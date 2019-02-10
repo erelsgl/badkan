@@ -23,6 +23,7 @@ document.getElementById("btnSignUp").addEventListener('click', e=>{
   var emptyField = document.getElementById("emptyField");
   var mailUsed = document.getElementById("mailUsed");
   var passShort = document.getElementById("passShort");
+  var badMail = document.getElementById("badMail");
 
   if(email === "" || pass === "" || name === "" || lastName === "" || id === "") {
     emptyField.className = "show";
@@ -30,7 +31,12 @@ document.getElementById("btnSignUp").addEventListener('click', e=>{
     return;
   } 
    
-  firebase.auth().createUserWithEmailAndPassword(email, pass).catch(function(error) {
+  firebase.auth().createUserWithEmailAndPassword(email, pass).then(function() {
+    let currentUser = new User(name, lastName, id, email);
+    var user = firebase.auth().currentUser;
+    writeUserData(currentUser, user.uid);
+    document.location.href = "home.html";
+  }).catch(function(error) {
     console.log(error.message);
     if(error.message === "The email address is already in use by another account.") {
       mailUsed.className = "show";
@@ -42,11 +48,12 @@ document.getElementById("btnSignUp").addEventListener('click', e=>{
       setTimeout(function(){ passShort.className = passShort.className.replace("show", ""); }, 2500);
       return;
     }
-  }).then(function() {
-    let currentUser = new User(name, lastName, id, email);
-    var user = firebase.auth().currentUser;
-    writeUserData(currentUser, user.uid);
-    document.location.href = "home.html";
+    if(error.message === "The email address is badly formatted.") {
+      badMail.className = "show";
+      setTimeout(function(){ badMail.className = badMail.className.replace("show", ""); }, 2500);
+      return;
+    }
+    
   });
 
 });
