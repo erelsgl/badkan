@@ -22,8 +22,7 @@ firebase.auth().onAuthStateChanged(user=>{
 
 /**
  * BUTTON SETTINGS.
- * Here we're checking if the mail and password correspond 
- * and send he user to the home page.
+ * Send he user to the settings page.
  */
 document.getElementById("btnSettings").addEventListener('click', e=>{
 

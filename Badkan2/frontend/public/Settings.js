@@ -3,8 +3,6 @@ import User from './User.js'
 
 /**
  * BUTTON CONFIRM.
- * Here we first authentificate the user, then we register the user in the
- * realtime database, then, we redirected the user to the home page.
  */
 document.getElementById("confirm").addEventListener('click', e=>{
 
