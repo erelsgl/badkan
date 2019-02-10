@@ -27,10 +27,8 @@ document.getElementById("btnConfirm").addEventListener('click', e=>{
       return;
     } 
 
-    uploadExercise(testCase, hiddenTestCase, solution);
-
-
-    //  document.location.href = "home.html";
+    uploadExercise(name, descr, testCase, hiddenTestCase, solution);
 
 });
+
   

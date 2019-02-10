@@ -32,7 +32,7 @@ document.getElementById("btnSignUp").addEventListener('click', e=>{
   } 
    
   firebase.auth().createUserWithEmailAndPassword(email, pass).then(function() {
-    let currentUser = new User(name, lastName, id, email);
+    let currentUser = new User(name, lastName, id, email, 0);
     var user = firebase.auth().currentUser;
     writeUserData(currentUser, user.uid);
     document.location.href = "home.html";

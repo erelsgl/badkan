@@ -1,12 +1,11 @@
-export class Exercise {
+class Exercise {
 
-    constructor(name, description, folderName) {
+    constructor(name, description, ownerId) {
         this.name = name;
         this.description = description;
-        this.folderName = folderName;
+        this.ownerId = ownerId;
     }
 
 }
-export default Exercise;
 
 

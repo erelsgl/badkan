@@ -13,7 +13,7 @@
 firebase.auth().onAuthStateChanged(user=>{ 
   if(user){
     var userId = firebase.auth().currentUser.uid;
-    var user = loadCurrentUser(userId);
+    loadCurrentUser(userId);
   }
   else {
     console.log("not user");

@@ -23,7 +23,7 @@ document.getElementById("confirm").addEventListener('click', e=>{
   } 
 
   var user = firebase.auth().currentUser;
-  let currentUser = new User(name, lastName, id, user.email);
+  let currentUser = new User(name, lastName, id, user.email, 0);
   writeUserData(currentUser, user.uid);
 
   document.location.href = "home.html";
