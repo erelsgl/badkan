@@ -31,6 +31,11 @@ function writeExercise(name, descr, folderName, userId) {
   });
 }
 
+function incrementNbExercise(userId, homeUser) {
+  homeUser.exerciseNb++;
+  writeUserData(homeUser, userId);
+}
+
 function loadCurrentUser(userId) {
   firebase.database().ref('/users/' + userId).once('value').then(function(snapshot) {
     var homeUser = snapshot.val().user;
@@ -43,14 +48,13 @@ function loadCurrentUser(userId) {
 }
 
 /**
- * TODO: NEED TO FINISH THIS: CHECK THE PROBLEM WHILE UPLAODING MULTIPLE FILES.
  * @param {*} testCase 
  * @param {*} hiddenTestCase 
  * @param {*} solution 
  */
 function uploadExercise(name, descr, testCases, hiddenTestCases, solution) {
   // The ref of the folder must be PK.
-  // TODO: Don't forget to increment the number of exercise of the user.
+
   // TODO: Check with Erel what about the other files.
   var user = firebase.auth().currentUser;
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
@@ -66,9 +70,7 @@ function uploadExercise(name, descr, testCases, hiddenTestCases, solution) {
       }
     })
   }
-
+  incrementNbExercise(user.uid, homeUser);
   writeExercise(name, descr, folderName, user.uid);
-
-
 
 }

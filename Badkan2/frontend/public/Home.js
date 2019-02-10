@@ -12,13 +12,15 @@
  */
 firebase.auth().onAuthStateChanged(user=>{ 
   if(user){
+    console.log("here");
     var userId = firebase.auth().currentUser.uid;
-    loadCurrentUser(userId);
+    var user = loadCurrentUser(userId);
   }
   else {
     console.log("not user");
   }
 });
+
 
 /**
  * BUTTON SETTINGS.
