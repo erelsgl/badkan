@@ -15,7 +15,6 @@ document.getElementById("confirm").addEventListener('click', e=>{
   const id = document.getElementById("txtId").value;
 
   var emptyField = document.getElementById("emptyField");
-  var idUsed = document.getElementById("idUsed");
 
   if(name === "" || lastName === "" || id === "") {
     emptyField.className = "show";
