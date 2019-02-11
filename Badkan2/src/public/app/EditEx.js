@@ -50,7 +50,7 @@ document.getElementById("btnEdit").addEventListener('click', e => {
   
     let exercise = new Exercise(name, descr, user.uid);
   
-    incrementCreatedEx(user.uid, homeUser);
+    incrementEditEx(user.uid, homeUser);
     writeExercise(exercise, folderName);
   
   }
