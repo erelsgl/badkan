@@ -14,19 +14,27 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 /**
- * BUTTON SETTINGS.
- * Send he user to the settings page.
- */
-document.getElementById("btnSettings").addEventListener('click', e => {
-  document.location.href = "settings.html";
-});
-
-/**
  * BUTTON CREATEEX.
  * Send he user to the createEx page.
  */
 document.getElementById("btnCreateEx").addEventListener('click', e => {
   document.location.href = "createEx.html";
+});
+
+/**
+ * BUTTON EDITEX.
+ * Send he user to the createEx page.
+ */
+document.getElementById("btnEditEx").addEventListener('click', e => {
+  document.location.href = "editEx.html";
+});
+
+/**
+ * BUTTON SETTINGS.
+ * Send he user to the settings page.
+ */
+document.getElementById("btnSettings").addEventListener('click', e => {
+  document.location.href = "settings.html";
 });
 
 /**

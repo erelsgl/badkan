@@ -18,9 +18,9 @@ var database = firebase.database();
 var storage = firebase.storage();
 
 function writeUserData(user, userId) {
-  firebase.database().ref("users/" + userId).set({
+  database.ref("users/" + userId).set({
     user
-  }).then(function() {
+  }).then(function () {
     document.location.href = "home.html";
   });
 }
@@ -37,7 +37,7 @@ function incrementNbExercise(userId, homeUser) {
 }
 
 function loadCurrentUser(userId) {
-  firebase.database().ref('/users/' + userId).once('value').then(function (snapshot) {
+  database.ref('/users/' + userId).once('value').then(function (snapshot) {
     var homeUser = snapshot.val().user;
     localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
     document.getElementById("name").innerHTML = "Hello " + homeUser.name + " " + homeUser.lastName
@@ -46,3 +46,20 @@ function loadCurrentUser(userId) {
   });
 }
 
+function loadExerciseByOwner() {
+  database.ref().child('exercises/').on("value", function (snapshot) {
+    snapshot.forEach(function (data) {
+      if (data.val().exercise.ownerId === firebase.auth().currentUser.uid) {
+        addOption(data.val().exercise, data.key);
+      }
+    });
+  });
+}
+
+function deleteExerciseById(exerciseId) {
+  // Need to delete from the realtime database and then from storage.
+  database.ref().child('exercises/' + exerciseId).remove();
+  // It's currently not possible to delete a folder in the storage firebase, may be an issue but
+  // I actually don't implement the deleting in the storage.
+  document.location.href = "home.html";
+}

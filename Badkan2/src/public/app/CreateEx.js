@@ -7,18 +7,17 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
   const descr = document.getElementById("exDescr").value;
 
   const testCase = document.getElementById("testCase").files;
-  const hiddenTestCase = document.getElementById("hiddenTestCase").files;
-  const solution = document.getElementById("solution").files;
+  const grading = document.getElementById("grading").files;
 
   var emptyField = document.getElementById("emptyField");
 
-  if (name === "" || descr === "" || testCase.length == 0 || hiddenTestCase.length == 0 || solution.length == 0) {
+  if (name === "" || descr === "" || testCase.length == 0 || grading.length == 0) {
     emptyField.className = "show";
     setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
     return;
   }
 
-  uploadExercise(name, descr, testCase, hiddenTestCase, solution);
+  uploadExercise(name, descr, testCase, grading);
 
 });
 
