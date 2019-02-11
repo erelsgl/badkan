@@ -1,6 +1,3 @@
-// Import the User object.
-import User from './User.js'
-
 /**
  * BUTTON CONFIRM.
  */
@@ -21,7 +18,9 @@ document.getElementById("confirm").addEventListener('click', e=>{
   } 
 
   var user = firebase.auth().currentUser;
-  let currentUser = new User(name, lastName, id, user.email);
+  var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+
+  let currentUser = new User(name, lastName, id, homeUser.email, homeUser.exerciseNb);
   writeUserData(currentUser, user.uid);
 
   document.location.href = "home.html";

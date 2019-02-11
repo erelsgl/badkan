@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Badkan</title>
+
+  <!-- Import js. -->
+  <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+  <script type="text/javascript" src="../util/Firebase.js"></script>
+  <script type="text/javascript" src="../objects/User.js"></script>
+
+  <!-- Import css. -->
+  <link rel="stylesheet" href="../style/snackbar.css">
+</head>
+
+<body>
+  <!-- input. -->
+  <input type="email" id="txtEmail" placeholder="Enter email" /> <br />
+  <input type="password" id="txtPassword" placeholder="Enter password" /><br />
+  <input id="txtName" placeholder="Enter name" /> <br />
+  <input id="txtLastName" placeholder="Enter last name" /> <br />
+  <input id="txtId" placeholder="Enter id" /><br />
+
+  <!-- button. -->
+  <button id="btnLogin">Log in</button>
+  <button id="btnSignUp">Sign Up</button>
+  <button id="withGithub">Log In with GitHub</button>
+
+  <!-- snackbar. -->
+  <div id="emptyField">Please fill all the fields.</div>
+  <div id="mailUsed">The email address is already in use by another account.</div>
+  <div id="passShort">Password should be at least 6 characters.</div>
+  <div id="mailGithub">The Github mail is already associated with another account.</div>
+  <div id="wrongData">The data is wrong.</div>
+  <div id="badMail">The mail is badly formated.</div>
+
+  <script type="text/javascript" src="../app/Register.js"></script>
+</body>
+
+</html>

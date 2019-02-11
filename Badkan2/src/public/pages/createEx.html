@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Badkan</title>
+
+  <!-- Import js. -->
+  <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+  <script type="text/javascript" src="../util/Firebase.js"></script>
+  <script type="text/javascript" src="../objects/Exercise.js"></script>
+
+  <!-- Import css. -->
+  <link rel="stylesheet" href="../style/snackbar.css">
+</head>
+
+<body>
+  <!-- input. -->
+  <input id="exName" placeholder="Enter a name for the exercise" /> <br />
+
+  <!-- test area. -->
+  <textarea rows="10" cols="100" id="exDescr" name="comment" form="usrform">Enter the description of the exercise here...</textarea> <br />
+
+  <!-- input. -->
+  <label for="Test Case">Please, import test case:</label>
+  <input type="file" id="testCase" name="Test Case" multiple> <br />
+
+  <label for="Hidden Test Case">Please, import hidden test case (for grading):</label>
+  <input type="file" id="hiddenTestCase" name="Hidden Test Case" multiple> <br />
+
+  <label for="Solution">Please, import the solution:</label>
+  <input type="file" id="solution" name="Solution" multiple> <br />
+
+  <!-- button. -->
+  <button id="btnConfirm">Confirm</button>
+
+  <!-- snackbar. -->
+  <div id="emptyField">Please fill all the fields.</div>
+
+  <script type="text/javascript" src="../app/CreateEx.js"></script>
+
+</body>
+
+</html>
