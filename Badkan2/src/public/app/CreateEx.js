@@ -22,10 +22,9 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
 
 });
 
-function uploadExercise(name, descr, testCases, hiddenTestCases, solution) {
+function uploadExercise(name, descr, testCases, grading) {
   // The ref of the folder must be PK.
 
-  // TODO: Check with Erel what about the other files.
   // TODO FROM LAST COMMIT : finishing to import exercise: 
   // need to speak with erel, then, edit and delete (so need to implement access to exercise), then part III
   var user = firebase.auth().currentUser;
@@ -43,6 +42,11 @@ function uploadExercise(name, descr, testCases, hiddenTestCases, solution) {
               document.location.href = "home.html";
           }
       })
+  }
+
+  for (i = 0; i < grading; i++) {
+    // Send the grading file in the badkan 1.0 server
+    // The name of the folder must be the same that what there is in firebase. 
   }
 
   let exercise = new Exercise(name, descr, user.uid);
