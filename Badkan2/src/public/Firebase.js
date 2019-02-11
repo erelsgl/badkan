@@ -56,6 +56,8 @@ function uploadExercise(name, descr, testCases, hiddenTestCases, solution) {
   // The ref of the folder must be PK.
 
   // TODO: Check with Erel what about the other files.
+  // TODO FROM LAST COMMIT : finishing to import exercise: 
+  // need to speak with erel, then, edit and delete (so need to implement access to exercise), then part III
   var user = firebase.auth().currentUser;
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   var folderName = user.uid + "_" + homeUser.exerciseNb;
