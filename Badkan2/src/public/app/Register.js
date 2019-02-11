@@ -27,7 +27,7 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
   }
 
   firebase.auth().createUserWithEmailAndPassword(email, pass).then(function () {
-    let currentUser = new User(name, lastName, id, email, 0);
+    let currentUser = new User(name, lastName, id, email, 0, 0);
     var user = firebase.auth().currentUser;
     writeUserData(currentUser, user.uid);
   }).catch(function (error) {

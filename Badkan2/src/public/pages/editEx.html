@@ -2,24 +2,41 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Badkan</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Badkan</title>
 
-    <!-- Import js. -->
-    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
-    <script type="text/javascript" src="../util/Firebase.js"></script>
+  <!-- Import js. -->
+  <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+  <script type="text/javascript" src="../util/Firebase.js"></script>
+  <script type="text/javascript" src="../objects/Exercise.js"></script>
+
+  <!-- Import css. -->
+  <link rel="stylesheet" href="../style/snackbar.css">
 </head>
 
 <body>
-    <!-- select. -->
-    <select id = "exercises"></select>
+  <!-- input. -->
+  <input id="exName" placeholder="Enter a new name for the exercise" /> <br />
 
-    <!-- button. -->
-    <button id="btnEdit">Edit</button>
-    <button id="btnDelete">Delete</button>
+  <!-- test area. -->
+  <textarea rows="10" cols="100" id="exDescr" name="comment" form="usrform">Enter the new description of the exercise here...</textarea> <br />
 
-    <script type="text/javascript" src="../app/EditEx.js"></script>
+  <!-- input. -->
+  <label for="Test Case">Please, import new test case:</label>
+  <input type="file" id="testCase" name="Test Case" multiple> <br />
+
+  <label for="Grading">Please, import all the files for grading:</label>
+  <input type="file" id="grading" name="Grading" multiple> <br />
+
+  <!-- button. -->
+  <button id="btnEdit">Edit</button>
+
+  <!-- snackbar. -->
+  <div id="emptyField">Please fill all the fields.</div>
+
+  <script type="text/javascript" src="../app/EditEx.js"></script>
+
 </body>
 
 </html>

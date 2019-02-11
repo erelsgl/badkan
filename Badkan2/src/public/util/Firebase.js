@@ -31,8 +31,13 @@ function writeExercise(exercise, exerciseId) {
   });
 }
 
-function incrementNbExercise(userId, homeUser) {
-  homeUser.exerciseNb++;
+function incrementCreatedEx(userId, homeUser) {
+  homeUser.createdEx++;
+  writeUserData(homeUser, userId);
+}
+
+function incrementDeletedEx(userId, homeUser) {
+  homeUser.deletedEx++;
   writeUserData(homeUser, userId);
 }
 
@@ -42,7 +47,7 @@ function loadCurrentUser(userId) {
     localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
     document.getElementById("name").innerHTML = "Hello " + homeUser.name + " " + homeUser.lastName
       + "<br />" + "ID: " + homeUser.id + "<br />" + "Email: " + homeUser.email + "<br />" +
-      "Created exercise(s): " + homeUser.exerciseNb;
+      "Created exercise(s): " + homeUser.createdEx + "<br />" + "Deleted exercise(s): " + homeUser.deletedEx;
   });
 }
 

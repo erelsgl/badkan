@@ -20,7 +20,7 @@ document.getElementById("confirm").addEventListener('click', e=>{
   var user = firebase.auth().currentUser;
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 
-  let currentUser = new User(name, lastName, id, homeUser.email, homeUser.exerciseNb);
+  let currentUser = new User(name, lastName, id, homeUser.email, homeUser.createdEx, homeUser.deletedEx);
   writeUserData(currentUser, user.uid);
 
   document.location.href = "home.html";

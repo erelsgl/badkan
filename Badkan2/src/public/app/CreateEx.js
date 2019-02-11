@@ -29,7 +29,7 @@ function uploadExercise(name, descr, testCases, grading) {
   var user = firebase.auth().currentUser;
 
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
-  var folderName = user.uid + "_" + homeUser.exerciseNb;
+  var folderName = user.uid + "_" + homeUser.createdEx;
 
   var storageRef = firebase.storage().ref(folderName);
 
@@ -50,7 +50,7 @@ function uploadExercise(name, descr, testCases, grading) {
 
   let exercise = new Exercise(name, descr, user.uid);
 
-  incrementNbExercise(user.uid, homeUser);
+  incrementCreatedEx(user.uid, homeUser);
   writeExercise(exercise, folderName);
 
 }

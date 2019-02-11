@@ -26,7 +26,7 @@ document.getElementById("btnCreateEx").addEventListener('click', e => {
  * Send he user to the createEx page.
  */
 document.getElementById("btnEditEx").addEventListener('click', e => {
-  document.location.href = "editEx.html";
+  document.location.href = "editDeleteEx.html";
 });
 
 /**
