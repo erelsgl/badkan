@@ -30,6 +30,14 @@ document.getElementById("btnEditEx").addEventListener('click', e => {
 });
 
 /**
+ * BUTTON SOLVEEX.
+ * Send he user to the createEx page.
+ */
+document.getElementById("btnSolveEx").addEventListener('click', e => {
+  document.location.href = "solveEx.html";
+});
+
+/**
  * BUTTON SETTINGS.
  * Send he user to the settings page.
  */

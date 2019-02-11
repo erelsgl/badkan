@@ -67,10 +67,30 @@ function loadExerciseByOwner() {
   });
 }
 
+function loadAllExercise() {
+  database.ref().child('exercises/').on("value", function (snapshot) {
+    snapshot.forEach(function (data) {
+      addOption(data.val().exercise, data.key);
+      exercises.set(data.key, data.val().exercise);
+      onOptionChange();
+    });
+  });
+
+}
+
 function deleteExerciseById(exerciseId) {
   // Need to delete from the realtime database and then from storage.
   database.ref().child('exercises/' + exerciseId).remove();
   // It's currently not possible to delete a folder in the storage firebase, may be an issue but
   // I actually don't implement the deleting in the storage.
   document.location.href = "home.html";
+}
+
+function downloadTestCase(path) {
+  const testCase = storage.ref().child(path + "/testCase");
+  testCase.getDownloadURL().then(function (url) {
+    window.location.replace(url);
+  }).catch(function (error) {
+    console.log(error.message);
+  });
 }

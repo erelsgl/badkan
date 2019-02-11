@@ -23,9 +23,6 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
 
 function uploadExercise(name, descr, testCases, grading) {
   // The ref of the folder must be PK.
-
-  // TODO FROM LAST COMMIT : finishing to import exercise: 
-  // need to speak with erel, then, edit and delete (so need to implement access to exercise), then part III
   var user = firebase.auth().currentUser;
 
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
@@ -33,15 +30,10 @@ function uploadExercise(name, descr, testCases, grading) {
 
   var storageRef = firebase.storage().ref(folderName);
 
-  for (i = 0; i < testCases.length; i++) {
-      var testCaseRef = storageRef.child('testCase/' + i);
-      testCaseRef.put(testCases[i]).then(function (snapshot) {
-          console.log('Uploaded folder!');
-          if (i === testCases.length) {
-              document.location.href = "home.html";
-          }
-      })
-  }
+  var testCaseRef = storageRef.child('testCase/');
+  testCaseRef.put(testCases[0]).then(function (snapshot) {
+    console.log('Uploaded folder!');
+  })
 
   for (i = 0; i < grading; i++) {
     // Send the grading file in the badkan 1.0 server
