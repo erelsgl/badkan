@@ -23,17 +23,9 @@ document.getElementById("downloadData").addEventListener('click', e => {
  * BUTTON SOLVE IT!.
  */
 document.getElementById("btnSolve").addEventListener('click', e => {
-    // Check empty field.
-    var emptyField = document.getElementById("emptyField");
-    const githubLink = document.getElementById("githubLink").value;
+    // TODO: CHANGE MUTLIPLY BY THE NAME OF THE FOLDER CONTAINING THE EXERCISE.
+    document.location.href = "badkan.html?exercise=multiply";
 
-    if (githubLink === "") {
-        emptyField.className = "show";
-        setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
-        return;
-    }
-    // Here we need to send the github link to the Badkan server.
-    console.log(githubLink);
 });
 
 function onOptionChange() {

@@ -99,6 +99,7 @@ async def run(websocket, path):
     submission_json = await websocket.recv()
     print("< "+submission_json)
     submission = json.loads(submission_json)
+    print("hello")
     await check_submission(websocket, submission["exercise"], submission["git_url"],submission)
     print ("> Closing connection")
 
