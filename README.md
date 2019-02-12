@@ -1,4 +1,4 @@
-# badkan
+	# badkan
 A server for automatic checking and grading of programming assignments.
 
 ## Installation
