@@ -10,7 +10,7 @@ import websockets, subprocess, asyncio, os, urllib,  json, re
 import csv, time
 import sys
 
-PORT = sys.argv[1] if len(sys.argv)>=2 else 5678   # same port as in frontend/index.html
+PORT = sys.argv[1] if len(sys.argv)>=2 else 5670   # same port as in frontend/index.html
 EXERCISE_DIR = "../exercises"
 
 GIT_REGEXP = re.compile("http.*github[.]com/(.*)/(.*)", re.IGNORECASE)
@@ -97,9 +97,8 @@ async def run(websocket, path):
     Run a websocket server that receives submissions and grades them.
     """
     submission_json = await websocket.recv()
-    print("< "+submission_json)
+    print("< "+submission_json)git@github.com:SamuelBismuth/ExerciseForBadkan.git
     submission = json.loads(submission_json)
-    print("hello")
     await check_submission(websocket, submission["exercise"], submission["git_url"],submission)
     print ("> Closing connection")
 
@@ -108,4 +107,5 @@ print("{} listening at {}".format(type(websocketserver), PORT))
 
 asyncio.get_event_loop().run_until_complete(websocketserver)
 asyncio.get_event_loop().run_forever()
+
 

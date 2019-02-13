@@ -47,7 +47,7 @@ function uploadExercise(name, descr, testCases, grading) {
 function sendLinkHTTP(grading, folderName) {
   var backendPort = getParameterByName("backend");     // in utils.js
   if (!backendPort)
-    backendPort = 5678; // default port - same as in ../server.py
+    backendPort = 5670; // default port - same as in ../server.py
   var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
 
   var submission_json = JSON.stringify({

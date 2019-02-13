@@ -4,12 +4,12 @@
 PORT_EXPOSED_FROM_DOCKER=8010
 sudo docker run --name badkan -p $PORT_EXPOSED_FROM_DOCKER:$PORT_EXPOSED_FROM_DOCKER --rm -itd erelsgl/badkan bash
 # Start the http server from within docker (optional):
-#sudo docker exec badkan bash -c "cd /www; python3 -u -m http.server $PORT_EXPOSED_FROM_DOCKER" &
+sudo docker exec badkan bash -c "cd /www; python3 -u -m http.server $PORT_EXPOSED_FROM_DOCKER" &
 
 # 2. Start the backend server:
 cd backend
 sudo rm nohup.out
-sudo python3 -u server.py 5670 &
+sudo nohup python3 -u server.py 5670 &
 sudo nohup python3 -u server.py 5671 &
 sudo nohup python3 -u server.py 5672 &
 sudo nohup python3 -u server.py 5673 &
@@ -24,7 +24,7 @@ sudo nohup python3 -u server.py 5679 &
 # 3. Start the frontend server:
 cd ../frontend
 sudo rm nohup.out
-sudo python3 -u -m http.server 8000 &
+sudo nohup python3 -u -m http.server 8000 &
 sudo nohup python3 -u -m http.server 8001 &
 sudo nohup python3 -u -m http.server 8002 &
 sudo nohup python3 -u -m http.server 8003 &

@@ -4,7 +4,7 @@
 
 var backendPort = getParameterByName("backend");     // in utils.js
 if (!backendPort)
-    backendPort = 5678; // default port - same as in ../server.py
+    backendPort = 5670; // default port - same as in ../server.py
 var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
 var exercise = getParameterByName("exercise");     // in utils.js
 if (!exercise)
