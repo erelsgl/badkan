@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from terminal import git_clone
+
 """
 A server for submission and checking of exercises.
 
@@ -92,14 +94,21 @@ async def appendGradeTofile(grade,submission,git_url,websocket):
     htmlMessage = "<div class='grade'>"+userMessage+"</div>"
     await tee (websocket,htmlMessage)
 
+async def load_ex(url, folder_name):
+    git_clone("../exercises/", url, folder_name)
+    print("your exercise is loaded.")
+
 async def run(websocket, path):
     """
     Run a websocket server that receives submissions and grades them.
     """
-    submission_json = await websocket.recv()
-    print("< "+submission_json)git@github.com:SamuelBismuth/ExerciseForBadkan.git
+    submission_json = await websocket.recv()  # return a string
+    print("< "+submission_json)
     submission = json.loads(submission_json)
-    await check_submission(websocket, submission["exercise"], submission["git_url"],submission)
+    if (submission_json[2] == 'g'):
+        await load_ex(submission["git_url"], submission["folderName"])
+    else:
+        await check_submission(websocket, submission["exercise"], submission["git_url"],submission)
     print ("> Closing connection")
 
 websocketserver = websockets.server.serve(run, '0.0.0.0', PORT, origins=None)
