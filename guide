@@ -12,3 +12,7 @@ run
 run the docker server:
 
 sudo docker exec badkan bash -c "cd /www; python3 -u -m http.server 8010"
+
+maybe need to dl 
+sudo pip install m2crypto
+

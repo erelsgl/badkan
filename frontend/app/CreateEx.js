@@ -5,23 +5,25 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
 
   const name = document.getElementById("exName").value;
   const descr = document.getElementById("exDescr").value;
+  const grading = document.getElementById("grading").value;
+  const username = document.getElementById("user").value;
+  const pass = document.getElementById("pass").value;
 
   const testCase = document.getElementById("testCase").files;
-  const grading = document.getElementById("grading").value;
 
   var emptyField = document.getElementById("emptyField");
 
-  if (name === "" || descr === "" || testCase.length == 0 || grading == "") {
+  if (name === "" || descr === "" || user == "" || pass == "" || grading == "" || testCase.length == 0) {
     emptyField.className = "show";
     setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
     return;
   }
 
-  uploadExercise(name, descr, testCase, grading);
+  uploadExercise(name, descr, testCase, grading, username, pass);
 
 });
 
-function uploadExercise(name, descr, testCases, grading) {
+function uploadExercise(name, descr, testCases, grading, username, pass) {
   // The ref of the folder must be PK.
   var user = firebase.auth().currentUser;
 
@@ -35,7 +37,7 @@ function uploadExercise(name, descr, testCases, grading) {
     console.log('Uploaded folder!');
   })
 
-  sendLinkHTTP(grading, folderName);
+  sendLinkHTTP(grading, folderName, username, pass);
 
   let exercise = new Exercise(name, descr, user.uid);
 
@@ -44,7 +46,7 @@ function uploadExercise(name, descr, testCases, grading) {
 
 }
 
-function sendLinkHTTP(grading, folderName) {
+function sendLinkHTTP(grading, folderName, username, pass) {
   var backendPort = getParameterByName("backend");     // in utils.js
   if (!backendPort)
     backendPort = 5670; // default port - same as in ../server.py
@@ -53,6 +55,8 @@ function sendLinkHTTP(grading, folderName) {
   var submission_json = JSON.stringify({
     git_url: grading,
     folderName: folderName,
+    username: username,
+    pass: pass,
   });
 
   logClient("color:#888", submission_json);  // in utils.js

@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-# TODO AFTER THE BREAK: EDIT "EDIT" THEN PUSH GRADE THEN DEBUG.
-
 from terminal import *
 
 """
@@ -96,12 +94,12 @@ async def appendGradeTofile(grade,submission,git_url,websocket):
     htmlMessage = "<div class='grade'>"+userMessage+"</div>"
     await tee (websocket,htmlMessage)
 
-async def load_ex(url, folder_name):
-    git_clone("../exercises/", url, folder_name)
+async def load_ex(url, folder_name, username, password):
+    git_clone("../exercises/", url, folder_name, username, password)
     print("your exercise is loaded.")
 
-async def edit_ex(url, folder_name):
-    git_clone_force("../exercises/", url, folder_name)
+async def edit_ex(url, folder_name, username, password):
+    git_clone_force("../exercises/", url, folder_name, username, password)
     print("your exercise is edited.")
 
 async def run(websocket, path):
@@ -112,9 +110,9 @@ async def run(websocket, path):
     print("< "+submission_json)
     submission = json.loads(submission_json)
     if (submission_json[2] == 'g'):
-        await load_ex(submission["git_url"], submission["folderName"])
-    elif (submission_json[2] == 'e'):
-        await edit_ex(submission["edit_git_url"], submission["folderName"])
+        await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"])
+    elif (submission_json[3] == 'd'):
+        await edit_ex(submission["edit_git_url"], submission["folderName"], submission["username"], submission["pass"])
     else:
         await check_submission(websocket, submission["exercise"], submission["git_url"],submission)
     print ("> Closing connection")
