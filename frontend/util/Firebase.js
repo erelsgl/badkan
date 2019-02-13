@@ -62,6 +62,7 @@ function loadExerciseByOwner() {
     snapshot.forEach(function (data) {
       if (data.val().exercise.ownerId === firebase.auth().currentUser.uid) {
         addOption(data.val().exercise, data.key);
+        ownExercises.set(data.key, data.val().exercise);
       }
     });
   });

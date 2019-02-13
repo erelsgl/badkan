@@ -23,8 +23,8 @@ document.getElementById("downloadData").addEventListener('click', e => {
  * BUTTON SOLVE IT!.
  */
 document.getElementById("btnSolve").addEventListener('click', e => {
-    // TODO: CHANGE MUTLIPLY BY THE NAME OF THE FOLDER CONTAINING THE EXERCISE.
-    document.location.href = "badkan.html?exercise=multiply";
+    localStorage.setItem("exercise", JSON.stringify(exercises.get(select.value)));
+    document.location.href = "badkan.html?exercise=" + select.value;
 
 });
 

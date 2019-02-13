@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-from terminal import git_clone
+# TODO AFTER THE BREAK: EDIT "EDIT" THEN PUSH GRADE THEN DEBUG.
+
+from terminal import *
 
 """
 A server for submission and checking of exercises.
@@ -98,6 +100,10 @@ async def load_ex(url, folder_name):
     git_clone("../exercises/", url, folder_name)
     print("your exercise is loaded.")
 
+async def edit_ex(url, folder_name):
+    git_clone_force("../exercises/", url, folder_name)
+    print("your exercise is edited.")
+
 async def run(websocket, path):
     """
     Run a websocket server that receives submissions and grades them.
@@ -107,6 +113,8 @@ async def run(websocket, path):
     submission = json.loads(submission_json)
     if (submission_json[2] == 'g'):
         await load_ex(submission["git_url"], submission["folderName"])
+    elif (submission_json[2] == 'e'):
+        await edit_ex(submission["edit_git_url"], submission["folderName"])
     else:
         await check_submission(websocket, submission["exercise"], submission["git_url"],submission)
     print ("> Closing connection")

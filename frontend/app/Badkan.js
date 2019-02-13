@@ -9,7 +9,8 @@ var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
 var exercise = getParameterByName("exercise");     // in utils.js
 if (!exercise)
     exercise = "00-multiply"; // default exercise
-$("#exercise").html(exercise);
+var ex = JSON.parse(localStorage.getItem("exercise"));
+$("#exercise").html(ex.name);
 
 
 $("button#clear").click(() => {
@@ -47,3 +48,8 @@ $("button#submit").click(() => {
 
     return false;
 })
+
+$("button#home").click(() => {
+    document.location.href = "home.html";
+})
+

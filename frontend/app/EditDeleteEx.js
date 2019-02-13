@@ -3,9 +3,12 @@
  */
 
 loadExerciseByOwner();
+var ownExercises = new Map();
+
+var select = document.getElementById("exercises");
+
 
 function addOption(exercise, key) {
-	var select = document.getElementById("exercises");
 	select.options[select.options.length] = new Option(exercise.name, key);
 }
 
@@ -13,8 +16,8 @@ function addOption(exercise, key) {
  * BUTTON EDIT.
  */
 document.getElementById("btnEdit").addEventListener('click', e => {
-    var selected = document.getElementById("exercises");
-    localStorage.setItem("selectedEx", JSON.stringify(selected.value));
+    localStorage.setItem("selectedEx", JSON.stringify(select.value));
+    localStorage.setItem("selectedExObj", JSON.stringify(ownExercises.get(select.value)));
     document.location.href = "editEx.html";
 });
 
@@ -22,7 +25,6 @@ document.getElementById("btnEdit").addEventListener('click', e => {
  * BUTTON DELETE
  */
 document.getElementById("btnDelete").addEventListener('click', e => {
-    var selected = document.getElementById("exercises");
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     var user = firebase.auth().currentUser;
 
