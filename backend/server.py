@@ -74,7 +74,10 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
             if(gradeLinePrefix in line):
                 grade = line[len(gradeLinePrefix):]
             await tee(websocket, line.strip())
+            if "Grade:" in line.strip():
+                await tee(websocket, "Final " +  line.strip()[line.strip().find('Grade: '): line.strip().find('%')])
     await appendGradeTofile(grade,submission,git_url,websocket)
+
 
 async def appendGradeTofile(grade,submission,git_url,websocket):
     '''

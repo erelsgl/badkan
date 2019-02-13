@@ -3,7 +3,7 @@
  */
 class User {
 
-  constructor(name, lastName, id, email, createdEx, deletedEx, editedEx) {
+  constructor(name, lastName, id, email, createdEx, deletedEx, editedEx, exerciseSolved) {
     this.name = name;
     this.lastName = lastName;
     this.id = id;
@@ -11,5 +11,6 @@ class User {
     this.createdEx = createdEx;
     this.deletedEx = deletedEx;
     this.editedEx = editedEx;
+    this.exerciseSolved = exerciseSolved;
   }
 }

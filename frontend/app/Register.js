@@ -27,9 +27,11 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
   }
 
   firebase.auth().createUserWithEmailAndPassword(email, pass).then(function () {
-    let currentUser = new User(name, lastName, id, email, 0, 0, 0);
+    exerciseSolved = new ExerciseSolved(new Exercise("0", "0", "0"), 90, "id");
+
+    let homeUser = new User(name, lastName, id, email, 0, 0, 0, [exerciseSolved]);
     var user = firebase.auth().currentUser;
-    writeUserData(currentUser, user.uid);
+    writeUserData(homeUser, user.uid);
   }).catch(function (error) {
     console.log(error.message);
     if (error.message === "The email address is already in use by another account.") {

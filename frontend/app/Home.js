@@ -38,6 +38,14 @@ document.getElementById("btnSolveEx").addEventListener('click', e => {
 });
 
 /**
+ * BUTTON RECORDS.
+ * Send he user to the createEx page.
+ */
+document.getElementById("records").addEventListener('click', e => {
+  document.location.href = "records.html";
+});
+
+/**
  * BUTTON SETTINGS.
  * Send he user to the settings page.
  */
@@ -49,7 +57,7 @@ document.getElementById("btnSettings").addEventListener('click', e => {
  * BUTTON LOGOUT.
  * Log out the user and redirect hinm to the register page.
  */
-document.getElementById("btnLogOut").addEventListener('click', e=>{
+document.getElementById("btnLogOut").addEventListener('click', e => {
   console.log('logged out')
   firebase.auth().signOut();
   document.location.href = "register.html";

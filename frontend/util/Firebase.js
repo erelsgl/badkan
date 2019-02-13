@@ -25,6 +25,13 @@ function writeUserData(user, userId) {
   });
 }
 
+function writeUserDataWithoutComingHome(user, userId) {
+  database.ref("users/" + userId).set({
+    user
+  });
+}
+
+
 function writeExercise(exercise, exerciseId) {
   firebase.database().ref("exercises/" + exerciseId).set({
     exercise
@@ -53,7 +60,8 @@ function loadCurrentUser(userId) {
     document.getElementById("name").innerHTML = "Hello " + homeUser.name + " " + homeUser.lastName
       + "<br />" + "ID: " + homeUser.id + "<br />" + "Email: " + homeUser.email + "<br />" +
       "Created exercise(s): " + homeUser.createdEx + "<br />" + "Deleted exercise(s): " + homeUser.deletedEx
-      + "<br />" + "Edited exercise(s): " + homeUser.editedEx;
+      + "<br />" + "Edited exercise(s): " + homeUser.editedEx + "<br />" + "Solved exercise(s): " +
+       homeUser.exerciseSolved.length;
   });
 }
 

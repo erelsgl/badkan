@@ -21,7 +21,7 @@ document.getElementById("confirm").addEventListener('click', e=>{
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 
   let currentUser = new User(name, lastName, id, homeUser.email, homeUser.createdEx, 
-  homeUser.deletedEx, homeUser.editedEx);
+  homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved);
   writeUserData(currentUser, user.uid);
 
   document.location.href = "home.html";

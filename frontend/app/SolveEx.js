@@ -24,6 +24,7 @@ document.getElementById("downloadData").addEventListener('click', e => {
  */
 document.getElementById("btnSolve").addEventListener('click', e => {
     localStorage.setItem("exercise", JSON.stringify(exercises.get(select.value)));
+    localStorage.setItem("selectedValue", JSON.stringify(select.value));
     document.location.href = "badkan.html?exercise=" + select.value;
 
 });
