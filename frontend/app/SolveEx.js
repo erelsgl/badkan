@@ -15,6 +15,7 @@ function addOption(exercise, key) {
  * BUTTON DOWNLOAD.
  */
 document.getElementById("downloadData").addEventListener('click', e => {
+    console.log(select.value);
     // Here we need to download the data from the storage.
     downloadTestCase(select.value);
 });
