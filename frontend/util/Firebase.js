@@ -61,7 +61,7 @@ function loadCurrentUser(userId) {
       + "<br />" + "ID: " + homeUser.id + "<br />" + "Email: " + homeUser.email + "<br />" +
       "Created exercise(s): " + homeUser.createdEx + "<br />" + "Deleted exercise(s): " + homeUser.deletedEx
       + "<br />" + "Edited exercise(s): " + homeUser.editedEx + "<br />" + "Solved exercise(s): " +
-       homeUser.exerciseSolved.length;
+       (homeUser.exerciseSolved.length - 1);
   });
 }
 
@@ -88,6 +88,7 @@ function loadAllExercise() {
 }
 
 function deleteExerciseById(exerciseId) {
+  console.log("here");
   // Need to delete from the realtime database and then from storage.
   database.ref().child('exercises/' + exerciseId).remove();
   // It's currently not possible to delete a folder in the storage firebase, may be an issue but

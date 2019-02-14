@@ -28,6 +28,6 @@ document.getElementById("btnDelete").addEventListener('click', e => {
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     var user = firebase.auth().currentUser;
 
+    deleteExerciseById(select.value)
     incrementDeletedEx(user.uid, homeUser);
-    deleteExerciseById(selected.value)
 });
