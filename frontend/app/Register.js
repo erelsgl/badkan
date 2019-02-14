@@ -76,6 +76,15 @@ document.getElementById("btnLogin").addEventListener('click', e => {
 
 });
 
+document.getElementById('signWithGithub').addEventListener('click', e => {
+  github();
+});
+
+document.getElementById('registerWithGithub').addEventListener('click', e => {
+  github();
+});
+
+
 /**
  * BUTTON GITHUB.
  * Attention !! Must use an HTTP or HTTPS adress. 
@@ -86,7 +95,7 @@ document.getElementById("btnLogin").addEventListener('click', e => {
  * Then, in the bowser, write: http://localhost:8000/
  * and go to the html file and we're done.
  */
-document.getElementById('withGithub').addEventListener('click', e => {
+function github() {
 
   console.log("Log with github");
 
@@ -120,7 +129,7 @@ document.getElementById('withGithub').addEventListener('click', e => {
 
   });
 
-})
+}
 
 
 

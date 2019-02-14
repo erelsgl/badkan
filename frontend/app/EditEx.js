@@ -91,3 +91,7 @@ function sendLinkHTTP(grading, folderName, username, pass) {
 
   return false;
 }
+
+document.getElementById("btnHome").addEventListener('click', e => {
+  document.location.href = "home.html";
+})

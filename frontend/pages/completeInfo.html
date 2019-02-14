@@ -7,6 +7,8 @@
     <title>Complete Info</title>
 
     <!-- Import js. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
     <script type="text/javascript" src="../util/Firebase.js"></script>
     <script type="text/javascript" src="../objects/User.js"></script>
@@ -14,18 +16,22 @@
     <script type="text/javascript" src="../objects/Exercise.js"></script>
 
     <!-- Import css. -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="../style/snackbar.css">
 
 </head>
 
 <body>
-    <!-- input. -->
-    <input type="name" id="txtName" placeholder="Enter name" /> <br />
-    <input type="lastName" id="txtLastName" placeholder="Enter last name" /> <br />
-    <input type="id" id="txtId" placeholder="Enter id" /><br />
+    <div class="container">
+        <h1>Please complete the information.</h1>
+        <!-- input. -->
+        <input type="name" id="txtName" placeholder="Enter name" /> <br />
+        <input type="lastName" id="txtLastName" placeholder="Enter last name" /> <br />
+        <input type="id" id="txtId" placeholder="Enter id" /><br />
 
-    <!-- button. -->
-    <button id="confirm">Confirm</button>
+        <!-- button. -->
+        <button id="confirm" type="button" class="btn btn-success">Confirm</button>
+    </div>
 
     <!-- snackbar. -->
     <div id="emptyField">Please fill all the fields.</div>

@@ -7,20 +7,18 @@
   <title>Register</title>
 
   <!-- Import js. -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
   <script type="text/javascript" src="../util/Firebase.js"></script>
   <script type="text/javascript" src="../objects/User.js"></script>
   <script type="text/javascript" src="../objects/ExerciseSolved.js"></script>
   <script type="text/javascript" src="../objects/Exercise.js"></script>
-
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
-
+  
   <!-- Import css. -->
   <link rel="stylesheet" href="../style/snackbar.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
 </head>
 
 <body>
@@ -35,9 +33,9 @@
         <br />
         <input type="email" id="txtEmail" placeholder="Enter email" /> <br />
         <input type="password" id="txtPassword" placeholder="Enter password" /><br />
-        <button id="btnLogin">Sign in</button>
+        <button id="btnLogin" type="button" class="btn btn-success">Sign in</button>
         <h4>If you have a github account.</h4>
-        <button id="withGithub">Sign in with GitHub</button>
+        <button id="signWithGithub" type="button" class="btn btn-success">Sign in with GitHub</button>
       </div>
       <div id="menu1" class="tab-pane fade">
         <br />
@@ -46,9 +44,9 @@
         <input id="txtName" placeholder="Enter name" /> <br />
         <input id="txtLastName" placeholder="Enter last name" /> <br />
         <input id="txtId" placeholder="Enter id" /><br />
-        <button id="btnSignUp">Sign Up</button>
+        <button id="btnSignUp" type="button" class="btn btn-success">Register</button>
         <h4>If you have a github account.</h4>
-        <button id="withGithub">Register with GitHub</button>
+        <button id="registerWithGithub" type="button" class="btn btn-success">Register with GitHub</button>
       </div>
     </div>
 

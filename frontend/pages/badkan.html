@@ -4,6 +4,8 @@
 <head>
     <meta charset="utf-8">
     <title>Submit exercise</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
     <script src='../library/jquery-3.2.1.min.js'></script>
     <script src='../util/utils.js'></script>
@@ -11,31 +13,29 @@
     <script src='../objects/ExerciseSolved.js'></script>
     <script src='../util/Firebase.js'></script>
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel='stylesheet' type='text/css' href='../style/style.css' />
-
 </head>
 
 <body>
-    <h1>Exercise Submission</h1>
-    <h2>Exercise name <span id="exercise"></span></h2>
-    <form style='border: solid 1px blue; margin: 10px; padding: 5px' dir="rtl">
-        <div style="text-align:center">
-            Enter here the Github Link. 
-            Must begin with https and end with .git
-            <br />
-            <input dir="ltr" id='giturl' style='width:90%' />
+    <div class="container">
+        <h1>Exercise Submission</h1>
+        <h2>Exercise name <span id="exercise"></span></h2>
+        <div class="form-group">
+            <label for="usr">Enter here the Github Link. Must begin with https and end with .git:</label>
+            <input type="text" class="form-control" id="giturl" /> <br />
         </div>
-        <div style='text-align:center'>
-            <button id='submit'>Send</button>
-            <button id='clear'>Clean</button>
+        <button id="submit" type="button" class="btn btn-primary">Send</button>
+        <button id="clear" type="button" class="btn btn-primary">Clean</button>
+        </form>
+        <h2>Submission result</h2>
+        <div id='output' dir='ltr' style='border: dashed 1px green; margin: 10px; padding: 5px; font-family: courier'>
         </div>
-    </form>
 
-    <h2>Submission result</h2>
-    <div id='output' dir='ltr' style='border: dashed 1px green; margin: 10px; padding: 5px; font-family: courier'>
+        <button id="home" type="button" class="btn btn-primary">Home page</button>
     </div>
 
-    <button id ="home">Home page</button>
+
     <script type="text/javascript" src="../app/Badkan.js"></script>
 </body>
 

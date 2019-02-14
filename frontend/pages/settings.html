@@ -7,22 +7,29 @@
     <title>Settings</title>
 
     <!-- Import js. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
     <script type="text/javascript" src="../util/Firebase.js"></script>
     <script type="text/javascript" src="../objects/User.js"></script>
 
     <!-- Import css. -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="../style/snackbar.css">
 </head>
 
 <body>
-    <!-- input. -->
-    <input id="txtName" placeholder="Change name" /> <br />
-    <input id="txtLastName" placeholder="Change last name" /> <br />
-    <input id="txtId" placeholder="Change id" /><br />
+    <div class="container">
+        <h1>Settings.</h1>
+        <!-- input. -->
+        <input id="txtName" placeholder="Change name" /> <br />
+        <input id="txtLastName" placeholder="Change last name" /> <br />
+        <input id="txtId" placeholder="Change id" /><br />
 
-    <!-- button. -->
-    <button id="confirm">Confirm</button>
+        <!-- button. -->
+        <button id="confirm" type="button" class="btn">Confirm</button>
+    </div>
+
 
     <!-- snackbar. -->
     <div id="emptyField">Please fill all the fields.</div>

@@ -7,17 +7,27 @@
     <title>Edit Delete</title>
 
     <!-- Import js. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
     <script type="text/javascript" src="../util/Firebase.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
 
 <body>
-    <!-- select. -->
-    <select id = "exercises"></select>
+    <div class="container">
+        <h1>Select the exercise you want to edit or delete.</h1>
+        <!-- select. -->
+        <div class="form-group">
+            <label for="sel1">Select exercise:</label>
+            <select class="form-control" id="exercises"></select>
+        </div>
 
-    <!-- button. -->
-    <button id="btnEdit">Edit</button>
-    <button id="btnDelete">Delete</button>
+        <!-- button. -->
+        <button id="btnEdit" type="button" class="btn btn-primary">Edit</button>
+        <button id="btnDelete" type="button" class="btn btn-danger">Delete</button>
+    </div>
 
     <script type="text/javascript" src="../app/EditDeleteEx.js"></script>
 </body>

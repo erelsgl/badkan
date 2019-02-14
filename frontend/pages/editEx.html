@@ -7,6 +7,8 @@
   <title>Edit Exercise</title>
 
   <!-- Import js. -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
   <script type="text/javascript" src="../util/Firebase.js"></script>
   <script type="text/javascript" src="../objects/Exercise.js"></script>
@@ -15,40 +17,50 @@
   <script src='../util/collaps.js'></script>
 
   <!-- Import css. -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="../style/snackbar.css">
 </head>
 
 <body>
-  <!-- input. -->
-  <input id="exName" /> <br />
+  <div class="container">
+    <h1>Edit exercise.</h1>
 
-  <!-- test area. -->
-  <textarea rows="10" cols="100" id="exDescr" name="comment" form="usrform"></textarea> <br />
+    <!-- input. -->
+    <div class="form-group">
+      <label for="usr">Name:</label>
+      <input type="text" class="form-control" id="exName" />
+    </div>
 
-  <!-- input. -->
-  <label for="Test Case">Please, import new test case:</label>
-  <input type="file" id="testCase" name="Test Case" multiple> <br />
+    <!-- test area. -->
+    <div class="form-group">
+      <label for="comment">Description:</label>
+      <textarea class="form-control" rows="10" id="exDescr" name="comment" form="usrform"></textarea>
+    </div>
 
-  <div style="text-align:center">
-    Enter here the GitLab Link.
-    Must begin with https and end with .git
-    <br />
-    <input dir="ltr" id='grading' style='width:90%' />
+    <!-- input. -->
+    <label for="Test Case">Test case:</label>
+    <input type="file" id="testCase" name="Test Case"> <br />
+
+    <div class="form-group">
+      <label for="usr">Enter here the GitLab Link. Must begin with https and end with .git:</label>
+      <input type="text" class="form-control" id="grading" /> <br />
+    </div>
+
+    <div class="form-group">
+      <label for="usr">Please enter the username for this repository:</label>
+      <input type="text" class="form-control" id="user" /> <br />
+    </div>
+
+    <div class="form-group">
+      <label for="usr">Please enter the password for this repository.:</label>
+      <input type="text" class="form-control" id="pass" /> <br />
+    </div>
+
+    <!-- button. -->
+    <button id="btnEdit" type="button" class="btn btn-primary">Edit</button>
+    <button id="btnHome" type="button" class="btn btn-primary">Home</button>
+
   </div>
-
-  <div style="text-align:center">
-    Please enter the username for this repository.
-    <br />
-    <input dir="ltr" id='user' style='width:90%' />
-  </div>
-
-  <div style="text-align:center">
-    Please enter the password for this repository.
-    <br />
-    <input dir="ltr" id='pass' style='width:90%' />
-  </div>
-  <!-- button. -->
-  <button id="btnEdit">Edit</button>
 
   <!-- snackbar. -->
   <div id="emptyField">Please fill all the fields.</div>

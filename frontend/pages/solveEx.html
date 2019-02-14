@@ -7,25 +7,33 @@
     <title>Solve Exercise</title>
 
     <!-- Import js. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
     <script type="text/javascript" src="../util/Firebase.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
 </head>
 
 <body>
-    <!-- select. -->
-    <select id="exercises" onchange="onOptionChange();"></select>
+    <div class="container">
 
-    <p id="descr"></p>
+        <!-- select. -->
+        <div class="form-group">
+                <label for="sel1">Select exercise:</label>
+                <select class="form-control" id="exercises" onchange="onOptionChange();"></select>
+        </div>
 
-    <!-- button. -->
-    <button id="downloadData">Download Test Case</button> <br />
+        <pre>
+            <p id="descr"></p>
+        </pre>
 
-    <p></p>
+        <!-- button. -->
+        <button id="downloadData" type="button" class="btn">Download Test Case</button> <br \>
+        <button id="btnSolve" type="button" class="btn">Solve it!</button>
+    </div>
 
-    <!-- button. -->
-    <button id="btnSolve">Solve it!</button>
-    
     <script type="text/javascript" src="../app/SolveEx.js"></script>
 </body>
 

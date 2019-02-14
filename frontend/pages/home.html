@@ -7,20 +7,27 @@
     <title>Badkan Home</title>
 
     <!-- Import js. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
     <script type="text/javascript" src="../util/Firebase.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 </head>
 
 <body>
-    <p id="name"></p>
-
-    <!-- button. -->
-    <button id="btnCreateEx" class="hide">Create Exercise</button>
-    <button id="btnEditEx" class="hide">Edit/Delete Exercise</button>
-    <button id="btnSolveEx" class="hide">Solve Exercise</button>
-    <button id="records" class="hide">Records</button>
-    <button id="btnSettings" class="hide">Settings</button>
-    <button id="btnLogOut" class="hide">Log Out</button>
+    <div class="container">
+        <h1>Badkan Home Page. </h1>
+        <pre>
+        <p id="name"></p>
+        </pre>
+        <button id="btnCreateEx" type="button" class="btn">Create Exercise</button>
+        <button id="btnEditEx" type="button" class="btn btn-primary">Edit/Delete Exercise</button>
+        <button id="btnSolveEx" type="button" class="btn btn-success">Solve Exercise</button>
+        <button id="records" type="button" class="btn btn-info">Records</button>
+        <button id="btnSettings" type="button" class="btn btn-warning">Settings</button>
+        <button id="btnLogOut" type="button" class="btn btn-danger">Log Out</button>
+    </div>
 
     <script type="text/javascript" src="../app/Home.js"></script>
 </body>
