@@ -5,7 +5,33 @@ A server for automatic checking and grading of programming assignments.
 
 Clone the rep:
 
-    git clone https://github.com/erelsgl/badkan.git
+    git clone https://github.com/SamuelBismuth/badkan.git
+
+Create a firebase account if you doesn't have one.
+
+Create a new project:
+
+Open the Firebase console at https://console.firebase.google.com/.
+
+Click "Add project".
+
+Add a project name and confirm.
+
+While your project initialized, add an web app.
+Copy all the script and paste it in the project at the next place:
+frontend-> util -> Firebase.js
+You need to replace the old script with the new one.
+
+If you want to add the feature "Sign in with GitHub" you need to enable the sign in method.
+But first you need to provide client ID and Client Secret from github.
+To do this, go to https://github.com/settings/developers.
+Click on new OAuth App.
+Fill all the field and in the field: Authorization callback URL, enter the url that firebase provide.
+For more information: https://firebase.google.com/docs/auth/?authuser=0 
+
+Go to Authentification, in the "Sign-in method" enable GitHub.
+
+Once firebase is initialized you need to install all the network stuff.
    
 We will do everything as root:
 
@@ -235,3 +261,11 @@ It is possible to create CSV reports of the performance of a class in an exercis
 Badkan is developed in Ariel university, computer science department.
 The code is released under the GPL 3 software license.
 Contributions are welcome!
+
+## Firebase
+Badkan use firebase as database.
+The paln is the spark plan, and allow only 100 simultenous connection.
+To check the number of current connection:   https://console.firebase.google.com/u/0/project/badkan-9d48d/database/usage/current-billing/connections
+To see all the information about the spark plan:  
+https://firebase.google.com/pricing/?authuser=0
+Notice that at any moment, it's possible to change the plan.
