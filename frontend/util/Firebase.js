@@ -96,11 +96,3 @@ function deleteExerciseById(exerciseId) {
   document.location.href = "home.html";
 }
 
-function downloadTestCase(path) {
-  const testCase = storage.ref().child(path + "/testCase");
-  testCase.getDownloadURL().then(function (url) {
-    window.location.replace(url);
-  }).catch(function (error) {
-    console.log(error.message);
-  });
-}

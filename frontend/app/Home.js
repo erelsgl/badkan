@@ -58,8 +58,10 @@ document.getElementById("btnSettings").addEventListener('click', e => {
  * Log out the user and redirect hinm to the register page.
  */
 document.getElementById("btnLogOut").addEventListener('click', e => {
-  console.log('logged out')
+  console.log('logged out');
   firebase.auth().signOut();
-  document.location.href = "register.html";
+  document.location.href = "index.html";
+  
 });
+
 

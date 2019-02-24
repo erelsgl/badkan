@@ -1,7 +1,3 @@
-/**
- * TODO: UPDATE THE GRADING OF THE STUDENT FOR THE EXERCISE.
- */
-
 var grade = 0;
 
 var backendPort = getParameterByName("backend");     // in utils.js
@@ -23,7 +19,7 @@ $("button#clear").click(() => {
 
 $("button#submit").click(() => {
     var submission_json = JSON.stringify({
-        exercise: exercise,
+        exercise: exercise + "/" + ex.exFolder,
         git_url: $("input#giturl").val(),
     });
     logClient("color:#888", submission_json);  // in utils.js

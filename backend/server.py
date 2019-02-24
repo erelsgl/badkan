@@ -44,6 +44,7 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
     :param git_url:   a url for cloning the student's git repository containing the submitted solution.
                       must be of the form https://xxx.git.
     """
+
     if not os.path.isdir(EXERCISE_DIR+"/"+exercise):
         await tee(websocket, "exercise '{}' not found".format(exercise))
         return
@@ -117,7 +118,7 @@ async def run(websocket, path):
     elif (submission_json[3] == 'd'):
         await edit_ex(submission["edit_git_url"], submission["folderName"], submission["username"], submission["pass"])
     else:
-        await check_submission(websocket, submission["exercise"], submission["git_url"],submission)
+        await check_submission(websocket, submission["exercise"], submission["git_url"], submission)
     print ("> Closing connection")
 
 websocketserver = websockets.server.serve(run, '0.0.0.0', PORT, origins=None)

@@ -12,15 +12,6 @@ function addOption(exercise, key) {
 }
 
 /**
- * BUTTON DOWNLOAD.
- */
-document.getElementById("downloadData").addEventListener('click', e => {
-    console.log(select.value);
-    // Here we need to download the data from the storage.
-    downloadTestCase(select.value);
-});
-
-/**
  * BUTTON SOLVE IT!.
  */
 document.getElementById("btnSolve").addEventListener('click', e => {
@@ -33,4 +24,6 @@ document.getElementById("btnSolve").addEventListener('click', e => {
 function onOptionChange() {
     document.getElementById("descr").innerHTML = "Here is the description of the exercise: <br />" +
         exercises.get(select.value).description;
+    document.getElementById("example").innerHTML = "Here is one example for the exercise: <br />" +
+        exercises.get(select.value).example;
 }

@@ -9,7 +9,7 @@ Clone the rep:
 
 Create a firebase account if you doesn't have one.
 
-Create a new project:
+Create a new firebase project:
 
 Open the Firebase console at https://console.firebase.google.com/.
 
@@ -17,12 +17,14 @@ Click "Add project".
 
 Add a project name and confirm.
 
-While your project initialized, add an web app.
+After your project initialized, add a web app by clicking on "</>.
 Copy all the script and paste it in the project at the next place:
 frontend-> util -> Firebase.js
 You need to replace the old script with the new one.
 
 If you want to add the feature "Sign in with GitHub" you need to enable the sign in method.
+In firebase go to Authentification, in the "Sign-in method" enable GitHub.
+
 But first you need to provide client ID and Client Secret from github.
 To do this, go to https://github.com/settings/developers.
 Click on new OAuth App.
@@ -186,6 +188,27 @@ To replace the container with an updated container:
 To replace an old exercise-grader with a new one: 
 put the new grader code in the "exercises" folder on the *host*.
 The server will automatically copy it to the docker container.
+
+Sometimes, you need to check the open ports using this command:
+ps -fA | grep pytho
+If need, kill the port by using both command:
+first: sudo killall python3
+then: sudo kill 21473
+
+
+As a developper, sometimes, you want to open the server in localhost without use nohup.
+Thus, open three terminal.
+Here are the command for the terminals:
+
+1- cd backend/pages then sudo python3 -u server.py 5670
+2 - cd frontend then sudo python3 -u -m http.server 8000
+3 - sudo docker run --name badkan -p 8010:8010 --rm -itd erelsgl/badkan bash 
+Then, optional: sudo docker exec badkan bash -c "cd /www; python3 -u -m http.server 8010" 
+
+Once everything done, open another terminal and here is the command:
+<your-browser> http://localhost:<FRONTEND_PORT>
+
+
 
 # Badkan 2.0
 
