@@ -1,3 +1,9 @@
+var currentUser = JSON.parse(localStorage.getItem("homeUserKey"));
+
+document.getElementById("txtName").defaultValue = currentUser.name
+document.getElementById("txtLastName").defaultValue = currentUser.lastName
+document.getElementById("txtId").defaultValue = currentUser.id
+
 /**
  * BUTTON CONFIRM.
  */

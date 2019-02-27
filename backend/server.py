@@ -45,10 +45,10 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
                       must be of the form https://xxx.git.
     """
 
-    if not os.path.isdir(EXERCISE_DIR+"/"+exercise):
-        await tee(websocket, "exercise '{}' not found".format(exercise))
+    if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
+        await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
-
+        
     # to find student grade 
     gradeLinePrefix = "your grade is :"
     grade = "putGradeHere"
@@ -98,12 +98,12 @@ async def appendGradeTofile(grade,submission,git_url,websocket):
     htmlMessage = "<div class='grade'>"+userMessage+"</div>"
     await tee (websocket,htmlMessage)
 
-async def load_ex(url, folder_name, username, password):
-    git_clone("../exercises/", url, folder_name, username, password)
+async def load_ex(url, folder_name, username, password, exercise):
+    git_clone("../exercises", url, folder_name, username, password, exercise)
     print("your exercise is loaded.")
 
-async def edit_ex(url, folder_name, username, password):
-    git_clone_force("../exercises/", url, folder_name, username, password)
+async def edit_ex(folder_name, ex_folder):
+    git_pull("../exercises", folder_name, ex_folder)
     print("your exercise is edited.")
 
 async def run(websocket, path):
@@ -114,9 +114,9 @@ async def run(websocket, path):
     print("< "+submission_json)
     submission = json.loads(submission_json)
     if (submission_json[2] == 'g'):
-        await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"])
-    elif (submission_json[3] == 'd'):
-        await edit_ex(submission["edit_git_url"], submission["folderName"], submission["username"], submission["pass"])
+        await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
+    elif (submission_json[3] == 'o'):
+        await edit_ex(submission["folderName"], submission["exFolder"])
     else:
         await check_submission(websocket, submission["exercise"], submission["git_url"], submission)
     print ("> Closing connection")

@@ -2,14 +2,18 @@ import subprocess
 from subprocess import call
 import os
 
-def git_clone(path, url, folder_name, username, password):
+def git_clone(path, url, folder_name, username, password, exercise):
+    owd = os.getcwd()
     os.chdir(path)
-    new_url = "https://" + username + ":" + password + "@" + url[8:] + ".git"
+    new_url = "https://" + username + ":" + password + "@" + url[8:]
     call(["git", "clone", new_url, folder_name])
+    os.chdir(path + "/" + folder_name)
+    os.system("ls | grep -v " + exercise + " | xargs rm -r")
+    os.chdir(owd)
 
-def git_clone_force(path, url, folder_name, username, password):
-    os.chdir(path)
-    new_url = "https://" + username + ":" + password + "@" + url[8:] + ".git"
-    call(["git", "clone", new_url, "temp"])
-    call(["rm", "-rf", folder_name])
-    call(["mv", "temp", folder_name])
+
+def git_pull(path, folder_name, ex_folder):
+    owd = os.getcwd()
+    os.chdir(path + "/" + folder_name + "/" + ex_folder)
+    call(["git", "pull"])
+    os.chdir(owd)

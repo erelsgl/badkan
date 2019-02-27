@@ -200,7 +200,7 @@ As a developper, sometimes, you want to open the server in localhost without use
 Thus, open three terminal.
 Here are the command for the terminals:
 
-1- cd backend/pages then sudo python3 -u server.py 5670
+1- cd backend then sudo python3 -u server.py 5670
 2 - cd frontend then sudo python3 -u -m http.server 8000
 3 - sudo docker run --name badkan -p 8010:8010 --rm -itd erelsgl/badkan bash 
 Then, optional: sudo docker exec badkan bash -c "cd /www; python3 -u -m http.server 8010" 
@@ -208,7 +208,9 @@ Then, optional: sudo docker exec badkan bash -c "cd /www; python3 -u -m http.ser
 Once everything done, open another terminal and here is the command:
 <your-browser> http://localhost:<FRONTEND_PORT>
 
-
+To update when update the readme: 
+The grade program must output the student grade at its last line in format:  
+< *** Right: 2. Wrong: 0. Grade: 100% ***
 
 # Badkan 2.0
 

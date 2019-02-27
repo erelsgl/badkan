@@ -33,8 +33,12 @@ $("button#submit").click(() => {
         console.log(event);
     }
     websocket.onclose = (event) => {
-        if (event.code === 1000)
+        if (event.code === 1000) {
+            if (grade === 0) {
+                uploadGrade(0);
+            }
             logServer("color:blue", "Submission completed!");
+        }
         else if (event.code === 1006)
             logServer("color:red", "Connection closed abnormally!");
         else
@@ -49,29 +53,33 @@ $("button#submit").click(() => {
         if (event.data.includes("Final Grade:")) {
             console.log(event.data.substring(12, event.data.length));
             grade = event.data.substring(12, event.data.length);
-            var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
-
-            exerciseSolved = new ExerciseSolved(ex, grade, selectedValue);
-
-            flag = true;
-            for (i = 0; i < homeUser.exerciseSolved.length; i++) {
-                if (homeUser.exerciseSolved[i].exerciseId === selectedValue) {
-                    homeUser.exerciseSolved[i] = exerciseSolved;
-                    flag = false;
-                }
-            }
-
-            if (flag) {
-                homeUser.exerciseSolved.push(exerciseSolved);
-            }
-
-            var userId = firebase.auth().currentUser.uid;
-            writeUserDataWithoutComingHome(homeUser, userId);
+            uploadGrade(grade);
         }
     }
 
     return false;
 })
+
+function uploadGrade(grade) {
+    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+
+    exerciseSolved = new ExerciseSolved(ex, grade, selectedValue);
+
+    flag = true;
+    for (i = 0; i < homeUser.exerciseSolved.length; i++) {
+        if (homeUser.exerciseSolved[i].exerciseId === selectedValue) {
+            homeUser.exerciseSolved[i] = exerciseSolved;
+            flag = false;
+        }
+    }
+
+    if (flag) {
+        homeUser.exerciseSolved.push(exerciseSolved);
+    }
+
+    var userId = firebase.auth().currentUser.uid;
+    writeUserDataWithoutComingHome(homeUser, userId);
+}
 
 $("button#home").click(() => {
     document.location.href = "home.html";

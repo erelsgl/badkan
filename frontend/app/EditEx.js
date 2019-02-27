@@ -2,7 +2,7 @@ var ex = JSON.parse(localStorage.getItem("selectedExObj"));
 
 document.getElementById("exName").defaultValue = ex.name
 document.getElementById("exDescr").defaultValue = ex.description
-
+document.getElementById("exEx").defaultValue = ex.example
 
 /**
  * BUTTON CONFIRM.
@@ -11,25 +11,21 @@ document.getElementById("btnEdit").addEventListener('click', e => {
 
   const name = document.getElementById("exName").value;
   const descr = document.getElementById("exDescr").value;
-  const grading = document.getElementById("grading").value;
-  const username = document.getElementById("user").value;
-  const pass = document.getElementById("pass").value;
-
-  const testCase = document.getElementById("testCase").files;
+  const example = document.getElementById("exEx").value;
 
   var emptyField = document.getElementById("emptyField");
 
-  if (name === "" || descr === "" || user == "" || pass == "" || grading == "" || testCase.length == 0) {
+  if (name === "" || descr === "" || example == "") {
     emptyField.className = "show";
     setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
     return;
   }
 
-  uploadExercise(name, descr, testCase, grading, username, pass);
+  uploadExercise(name, descr, example);
 
 });
 
-function uploadExercise(name, descr, testCases, grading, username, pass) {
+function uploadExercise(name, descr, example) {
   // The ref of the folder must be PK.
 
   var user = firebase.auth().currentUser;
@@ -37,33 +33,25 @@ function uploadExercise(name, descr, testCases, grading, username, pass) {
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   var folderName = JSON.parse(localStorage.getItem("selectedEx"));
 
-  var storageRef = firebase.storage().ref(folderName);
+  
+  sendLinkHTTP(folderName, ex.exFolder);
 
-  var testCaseRef = storageRef.child('testCase/');
-  testCaseRef.put(testCases[0]).then(function (snapshot) {
-    console.log('Uploaded folder!');
-  })
-
-  sendLinkHTTP(grading, folderName, username, pass);
-
-  let exercise = new Exercise(name, descr, user.uid);
+  let exercise = new Exercise(name, descr, example, user.uid, ex.link, ex.exFolder);
 
   incrementEditEx(user.uid, homeUser);
   writeExercise(exercise, folderName);
 
 }
 
-function sendLinkHTTP(grading, folderName, username, pass) {
+function sendLinkHTTP(folderName, exFolder) {
   var backendPort = getParameterByName("backend");     // in utils.js
   if (!backendPort)
     backendPort = 5670; // default port - same as in ../server.py
   var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
 
   var submission_json = JSON.stringify({
-    edit_git_url: grading,
     folderName: folderName,
-    username: username,
-    pass: pass,
+    exFolder: exFolder,
   });
 
   logClient("color:#888", submission_json);  // in utils.js

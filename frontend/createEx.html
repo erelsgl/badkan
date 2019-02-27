@@ -23,54 +23,63 @@
 
 <body>
   <div class="container">
-
     <h1>Create an exercise.</h1>
 
     <h3>First time?
-    <button id="btnHelp" type="button" class="btn btn-link">help</button></h3>
-
+      <button id="btnHelp" type="button" class="btn btn-link">help</button></h3>
     <!-- input. -->
-    <div class="form-group">
-      <label for="usr">Name:</label>
-      <input type="text" class="form-control" id="exName" placeholder="Enter a name for the exercise" /> <br />
-    </div>
-
+    <form>
+      <div class="form-group">
+        <label for="usr">Name:</label>
+        <input type="text" class="form-control" id="exName" placeholder="Enter a name for the exercise" /> <br />
+      </div>
+    </form>
 
     <!-- text area. -->
     <div class="form-group">
-        <label for="comment">Description:</label>
-        <textarea class="form-control" rows="10" id="exDescr" name="comment">Enter the description of the exercise here...</textarea>
-    </div> 
+      <label for="comment">Description:</label>
+      <textarea class="form-control" rows="10" id="exDescr" name="comment">Enter the description of the exercise here...</textarea>
+    </div>
 
     <!-- text area. -->
     <div class="form-group">
       <label for="comment">Example:</label>
       <textarea class="form-control" rows="10" id="exEx" name="comment">Enter an example of the exercise here...</textarea>
-    </div> 
+    </div>
 
-    <div class="form-group">
+    <form>
+      <div class="form-group">
         <label for="usr">Enter here the GitLab Link. Must begin with https and end with .git:</label>
-        <input type="text" class="form-control" id="link"/> <br />
-    </div>
+        <input type="text" class="form-control" id="link" /> <br />
+      </div>
+    </form>
 
-    <!-- input. -->
-    <div class="form-group">
-      <label for="usr">Exercise Folder:</label>
-      <input type="text" class="form-control" id="exFolder" /> <br />
-    </div>
+    <form>
 
-    <div class="form-group">
+      <!-- input. -->
+      <div class="form-group">
+        <label for="usr">Exercise Folder:</label>
+        <input type="text" class="form-control" id="exFolder" /> <br />
+      </div>
+
+    </form>
+
+    <form>
+
+      <div class="form-group">
         <label for="usr">Please enter the username for this repository:</label>
-        <input type="text" class="form-control" id="user"/> <br />
-    </div>
+        <input type="text" class="form-control" id="user" /> <br />
+      </div>
+    </form>
 
     <div class="form-group">
-        <label for="usr">Please enter the password for this repository:</label>
-        <input type="text" class="form-control" id="pass"/> <br />
+      <label for="usr">Please enter the password for this repository:</label>
+      <input type="text" class="form-control" id="pass" /> <br />
     </div>
 
     <!-- button. -->
     <button id="btnConfirm" type="button" class="btn btn-primary">Confirm</button>
+
   </div>
 
 
