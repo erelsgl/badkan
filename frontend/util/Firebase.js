@@ -25,12 +25,20 @@ function writeUserData(user, userId) {
   });
 }
 
+function writeUserDataAndSubmit(user, userId) {
+  database.ref("users/" + userId).set({
+    user
+  }).then(function () {
+    document.getElementById("form").submit();
+    document.location.href = "home.html";
+  });
+}
+
 function writeUserDataWithoutComingHome(user, userId) {
   database.ref("users/" + userId).set({
     user
   });
 }
-
 
 function writeExercise(exercise, exerciseId) {
   firebase.database().ref("exercises/" + exerciseId).set({
@@ -41,6 +49,11 @@ function writeExercise(exercise, exerciseId) {
 function incrementCreatedEx(userId, homeUser) {
   homeUser.createdEx++;
   writeUserData(homeUser, userId);
+}
+
+function incrementCreatedExAndSubmit(userId, homeUser) {
+  homeUser.createdEx++;
+  writeUserDataAndSubmit(homeUser, userId);
 }
 
 function incrementDeletedEx(userId, homeUser) {

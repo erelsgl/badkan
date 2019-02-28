@@ -1,8 +1,8 @@
 /**
- * BUTTON CONFIRM.
- */
+* BUTTON CONFIRM.
+*/
 document.getElementById("btnConfirm").addEventListener('click', e => {
-  
+
   const name = document.getElementById("exName").value;
   const descr = document.getElementById("exDescr").value;
   const example = document.getElementById("exEx").value;
@@ -28,13 +28,14 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
  */
 document.getElementById("btnHelp").addEventListener('click', e => {
   alert("To upload a new exercise, you need first to create a GitLab account. \n" +
-  "Then, create a private repository with all the files. Once the repository created, \n" + 
-  "go to the settings of the repository, and then click in the Repository button. \n" +
-  "Expand the deploy key and create one. you need to copy and paste the user name and the password \n" +
-  "in the fields at the bottom.");
+    "Then, create a private repository with all the files. Once the repository created, \n" +
+    "go to the settings of the repository, and then click in the Repository button. \n" +
+    "Expand the deploy key and create one. you need to copy and paste the user name and the password \n" +
+    "in the fields at the bottom.");
 });
 
 function uploadExercise(name, descr, example, link, username, pass, exFolder) {
+
   // The ref of the folder must be PK.
   var user = firebase.auth().currentUser;
 
@@ -45,7 +46,7 @@ function uploadExercise(name, descr, example, link, username, pass, exFolder) {
 
   let exercise = new Exercise(name, descr, example, user.uid, link, exFolder);
 
-  incrementCreatedEx(user.uid, homeUser);
+  incrementCreatedExAndSubmit(user.uid, homeUser);
   writeExercise(exercise, folderName);
 
 }
