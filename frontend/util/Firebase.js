@@ -57,6 +57,7 @@ function incrementCreatedExAndSubmit(userId, homeUser) {
 }
 
 function incrementDeletedEx(userId, homeUser) {
+  console.log("increment delete");
   homeUser.deletedEx++;
   writeUserData(homeUser, userId);
 }
@@ -74,19 +75,25 @@ function loadCurrentUser(userId) {
       + "<br />" + "ID: " + homeUser.id + "<br />" + "Email: " + homeUser.email + "<br />" +
       "Created exercise(s): " + homeUser.createdEx + "<br />" + "Deleted exercise(s): " + homeUser.deletedEx
       + "<br />" + "Edited exercise(s): " + homeUser.editedEx + "<br />" + "Solved exercise(s): " +
-       (homeUser.exerciseSolved.length - 1);
+      (homeUser.exerciseSolved.length - 1);
   });
 }
 
 function loadExerciseByOwner() {
+  var flag = false;
   database.ref().child('exercises/').on("value", function (snapshot) {
     snapshot.forEach(function (data) {
       if (data.val().exercise.ownerId === firebase.auth().currentUser.uid) {
         addOption(data.val().exercise, data.key);
         ownExercises.set(data.key, data.val().exercise);
+        flag = true;
       }
     });
-  });
+    if (!flag) {
+      alert("You didn't create any exercise yet!");
+      window.location.href = 'home.html';
+    }
+  }); 
 }
 
 function loadAllExercise() {
@@ -101,11 +108,7 @@ function loadAllExercise() {
 }
 
 function deleteExerciseById(exerciseId) {
-  console.log("here");
-  // Need to delete from the realtime database and then from storage.
+  // Need to delete from the realtime database.
   database.ref().child('exercises/' + exerciseId).remove();
-  // It's currently not possible to delete a folder in the storage firebase, may be an issue but
-  // I actually don't implement the deleting in the storage.
-  document.location.href = "home.html";
 }
 

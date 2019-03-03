@@ -106,6 +106,10 @@ async def edit_ex(folder_name, ex_folder):
     git_pull("../exercises", folder_name, ex_folder)
     print("your exercise is edited.")
 
+async def delete_ex(delete_ex):
+    rmv("../exercises", delete_ex)
+    print("your exercise is deleted.")
+
 async def run(websocket, path):
     """
     Run a websocket server that receives submissions and grades them.
@@ -117,6 +121,8 @@ async def run(websocket, path):
         await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
     elif (submission_json[3] == 'o'):
         await edit_ex(submission["folderName"], submission["exFolder"])
+    elif (submission_json[2] == 'd'):
+        await delete_ex(submission["delete_exercise"])
     else:
         await check_submission(websocket, submission["exercise"], submission["git_url"], submission)
     print ("> Closing connection")

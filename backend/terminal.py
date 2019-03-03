@@ -17,3 +17,9 @@ def git_pull(path, folder_name, ex_folder):
     os.chdir(path + "/" + folder_name + "/" + ex_folder)
     call(["git", "pull"])
     os.chdir(owd)
+
+def rmv(path, folder_name):
+    owd = os.getcwd()
+    os.chdir(path)
+    os.system("rm -r " + folder_name)
+    os.chdir(owd)
