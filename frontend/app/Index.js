@@ -9,8 +9,8 @@
  */
 document.getElementById("btnSignUp").addEventListener('click', e => {
 
-  const email = document.getElementById("txtEmail").value;
-  const pass = document.getElementById("txtPassword").value;
+  const email = document.getElementById("txtEmailSignIn").value;
+  const pass = document.getElementById("txtPasswordSignIn").value;
   const name = document.getElementById("txtName").value;
   const lastName = document.getElementById("txtLastName").value;
   const id = document.getElementById("txtId").value;
@@ -21,6 +21,12 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
   var badMail = document.getElementById("badMail");
 
   if (email === "" || pass === "" || name === "" || lastName === "" || id === "") {
+    console.log(email);
+    console.log(pass);
+    console.log(name);
+    console.log(lastName);
+    console.log(id);
+
     emptyField.className = "show";
     setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
     return;
