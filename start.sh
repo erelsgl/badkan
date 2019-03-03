@@ -22,7 +22,7 @@ sudo nohup python3 -u server.py 5679 &
 # -u = unbuffered. See https://stackoverflow.com/a/107717/827927
 
 # 3. Start the frontend server:
-cd ../frontend/pages
+cd ../frontend
 sudo rm nohup.out
 sudo nohup python3 -u -m http.server 8000 &
 sudo nohup python3 -u -m http.server 8001 &
