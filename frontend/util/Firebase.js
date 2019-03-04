@@ -82,14 +82,12 @@ function loadCurrentUser(userId) {
 }
 
 /**
- * TODO: no need local storage so change this.
- * finish here.
  * @param {*} userId 
  * @param {*} grade 
  */
 function loadCollabById(userId, grade) {
   database.ref('/users/').orderByChild("/user/id").equalTo(userId).once('value').then(function (snapshot) {
-    snapshot.forEach(function(child) {
+    snapshot.forEach(function (child) {
       let uid = child.key;
       database.ref('/users/' + uid).once('value').then(function (snapshot) {
         let collab1 = snapshot.val().user;
@@ -141,3 +139,17 @@ function deleteExerciseById(exerciseId) {
   database.ref().child('exercises/' + exerciseId).remove();
 }
 
+function downloadGradesByOwner(exercises) {
+  var mapIter = exercises.keys();
+  let result = mapIter.next();
+  while (!result.done) {
+    getAllGrades(result.value);
+    result = mapIter.next();
+  }
+}
+
+function getAllGrades(exerciseId) {
+  database.ref('users').orderByChild("user/exerciseSolved").once('value').then(function (snapshot) {
+    console.log(snapshot.key);
+  });
+}

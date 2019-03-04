@@ -76,5 +76,6 @@ document.getElementById("btnDelete").addEventListener('click', e => {
  * BUTTON GRADES
  */
 document.getElementById("grades").addEventListener('click', e => {
-    
+    downloadGradesByOwner(ownExercises);
 });
+
