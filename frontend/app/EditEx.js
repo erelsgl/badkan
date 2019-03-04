@@ -3,9 +3,12 @@ var ex = JSON.parse(localStorage.getItem("selectedExObj"));
 document.getElementById("exName").defaultValue = ex.name
 document.getElementById("exDescr").defaultValue = ex.description
 document.getElementById("exEx").defaultValue = ex.example
+document.getElementById("link").defaultValue = ex.link
+document.getElementById("exFolder").defaultValue = ex.exFolder
+//document.getElementById("user").defaultValue = ex.username
 
 /**
- * BUTTON CONFIRM.
+ * BUTTON CONFIRM (SAVE CHANGES).
  */
 document.getElementById("btnEdit").addEventListener('click', e => {
 

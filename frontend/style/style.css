@@ -1,3 +1,12 @@
+.buttonload {
+      background-color: rgba(241, 238, 238, 0.952); /* Green background */
+      border: none; /* Remove borders */
+      color: rgb(37, 35, 35); /* White text */
+      padding: 0px 30px; /* Some padding */
+      font-size: 20px; /* Set a font-size */
+}
+
+
 div.grade {background:#eef;border:#00f solid 1px; padding:2px; margin:2px}
 
 div.testcase {
@@ -38,3 +47,8 @@ border-top-width: 0px;
 }
 
 
+a.home {
+  display:block;
+  padding:1mm;
+  background:#efe;
+}

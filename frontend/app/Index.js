@@ -4,8 +4,9 @@
 
 /**
  * BUTTON SIGNUP.
- * Here we first authentificate the user, then we register the user in the
- * realtime database, then, we redirected the user to the home page.
+ * Here we first authenticate the user,
+ * then we register the user in the realtime database,
+ * then we redirect the user to the home page.
  */
 document.getElementById("btnSignUp").addEventListener('click', e => {
 

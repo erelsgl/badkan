@@ -1,25 +1,22 @@
 # badkan
 A server for automatic checking and grading of programming assignments.
 
-## Installation
+## Installing the database
+Badkan stores its data on a Firebase database.
 
-Clone the rep:
+Create a Firebase account if you don't have one.
 
-    git clone https://github.com/SamuelBismuth/badkan.git
+Create a new Firebase project:
 
-Create a firebase account if you doesn't have one.
+* Open the Firebase console at https://console.firebase.google.com/.
+* Click "Add project".
+* Add a project name and confirm.
 
-Create a new firebase project:
+After your project is initialized, add a web app by clicking on "</>".
+Copy the script code from the text box, and paste it in the file:
 
-Open the Firebase console at https://console.firebase.google.com/.
-
-Click "Add project".
-
-Add a project name and confirm.
-
-After your project initialized, add a web app by clicking on "</>.
-Copy all the script and paste it in the project at the next place:
-frontend-> util -> Firebase.js
+    frontend/util/Firebase.js
+    
 You need to replace the old script with the new one.
 
 If you want to add the feature "Sign in with GitHub" you need to enable the sign in method.
@@ -31,10 +28,16 @@ Click on new OAuth App.
 Fill all the field and in the field: Authorization callback URL, enter the url that firebase provide.
 For more information: https://firebase.google.com/docs/auth/?authuser=0 
 
-Go to Authentification, in the "Sign-in method" enable GitHub.
+Go to Authentication, in the "Sign-in method" enable GitHub.
 
-Once firebase is initialized you need to install all the network stuff.
-   
+Once Firebase is initialized you need to install all the network stuff.
+
+## Installing the server
+
+Clone the repository:
+
+    git clone https://github.com/SamuelBismuth/badkan.git
+
 We will do everything as root:
 
     sudo su
@@ -62,14 +65,14 @@ Optional: check that docker is installed correctly:
 Next, pull a docker image of badkan from the public docker repository:
 
     docker pull erelsgl/badkan
-    sudo docker images       # check that you see the badkan image
+    docker images       # check that you see the badkan image
 
 This can take a very long time since the image is large.
 Alternatively, you can build the image yourself:
 
     cd badkan/docker
     docker build -t erelsgl/badkan:latest .
-    sudo docker images       # check that you see the badkan image
+    docker images       # check that you see the badkan image
     
 
 If you want to use a process-monitor to run the servers, you can use pm2:
@@ -92,7 +95,7 @@ For example:
 
     sudo bash start.sh 80
 
-Verify that the docker container is running:
+Verify that a docker container with image "badkan" is running:
 
     sudo docker container ls
 
@@ -164,7 +167,7 @@ The system then:
 The default installation contains two example exercises:
 "multiply" and "reverse". 
 
-## Maintenance
+## UPDATING THE DOCKER CONTAINER
 
 To enter the running docker container:
 
@@ -178,20 +181,26 @@ To copy files from the host into the container:
 
     docker cp <local-file> badkan:/<remote-file>
     
-To replace the container with an updated container:
+After you change the badkan container, you can push your changes upstream by:
+
+    docker commit <container-id> erelsgl/badkan
+    docker push erelsgl/badkan
+    
+Then, on another server, you can pull these changes by:
 
     sudo docker pull erelsgl/badkan:latest
     sudo docker images    # note the old image with the <none> tag
+    sudo docker stop badkan
     sudo docker rmi <old-image-id>
-    sudo docker run --name badkan --rm -i -t erelsgl/badkan bash
-    
+    sudo docker run --name badkan --rm -itd erelsgl/badkan bash
+
 To replace an old exercise-grader with a new one: 
 put the new grader code in the "exercises" folder on the *host*.
 The server will automatically copy it to the docker container.
 
 Sometimes, you need to check the open ports using this command:
 ps -fA | grep pytho
-If need, kill the port by using both command:
+If needed, kill the port by using both command:
 first: sudo killall python3
 then: sudo kill 21473
 

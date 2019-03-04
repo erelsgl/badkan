@@ -72,7 +72,7 @@ function loadCurrentUser(userId) {
     var homeUser = snapshot.val().user;
     localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
     document.getElementById("name").innerHTML = "Hello " + homeUser.name + " " + homeUser.lastName
-      + "<br />" + "ID: " + homeUser.id + "<br />" + "Email: " + homeUser.email + "<br />" +
+      + "! <br />" + "ID number: " + homeUser.id + "<br />" + "Email: " + homeUser.email + "<br />" +
       "Created exercise(s): " + homeUser.createdEx + "<br />" + "Deleted exercise(s): " + homeUser.deletedEx
       + "<br />" + "Edited exercise(s): " + homeUser.editedEx + "<br />" + "Solved exercise(s): " +
       (homeUser.exerciseSolved.length - 1);

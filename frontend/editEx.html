@@ -19,33 +19,52 @@
   <!-- Import css. -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="../style/snackbar.css">
+  <link rel="stylesheet" href="style/style.css">
 </head>
 
 <body>
+<a class='home' href="home.html">Badkan Home</a>
   <div class="container">
-    <h1>Edit exercise.</h1>
+    <h1>Edit Exercise</h1>
 
     <!-- input. -->
     <div class="form-group">
-      <label for="usr">Name:</label>
+      <label for="exName">Name:</label>
       <input type="text" class="form-control" id="exName" />
     </div>
 
     <!-- test area. -->
     <div class="form-group">
-      <label for="comment">Description:</label>
+      <label for="exDescr">Description:</label>
       <textarea class="form-control" rows="10" id="exDescr" name="comment" form="usrform"></textarea>
     </div>
 
     <!-- text area. -->
     <div class="form-group">
-      <label for="comment">Example:</label>
+      <label for="exEx">Example:</label>
       <textarea class="form-control" rows="10" id="exEx" name="comment" form="usrform"> </textarea>
     </div> 
 
+    <div class="form-group">
+      <label for="link">GitLab repository:</label>
+      <input type="text" class="form-control" id="link" placeholder="Enter here a clone-link to a repository in GitLab. It must begin with https: and end with .git"/> <br />
+    </div>
+
+    <!-- input. -->
+    <div class="form-group">
+      <label for="exFolder">Exercise folder:</label>
+      <input type="text" class="form-control" id="exFolder"  placeholder="Enter here a subfolder of the repository where the exercise files are located. Must be accurate."/> <br />
+    </div>
+
+    <div class="form-group">
+      NOTE: To change the exercise grader,
+      push the changes to your GitLab repository,
+      and then click the "Save changes" button below.
+      The system will automatically pull the changes from your repository.
+    </div>
+
     <!-- button. -->
-    <button id="btnEdit" type="button" class="btn btn-primary">Edit</button>
-    <button id="btnHome" type="button" class="btn btn-primary">Home</button>
+    <button id="btnEdit" type="button" class="btn btn-primary">Save changes &amp; pull</button>
 
   </div>
 
