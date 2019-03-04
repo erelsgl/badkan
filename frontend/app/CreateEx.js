@@ -27,11 +27,11 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
  * BUTTON HELP.
  */
 document.getElementById("btnHelp").addEventListener('click', e => {
-  alert("To upload a new exercise, you need first to create a GitLab account. \n" +
-    "Then, create a private repository with all the files. Once the repository created, \n" +
-    "go to the settings of the repository, and then click in the Repository button. \n" +
-    "Expand the deploy key and create one. you need to copy and paste the user name and the password \n" +
-    "in the fields at the bottom.");
+  alert("On this page, you can create a new exercise. \n" +
+    "To upload a new exercise, you need first to create a GitLab account. \n" +
+    "Then, create a private repository with all the files. Once the repository created you need to get a deploy token. \n" +
+    "To get a deploy-token, go to GitLab -> Settings -> Repository -> Deploy Tokens -> Expand, \n" +
+    "choose a name for the new token, and click \"Create deploy token\".");
 });
 
 function uploadExercise(name, descr, example, link, username, pass, exFolder) {

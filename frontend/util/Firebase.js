@@ -76,6 +76,26 @@ function loadCurrentUser(userId) {
       "Created exercise(s): " + homeUser.createdEx + "<br />" + "Deleted exercise(s): " + homeUser.deletedEx
       + "<br />" + "Edited exercise(s): " + homeUser.editedEx + "<br />" + "Solved exercise(s): " +
       (homeUser.exerciseSolved.length - 1);
+    loading("div1");
+    loading("loading");
+  });
+}
+
+/**
+ * TODO: no need local storage so change this.
+ * finish here.
+ * @param {*} userId 
+ * @param {*} grade 
+ */
+function loadCollabById(userId, grade) {
+  database.ref('/users/').orderByChild("/user/id").equalTo(userId).once('value').then(function (snapshot) {
+    snapshot.forEach(function(child) {
+      let uid = child.key;
+      database.ref('/users/' + uid).once('value').then(function (snapshot) {
+        let collab1 = snapshot.val().user;
+        uploadCollabGrade(grade, collab1, uid);
+      });
+    });
   });
 }
 
@@ -89,22 +109,31 @@ function loadExerciseByOwner() {
         flag = true;
       }
     });
+    loading("div2");
+    loading("loading2");
     if (!flag) {
       alert("You didn't create any exercise yet!");
       window.location.href = 'home.html';
     }
-  }); 
+  });
 }
 
 function loadAllExercise() {
+  var flag = false;
   database.ref().child('exercises/').on("value", function (snapshot) {
     snapshot.forEach(function (data) {
       addOption(data.val().exercise, data.key);
       exercises.set(data.key, data.val().exercise);
       onOptionChange();
+      flag = true;
     });
+    loading("div3");
+    loading("loading3");
+    if (!flag) {
+      alert("There is no available exercise!");
+      window.location.href = 'home.html';
+    }
   });
-
 }
 
 function deleteExerciseById(exerciseId) {

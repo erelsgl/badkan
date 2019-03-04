@@ -13,31 +13,22 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
     <script type="text/javascript" src="../util/Firebase.js"></script>
+    <script type="text/javascript" src="../util/Loading.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <style>
-        .buttonload {
-              background-color: rgba(241, 238, 238, 0.952); /* Green background */
-              border: none; /* Remove borders */
-              color: rgb(37, 35, 35); /* White text */
-              padding: 0px 30px; /* Some padding */
-              font-size: 20px; /* Set a font-size */
-            }
-    </style>
+    <link rel="stylesheet" href="../style/loading.css">
+
 </head>
-x
+
 <body>
-    <div class="container">
+    <div id="loading" class="loader"></div>
+    <div id="div1" class="container" style="display: none">
         <h1>Badkan Home Page. </h1>
         <pre>
-            <p id="name"> 
-                <button class="buttonload">
-                    <i class="fa fa-spinner fa-spin"></i>Loading
-                </button>
-            </p>
+            <p id="name"> </p>
         </pre>
         <button id="btnCreateEx" type="button" class="btn">Create Exercise</button>
-        <button id="btnEditEx" type="button" class="btn btn-primary">Edit/Delete Exercise</button>
+        <button id="btnEditEx" type="button" class="btn btn-primary">My Created Exercises</button>
         <button id="btnSolveEx" type="button" class="btn btn-success">Solve Exercise</button>
         <button id="records" type="button" class="btn btn-info">Records</button>
         <button id="btnSettings" type="button" class="btn btn-warning">Settings</button>

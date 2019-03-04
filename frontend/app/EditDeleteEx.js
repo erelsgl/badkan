@@ -12,7 +12,6 @@ var ownExercises = new Map();
 
 var select = document.getElementById("exercises");
 
-
 function addOption(exercise, key) {
     select.options[select.options.length] = new Option(exercise.name, key);
 }
@@ -71,4 +70,11 @@ document.getElementById("btnDelete").addEventListener('click', e => {
             uploadGrade(grade);
         }
     }
+});
+
+/**
+ * BUTTON GRADES
+ */
+document.getElementById("grades").addEventListener('click', e => {
+    
 });
