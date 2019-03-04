@@ -61,7 +61,16 @@ document.getElementById("btnLogOut").addEventListener('click', e => {
   console.log('logged out');
   firebase.auth().signOut();
   document.location.href = "index.html";
-  
 });
+
+
+function hideLoading() {
+  var x = document.getElementById("loading");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+} 
 
 

@@ -11,7 +11,6 @@ var ex = JSON.parse(localStorage.getItem("exercise"));
 var selectedValue = JSON.parse(localStorage.getItem("selectedValue"));
 $("#exercise").html(ex.name);
 
-
 $("button#clear").click(() => {
     $("div#output").html("")
     return false;
@@ -56,15 +55,55 @@ $("button#submit").click(() => {
             uploadGrade(grade);
         }
     }
-
     return false;
 })
 
 function uploadGrade(grade) {
-    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+    const collab1Id = document.getElementById("collab1").value;
+    const collab2Id = document.getElementById("collab2").value;
+    if (collab1Id != "" && collab2Id != "") {
+        uploadGradeWithTwoCollab(grade, collab1Id, collab2Id);
+    }
+    else if (collab1Id != "") {
+        uploadGradeWithOneCollab(grade, collab1Id)
+    }
+    else if (collab2Id != "") {
+        uploadGradeWithOneCollab(grade, collab2Id)
+    }
+    else {
+        uploadHomeUserGrade(grade);
+    }
+}
 
+function uploadGradeWithOneCollab(grade, collab1Id) {
+    uploadHomeUserGrade(grade);
+    loadCollabById(collab1Id, grade);
+}
+
+function uploadGradeWithTwoCollab(grade, collab1Id, collab2Id) {
+    uploadHomeUserGrade(grade);
+    loadCollabById(collab1Id, grade);
+    loadCollabById(collab2Id, grade);
+}
+
+function uploadCollabGrade(grade, collab, collabId) {
     exerciseSolved = new ExerciseSolved(ex, grade, selectedValue);
+    flag = true;
+    for (i = 0; i < collab.exerciseSolved.length; i++) {
+        if (collab.exerciseSolved[i].exerciseId === selectedValue) {
+            collab.exerciseSolved[i] = exerciseSolved;
+            flag = false;
+        }
+    }
+    if (flag) {
+        collab.exerciseSolved.push(exerciseSolved);
+    }
+    writeUserDataWithoutComingHome(collab, collabId);
+}
 
+function uploadHomeUserGrade(grade) {
+    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+    exerciseSolved = new ExerciseSolved(ex, grade, selectedValue);
     flag = true;
     for (i = 0; i < homeUser.exerciseSolved.length; i++) {
         if (homeUser.exerciseSolved[i].exerciseId === selectedValue) {
@@ -72,11 +111,9 @@ function uploadGrade(grade) {
             flag = false;
         }
     }
-
     if (flag) {
         homeUser.exerciseSolved.push(exerciseSolved);
     }
-
     var userId = firebase.auth().currentUser.uid;
     writeUserDataWithoutComingHome(homeUser, userId);
 }

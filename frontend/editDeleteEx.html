@@ -13,14 +13,17 @@
     <script type="text/javascript" src="../util/Firebase.js"></script>
     <script src='../util/utils.js'></script>
     <script src='../util/collaps.js'></script>
+    <script type="text/javascript" src="../util/Loading.js"></script>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="../style/loading.css">
 </head>
 
 <body>
 <a class='home' href="home.html">Badkan Home</a>
-    <div class="container">
+    <div id="loading2" class="loader"></div>
+    <div id="div2" class="container" style="display: none">
         <h1>Select the exercise you want to edit or delete.</h1>
         <!-- select. -->
         <div class="form-group">
@@ -30,7 +33,10 @@
 
         <!-- button. -->
         <button id="btnEdit" type="button" class="btn btn-primary">Edit</button>
-        <button id="btnDelete" type="button" class="btn btn-danger">Delete</button>
+        <button id="btnDelete" type="button" class="btn btn-danger">Delete</button> <br/> 
+        <br/>
+        <button id="grades" type="button" class="btn btn-info">Download Grades</button>
+
     </div>
 
     <script type="text/javascript" src="../app/EditDeleteEx.js"></script>
