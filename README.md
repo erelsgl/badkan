@@ -7,19 +7,19 @@ Clone the rep:
 
     git clone https://github.com/SamuelBismuth/badkan.git
 
-Create a firebase account if you doesn't have one.
+Create a FireBase account if you don't have one.
 
-Create a new firebase project:
+Create a new FireBase project:
 
-Open the Firebase console at https://console.firebase.google.com/.
+* Open the Firebase console at https://console.firebase.google.com/.
+* Click "Add project".
+* Add a project name and confirm.
 
-Click "Add project".
+After your project is initialized, add a web app by clicking on "</>".
+Copy the script code from the text box, and paste it in the file:
 
-Add a project name and confirm.
-
-After your project initialized, add a web app by clicking on "</>.
-Copy all the script and paste it in the project at the next place:
-frontend-> util -> Firebase.js
+    frontend/util/Firebase.js
+    
 You need to replace the old script with the new one.
 
 If you want to add the feature "Sign in with GitHub" you need to enable the sign in method.
