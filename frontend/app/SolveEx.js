@@ -22,8 +22,6 @@ document.getElementById("btnSolve").addEventListener('click', e => {
 });
 
 function onOptionChange() {
-    document.getElementById("descr").innerHTML = "Here is the description of the exercise: <br />" +
-        exercises.get(select.value).description;
-    document.getElementById("example").innerHTML = "Here is one example for the exercise: <br />" +
-        exercises.get(select.value).example;
+    document.getElementById("descr").innerHTML = exercises.get(select.value).description;
+    document.getElementById("example").innerHTML = exercises.get(select.value).example;
 }
