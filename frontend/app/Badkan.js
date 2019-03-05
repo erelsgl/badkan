@@ -1,5 +1,7 @@
 var grade = 0;
 
+var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+
 var backendPort = getParameterByName("backend");     // in utils.js
 if (!backendPort)
     backendPort = 5670; // default port - same as in ../server.py
@@ -72,18 +74,32 @@ function uploadGrade(grade) {
     }
     else {
         uploadHomeUserGrade(grade);
+        let newGrade = new Grade(homeUser.id, grade)
+        writeExerciseHistoric(selectedValue, newGrade);
     }
 }
 
+/* TODO FINISH HERE: NEED TO ENTER ALSO THE GRADE OF THE HOME USER.
+ */
 function uploadGradeWithOneCollab(grade, collab1Id) {
     uploadHomeUserGrade(grade);
     loadCollabById(collab1Id, grade);
+    let newGrade1 = new Grade(homeUser.id, grade)
+    let newGrade2 = new Grade(collab1Id, grade)
+    let gradevector = [newGrade1, newGrade2];
+    writeExerciseHistoric(selectedValue, gradevector);
 }
 
 function uploadGradeWithTwoCollab(grade, collab1Id, collab2Id) {
     uploadHomeUserGrade(grade);
     loadCollabById(collab1Id, grade);
     loadCollabById(collab2Id, grade);
+    let newGrade1 = new Grade(homeUser.id, grade)
+    let newGrade2 = new Grade(collab1Id, grade)
+    let newGrade3 = new Grade(collab2Id, grade)
+    let gradevector = [newGrade1, newGrade2, newGrade3];
+    writeExerciseHistoric(selectedValue, gradevector);
+
 }
 
 function uploadCollabGrade(grade, collab, collabId) {
@@ -102,7 +118,6 @@ function uploadCollabGrade(grade, collab, collabId) {
 }
 
 function uploadHomeUserGrade(grade) {
-    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     exerciseSolved = new ExerciseSolved(ex, grade, selectedValue);
     flag = true;
     for (i = 0; i < homeUser.exerciseSolved.length; i++) {

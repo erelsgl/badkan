@@ -82,7 +82,7 @@ function loadCurrentUser(userId) {
 }
 
 /**
- * @param {*} userId 
+ * @param {*} userId 342533064 
  * @param {*} grade 
  */
 function loadCollabById(userId, grade) {
@@ -139,17 +139,34 @@ function deleteExerciseById(exerciseId) {
   database.ref().child('exercises/' + exerciseId).remove();
 }
 
-function downloadGradesByOwner(exercises) {
-  var mapIter = exercises.keys();
-  let result = mapIter.next();
-  while (!result.done) {
-    getAllGrades(result.value);
-    result = mapIter.next();
-  }
+/**
+ * 
+ * @param {*} selectedValue 
+ * @param {*} grade 
+ */
+function writeExerciseHistoric(selectedValue, grade) {
+  database.ref('exercises/' + selectedValue).once('value').then(function (snapshot) {
+    var exercise = snapshot.val().exercise;
+    for (var i = 0; i < grade.length; i++) {
+      let index = checkIfIdExist(exercise, grade[i].id);
+      if (index != -1) {
+        exercise.grades.gradeObj[index]= grade[i];
+      }
+      else {
+        exercise.grades.gradeObj.push(grade[i]);
+      }
+    }
+    firebase.database().ref("exercises/" + selectedValue).set({
+      exercise
+    });
+  });
 }
 
-function getAllGrades(exerciseId) {
-  database.ref('users').orderByChild("user/exerciseSolved").once('value').then(function (snapshot) {
-    console.log(snapshot.key);
-  });
+function checkIfIdExist(exercise, id) {
+  for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
+    if (exercise.grades.gradeObj[i].id === id) {
+      return i;
+    }
+  }
+  return -1;
 }

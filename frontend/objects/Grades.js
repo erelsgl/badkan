@@ -3,10 +3,9 @@
  */
 class Grades {
 
-    constructor(exerciseName, id, grade) {
+    constructor(exerciseName, gradeObj) {
         this.exerciseName = exerciseName;
-        this.id = id;
-        this.grade = grade;
+        this.gradeObj = gradeObj;
     }
 
 }
