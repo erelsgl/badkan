@@ -19,9 +19,12 @@ $("button#clear").click(() => {
 })
 
 $("button#submit").click(() => {
+    const collab1Id = document.getElementById("collab1").value;
+    const collab2Id = document.getElementById("collab2").value;
     var submission_json = JSON.stringify({
         exercise: exercise + "/" + ex.exFolder,
         git_url: $("input#giturl").val(),
+        ids: homeUser.id + "-" + collab1Id + "-" + collab2Id
     });
     logClient("color:#888", submission_json);  // in utils.js
     var websocket = new WebSocket(websocketurl);

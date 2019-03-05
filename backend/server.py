@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-from terminal import *
-
 """
 A server for submission and checking of exercises.
 
@@ -11,6 +9,9 @@ SINCE: 2018-01
 import websockets, subprocess, asyncio, os, urllib,  json, re
 import csv, time
 import sys
+from terminal import *
+from csv_trace import edit_csv
+import datetime
 
 PORT = sys.argv[1] if len(sys.argv)>=2 else 5670   # same port as in frontend/index.html
 EXERCISE_DIR = "../exercises"
@@ -78,6 +79,9 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
             if "Grade:" in line.strip():
                 await tee(websocket, "Final " +  line.strip()[line.strip().find('Grade: '): line.strip().find('%')])
     await appendGradeTofile(grade,submission,git_url,websocket)
+    currentDT = datetime.datetime.now()
+    edit_csv(str(currentDT), git_url, submission["ids"], line.strip()[line.strip().find('Grade: '): line.strip().find('%')][7:])
+
 
 
 async def appendGradeTofile(grade,submission,git_url,websocket):
@@ -132,5 +136,3 @@ print("{} listening at {}".format(type(websocketserver), PORT))
 
 asyncio.get_event_loop().run_until_complete(websocketserver)
 asyncio.get_event_loop().run_forever()
-
-
