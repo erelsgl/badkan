@@ -78,7 +78,7 @@ function uploadGrade(grade) {
     else {
         uploadHomeUserGrade(grade);
         let newGrade = new Grade(homeUser.id, grade)
-        writeExerciseHistoric(selectedValue, newGrade);
+        writeExerciseHistoric(selectedValue, [newGrade]);
     }
 }
 
