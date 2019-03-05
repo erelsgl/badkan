@@ -82,8 +82,6 @@ function uploadGrade(grade) {
     }
 }
 
-/* TODO FINISH HERE: NEED TO ENTER ALSO THE GRADE OF THE HOME USER.
- */
 function uploadGradeWithOneCollab(grade, collab1Id) {
     uploadHomeUserGrade(grade);
     loadCollabById(collab1Id, grade);
