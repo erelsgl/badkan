@@ -39,7 +39,7 @@ async def docker_command(command_words):
     :return: a stream that contains all output of the command (stdout and stderr together)
     """
     return await asyncio.subprocess.create_subprocess_exec(
-        ["docker"] + command_words,
+        *(["docker"] + command_words),
         stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
 
 
