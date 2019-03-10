@@ -76,6 +76,7 @@ async def check_submission(websocket:object, submission:dict):
     grade = 0
     with docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade "+username+" "+repository]) as proc:
         for line in proc.stdout:
+            await tee(websocket, line.strip())
             matches = GRADE_REGEXP.search(line)
             if matches is not None:
                 grade = matches.group(1)
