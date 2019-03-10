@@ -73,7 +73,7 @@ async def check_submission(websocket:object, submission:dict):
         for line in proc.stdout:  print(line)
 
     # Grade the submission inside the docker container "badkan"
-    grade = "None"
+    grade = 0
     with docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade "+username+" "+repository]) as proc:
         for line in proc.stdout:
             matches = GRADE_REGEXP.search(line)
