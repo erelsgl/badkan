@@ -15,12 +15,10 @@ Create a new Firebase project:
 After your project is initialized, add a web app by clicking on "</>".
 Copy the script code from the text box, and paste it in the file:
 
-    frontend/util/Firebase.js
-    
-You need to replace the old script with the new one.
+    frontend/util/FirebaseConfig.js
 
 If you want to add the feature "Sign in with GitHub" you need to enable the sign in method.
-In firebase go to Authentification, in the "Sign-in method" enable GitHub.
+In firebase go to Authentication, in the "Sign-in method" enable GitHub.
 
 But first you need to provide client ID and Client Secret from github.
 To do this, go to https://github.com/settings/developers.
