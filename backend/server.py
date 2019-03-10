@@ -2,7 +2,6 @@
 
 """
 A server for submission and checking of exercises.
-
 AUTHOR: Erel Segal-Halevi
 SINCE: 2018-01
 """
@@ -34,12 +33,12 @@ async def tee(websocket, message):
     await websocket.send(message)
 
 
-async def docker_command(command_words):
+def docker_command(command_words):
     """
     :param command_words: a list of words to be executed by docker.
     :return: a stream that contains all output of the command (stdout and stderr together)
     """
-    return asyncio.subprocess.create_subprocess_exec(
+    return subprocess.Popen(
         ["docker"] + command_words,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
 
@@ -65,30 +64,26 @@ async def check_submission(websocket:object, submission:dict):
     repository_folder = "/submissions/"+username+"/"+repository
 
     # Clone or pull the student's submission from github to the docker container "badkan":
-    proc = await docker_command(["exec", "badkan", "bash", "get-submission.sh", username, repository])
-    async for line in proc.stdout:
-        await tee(websocket, line.strip())
-    await proc.wait()
+    with docker_command(["exec", "badkan", "bash", "get-submission.sh", username, repository]) as proc:
+        for line in proc.stdout:
+            await tee(websocket, line.strip())
 
     # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
     current_exercise_dir = os.path.realpath(EXERCISE_DIR + "/" + exercise)
     await tee(websocket, "copying from "+current_exercise_dir)
-    proc = await docker_command(["cp", current_exercise_dir, "badkan:"+repository_folder+"/grading_files"])
-    async for line in proc.stdout:  print(line)
-    await proc.wait()
-
+    with docker_command(["cp", current_exercise_dir, "badkan:"+repository_folder+"/grading_files"]) as proc:
+        for line in proc.stdout:  print(line)
 
     # Grade the submission inside the docker container "badkan"
     grade = None
-    proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade "+username+" "+repository])
-    async for line in proc.stdout:
-        await tee(websocket, line.strip())
-        matches = GRADE_REGEXP.search(line)
-        if matches is not None:
-            grade = matches.group(1)
-            await tee(websocket, "Final Grade: " + grade)
+    with docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade "+username+" "+repository]) as proc:
+        for line in proc.stdout:
+            await tee(websocket, line.strip())
+            matches = GRADE_REGEXP.search(line)
+            if matches is not None:
+                grade = matches.group(1)
+                await tee(websocket, "Final Grade: " + grade)
                     # This line is read at app/Badkan.js, in websocket.onmessage.
-    await proc.wait()
     if grade is None:
         await tee(websocket, "Final Grade: 0")
 
@@ -137,5 +132,3 @@ print("{} listening at {}".format(type(websocketserver), PORT))
 loop = asyncio.get_event_loop()
 loop.run_until_complete(websocketserver)
 loop.run_forever()
-
-
