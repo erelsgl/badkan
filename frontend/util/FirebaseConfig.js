@@ -1,10 +1,11 @@
+alert("Insert your FIrebase details in frontend/util/FirebaseConfig.js")
 // Initialize Firebase
 var config = {
-    apiKey: "AIzaSyBY7yjfSeQODE31nSzHlsE6_oIBnAw5OtQ",
-    authDomain: "badkanlocal.firebaseapp.com",
-    databaseURL: "https://badkanlocal.firebaseio.com",
-    projectId: "badkanlocal",
-    storageBucket: "badkanlocal.appspot.com",
-    messagingSenderId: "539825360637"
-  };
-  firebase.initializeApp(config);
+  apiKey: "...",
+  authDomain: "...",
+  databaseURL: "...",
+  projectId: "...",
+  storageBucket: "...",
+  messagingSenderId: "..."
+};
+firebase.initializeApp(config);
