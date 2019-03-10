@@ -73,7 +73,7 @@ async def check_submission(websocket:object, submission:dict):
         for line in proc.stdout:  print(line)
 
     # Grade the submission inside the docker container "badkan"
-    grade = 0
+    grade = None
     with docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade "+username+" "+repository]) as proc:
         for line in proc.stdout:
             await tee(websocket, line.strip())
@@ -82,6 +82,8 @@ async def check_submission(websocket:object, submission:dict):
                 grade = matches.group(1)
                 await tee(websocket, "Final Grade: " + grade)
                     # This line is read at app/Badkan.js, in websocket.onmessage.
+    if grade is None:
+        await tee(websocket, "Final Grade: 0")
 
     currentDT = datetime.datetime.now()
     edit_csv(str(currentDT), git_url, submission["ids"], grade)
