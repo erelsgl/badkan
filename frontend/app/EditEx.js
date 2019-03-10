@@ -39,7 +39,7 @@ function uploadExercise(name, descr, example) {
   
   sendLinkHTTP(folderName, ex.exFolder);
 
-  let exercise = new Exercise(name, descr, example, user.uid, ex.link, ex.exFolder);
+  let exercise = new Exercise(name, descr, example, user.uid, ex.link, ex.exFolder, ex.grades);
 
   incrementEditEx(user.uid, homeUser);
   writeExercise(exercise, folderName);

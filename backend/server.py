@@ -12,6 +12,9 @@ from terminal import *
 import websockets, subprocess, asyncio, os, urllib,  json, re
 import csv, time
 import sys
+from terminal import *
+from csv_trace import edit_csv
+import datetime
 
 PORT = sys.argv[1] if len(sys.argv)>=2 else 5670   # same port as in frontend/index.html
 EXERCISE_DIR = "../exercises"
@@ -70,6 +73,7 @@ async def check_submission(websocket:object, submission:dict):
         for line in proc.stdout:  print(line)
 
     # Grade the submission inside the docker container "badkan"
+    grade = "None"
     with docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade "+username+" "+repository]) as proc:
         for line in proc.stdout:
             matches = GRADE_REGEXP.search(line)
@@ -77,6 +81,9 @@ async def check_submission(websocket:object, submission:dict):
                 grade = matches.group(1)
                 await tee(websocket, "Final Grade: " + grade)
                     # This line is read at app/Badkan.js, in websocket.onmessage.
+
+    currentDT = datetime.datetime.now()
+    edit_csv(str(currentDT), git_url, submission["ids"], grade)
 
 
 async def appendGradeTofile(grade,submission,git_url,websocket):

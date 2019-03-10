@@ -204,7 +204,6 @@ If needed, kill the port by using both command:
 first: sudo killall python3
 then: sudo kill 21473
 
-
 As a developper, sometimes, you want to open the server in localhost without use nohup.
 Thus, open three terminal.
 Here are the command for the terminals:
@@ -220,6 +219,10 @@ Once everything done, open another terminal and here is the command:
 To update when update the readme: 
 The grade program must output the student grade at its last line in format:  
 < *** Right: 2. Wrong: 0. Grade: 100% ***
+
+Note: A trace table (csv format) can be found in the folder backend.  
+In this table, there are for each submission the following information:  
+time, url, ids, and grade.  
 
 # Badkan 2.0
 

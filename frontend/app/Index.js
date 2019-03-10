@@ -22,19 +22,15 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
   var badMail = document.getElementById("badMail");
 
   if (email === "" || pass === "" || name === "" || lastName === "" || id === "") {
-    console.log(email);
-    console.log(pass);
-    console.log(name);
-    console.log(lastName);
-    console.log(id);
-
     emptyField.className = "show";
     setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
     return;
   }
 
   firebase.auth().createUserWithEmailAndPassword(email, pass).then(function () {
-    exerciseSolved = new ExerciseSolved(new Exercise("0", "0", "0", "0", "0", "0"), 90, "id");
+    let grade = new Grade("id", 90);
+    let grades = new Grades("Init", [grade]);
+    let exerciseSolved = new ExerciseSolved(new Exercise("0", "0", "0", "0", "0", "0", grades), 90, "id");
 
     let homeUser = new User(name, lastName, id, email, 0, 0, 0, [exerciseSolved]);
     var user = firebase.auth().currentUser;

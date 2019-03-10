@@ -76,5 +76,20 @@ document.getElementById("btnDelete").addEventListener('click', e => {
  * BUTTON GRADES
  */
 document.getElementById("grades").addEventListener('click', e => {
-    
+    let values = Array.from(ownExercises.values());
+    let rows = [];
+    rows.push(["Exercise Name", "id", "grade", "..."]);
+    for (let i = 0; i < values.length; i++) {
+        let row = [];
+        row[0] = values[i].grades.exerciseName;
+        for (let j = 1; j < values[i].grades.gradeObj.length; j++) {
+            row.push(values[i].grades.gradeObj[j].id);
+            row.push(values[i].grades.gradeObj[j].grade);
+        }
+        rows.push(row);
+    }
+    let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+    var encodedUri = encodeURI(csvContent);
+    window.open(encodedUri);
 });
+

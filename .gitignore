@@ -103,3 +103,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+#manualy added
+.vscode
