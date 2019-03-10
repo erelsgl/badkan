@@ -38,10 +38,9 @@ def docker_command(command_words):
     :param command_words: a list of words to be executed by docker.
     :return: a stream that contains all output of the command (stdout and stderr together)
     """
-    return subprocess.Popen(
+    return await asyncio.subprocess.create_subprocess_exec(
         ["docker"] + command_words,
-        stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
-
+        stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
 
 async def check_submission(websocket:object, submission:dict):
     """
@@ -119,10 +118,6 @@ async def run(websocket, path):
         await delete_ex(submission["delete_exercise"])
     else:
         await check_submission(websocket, submission)
-        # loop = asyncio.get_event_loop()
-        # executor = ProcessPoolExecutor()
-        # loop.set_default_executor(executor)
-        # await loop.run_in_executor(None, check_submission, websocket, submission)
     print ("> Closing connection")
 
 
