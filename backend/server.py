@@ -29,7 +29,7 @@ async def tee(websocket, message):
     """
     Send a message both to the backend screen and to the frontend client.
     """
-    print("> " + message)
+    print("> {}".format(message))
     await websocket.send(message)
 
 
@@ -53,7 +53,6 @@ async def check_submission(websocket:object, submission:dict):
     """
     exercise=submission["exercise"]
     git_url =submission["git_url"]
-    print("check_submission pid={}".format(os.getpid()))
     if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
@@ -61,7 +60,7 @@ async def check_submission(websocket:object, submission:dict):
     matches = GIT_REGEXP.search(git_url)
     username = matches.group(1)
     repository = GIT_CLEAN.sub("",matches.group(2))
-    repository_folder = "/submissions/"+username+"/"+repository
+    repository_folder = "/submissions/{}/{}".format(username,repository)
 
     # Clone or pull the student's submission from github to the docker container "badkan":
     proc = await docker_command(["exec", "badkan", "bash", "get-submission.sh", username, repository])
@@ -71,14 +70,15 @@ async def check_submission(websocket:object, submission:dict):
 
     # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
     current_exercise_dir = os.path.realpath(EXERCISE_DIR + "/" + exercise)
-    await tee(websocket, "copying from "+current_exercise_dir)
-    proc = await docker_command(["cp", current_exercise_dir, "badkan:"+repository_folder+"/grading_files"])
+    await tee(websocket, "copying from {}".format(current_exercise_dir))
+    proc = await docker_command(["cp", current_exercise_dir, "badkan:{}/grading_files".format(repository_folder)])
     async for line in proc.stdout:  print(line)
     await proc.wait()
 
     # Grade the submission inside the docker container "badkan"
     grade = None
-    proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade "+username+" "+repository])
+    proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", 
+        "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade {} {}".format(username,repository)])
     async for line in proc.stdout:
         await tee(websocket, line.strip())
         matches = GRADE_REGEXP.search(line)
@@ -112,7 +112,7 @@ async def run(websocket, path):
     Run a websocket server that receives submissions and grades them.
     """
     submission_json = await websocket.recv()   # returns a string
-    print("< "+submission_json)
+    print("< {} ".format(submission_json))
     submission = json.loads(submission_json)   # converts the string to a python dict
     if   (submission_json[2] == 'g'):
         await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
