@@ -1,4 +1,9 @@
-import subprocess
+#!/usr/bin/env python3
+
+"""
+Utility functions: clone git repository, pull git repository, remove path
+"""
+
 from subprocess import call
 import os
 

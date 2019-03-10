@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 
-from terminal import *
-
 """
 A server for submission and checking of exercises.
 
 AUTHOR: Erel Segal-Halevi
 SINCE: 2018-01
 """
+
+from terminal import *
+
 import websockets, subprocess, asyncio, os, urllib,  json, re
 import csv, time
 import sys
@@ -17,6 +18,7 @@ EXERCISE_DIR = "../exercises"
 
 GIT_REGEXP = re.compile("http.*github[.]com/(.*)/(.*)", re.IGNORECASE)
 GIT_CLEAN  = re.compile(".git.*", re.IGNORECASE)
+GRADE_REGEXP = re.compile("grade.*:\\s*(\\d+)", re.IGNORECASE)
 
 async def tee(websocket, message):
     """
@@ -36,22 +38,20 @@ def docker_command(command_words):
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
 
 
-async def check_submission(websocket:object, exercise:str, git_url:str , submission):
+async def check_submission(websocket:object, submission:dict):
     """
     Check a submitted solution to the given exercise from the given git_url.
     :param websocket: for reading the submission params and sending output messages.
-    :param exercise:  name of the exercise; represents a sub-folder of the "exercises" folder.
-    :param git_url:   a url for cloning the student's git repository containing the submitted solution.
-                      must be of the form https://xxx.git.
+    :param submission: a JSON object with at least the following fields:
+           "exercise" - name of the exercise; represents a sub-folder of the "exercises" folder.
+           "git_url"  - a url for cloning the student's git repository containing the submitted solution.                      must be of the form https://xxx.git.
     """
+    exercise=submission["exercise"]
+    git_url =submission["git_url"]
 
     if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
-        
-    # to find student grade 
-    gradeLinePrefix = "your grade is :"
-    grade = "putGradeHere"
 
     matches = GIT_REGEXP.search(git_url)
     username = matches.group(1)
@@ -72,12 +72,11 @@ async def check_submission(websocket:object, exercise:str, git_url:str , submiss
     # Grade the submission inside the docker container "badkan"
     with docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade "+username+" "+repository]) as proc:
         for line in proc.stdout:
-            if(gradeLinePrefix in line):
-                grade = line[len(gradeLinePrefix):]
-            await tee(websocket, line.strip())
-            if "Grade:" in line.strip():
-                await tee(websocket, "Final " +  line.strip()[line.strip().find('Grade: '): line.strip().find('%')])
-    await appendGradeTofile(grade,submission,git_url,websocket)
+            matches = GRADE_REGEXP.search(line)
+            if matches is not None:
+                grade = matches.group(1)
+                await tee(websocket, "Final Grade: " + grade)
+                    # This line is read at app/Badkan.js, in websocket.onmessage.
 
 
 async def appendGradeTofile(grade,submission,git_url,websocket):
@@ -114,17 +113,17 @@ async def run(websocket, path):
     """
     Run a websocket server that receives submissions and grades them.
     """
-    submission_json = await websocket.recv()  # return a string
+    submission_json = await websocket.recv()   # returns a string
     print("< "+submission_json)
-    submission = json.loads(submission_json)
-    if (submission_json[2] == 'g'):
+    submission = json.loads(submission_json)   # converts the string to a python dict
+    if   (submission_json[2] == 'g'):
         await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
     elif (submission_json[3] == 'o'):
         await edit_ex(submission["folderName"], submission["exFolder"])
     elif (submission_json[2] == 'd'):
         await delete_ex(submission["delete_exercise"])
     else:
-        await check_submission(websocket, submission["exercise"], submission["git_url"], submission)
+        await check_submission(websocket, submission)
     print ("> Closing connection")
 
 websocketserver = websockets.server.serve(run, '0.0.0.0', PORT, origins=None)
@@ -132,5 +131,3 @@ print("{} listening at {}".format(type(websocketserver), PORT))
 
 asyncio.get_event_loop().run_until_complete(websocketserver)
 asyncio.get_event_loop().run_forever()
-
-

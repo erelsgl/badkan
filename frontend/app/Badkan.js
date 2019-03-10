@@ -20,7 +20,7 @@ $("button#submit").click(() => {
     var submission_json = JSON.stringify({
         exercise: exercise + "/" + ex.exFolder,
         git_url: $("input#giturl").val(),
-    });
+    });  // the variable "submission_json" is read in server.py:run
     logClient("color:#888", submission_json);  // in utils.js
     var websocket = new WebSocket(websocketurl);
     websocket.onopen = (event) => {
@@ -49,8 +49,8 @@ $("button#submit").click(() => {
     }
     websocket.onmessage = (event) => {
         logServer("color:black; margin:0 1em 0 1em", event.data);
+        // The line "Final Grade:<grade>" is written in server.py:check_submission
         if (event.data.includes("Final Grade:")) {
-            console.log(event.data.substring(12, event.data.length));
             grade = event.data.substring(12, event.data.length);
             uploadGrade(grade);
         }
