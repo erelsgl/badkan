@@ -48,4 +48,4 @@ sudo nohup python3 -u -m http.server 8000 &
 # sudo nohup python3 -u -m http.server 8009 &
 # -u = unbuffered. See https://stackoverflow.com/a/107717/827927
 
-echo "Try me at: lynx http://localhost:8000?backend=5670"
+echo "Try me at: lynx http://localhost:8000"
