@@ -65,7 +65,8 @@ async def check_submission(websocket:object, submission:dict):
     # Clone or pull the student's submission from github to the docker container "badkan":
     proc = await docker_command(["exec", "badkan", "bash", "get-submission.sh", username, repository])
     async for line in proc.stdout:
-        await tee(websocket, line.strip())
+        line = line.decode('utf-8').strip()
+        await tee(websocket, line)
     await proc.wait()
 
     # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
@@ -80,7 +81,8 @@ async def check_submission(websocket:object, submission:dict):
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", 
         "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade {} {}".format(username,repository)])
     async for line in proc.stdout:
-        await tee(websocket, line.strip())
+        line = line.decode('utf-8').strip()
+        await tee(websocket, line)
         matches = GRADE_REGEXP.search(line)
         if matches is not None:
             grade = matches.group(1)
