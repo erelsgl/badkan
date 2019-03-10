@@ -1,14 +1,11 @@
-var grade = 0;
+var BACKEND_PORTS = [5670,5671,5672,5673,5674,5675,5676,5677,5678,5679,];
 
+var grade = 0;
 var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 
-var backendPort = getParameterByName("backend");     // in utils.js
-if (!backendPort)
-    backendPort = 5670; // default port - same as in ../server.py
-var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
 var exercise = getParameterByName("exercise");     // in utils.js
 if (!exercise)
-    exercise = "00-multiply"; // default exercise
+    exercise = "multiply"; // default exercise
 var ex = JSON.parse(localStorage.getItem("exercise"));
 var selectedValue = JSON.parse(localStorage.getItem("selectedValue"));
 $("#exercise").html(ex.name);
@@ -19,6 +16,14 @@ $("button#clear").click(() => {
 })
 
 $("button#submit").click(() => {
+    // Choose a backend port at random
+    var backendPort = getParameterByName("backend");     // in utils.js
+    if (!backendPort)
+        backendPort = BACKEND_PORTS[Math.floor(Math.random()*BACKEND_PORTS.length)];
+    var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
+    logClient("color:#888", "Submitting to backend port: "+backendPort);  // in utils.js
+
+    // Create the json for submission
     const collab1Id = document.getElementById("collab1").value;
     const collab2Id = document.getElementById("collab2").value;
     var submission_json = JSON.stringify({
