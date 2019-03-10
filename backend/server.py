@@ -15,6 +15,9 @@ import sys
 from terminal import *
 from csv_trace import edit_csv
 import datetime
+from multiprocessing import Process
+
+from concurrent.futures import ProcessPoolExecutor
 
 PORT = sys.argv[1] if len(sys.argv)>=2 else 5670   # same port as in frontend/index.html
 EXERCISE_DIR = "../exercises"
@@ -51,7 +54,7 @@ async def check_submission(websocket:object, submission:dict):
     """
     exercise=submission["exercise"]
     git_url =submission["git_url"]
-
+    print("check_submission pid={}".format(os.getpid()))
     if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
@@ -89,24 +92,6 @@ async def check_submission(websocket:object, submission:dict):
     edit_csv(str(currentDT), git_url, submission["ids"], grade)
 
 
-async def appendGradeTofile(grade,submission,git_url,websocket):
-    '''
-    append submission grade to csv file 
-    :param grade: string representing student grade
-    :param submission: dict with keys ID_1 , ID_2, ID_3, student_names, exercise  where ID is student ID 
-    '''
-    if (any(arg not in submission for arg in ("ID_1" , "ID_2" , "ID_3" , "student_names" , "exercise" ))):
-        print("this is an anonymous submission")
-        return
-    timestamp = time.asctime(time.localtime())
-    file = open('grades'+ submission["exercise"] +'.csv', 'a+')
-    gradesCsv = csv.writer(file)
-    gradesCsv.writerow([submission["ID_1"],submission["ID_2"],submission["ID_3"],submission["student_names"],git_url,grade.rstrip(),timestamp])
-    file.close()
-    userMessage = "We recorded your IDs: {0}, {1}, {2} and your grade: {3}.<br/> Date of submission is {4}.".format(submission["ID_1"],submission["ID_2"],submission["ID_3"],grade.rstrip(),timestamp)
-    htmlMessage = "<div class='grade'>"+userMessage+"</div>"
-    await tee (websocket,htmlMessage)
-
 async def load_ex(url, folder_name, username, password, exercise):
     git_clone("../exercises", url, folder_name, username, password, exercise)
     print("your exercise is loaded.")
@@ -118,6 +103,7 @@ async def edit_ex(folder_name, ex_folder):
 async def delete_ex(delete_ex):
     rmv("../exercises", delete_ex)
     print("your exercise is deleted.")
+
 
 async def run(websocket, path):
     """
@@ -134,10 +120,18 @@ async def run(websocket, path):
         await delete_ex(submission["delete_exercise"])
     else:
         await check_submission(websocket, submission)
+        # loop = asyncio.get_event_loop()
+        # executor = ProcessPoolExecutor()
+        # loop.set_default_executor(executor)
+        # await loop.run_in_executor(None, check_submission, websocket, submission)
     print ("> Closing connection")
+
 
 websocketserver = websockets.server.serve(run, '0.0.0.0', PORT, origins=None)
 print("{} listening at {}".format(type(websocketserver), PORT))
 
-asyncio.get_event_loop().run_until_complete(websocketserver)
-asyncio.get_event_loop().run_forever()
+loop = asyncio.get_event_loop()
+loop.run_until_complete(websocketserver)
+loop.run_forever()
+
+
