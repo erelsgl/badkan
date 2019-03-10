@@ -15,7 +15,7 @@ Create a new Firebase project:
 After your project is initialized, add a web app by clicking on "</>".
 Copy the script code from the text box, and paste it in the file:
 
-    frontend/util/Firebase.js
+    frontend/util/FirebaseConfig.js
     
 You need to replace the old script with the new one.
 
