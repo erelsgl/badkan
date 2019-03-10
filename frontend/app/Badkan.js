@@ -1,4 +1,5 @@
-var BACKEND_PORTS = [5670,5671,5672,5673,5674,5675,5676,5677,5678,5679,];
+//var BACKEND_PORTS = [5670,5671,5672,5673,5674,5675,5676,5677,5678,5679,];
+var BACKEND_PORTS = [5670];
 
 var grade = 0;
 var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
