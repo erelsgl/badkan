@@ -39,7 +39,7 @@ async def docker_command(command_words):
     :param command_words: a list of words to be executed by docker.
     :return: a stream that contains all output of the command (stdout and stderr together)
     """
-    return asyncio.subprocess.Popen(
+    return asyncio.subprocess.create_subprocess_exec(
         ["docker"] + command_words,
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
 
