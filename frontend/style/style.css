@@ -47,8 +47,15 @@ border-top-width: 0px;
 }
 
 
-a.home {
+.home {
   display:block;
   padding:1mm;
+  background:#efe;
+}
+
+.footer {
+  display:block;
+  padding:1mm;
+  margin-top:2cm;
   background:#efe;
 }
