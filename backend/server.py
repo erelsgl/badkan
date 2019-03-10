@@ -137,5 +137,3 @@ print("{} listening at {}".format(type(websocketserver), PORT))
 loop = asyncio.get_event_loop()
 loop.run_until_complete(websocketserver)
 loop.run_forever()
-
-
