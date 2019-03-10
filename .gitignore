@@ -106,3 +106,5 @@ ENV/
 
 #manualy added
 .vscode
+backend/trace_table.csv
+exercises/*/
