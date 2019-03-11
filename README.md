@@ -24,7 +24,7 @@ But first you need to provide client ID and Client Secret from github.
 To do this, go to https://github.com/settings/developers.
 Click on new OAuth App.
 Fill all the field and in the field: Authorization callback URL, enter the url that firebase provide.
-For more information: https://firebase.google.com/docs/auth/?authuser=0 
+For more information: https://firebase.google.com/docs/auth/?authuser=0
 
 Go to Authentication, in the "Sign-in method" enable GitHub.
 
@@ -40,7 +40,7 @@ We will do everything as root:
 
     sudo su
 
-Badkan uses python and its websockets library, 
+Badkan uses python and its websockets library,
 so let's install them first:
 
     apt update
@@ -53,7 +53,7 @@ Let's install docker then. On Ubuntu, do:
     curl -fsSL https://get.docker.com/ | sh
     systemctl start docker
     systemctl enable docker
-    
+
 Optional: check that docker is installed correctly:
 
     service docker status
@@ -70,14 +70,136 @@ Alternatively, you can build the image yourself:
     cd badkan/docker
     docker build -t erelsgl/badkan:latest .
     docker images       # check that you see the badkan image
-    
+
 
 If you want to use a process-monitor to run the servers, you can use pm2:
 
-    sudo apt install npm 
+    sudo apt install npm
     sudo npm install -g --no-optional pm2@latest
 
+## Installing the Apache server
 
+## 1 — Installing Apache
+
+Update your local package index:
+
+    sudo apt update
+
+Install the apache2 package:
+
+    sudo apt install apache2
+
+## 2 — Adjusting the Firewall
+
+Check the available ufw application profiles:
+
+    sudo ufw app list
+
+The output must be something like:
+
+    Available applications:
+    Apache
+    Apache Full
+    Apache Secure
+    OpenSSH
+
+Then run:
+
+    sudo ufw allow 'Apache'
+
+Verify the change:
+
+    sudo ufw status
+
+The output must be something like:
+
+    Status: active
+
+    To                         Action      From
+    --                         ------      ----
+    OpenSSH                    ALLOW       Anywhere                  
+    Apache                     ALLOW       Anywhere                  
+    OpenSSH (v6)               ALLOW       Anywhere (v6)             
+    Apache (v6)                ALLOW       Anywhere (v6)
+
+## 3 — Checking your Web Server
+
+Check with the systemd init system to make sure the service is running by typing:
+
+    sudo systemctl status apache2
+
+The output must be something like:
+
+    apache2.service - The Apache HTTP Server
+       Loaded: loaded (/lib/systemd/system/apache2.service; enabled; vendor preset: enabled)
+      Drop-In: /lib/systemd/system/apache2.service.d
+               └─apache2-systemd.conf
+       Active: active (running) since Tue 2018-04-24 20:14:39 UTC; 9min ago
+     Main PID: 2583 (apache2)
+        Tasks: 55 (limit: 1153)
+       CGroup: /system.slice/apache2.service
+               ├─2583 /usr/sbin/apache2 -k start
+               ├─2585 /usr/sbin/apache2 -k start
+               └─2586 /usr/sbin/apache2 -k start
+
+Access the default Apache landing page to confirm that the software is running properly through your IP address:
+
+      http://your_server_ip
+
+You should see the default page of apache2.
+
+# 4 — Setting Up Virtual Hosts
+
+Make a new virtual host file at /etc/apache2/sites-available/<application_name>.conf:
+
+    sudo nano /etc/apache2/sites-available/<application_name>.conf
+
+Paste in the following configuration block, updated for our new directory and domain name:
+
+    <VirtualHost \*:80>
+    ServerAdmin your@email.com
+    ServerName <application_name>.com
+    ServerAlias www.<application_name>.com
+    DocumentRoot <path to the index.html file
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    </VirtualHost>
+
+Save and close the file when you are finished.
+
+Enable the file with a2ensite:
+
+    sudo a2ensite <application_name>.com.conf
+
+Disable the default site defined in 000-default.conf:
+
+      sudo a2dissite 000-default.conf
+
+Test for configuration errors:
+
+    sudo apache2ctl configtest
+
+You should see the following output:
+
+    Syntax OK
+
+if your trying to install it in local, you need to add in the hosts file the following:
+
+    sudo nano /etc/hosts
+
+Add the next line:
+
+    127.0.0.1       <application_name>.com
+
+When your doing this from a server: ??? TODO.
+
+Restart Apache to implement your changes:
+
+      sudo systemctl restart apache2
+
+go to http://<application_name>.com
+
+Don't forget to start the backend and docker server too!
 
 ## Start
 
@@ -116,7 +238,7 @@ You should see that the grade is 100%.
 To restart the badkan server, you can do:
 
     start/backend_frontend.sh
-  
+
 
 ## Logs
 
@@ -130,13 +252,13 @@ The frontend logs are at frontend/nohup.out
 An *exercise* corresponds to a subfolder of the "exercises" folder.
 Inside the folder, there should be an executable program
 called *grade*. This program is responsible for checking and grading the submissions.
-For example, it can contain a "make" command, 
+For example, it can contain a "make" command,
 and some commands for running the executable and comparing against expected outputs.
 
 To submit an exercise, a student should:
 
 1. put the solution in a git repository (e.g. in GitHub);
-2. open the frontend with the exercise code, e.g. http://server?exercise=reverse 
+2. open the frontend with the exercise code, e.g. http://server?exercise=reverse
 3. submit the clone-url of this repository.
 
 The system then:
@@ -146,14 +268,14 @@ The system then:
 6. enters the repository folder and runs "grade".
 
 The default installation contains two example exercises:
-"multiply" and "reverse". 
+"multiply" and "reverse".
 
 ## UPDATING THE DOCKER CONTAINER
 
 To enter the running docker container:
 
     sudo docker attach badkan
-    
+
 To exit back to the host:
 
     Ctrl+P+Q
@@ -161,12 +283,12 @@ To exit back to the host:
 To copy files from the host into the container:
 
     docker cp <local-file> badkan:/<remote-file>
-    
+
 After you change the badkan container, you can push your changes upstream by:
 
     docker commit <container-id> erelsgl/badkan
     docker push erelsgl/badkan
-    
+
 Then, on another server, you can pull these changes by:
 
     sudo docker pull erelsgl/badkan:latest
@@ -175,7 +297,7 @@ Then, on another server, you can pull these changes by:
     sudo docker rmi <old-image-id>
     sudo docker run --name badkan --rm -itd erelsgl/badkan bash
 
-To replace an old exercise-grader with a new one: 
+To replace an old exercise-grader with a new one:
 put the new grader code in the "exercises" folder on the *host*.
 The server will automatically copy it to the docker container.
 
@@ -192,12 +314,12 @@ Here are the command for the terminals:
 1- cd backend then sudo python3 -u server.py 5670
 2 - cd frontend then sudo python3 -u -m http.server 8000
 3 - sudo docker run --name badkan -p 8010:8010 --rm -itd erelsgl/badkan bash
-Then, optional: sudo docker exec badkan bash -c "cd /www; python3 -u -m http.server 8010" 
+Then, optional: sudo docker exec badkan bash -c "cd /www; python3 -u -m http.server 8010"
 
 Once everything done, open another terminal and here is the command:
 <your-browser> http://localhost:<FRONTEND_PORT>
 
-To update when update the readme: 
+To update when update the readme:
 The grade program must output the student grade at its last line in format:  
 < *** Right: 2. Wrong: 0. Grade: 100% ***
 
