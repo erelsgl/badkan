@@ -2,53 +2,57 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>Submit exercise</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
-    <script src='../library/jquery-3.2.1.min.js'></script>
-    <script src='../util/utils.js'></script>
-    <script src='../util/collaps.js'></script>
-    <script src='../objects/ExerciseSolved.js'></script>
-    <script src='../util/FirebaseConfig.js'></script>
-    <script src='../util/Firebase.js'></script>
-    <script type="text/javascript" src="../objects/Grade.js"></script>
-    <script type="text/javascript" src="../objects/Grades.js"></script>
+  <meta charset="utf-8">
+  <title>Submit exercise</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+  <script src='../util/FirebaseConfig.js'></script>
+  <script src='../library/jquery-3.2.1.min.js'></script>
+  <script src='../util/utils.js'></script>
+  <script src='../util/collaps.js'></script>
+  <script src='../objects/ExerciseSolved.js'></script>
+  <script src='../util/Firebase.js'></script>
+  <script type="text/javascript" src="../objects/Grade.js"></script>
+  <script type="text/javascript" src="../objects/Grades.js"></script>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <link rel='stylesheet' type='text/css' href='../style/style.css' />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel='stylesheet' type='text/css' href='../style/style.css' />
 </head>
 
 <body>
-<a class='home' href="home.html">Badkan Home</a>
-    <div class="container">
-        <h1>Submit exercise <b><span id="exercise"></span></b></h1>
-        <form>
-            <div class="form-group">
-                <label for="usr">Enter here the Github Link. Must begin with https and end with .git:</label>
-                <input type="text" class="form-control" id="giturl" /> <br />
-            </div>
-            <div class="form-group">
-                    <label for="usr">Enter here the id of your first collaborator (if exist):</label>
-                    <input type="text" class="form-control" id="collab1" /> <br />
-            </div>
-            <div class="form-group">
-                    <label for="usr">Enter here the id of your second collaborator (if exist):</label>
-                    <input type="text" class="form-control" id="collab2" /> <br />
-            </div>
-            <button id="submit" type="submit" class="btn btn-primary">Send</button>
-            <button id="clear" type="button" class="btn btn-primary">Clean</button>
-        </form>
-        <h2>Submission result</h2>
-        <div id='output' dir='ltr' style='border: dashed 1px green; margin: 10px; padding: 5px; font-family: courier'>
-        </div>
-        
-        <button id="home" type="button" class="btn btn-primary">Home page</button>
+  <a class='home' href="home.html">Badkan Home</a>
+  <div class="container">
+    <h1>Submit exercise <b><span id="exercise"></span></b></h1>
+    <form>
+      <div class="form-group">
+        <label for="usr">Enter here the Github Link. Must begin with https and end with .git:</label>
+        <input type="text" class="form-control" id="giturl" /> <br />
+      </div>
+      <div class="form-group">
+        <label for="usr">Your id:</label>
+        <input type="text" class="form-control" id="currentId"/> <br />
+      </div>
+      <div class="form-group">
+        <label for="usr">Enter here the id of your first collaborator (if exist):</label>
+        <input type="text" class="form-control" id="collab1" /> <br />
+      </div>
+      <div class="form-group">
+        <label for="usr">Enter here the id of your second collaborator (if exist):</label>
+        <input type="text" class="form-control" id="collab2" /> <br />
+      </div>
+      <button id="submit" type="submit" class="btn btn-primary">Send</button>
+      <button id="clear" type="button" class="btn btn-primary">Clean</button>
+    </form>
+    <h2>Submission result</h2>
+    <div id='output' dir='ltr' style='border: dashed 1px green; margin: 10px; padding: 5px; font-family: courier'>
     </div>
 
+    <button id="home" type="button" class="btn btn-primary">Home page</button>
+  </div>
 
-    <script type="text/javascript" src="../app/Badkan.js"></script>
+
+  <script type="text/javascript" src="../app/Badkan.js"></script>
 </body>
 
 </html>
