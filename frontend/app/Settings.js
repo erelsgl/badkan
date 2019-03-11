@@ -9,11 +9,9 @@ document.getElementById("txtId").defaultValue = currentUser.id
  */
 document.getElementById("confirm").addEventListener('click', e=>{
 
-  console.log("confirm");
-
-  const name = document.getElementById("txtName").value; 
-  const lastName = document.getElementById("txtLastName").value;
-  const id = document.getElementById("txtId").value;
+  const name = escapeHtml(document.getElementById("txtName").value);
+  const lastName = escapeHtml(document.getElementById("txtLastName").value);
+  const id = escapeHtml(document.getElementById("txtId").value);
 
   var emptyField = document.getElementById("emptyField");
 
@@ -21,12 +19,12 @@ document.getElementById("confirm").addEventListener('click', e=>{
     emptyField.className = "show";
     setTimeout(function(){ emptyField.className = emptyField.className.replace("show", ""); }, 2500);
     return;
-  } 
+  }
 
   var user = firebase.auth().currentUser;
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 
-  let currentUser = new User(name, lastName, id, homeUser.email, homeUser.createdEx, 
+  let currentUser = new User(name, lastName, id, homeUser.email, homeUser.createdEx,
   homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved);
   writeUserData(currentUser, user.uid);
 

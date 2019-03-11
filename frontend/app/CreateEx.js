@@ -3,13 +3,13 @@
 */
 document.getElementById("btnConfirm").addEventListener('click', e => {
 
-  const name = document.getElementById("exName").value;
-  const descr = document.getElementById("exDescr").value;
-  const example = document.getElementById("exEx").value;
-  const link = document.getElementById("link").value;
-  const exFolder = document.getElementById("exFolder").value;
-  const username = document.getElementById("user").value;
-  const pass = document.getElementById("pass").value;
+  const name = escapeHtml(document.getElementById("exName").value);
+  const descr = escapeHtml(document.getElementById("exDescr").value);
+  const example = escapeHtml(document.getElementById("exEx").value);
+  const link = escapeHtmlWithRespectGit(document.getElementById("link").value);
+  const exFolder = escapeHtml(document.getElementById("exFolder").value);
+  const username = escapeHtml(document.getElementById("user").value);
+  const pass = escapeHtml(document.getElementById("pass").value);
 
   var emptyField = document.getElementById("emptyField");
 
