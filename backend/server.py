@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-""" 
+"""
 A server for submission and checking of exercises.
 AUTHOR: Erel Segal-Halevi
 SINCE: 2018-01
