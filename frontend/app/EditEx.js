@@ -82,7 +82,3 @@ function sendLinkHTTP(folderName, exFolder) {
 
   return false;
 }
-
-document.getElementById("btnHome").addEventListener('click', e => {
-  document.location.href = "home.html";
-})
