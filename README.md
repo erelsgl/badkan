@@ -45,7 +45,6 @@ so let's install them first:
 
     apt update
     apt install git git-gui python3 python3-pip python3-dev
-    pip3 install --upgrade pip
     pip3 install websockets
 
 Badkan executes the submitted exercises in an isolated environment. This is handled by [docker](https://www.docker.com/).
@@ -84,14 +83,10 @@ If you want to use a process-monitor to run the servers, you can use pm2:
 
 The system has three different parts: docker, backend and frontend.
 
-They can all be started with:
+They can all be started for the first time (or after reboot) by:
 
     cd badkan
-    sudo bash start.sh <FRONTEND_PORT>
-
-For example:
-
-    sudo bash start.sh 80
+    start/1st_time.sh
 
 Verify that a docker container with image "badkan" is running:
 
@@ -104,42 +99,30 @@ Verify that the back-end is running:
 Verify that the front-end is running:
 
     sudo less frontend/nohup.out
-    <your-browser> http://localhost:<FRONTEND_PORT>?exercise=multiply
+    <your-browser> http://localhost:8000
 
 For example:
 
-    lynx http://localhost?exercise=multiply
+    lynx http://localhost:8000
 
 (If you installed badkan on a remote server, use its IP address instead of localhost).
 
-You can try to submit the following solution to the sample assignment:
+You can try to submit the following solution to the sample assignment "multiply":
 
     https://github.com/ereltest/multiply.git
 
 You should see that the grade is 100%.
 
+To restart the badkan server, you can do:
+
+    start/backend_frontend.sh
+  
 
 ## Logs
 
 The backend logs are at backend/nohup.out
 
 The frontend logs are at frontend/nohup.out
-
-
-## Restart
-
-When you upgrade badkan, you have to restart it. Since both badkan servers
-run in python, you can stop it by just:
-
-    sudo killall python3
-    
-then start it again by:
-
-    sudo bash start.sh 80
-
-You can run both by:
-
-    bash restart.sh 80
 
 
 ## Exercises
