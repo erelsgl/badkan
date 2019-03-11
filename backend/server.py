@@ -79,7 +79,9 @@ async def check_submission(websocket:object, submission:dict):
     # Grade the submission inside the docker container "badkan"
     grade = None
     move_command = "mv grading_files/* . && rm -rf grading_files"
-    grade_command = "timeout -s 9 10 timeout 5 nice -n 5 ./grade {} {}".format(username,repository)
+    TIMEOUT_SOFT = 10 # seconds
+    TIMEOUT_HARD = 20 # seconds
+    grade_command = "timeout -s 9 {} timeout {} nice -n 5 ./grade {} {}".format(TIMEOUT_HARD, TIMEOUT_SOFT, username,repository)
     combined_command = "{} && {}".format(move_command, grade_command)
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
 
