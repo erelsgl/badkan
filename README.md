@@ -201,6 +201,15 @@ go to http://<application_name>.com
 
 Don't forget to start the backend and docker server too!
 
+If there are issues when trying to sign in/up with github:
+
+Check if the error is :
+
+    The popup has been closed by the user before finalizing the operation. signin with girhub fireabse
+
+Then, go to Firebase in the Authentication -> Sign-in method -> Authorized domain and add your domain.
+Also go to GitHub settings -> application -> choose the right application and change the Homepage URL with the new one.
+
 ## Start
 
 The system has three different parts: docker, backend and frontend.
