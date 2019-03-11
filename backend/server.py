@@ -78,8 +78,11 @@ async def check_submission(websocket:object, submission:dict):
 
     # Grade the submission inside the docker container "badkan"
     grade = None
-    proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", 
-        "mv grading_files/* .; rm -rf grading_files; nice -n 5 ./grade {} {}".format(username,repository)])
+    move_command = "mv grading_files/* . && rm -rf grading_files"
+    grade_command = "timeout -s 9 10 timeout 5 nice -n 5 ./grade {} {}".format(username,repository)
+    combined_command = "{} && {}".format(move_command, grade_command)
+    proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
+
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         await tee(websocket, line)
