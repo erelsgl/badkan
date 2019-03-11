@@ -5,6 +5,10 @@ document.getElementById("exDescr").defaultValue = ex.description
 document.getElementById("exEx").defaultValue = ex.example
 document.getElementById("link").defaultValue = ex.link
 document.getElementById("exFolder").defaultValue = ex.exFolder
+
+document.getElementById("link").readOnly = true
+document.getElementById("exFolder").readOnly = true
+
 //document.getElementById("user").defaultValue = ex.username
 
 /**
@@ -12,9 +16,9 @@ document.getElementById("exFolder").defaultValue = ex.exFolder
  */
 document.getElementById("btnEdit").addEventListener('click', e => {
 
-  const name = document.getElementById("exName").value;
-  const descr = document.getElementById("exDescr").value;
-  const example = document.getElementById("exEx").value;
+  const name = escapeHtml(document.getElementById("exName").value);
+  const descr = escapeHtml(document.getElementById("exDescr").value);
+  const example = escapeHtml(document.getElementById("exEx").value);
 
   var emptyField = document.getElementById("emptyField");
 
@@ -36,7 +40,7 @@ function uploadExercise(name, descr, example) {
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   var folderName = JSON.parse(localStorage.getItem("selectedEx"));
 
-  
+
   sendLinkHTTP(folderName, ex.exFolder);
 
   let exercise = new Exercise(name, descr, example, user.uid, ex.link, ex.exFolder, ex.grades);

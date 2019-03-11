@@ -4,6 +4,9 @@ var BACKEND_PORTS = [5670,5671,5672,5673,5674,5675,5676,5677,5678,5679,];
 var grade = 0;
 var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 
+document.getElementById("currentId").value = homeUser.id;
+document.getElementById('currentId').readOnly = true;
+
 var exercise = getParameterByName("exercise");     // in utils.js
 if (!exercise)
     exercise = "multiply"; // default exercise
@@ -25,11 +28,12 @@ $("button#submit").click(() => {
     logClient("color:#888", "Submitting to backend port: "+backendPort);  // in utils.js
 
     // Create the json for submission
-    const collab1Id = document.getElementById("collab1").value;
-    const collab2Id = document.getElementById("collab2").value;
+    const collab1Id = escapeHtml(document.getElementById("collab1").value);
+    const collab2Id = escapeHtml(document.getElementById("collab2").value);
+    const giturl = escapeHtmlWithRespectGit(document.getElementById("giturl").value)
     var submission_json = JSON.stringify({
         exercise: exercise + "/" + ex.exFolder,
-        git_url: $("input#giturl").val(),
+        git_url: giturl,
         ids: homeUser.id + "-" + collab1Id + "-" + collab2Id
     });  // the variable "submission_json" is read in server.py:run
     logClient("color:#888", submission_json);  // in utils.js
