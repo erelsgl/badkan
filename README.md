@@ -77,7 +77,7 @@ If you want to use a process-monitor to run the servers, you can use pm2:
     sudo apt install npm
     sudo npm install -g --no-optional pm2@latest
 
-## Installing the Apache server
+# Installing the Apache server
 
 ## 1 — Installing Apache
 
@@ -148,7 +148,7 @@ Access the default Apache landing page to confirm that the software is running p
 
 You should see the default page of apache2.
 
-# 4 — Setting Up Virtual Hosts
+## 4 — Setting Up Virtual Hosts
 
 Make a new virtual host file at /etc/apache2/sites-available/<application_name>.conf:
 
