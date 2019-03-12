@@ -58,6 +58,11 @@ function incrementEditEx(userId, homeUser) {
   writeUserData(homeUser, userId);
 }
 
+function incrementEditExWithoutCommingHome(userId, homeUser) {
+  homeUser.editedEx++;
+  writeUserDataWithoutComingHome(homeUser, userId);
+}
+
 function loadCurrentUser(userId) {
   database.ref('/users/' + userId).once('value').then(function (snapshot) {
     var homeUser = snapshot.val().user;
@@ -73,8 +78,8 @@ function loadCurrentUser(userId) {
 }
 
 /**
- * @param {*} userId 342533064 
- * @param {*} grade 
+ * @param {*} userId 342533064
+ * @param {*} grade
  */
 function loadCollabById(userId, grade) {
   database.ref('/users/').orderByChild("/user/id").equalTo(userId).once('value').then(function (snapshot) {
@@ -131,9 +136,9 @@ function deleteExerciseById(exerciseId) {
 }
 
 /**
- * 
- * @param {*} selectedValue 
- * @param {*} grade 
+ *
+ * @param {*} selectedValue
+ * @param {*} grade
  */
 function writeExerciseHistoric(selectedValue, grade) {
   database.ref('exercises/' + selectedValue).once('value').then(function (snapshot) {
