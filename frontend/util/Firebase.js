@@ -131,8 +131,15 @@ function loadAllExercise() {
 }
 
 function deleteExerciseById(exerciseId) {
-  // Need to delete from the realtime database.
   database.ref().child('exercises/' + exerciseId).remove();
+}
+
+function deleteUserById(userId) {
+  database.ref().child('users/' + userId).remove();
+}
+
+function deleteAuthById() {
+  firebase.auth().currentUser.delete();
 }
 
 /**

@@ -7,7 +7,7 @@ document.getElementById("txtId").defaultValue = currentUser.id
 /**
  * BUTTON CONFIRM.
  */
-document.getElementById("confirm").addEventListener('click', e=>{
+document.getElementById("confirm").addEventListener('click', e => {
 
   const name = escapeHtml(document.getElementById("txtName").value);
   const lastName = escapeHtml(document.getElementById("txtLastName").value);
@@ -15,9 +15,11 @@ document.getElementById("confirm").addEventListener('click', e=>{
 
   var emptyField = document.getElementById("emptyField");
 
-  if(name === "" || lastName === "" || id === "") {
+  if (name === "" || lastName === "" || id === "") {
     emptyField.className = "show";
-    setTimeout(function(){ emptyField.className = emptyField.className.replace("show", ""); }, 2500);
+    setTimeout(function() {
+      emptyField.className = emptyField.className.replace("show", "");
+    }, 2500);
     return;
   }
 
@@ -25,9 +27,23 @@ document.getElementById("confirm").addEventListener('click', e=>{
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 
   let currentUser = new User(name, lastName, id, homeUser.email, homeUser.createdEx,
-  homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved);
+    homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved);
   writeUserData(currentUser, user.uid);
 
   document.location.href = "home.html";
 
+});
+
+
+/**
+ * BUTTON DELETE ACCOUNT.
+ */
+document.getElementById("deleteAc").addEventListener('click', e => {
+
+  if (confirm("Are you sure? All your data will be deleted.")) {
+    var user = firebase.auth().currentUser;
+    deleteUserById(user.uid);
+    deleteAuthById();
+    document.location.href = "index.html";
+  }
 });
