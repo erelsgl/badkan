@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Restart the badkan backend and frontend.
+# Restart the badkan backend.
 #
 # Credit:   https://stackoverflow.com/a/107717/827927
 #           [for the explanation that -u = unbuffered]
@@ -24,19 +24,3 @@ sudo nohup python3 -u server.py 5676 &
 sudo nohup python3 -u server.py 5677 &
 sudo nohup python3 -u server.py 5678 &
 sudo nohup python3 -u server.py 5679 &
-
-# 3. Start the frontend server:
-cd $DIR/../frontend
-sudo rm -f nohup.out
-sudo nohup nice -n -5 python3 -u -m http.server 8000 &
-# sudo nohup python3 -u -m http.server 8001 &
-# sudo nohup python3 -u -m http.server 8002 &
-# sudo nohup python3 -u -m http.server 8003 &
-# sudo nohup python3 -u -m http.server 8004 &
-# sudo nohup python3 -u -m http.server 8005 &
-# sudo nohup python3 -u -m http.server 8006 &
-# sudo nohup python3 -u -m http.server 8007 &
-# sudo nohup python3 -u -m http.server 8008 &
-# sudo nohup python3 -u -m http.server 8009 &
-
-echo "Try me at: lynx http://localhost:8000"

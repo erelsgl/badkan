@@ -85,7 +85,8 @@ async def check_submission(websocket:object, submission:dict):
     TIMEOUT_SOFT = 10 # seconds
     TIMEOUT_HARD = 20 # seconds
     grade_command = "timeout -s 9 {} timeout {} nice -n 5 ./grade {} {}".format(TIMEOUT_HARD, TIMEOUT_SOFT, username,repository)
-    combined_command = "{} && {}".format(move_command, grade_command)
+    exitcode_command = "echo Exit code: $?"
+    combined_command = "{} && {} ; {}".format(move_command, grade_command, exitcode_command)
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
 
     async for line in proc.stdout:

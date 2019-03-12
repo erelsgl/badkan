@@ -143,7 +143,3 @@ function uploadHomeUserGrade(grade) {
     var userId = firebase.auth().currentUser.uid;
     writeUserDataWithoutComingHome(homeUser, userId);
 }
-
-$("button#home").click(() => {
-    document.location.href = "home.html";
-})
