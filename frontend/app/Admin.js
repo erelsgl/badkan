@@ -14,6 +14,22 @@ firebase.auth().onAuthStateChanged(user => {
 });
 
 /**
+ * BUTTON CREATEEX.
+ * Send he user to the createEx page.
+ */
+document.getElementById("btnCreateEx").addEventListener('click', e => {
+  document.location.href = "createEx.html";
+});
+
+/**
+ * BUTTON EDITEX.
+ * Send he user to the createEx page.
+ */
+document.getElementById("btnEditEx").addEventListener('click', e => {
+  document.location.href = "editDeleteEx.html";
+});
+
+/**
  * BUTTON SOLVEEX.
  * Send he user to the createEx page.
  */
