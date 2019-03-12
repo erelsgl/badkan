@@ -191,8 +191,6 @@ Add the next line:
 
     127.0.0.1       <application_name>.com
 
-When your doing this from a server: ??? TODO.
-
 Restart Apache to implement your changes:
 
       sudo systemctl restart apache2
