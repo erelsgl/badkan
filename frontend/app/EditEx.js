@@ -45,9 +45,11 @@ function uploadExercise(name, descr, example) {
 
   let exercise = new Exercise(name, descr, example, user.uid, ex.link, ex.exFolder, ex.grades);
 
-  incrementEditEx(user.uid, homeUser);
+  incrementEditExWithoutCommingHome(user.uid, homeUser);
   writeExercise(exercise, folderName);
 
+  pullSuccess.className = "show";
+  setTimeout(function () { pullSuccess.className = pullSuccess.className.replace("show", ""); }, 2500);
 }
 
 function sendLinkHTTP(folderName, exFolder) {
