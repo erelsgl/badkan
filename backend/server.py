@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-""" 
+"""
 A server for submission and checking of exercises.
 AUTHOR: Erel Segal-Halevi
 SINCE: 2018-01
@@ -53,6 +53,9 @@ async def check_submission(websocket:object, submission:dict):
     """
     exercise=submission["exercise"]
     git_url =submission["git_url"]
+    ids = submission["ids"]
+    currentDT = datetime.datetime.now()
+    edit_csv(str(currentDT), git_url, ids, "START")
     if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
@@ -98,7 +101,7 @@ async def check_submission(websocket:object, submission:dict):
         await tee(websocket, "Final Grade: 0")
 
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), git_url, submission["ids"], grade)
+    edit_csv(str(currentDT), git_url, ids, grade)
 
 
 async def load_ex(url, folder_name, username, password, exercise):
