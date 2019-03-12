@@ -7,4 +7,7 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-source $DIR/docker.sh  &&  source $DIR/update.sh
+if git pull
+then
+    cp -rf $DIR/../frontend/* /var/www/html/
+fi
