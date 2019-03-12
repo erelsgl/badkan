@@ -314,14 +314,14 @@ If needed, kill the port by using both command:
 first: sudo killall python3
 then: sudo kill 21473
 
-As a developper, sometimes, you want to open the server in localhost without use nohup.
-Thus, open three terminal.
-Here are the command for the terminals:
+As a developper, sometimes, you want to open the server in localhost without use nohup.  
+Thus, open three terminal.  
+Here are the command for the terminals:  
 
-1- cd backend then sudo python3 -u server.py 5670
-2 - cd frontend then sudo python3 -u -m http.server 8000
-3 - sudo docker run --name badkan -p 8010:8010 --rm -itd erelsgl/badkan bash
-Then, optional: sudo docker exec badkan bash -c "cd /www; python3 -u -m http.server 8010"
+1- cd backend then sudo python3 -u server.py 5670  
+2 - cd frontend then sudo python3 -u -m http.server 8000  
+3 - sudo docker run --name badkan -p 8010:8010 --rm -itd erelsgl/badkan bash  
+Then, optional: sudo docker exec badkan bash -c "cd /www; python3 -u -m http.server 8010"  
 
 Once everything done, open another terminal and here is the command:
 <your-browser> http://localhost:<FRONTEND_PORT>
