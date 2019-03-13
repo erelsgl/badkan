@@ -136,10 +136,6 @@ function deleteUserById(userId) {
   database.ref().child('users/' + userId).remove();
 }
 
-function deleteAuthById() {
-  firebase.auth().currentUser.delete();
-}
-
 /**
  *
  * @param {*} selectedValue

@@ -59,7 +59,7 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
 
 /**
  * BUTTON LOGIN.
- * Here we're checking if the mail and password correspond 
+ * Here we're checking if the mail and password correspond
  * and send he user to the home page.
  */
 document.getElementById("btnLogin").addEventListener('click', e => {
@@ -79,49 +79,37 @@ document.getElementById("btnLogin").addEventListener('click', e => {
 
 });
 
-document.getElementById('signWithGithub').addEventListener('click', e => {
+document.getElementById('github').addEventListener('click', e => {
   github();
 });
-
-document.getElementById('registerWithGithub').addEventListener('click', e => {
-  github();
-});
-
 
 /**
  * BUTTON GITHUB.
- * Attention !! Must use an HTTP or HTTPS adress. 
+ * Attention !! Must use an HTTP or HTTPS adress.
  * It can't be on the local server but with a web server.
  * Run configuration:
- * Open a terminal and write: 
- * python3 -m http.server 
+ * Open a terminal and write:
+ * python3 -m http.server
  * Then, in the bowser, write: http://localhost:8000/
  * and go to the html file and we're done.
  */
 function github() {
-
-  console.log("Log with github");
-
   const provider = new firebase.auth.GithubAuthProvider();
   const promise = firebase.auth().signInWithPopup(provider);
   var mailGihtub = document.getElementById("mailGithub");
   promise.then(function (result) {
-
     /**
      * Two cases here: if the user is new need to register him in the realtime database
      * and then go to home, if the user is old need to go to home.
      */
-
     if (result.additionalUserInfo.isNewUser) {
-      console.log(result)
+      console.log("new User")
       document.location.href = "completeInfo.html"
     }
     else {
+      console.log("old user");
       document.location.href = "home.html";
     }
-
-    console.log(result)
-
   }).catch(function (error) {
     if (error.message === "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.") {
       mailGihtub.className = "show";
@@ -129,13 +117,5 @@ function github() {
       return;
     }
     console.log(error.message);
-
   });
-
 }
-
-
-
-
-
-

@@ -41,9 +41,14 @@ document.getElementById("confirm").addEventListener('click', e => {
 document.getElementById("deleteAc").addEventListener('click', e => {
 
   if (confirm("Are you sure? All your data will be deleted.")) {
-    var user = firebase.auth().currentUser;
-    deleteUserById(user.uid);
-    deleteAuthById();
-    document.location.href = "index.html";
+    var user = firebase.auth().currentUser
+    user.delete().catch(function(error) {
+      console.log(error.message);
+      alert(error.message);
+      return;
+    }).then(function() {
+      deleteUserById(user.uid);
+      document.location.href = "index.html";
+    });
   }
 });

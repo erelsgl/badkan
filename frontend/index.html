@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="../style/snackbar.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
 </head>
 
@@ -39,8 +40,6 @@
         <input type="email" id="txtEmail" placeholder="Enter email" /> <br />
         <input type="password" id="txtPassword" placeholder="Enter password" /><br />
         <button id="btnLogin" type="button" class="btn btn-success">Sign in</button>
-        <h4>If you have a github account.</h4>
-        <button id="signWithGithub" type="button" class="btn btn-success">Sign in with GitHub</button>
       </div>
       <div id="menu1" class="tab-pane fade">
         <br />
@@ -50,9 +49,15 @@
         <input id="txtLastName" placeholder="Enter last name" /> <br />
         <input id="txtId" placeholder="Enter id" /><br />
         <button id="btnSignUp" type="button" class="btn btn-success">Register</button>
-        <h4>If you have a github account.</h4>
-        <button id="registerWithGithub" type="button" class="btn btn-success">Register with GitHub</button>
       </div>
+      <!--
+      <button id="signWithGithub" type="button" class="btn btn-success">Sign in/Register with GitHub</button>
+      <h4>If you have a github account.</h4>
+      <button id="registerWithGithub" type="button" class="btn btn-success">Register with GitHub</button> -->
+      <h4>If you have a github account: Sign in or register by clicking on the icon.</h4>
+      <button id="github" class="btn" >
+        <font size="10"><i class="fab fa-github"></i></font>
+      </button>
     </div>
 
     <!-- snackbar. -->
