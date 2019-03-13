@@ -2,8 +2,6 @@
  * Here are all the function for firebase use.
  */
 
-
-
 // Get a reference to the database service
 var database = firebase.database();
 var storage = firebase.storage();
