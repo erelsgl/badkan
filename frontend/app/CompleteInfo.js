@@ -18,7 +18,7 @@ document.getElementById("confirm").addEventListener('click', e => {
   }
 
   var user = firebase.auth().currentUser;
-  let grade = new Grade("id", 90);
+  let grade = new Grade("id", 90, "url");
   let grades = new Grades("Init", [grade]);
   let exerciseSolved = new ExerciseSolved(new Exercise("0", "0", "0", "0", "0", "0", grades), 90, "id");
   let currentUser = new User(name, lastName, id, user.email, 0, 0, 0, [exerciseSolved]);

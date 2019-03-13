@@ -9,7 +9,7 @@ var storage = firebase.storage();
 function writeUserData(user, userId) {
   database.ref("users/" + userId).set({
     user
-  }).then(function () {
+  }).then(function() {
     document.location.href = "home.html";
   });
 }
@@ -17,7 +17,7 @@ function writeUserData(user, userId) {
 function writeUserDataAndSubmit(user, userId) {
   database.ref("users/" + userId).set({
     user
-  }).then(function () {
+  }).then(function() {
     document.getElementById("form").submit();
     document.location.href = "home.html";
   });
@@ -62,13 +62,13 @@ function incrementEditExWithoutCommingHome(userId, homeUser) {
 }
 
 function loadCurrentUser(userId) {
-  database.ref('/users/' + userId).once('value').then(function (snapshot) {
+  database.ref('/users/' + userId).once('value').then(function(snapshot) {
     var homeUser = snapshot.val().user;
     localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
-    document.getElementById("name").innerHTML = "Hello " + homeUser.name + " " + homeUser.lastName
-      + "! <br />" + "ID number: " + homeUser.id + "<br />" + "Email: " + homeUser.email + "<br />" +
-      "Created exercise(s): " + homeUser.createdEx + "<br />" + "Deleted exercise(s): " + homeUser.deletedEx
-      + "<br />" + "Edited exercise(s): " + homeUser.editedEx + "<br />" + "Solved exercise(s): " +
+    document.getElementById("name").innerHTML = "Hello " + homeUser.name + " " + homeUser.lastName +
+      "! <br />" + "ID number: " + homeUser.id + "<br />" + "Email: " + homeUser.email + "<br />" +
+      "Created exercise(s): " + homeUser.createdEx + "<br />" + "Deleted exercise(s): " + homeUser.deletedEx +
+      "<br />" + "Edited exercise(s): " + homeUser.editedEx + "<br />" + "Solved exercise(s): " +
       (homeUser.exerciseSolved.length - 1);
     loading("div1");
     loading("loading");
@@ -80,10 +80,10 @@ function loadCurrentUser(userId) {
  * @param {*} grade
  */
 function loadCollabById(userId, grade) {
-  database.ref('/users/').orderByChild("/user/id").equalTo(userId).once('value').then(function (snapshot) {
-    snapshot.forEach(function (child) {
+  database.ref('/users/').orderByChild("/user/id").equalTo(userId).once('value').then(function(snapshot) {
+    snapshot.forEach(function(child) {
       let uid = child.key;
-      database.ref('/users/' + uid).once('value').then(function (snapshot) {
+      database.ref('/users/' + uid).once('value').then(function(snapshot) {
         let collab1 = snapshot.val().user;
         uploadCollabGrade(grade, collab1, uid);
       });
@@ -91,10 +91,34 @@ function loadCollabById(userId, grade) {
   });
 }
 
+function loadUidById(id, giturl) {
+  database.ref('/users/').orderByChild("/user/id").equalTo(id).once('value').then(function(snapshot) {
+    snapshot.forEach(function(child) {
+      let uid = child.key;
+      uploadGradeWithOneCollab(grade, uid, giturl)
+    });
+  });
+}
+
+
+function loadUidByIds(id1, id2, giturl) {
+  database.ref('/users/').orderByChild("/user/id").equalTo(id1).once('value').then(function(snapshot) {
+    snapshot.forEach(function(child) {
+      let uid1 = child.key;
+      database.ref('/users/').orderByChild("/user/id").equalTo(id2).once('value').then(function(snapshot) {
+        snapshot.forEach(function(child) {
+          let uid2 = child.key;
+          uploadGradeWithTwoCollab(grade, uid1, uid2, giturl);
+        });
+      });
+    });
+  });
+}
+
 function loadExerciseByOwner() {
   var flag = false;
-  database.ref().child('exercises/').on("value", function (snapshot) {
-    snapshot.forEach(function (data) {
+  database.ref().child('exercises/').on("value", function(snapshot) {
+    snapshot.forEach(function(data) {
       if (data.val().exercise.ownerId === firebase.auth().currentUser.uid) {
         addOption(data.val().exercise, data.key);
         ownExercises.set(data.key, data.val().exercise);
@@ -112,8 +136,8 @@ function loadExerciseByOwner() {
 
 function loadAllExercise() {
   var flag = false;
-  database.ref().child('exercises/').on("value", function (snapshot) {
-    snapshot.forEach(function (data) {
+  database.ref().child('exercises/').on("value", function(snapshot) {
+    snapshot.forEach(function(data) {
       addOption(data.val().exercise, data.key);
       exercises.set(data.key, data.val().exercise);
       onOptionChange();
@@ -142,14 +166,14 @@ function deleteUserById(userId) {
  * @param {*} grade
  */
 function writeExerciseHistoric(selectedValue, grade) {
-  database.ref('exercises/' + selectedValue).once('value').then(function (snapshot) {
+  console.log(grade);
+  database.ref('exercises/' + selectedValue).once('value').then(function(snapshot) {
     var exercise = snapshot.val().exercise;
     for (var i = 0; i < grade.length; i++) {
       let index = checkIfIdExist(exercise, grade[i].id);
       if (index != -1) {
-        exercise.grades.gradeObj[index]= grade[i];
-      }
-      else {
+        exercise.grades.gradeObj[index] = grade[i];
+      } else {
         exercise.grades.gradeObj.push(grade[i]);
       }
     }
