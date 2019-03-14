@@ -10,5 +10,5 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 if git pull
 then
     cp -rf $DIR/../frontend/* /var/www/html/
-    source $DIR/backend_frontend.sh
+    source $DIR/backend.sh
 fi
