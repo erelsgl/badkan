@@ -28,7 +28,7 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
   }
 
   firebase.auth().createUserWithEmailAndPassword(email, pass).then(function () {
-    let grade = new Grade("id", 90);
+    let grade = new Grade("id", 90, "url");
     let grades = new Grades("Init", [grade]);
     let exerciseSolved = new ExerciseSolved(new Exercise("0", "0", "0", "0", "0", "0", grades), 90, "id");
 
