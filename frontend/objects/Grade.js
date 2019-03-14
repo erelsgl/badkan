@@ -3,9 +3,10 @@
  */
 class Grade {
 
-    constructor(id, grade) {
+    constructor(id, grade, url) {
         this.id = id;
         this.grade = grade;
+        this.url = url;
     }
 
 }
