@@ -2,8 +2,6 @@
  * Here are all the function for firebase use.
  */
 
-
-
 // Get a reference to the database service
 var database = firebase.database();
 var storage = firebase.storage();
@@ -131,8 +129,11 @@ function loadAllExercise() {
 }
 
 function deleteExerciseById(exerciseId) {
-  // Need to delete from the realtime database.
   database.ref().child('exercises/' + exerciseId).remove();
+}
+
+function deleteUserById(userId) {
+  database.ref().child('users/' + userId).remove();
 }
 
 /**
