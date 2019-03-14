@@ -108,4 +108,5 @@ ENV/
 .vscode
 backend/trace_table.csv
 exercises/*/
+database_exports/*/
 frontend/util/FirebaseConfig.js
