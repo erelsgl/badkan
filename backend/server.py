@@ -49,13 +49,15 @@ async def check_submission(websocket:object, submission:dict):
     :param websocket: for reading the submission params and sending output messages.
     :param submission: a JSON object with at least the following fields:
            "exercise" - name of the exercise; represents a sub-folder of the "exercises" folder.
-           "git_url"  - a url for cloning the student's git repository containing the submitted solution.                      must be of the form https://xxx.git.
+           "git_url"  - a url for cloning the student's git repository containing the submitted solution.
+           must be of the form https://xxx.git.
     """
     exercise=submission["exercise"]
     git_url =submission["git_url"]
     ids = submission["ids"]
+    name = submission["name"]
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), git_url, ids, "START")
+    edit_csv(str(currentDT), git_url, ids, "START", name)
     if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
@@ -102,7 +104,7 @@ async def check_submission(websocket:object, submission:dict):
         await tee(websocket, "Final Grade: 0")
 
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), git_url, ids, grade)
+    edit_csv(str(currentDT), git_url, ids, grade, name)
 
 
 async def load_ex(url, folder_name, username, password, exercise):

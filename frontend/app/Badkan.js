@@ -34,7 +34,8 @@ $("button#submit").click(() => {
   var submission_json = JSON.stringify({
     exercise: exercise + "/" + ex.exFolder,
     git_url: giturl,
-    ids: homeUser.id + "-" + collab1Id + "-" + collab2Id
+    ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
+    name: ex.name
   }); // the variable "submission_json" is read in server.py:run
   logClient("color:#888", submission_json); // in utils.js
   var websocket = new WebSocket(websocketurl);
