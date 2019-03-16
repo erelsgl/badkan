@@ -1,5 +1,8 @@
 var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 
+document.getElementById("heading").innerHTML =
+    "Records for " + homeUser.name + " " + homeUser.lastName + " " + homeUser.id;
+
 var str = "";
 for (i = 0; i < homeUser.exerciseSolved.length; i++) {
     if (homeUser.exerciseSolved[i].exerciseId != "id") {
@@ -9,12 +12,8 @@ for (i = 0; i < homeUser.exerciseSolved.length; i++) {
 }
 
 if (str === "") {
-    document.getElementById("name").innerHTML = "You didn't solve any exercise yet."
+    document.getElementById("records").innerHTML = "You didn't solve any exercise yet."
 }
 else {
-    document.getElementById("name").innerHTML = str;
+    document.getElementById("records").innerHTML = str;
 }
-
-$("button#home").click(() => {
-    document.location.href = "home.html";
-})
