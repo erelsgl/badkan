@@ -3,7 +3,7 @@
 """
 A server for submission and checking of exercises.
 AUTHOR: Erel Segal-Halevi
-SINCE: 2018-01
+SINCE: 2019-03
 """
 
 from terminal import *
@@ -108,14 +108,30 @@ async def check_submission(websocket:object, submission:dict):
 
 
 async def load_ex(url, folder_name, username, password, exercise):
+    """
+    :param url: the url of the submission.
+    :param folder_name: the folder_name of the solved exercise 
+    (it's composed of the uid of the owner + "_" + nb of exercise he created).
+    :param username: the username of the deploy token to clone the private repo.
+    :param password: the password of the deploy token to clone the private repo.
+    :param exercise: the name of the solved exercise.
+    """
     git_clone("../exercises", url, folder_name, username, password, exercise)
     print("your exercise is loaded.")
 
 async def edit_ex(folder_name, ex_folder):
+    """
+    :param folder_name: the folder_name of the solved exercise 
+    (it's composed of the uid of the owner + "_" + nb of exercise he created).
+    :param exercise: the name of the folder of the solved exercise.
+    """
     git_pull("../exercises", folder_name, ex_folder)
     print("your exercise is edited.")
 
 async def delete_ex(delete_ex):
+    """
+    :param delete_ex: the name of the folder of the exercise to delete.
+    """
     rmv("../exercises", delete_ex)
     print("your exercise is deleted.")
 

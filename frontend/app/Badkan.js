@@ -73,7 +73,6 @@ $("button#submit").click(() => {
   return false;
 })
 
-
 function uploadGrade(grade, giturl) {
   const collab1Id = document.getElementById("collab1").value;
   const collab2Id = document.getElementById("collab2").value;
