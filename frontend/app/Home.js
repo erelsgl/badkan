@@ -47,7 +47,9 @@ document.getElementById("btnLogOut").addEventListener('click', e => {
   document.location.href = "index.html";
 });
 
-
+/**
+ * This function hide the loading circle of active him.
+ */
 function hideLoading() {
   var x = document.getElementById("loading");
   if (x.style.display === "none") {

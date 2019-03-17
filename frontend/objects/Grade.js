@@ -3,6 +3,12 @@
  */
 class Grade {
 
+    /**
+     * 
+     * @param {int} id 
+     * @param {int} grade 
+     * @param {string} url 
+     */
     constructor(id, grade, url) {
         this.id = id;
         this.grade = grade;

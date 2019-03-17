@@ -3,6 +3,11 @@
  */
 class Grades {
 
+    /**
+     * 
+     * @param {string} exerciseName 
+     * @param {grade} gradeObj 
+     */
     constructor(exerciseName, gradeObj) {
         this.exerciseName = exerciseName;
         this.gradeObj = gradeObj;

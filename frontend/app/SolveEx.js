@@ -21,6 +21,9 @@ document.getElementById("btnSolve").addEventListener('click', e => {
 
 });
 
+/**
+ * Change the option of the list.
+ */
 function onOptionChange() {
     document.getElementById("descr").innerHTML = exercises.get(select.value).description;
     document.getElementById("example").innerHTML = exercises.get(select.value).example;

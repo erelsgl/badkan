@@ -34,6 +34,16 @@ document.getElementById("btnHelp").addEventListener('click', e => {
     "choose a name for the new token, and click \"Create deploy token\".");
 });
 
+/**
+ * This function upload the exercise on the database and on the server using websocket.
+ * @param {string} name 
+ * @param {string} descr 
+ * @param {string} example 
+ * @param {string} link 
+ * @param {string} username 
+ * @param {string} pass 
+ * @param {string} exFolder 
+ */
 function uploadExercise(name, descr, example, link, username, pass, exFolder) {
 
   // The ref of the folder must be PK.
@@ -54,6 +64,14 @@ function uploadExercise(name, descr, example, link, username, pass, exFolder) {
 
 }
 
+/**
+ * This function send the exercise to the server using websockets.
+ * @param {string} link 
+ * @param {string} folderName 
+ * @param {string} username 
+ * @param {string} pass 
+ * @param {string} exFolder 
+ */
 function sendLinkHTTP(link, folderName, username, pass, exFolder) {
   var backendPort = getParameterByName("backend");     // in utils.js
   if (!backendPort)

@@ -32,6 +32,13 @@ document.getElementById("btnEdit").addEventListener('click', e => {
 
 });
 
+/**
+ * This function edit on the firebase the exercise.
+ * Also, on the server, we proceed a push command for the repo.
+ * @param {string} name 
+ * @param {string} descr 
+ * @param {string} example 
+ */
 function uploadExercise(name, descr, example) {
   // The ref of the folder must be PK.
 
@@ -52,6 +59,11 @@ function uploadExercise(name, descr, example) {
   setTimeout(function () { pullSuccess.className = pullSuccess.className.replace("show", ""); }, 2500);
 }
 
+/**
+ * Send a push request on the backend server.
+ * @param {string} folderName 
+ * @param {string} exFolder 
+ */
 function sendLinkHTTP(folderName, exFolder) {
   var backendPort = getParameterByName("backend");     // in utils.js
   if (!backendPort)

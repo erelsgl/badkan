@@ -1,3 +1,7 @@
+/**
+ * This function active or not the loading.
+ * @param {int} id 
+ */
 function loading(id) {
     var x = document.getElementById(id);
     if (x.style.display === "none") {

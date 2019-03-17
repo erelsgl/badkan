@@ -6,6 +6,11 @@
 var database = firebase.database();
 var storage = firebase.storage();
 
+/**
+ * This method upload the user in firebase.
+ * @param {user} user 
+ * @param {string} userId 
+ */
 function writeUserData(user, userId) {
   database.ref("users/" + userId).set({
     user
@@ -14,6 +19,11 @@ function writeUserData(user, userId) {
   });
 }
 
+/**
+ * This method upload the user on firebase and then submit the form.
+ * @param {user} user 
+ * @param {string} userId 
+ */
 function writeUserDataAndSubmit(user, userId) {
   database.ref("users/" + userId).set({
     user
@@ -23,44 +33,86 @@ function writeUserDataAndSubmit(user, userId) {
   });
 }
 
+/**
+ * This method upload the user in firebase.
+ * Note that we're not comming home here.
+ * @param {user} user 
+ * @param {string} userId 
+ */
 function writeUserDataWithoutComingHome(user, userId) {
   database.ref("users/" + userId).set({
     user
   });
 }
 
+/**
+ * This function upload an exercise.
+ * @param {exercise} exercise 
+ * @param {string} exerciseId 
+ */
 function writeExercise(exercise, exerciseId) {
   firebase.database().ref("exercises/" + exerciseId).set({
     exercise
   });
 }
 
+/**
+ * This function increment the number of created exercise.
+ * @param {string} userId 
+ * @param {user}homeUser 
+ */
 function incrementCreatedEx(userId, homeUser) {
   homeUser.createdEx++;
   writeUserData(homeUser, userId);
 }
 
+/**
+ * This function increment the number of created exercise.
+ * Note that this function submit the form.
+ * @param {string} userId 
+ * @param {user}homeUser 
+ */
 function incrementCreatedExAndSubmit(userId, homeUser) {
   homeUser.createdEx++;
   writeUserDataAndSubmit(homeUser, userId);
 }
 
+/**
+ * This function increment the number of deleted exercise.
+ * @param {string} userId 
+ * @param {user}homeUser 
+ */
 function incrementDeletedEx(userId, homeUser) {
   console.log("increment delete");
   homeUser.deletedEx++;
   writeUserData(homeUser, userId);
 }
 
+/**
+ * This function increment the number of edited exercise.
+ * @param {string} userId 
+ * @param {user}homeUser 
+ */
 function incrementEditEx(userId, homeUser) {
   homeUser.editedEx++;
   writeUserData(homeUser, userId);
 }
 
+/**
+ * This function increment the number of edited exercise.
+ * Note that this function is not bring you at home.
+ * @param {string} userId 
+ * @param {user}homeUser 
+ */
 function incrementEditExWithoutCommingHome(userId, homeUser) {
   homeUser.editedEx++;
   writeUserDataWithoutComingHome(homeUser, userId);
 }
 
+/**
+ * This function download the user from the firebase given his id.
+ * @param {string} userId 
+ */
 function loadCurrentUser(userId) {
   database.ref('/users/' + userId).once('value').then(function(snapshot) {
     var homeUser = snapshot.val().user;
@@ -79,8 +131,9 @@ function loadCurrentUser(userId) {
 }
 
 /**
- * @param {*} userId 342533064
- * @param {*} grade
+ * This function load the collab.
+ * @param {int} userId 342533064
+ * @param {grade} grade
  */
 function loadCollabById(userId, grade) {
   database.ref('/users/').orderByChild("/user/id").equalTo(userId).once('value').then(function(snapshot) {
@@ -94,6 +147,11 @@ function loadCollabById(userId, grade) {
   });
 }
 
+/**
+ * This method download any user by is country id.
+ * @param {int} id 
+ * @param {string} giturl 
+ */
 function loadUidById(id, giturl) {
   database.ref('/users/').orderByChild("/user/id").equalTo(id).once('value').then(function(snapshot) {
     snapshot.forEach(function(child) {
@@ -103,7 +161,12 @@ function loadUidById(id, giturl) {
   });
 }
 
-
+/**
+ * This method download two users by their country ids.
+ * @param {int} id1 
+ * @param {int} id2 
+ * @param {string} giturl 
+ */
 function loadUidByIds(id1, id2, giturl) {
   database.ref('/users/').orderByChild("/user/id").equalTo(id1).once('value').then(function(snapshot) {
     snapshot.forEach(function(child) {
@@ -118,6 +181,9 @@ function loadUidByIds(id1, id2, giturl) {
   });
 }
 
+/**
+ * This function load all the exercise the current user create.
+ */
 function loadExerciseByOwner() {
   var flag = false;
   database.ref().child('exercises/').on("value", function(snapshot) {
@@ -137,6 +203,9 @@ function loadExerciseByOwner() {
   });
 }
 
+/**
+ * This function load all the exercises of the database.
+ */
 function loadAllExercise() {
   var flag = false;
   database.ref().child('exercises/').on("value", function(snapshot) {
@@ -155,18 +224,26 @@ function loadAllExercise() {
   });
 }
 
+/**
+ * This function remove an exercise from the database.
+ * @param {string} exerciseId 
+ */
 function deleteExerciseById(exerciseId) {
   database.ref().child('exercises/' + exerciseId).remove();
 }
 
+/**
+ * This function remove an user from the database.
+ * @param {string} userId 
+ */
 function deleteUserById(userId) {
   database.ref().child('users/' + userId).remove();
 }
 
 /**
- *
- * @param {*} selectedValue
- * @param {*} grade
+ * This function refresh the historic of the user.
+ * @param {int} selectedValue
+ * @param {grade} grade
  */
 function writeExerciseHistoric(selectedValue, grade) {
   console.log(grade);
@@ -186,6 +263,11 @@ function writeExerciseHistoric(selectedValue, grade) {
   });
 }
 
+/**
+ * This function check if the id country exist or not in the database.
+ * @param {exercise} exercise 
+ * @param {int} id 
+ */
 function checkIfIdExist(exercise, id) {
   for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
     if (exercise.grades.gradeObj[i].id === id) {
