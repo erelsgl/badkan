@@ -13,6 +13,9 @@ firebase_tweny_four_hours = open("24-hours.json", "rb")
 firebase_ninety_six_hours = open("96-hours.json", "rb")
 firebase_before_backend_update = open("before-backend-update.json", "rb")
 
+exercises = open("exercises-backup.tar.gz", "rb")
+
+
 bucket = storage.bucket()
 
 blob = bucket.blob('02-hours.json')
@@ -30,4 +33,5 @@ blob.upload_from_file(firebase_ninety_six_hours)
 blob = bucket.blob('before-backend-update.json')
 blob.upload_from_file(firebase_before_backend_update)
 
-print(blob.public_url)
+blob = bucket.blob('exercises-backup.tar.gz')
+blob.upload_from_file(exercises)
