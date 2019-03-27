@@ -3,6 +3,16 @@
  */
 class Exercise {
     
+    /**
+     * 
+     * @param {string} name 
+     * @param {string} description 
+     * @param {string} example 
+     * @param {string} ownerId 
+     * @param {string} link 
+     * @param {string} exFolder 
+     * @param {grades} grades 
+     */
     constructor(name, description, example, ownerId, link, exFolder, grades) {
         this.name = name;
         this.description = description;

@@ -3,7 +3,7 @@
 """
 A server for submission and checking of exercises.
 AUTHOR: Erel Segal-Halevi
-SINCE: 2018-01
+SINCE: 2019-03
 """
 
 from terminal import *
@@ -49,13 +49,15 @@ async def check_submission(websocket:object, submission:dict):
     :param websocket: for reading the submission params and sending output messages.
     :param submission: a JSON object with at least the following fields:
            "exercise" - name of the exercise; represents a sub-folder of the "exercises" folder.
-           "git_url"  - a url for cloning the student's git repository containing the submitted solution.                      must be of the form https://xxx.git.
+           "git_url"  - a url for cloning the student's git repository containing the submitted solution.
+           must be of the form https://xxx.git.
     """
     exercise=submission["exercise"]
     git_url =submission["git_url"]
     ids = submission["ids"]
+    name = submission["name"]
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), git_url, ids, "START")
+    edit_csv(str(currentDT), git_url, ids, "START", name)
     if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
@@ -102,18 +104,34 @@ async def check_submission(websocket:object, submission:dict):
         await tee(websocket, "Final Grade: 0")
 
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), git_url, ids, grade)
+    edit_csv(str(currentDT), git_url, ids, grade, name)
 
 
 async def load_ex(url, folder_name, username, password, exercise):
+    """
+    :param url: the url of the submission.
+    :param folder_name: the folder_name of the solved exercise 
+    (it's composed of the uid of the owner + "_" + nb of exercise he created).
+    :param username: the username of the deploy token to clone the private repo.
+    :param password: the password of the deploy token to clone the private repo.
+    :param exercise: the name of the solved exercise.
+    """
     git_clone("../exercises", url, folder_name, username, password, exercise)
     print("your exercise is loaded.")
 
 async def edit_ex(folder_name, ex_folder):
+    """
+    :param folder_name: the folder_name of the solved exercise 
+    (it's composed of the uid of the owner + "_" + nb of exercise he created).
+    :param exercise: the name of the folder of the solved exercise.
+    """
     git_pull("../exercises", folder_name, ex_folder)
     print("your exercise is edited.")
 
 async def delete_ex(delete_ex):
+    """
+    :param delete_ex: the name of the folder of the exercise to delete.
+    """
     rmv("../exercises", delete_ex)
     print("your exercise is deleted.")
 

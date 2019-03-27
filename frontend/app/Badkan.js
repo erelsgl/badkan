@@ -1,12 +1,12 @@
 var BACKEND_PORTS = [5670, 5671, 5672, 5673, 5674, 5675, 5676, 5677, 5678, 5679, ];
 //var BACKEND_PORTS = [5670]
 
-var grade = 0;
-var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+var grade = 0;  // The grade by default.
+var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));  // The current user.
 
-document.getElementById("currentId").value = homeUser.id;
-document.getElementById('currentId').readOnly = true;
-
+document.getElementById("currentId").value = homeUser.id;  // The id of the current user.
+document.getElementById('currentId').readOnly = true;  // Make it as readonly.
+ 
 var exercise = getParameterByName("exercise"); // in utils.js
 if (!exercise)
   exercise = "multiply"; // default exercise
@@ -14,11 +14,17 @@ var ex = JSON.parse(localStorage.getItem("exercise"));
 var selectedValue = JSON.parse(localStorage.getItem("selectedValue"));
 $("#exercise").html(ex.name);
 
+/**
+ * The button to clear the submission terminal.
+ */
 $("button#clear").click(() => {
   $("div#output").html("")
   return false;
 })
 
+/**
+ * The button to submit the exercise.
+ */
 $("button#submit").click(() => {
   // Choose a backend port at random
   var backendPort = getParameterByName("backend"); // in utils.js
@@ -34,7 +40,8 @@ $("button#submit").click(() => {
   var submission_json = JSON.stringify({
     exercise: exercise + "/" + ex.exFolder,
     git_url: giturl,
-    ids: homeUser.id + "-" + collab1Id + "-" + collab2Id
+    ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
+    name: ex.name
   }); // the variable "submission_json" is read in server.py:run
   logClient("color:#888", submission_json); // in utils.js
   var websocket = new WebSocket(websocketurl);
@@ -72,7 +79,11 @@ $("button#submit").click(() => {
   return false;
 })
 
-
+/**
+ * This function upload the grade of the users (if collaborator) in the database.
+ * @param {grade} grade 
+ * @param {string} giturl 
+ */
 function uploadGrade(grade, giturl) {
   const collab1Id = document.getElementById("collab1").value;
   const collab2Id = document.getElementById("collab2").value;
@@ -94,6 +105,12 @@ function uploadGrade(grade, giturl) {
   }
 }
 
+/**
+ * If there is only one collab.
+ * @param {grade} grade 
+ * @param {int} collab1Id 
+ * @param {string} giturl 
+ */
 function uploadGradeWithOneCollab(grade, collab1Id, giturl) {
   uploadHomeUserGrade(grade);
   var uid = firebase.auth().currentUser.uid;
@@ -103,6 +120,13 @@ function uploadGradeWithOneCollab(grade, collab1Id, giturl) {
   writeExerciseHistoric(selectedValue, gradevector);
 }
 
+/**
+ * If there is two collab.
+ * @param {grade} grade 
+ * @param {int} collab1Id 
+ * @param {int} collab1Id 
+ * @param {string} giturl 
+ */
 function uploadGradeWithTwoCollab(grade, collab1Id, collab2Id, giturl) {
   uploadHomeUserGrade(grade);
   var uid = firebase.auth().currentUser.uid;
@@ -114,6 +138,13 @@ function uploadGradeWithTwoCollab(grade, collab1Id, collab2Id, giturl) {
 
 }
 
+/**
+ * This function upload the collab grade in the database.
+ * @param {grade} grade 
+ * @param {user} collab 
+ * @param {int} collabId 
+ * @param {string} giturl 
+ */
 function uploadCollabGrade(grade, collab, collabId, giturl) {
   exerciseSolved = new ExerciseSolved(ex, grade, selectedValue);
   flag = true;
@@ -129,6 +160,10 @@ function uploadCollabGrade(grade, collab, collabId, giturl) {
   writeUserDataWithoutComingHome(collab, collabId);
 }
 
+/**
+ * This function upload the current user grade in the database.
+ * @param {grade} grade 
+ */
 function uploadHomeUserGrade(grade) {
   exerciseSolved = new ExerciseSolved(ex, grade, selectedValue);
   flag = true;

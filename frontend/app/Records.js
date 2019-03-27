@@ -1,3 +1,8 @@
+/**
+ * This script is writting the records of the user.
+ * Note that this page doesn't need firebase since all the information can be found on the internal storage.
+ */
+
 var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 
 document.getElementById("heading").innerHTML =
