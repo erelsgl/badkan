@@ -28,7 +28,7 @@ For more information: https://firebase.google.com/docs/auth/?authuser=0
 
 Go to Authentication, in the "Sign-in method" enable GitHub.
 
-Enable the admin privilege:
+Enable the admin privilege (for the backup):
 
 First download the package with:
 

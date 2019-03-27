@@ -150,7 +150,7 @@ function uploadGradeWithTwoCollab(grade, collab1Id, collab2Id, giturl) {
  * @param {string} giturl 
  */
 function uploadCollabGrade(grade, collab, collabId, giturl) {
-  exerciseSolved = new ExerciseSolved(ex, grade, selectedValue);
+  exerciseSolved = new ExerciseSolved(grade, selectedValue);
   flag = true;
   for (i = 0; i < collab.exerciseSolved.length; i++) {
     if (collab.exerciseSolved[i].exerciseId === selectedValue) {
@@ -169,7 +169,7 @@ function uploadCollabGrade(grade, collab, collabId, giturl) {
  * @param {grade} grade 
  */
 function uploadHomeUserGrade(grade) {
-  exerciseSolved = new ExerciseSolved(ex, grade, selectedValue);
+  exerciseSolved = new ExerciseSolved(grade, selectedValue);
   flag = true;
   for (i = 0; i < homeUser.exerciseSolved.length; i++) {
     if (homeUser.exerciseSolved[i].exerciseId === selectedValue) {

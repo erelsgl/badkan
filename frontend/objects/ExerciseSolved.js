@@ -5,12 +5,11 @@ class ExerciseSolved {
 
     /**
      * 
-     * @param {string} exercise 
+     * @param {string} exercise
      * @param {grade} grade 
      * @param {string} exerciseId 
      */
-    constructor(exercise, grade, exerciseId) {
-        this.exercise = exercise;
+    constructor(grade, exerciseId) {
         this.grade = grade;
         this.exerciseId = exerciseId
     }
