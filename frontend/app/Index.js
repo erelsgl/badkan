@@ -73,10 +73,11 @@ document.getElementById("btnLogin").addEventListener('click', e => {
   }).catch(e => {
     console.log(e.message)
     wrongData.className = "show";
-    setTimeout(function () { wrongData.className = wrongData.className.replace("show", ""); }, 2500);
+    setTimeout(function () {
+        wrongData.className = wrongData.className.replace("show", "");
+    }, 2500);
     return;
   })
-
 });
 
 document.getElementById('github').addEventListener('click', e => {
