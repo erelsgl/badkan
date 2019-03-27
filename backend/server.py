@@ -23,7 +23,7 @@ EXERCISE_DIR = "../exercises"
 
 GIT_REGEXP = re.compile("http.*github[.]com/(.*)/(.*)", re.IGNORECASE)
 GIT_CLEAN  = re.compile(".git.*", re.IGNORECASE)
-GRADE_REGEXP = re.compile("grade.*:\\s*(\\d+)", re.IGNORECASE)
+GRADE_REGEXP = re.compile("[*].*grade.*:\\s*(\\d+).*[*]", re.IGNORECASE)
 
 async def tee(websocket, message):
     """

@@ -1,14 +1,18 @@
 /**
- * When the user is directed in this page, we should first reload all the submited exercise.
+ * This file is used when the admin clicks "My created exercises".
  */
 
-var backendPort = getParameterByName("backend"); // in utils.js
-if (!backendPort)
-  backendPort = 5670; // default port - same as in ../server.py
+// This line should be the same as in Badkan.js.
+var BACKEND_PORTS = [5670, 5671, 5672, 5673, 5674, 5675, 5676, 5677, 5678, 5679, ];
+var backendPort = BACKEND_PORTS[5670]
 var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
 
-loadExerciseByOwner();
+
+/**
+ * When the user is directed in this page, we should first reload all the submited exercise.
+ */
 var ownExercises = new Map();
+loadExerciseByOwner(ownExercises);    // Defined in util/Firebase.js
 
 var select = document.getElementById("exercises");
 
@@ -72,11 +76,14 @@ document.getElementById("btnDelete").addEventListener('click', e => {
 });
 
 /**
- * BUTTON GRADES
- * Here it's momentary: when the database will be refreshed, it possible to delete the ifelse statement.
+ * This function is called when the admin clicks "Download grades".
  */
 document.getElementById("grades").addEventListener('click', async e => {
+  console.log("ownExercises:")
+  console.log(JSON.stringify(ownExercises));
   let values = Array.from(ownExercises.values());
+  console.log("values:")
+  console.log(JSON.stringify(values));
   let rows = [];
   rows.push(["Exercise Name", "id", "name", "lastName", "grade", "url"]);
   for (let i = 0; i < values.length; i++) {
@@ -84,18 +91,21 @@ document.getElementById("grades").addEventListener('click', async e => {
         console.log("Row "+i+" of "+values.length);
     }
     for (let j = 1; j < values[i].grades.gradeObj.length; j++) {
-      let row = [];
-      await database.ref('/users/' + values[i].grades.gradeObj[j].id).once('value').then(function(snapshot) {
-        if (snapshot.val() == undefined) {
-          row.push(values[i].grades.exerciseName);
+        let row = [];
+        await database.ref('/users/' + values[i].grades.gradeObj[j].id).once('value').then(function(snapshot) {
+        var data = snapshot.val();
+        if (!data || (typeof data === 'undefined')) {
+          // This part is temporary: when the database will be refreshed, it is possible to delete the ifelse statement.
+          row.push(values[i].name);
           row.push(values[i].grades.gradeObj[j].id);
           row.push("anonymous");
           row.push("anonymous");
           row.push(values[i].grades.gradeObj[j].grade);
           row.push("anonymous");
         } else {
-          let user = snapshot.val().user;
-          row.push(values[i].grades.exerciseName);
+          // This is the main code that creates the row in the grade table.
+          let user = data.user;
+          row.push(values[i].name);
           row.push(user.id);
           row.push(user.name);
           row.push(user.lastName);
