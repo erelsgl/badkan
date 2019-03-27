@@ -2,5 +2,4 @@
 # Database JSON export (for backup)
 
 tar -zcvf database_exports/exercises-backup.tar.gz exercises
-
-# Send to Firebase file-storage
+cd database_exports;   python3 ../start/firebase_save.py
