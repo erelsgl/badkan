@@ -8,8 +8,7 @@ class Grades {
      * @param {string} exerciseName 
      * @param {grade} gradeObj 
      */
-    constructor(exerciseName, gradeObj) {
-        this.exerciseName = exerciseName;
+    constructor(gradeObj) {
         this.gradeObj = gradeObj;
     }
 

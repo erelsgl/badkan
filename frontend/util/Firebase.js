@@ -190,8 +190,6 @@ function loadUidByIds(id1, id2, giturl) {
   });
 }
 
-
-
 /**
  * This function load all the exercise the current user create.
  */
@@ -213,7 +211,6 @@ function loadExerciseByOwner(ownExercises) {
     }
   });
 }
-
 
 /**
  * This function load all the exercises of the database.

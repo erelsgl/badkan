@@ -29,7 +29,7 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
 
   firebase.auth().createUserWithEmailAndPassword(email, pass).then(function () {
     let grade = new Grade("id", 90, "url");
-    let grades = new Grades("Init", [grade]);
+    let grades = new Grades([grade]);
     let exerciseSolved = new ExerciseSolved(90, "id");
 
     let homeUser = new User(name, lastName, id, email, 0, 0, 0, [exerciseSolved]);

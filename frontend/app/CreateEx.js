@@ -55,7 +55,7 @@ function uploadExercise(name, descr, example, link, username, pass, exFolder) {
   sendLinkHTTP(link, folderName, username, pass, exFolder);
 
   let grade = new Grade("id", 90, "url");
-  let grades = new Grades(name, [grade]);
+  let grades = new Grades([grade]);
 
   let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades);
 
