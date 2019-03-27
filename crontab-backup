@@ -16,3 +16,7 @@ PATH=/bin:/usr/bin:/usr/local/bin
 # Backup each 4 days:
 
 41 3 */4 * * cd badkan; start/export.sh 96-hours
+
+# Backup exercises each day:
+
+41 2 * * * cd badkan; start/export_exercises.sh
