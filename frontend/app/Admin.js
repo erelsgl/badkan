@@ -9,7 +9,7 @@
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     var userId = firebase.auth().currentUser.uid;
-    loadCurrentUser(userId);
+    loadCurrentUser(userId);  // in file util/Firebase.js
   }
 });
 

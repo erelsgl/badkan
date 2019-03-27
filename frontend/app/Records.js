@@ -8,17 +8,32 @@ var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 document.getElementById("heading").innerHTML =
     "Records for " + homeUser.name + " " + homeUser.lastName + " " + homeUser.id;
 
-var str = "";
-for (i = 0; i < homeUser.exerciseSolved.length; i++) {
-    if (homeUser.exerciseSolved[i].exerciseId != "id") {
-        str = str + "Exercise: " + homeUser.exerciseSolved[i].exercise.name +
-            ", Grade: " + homeUser.exerciseSolved[i].grade + "<br />";
-    }
-}
+loadAllExercises(function(exercises){     // defined in Firebase.js.
+    // exercises maps the exercise ID to the exercise data.
 
-if (str === "") {
-    document.getElementById("records").innerHTML = "You didn't solve any exercise yet."
-}
-else {
-    document.getElementById("records").innerHTML = str;
-}
+    var str = "";
+    for (i = 0; i < homeUser.exerciseSolved.length; i++) {
+        var exerciseSolutionObject = homeUser.exerciseSolved[i]
+        var exerciseId = exerciseSolutionObject.exerciseId
+        if (exerciseId != "id") {
+            // The first exercise is a "dummy exercise" added because
+            //   Firebase does not allow an empty object.
+            // It is marked by a dummy id "id". We skip it here.
+            var grade = exerciseSolutionObject.grade
+            var exerciseData = exercises.get(exerciseId)
+            str = str + "Exercise: " + exerciseData.name + ", Grade: " + grade + "<br />";
+        }
+    }
+
+
+    if (str === "") {
+        document.getElementById("records").innerHTML = "You didn't solve any exercise yet."
+    }
+    else {
+        document.getElementById("records").innerHTML = str;
+    }
+
+})
+
+
+

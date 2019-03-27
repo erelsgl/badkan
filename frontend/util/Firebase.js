@@ -110,12 +110,13 @@ function incrementEditExWithoutCommingHome(userId, homeUser) {
 }
 
 /**
- * This function download the user from the firebase given his id.
+ * This function downloads the user from the firebase given his id.
  * @param {string} userId 
  */
 function loadCurrentUser(userId) {
   database.ref('/users/' + userId).once('value').then(function(snapshot) {
-    if (!snapshot || !snapshot.val()) {
+    var data = snapshot.val();
+    if (!data || (typeof data === 'undefined')) {
         // User object does not exist
         document.location.href = "completeInfo.html";
     } else {
@@ -135,6 +136,8 @@ function loadCurrentUser(userId) {
     }
   });
 }
+
+
 
 /**
  * This function load the collab.
@@ -187,10 +190,12 @@ function loadUidByIds(id1, id2, giturl) {
   });
 }
 
+
+
 /**
  * This function load all the exercise the current user create.
  */
-function loadExerciseByOwner() {
+function loadExerciseByOwner(ownExercises) {
   var flag = false;
   database.ref().child('exercises/').on("value", function(snapshot) {
     snapshot.forEach(function(data) {
@@ -209,16 +214,31 @@ function loadExerciseByOwner() {
   });
 }
 
+
 /**
  * This function load all the exercises of the database.
  */
-function loadAllExercise() {
+function loadAllExercises(onFinish) {
+  exercises = new Map()
+  database.ref().child('exercises/').on("value", function(snapshot) {
+    snapshot.forEach(function(data) {
+      exercises.set(data.key, data.val().exercise);
+    });
+    onFinish(exercises)
+  });
+}
+
+
+/**
+ * This function load all the exercises of the database.
+ */
+function loadAllExercisesAndAddOptions(exercises) {
   var flag = false;
   database.ref().child('exercises/').on("value", function(snapshot) {
     snapshot.forEach(function(data) {
-      addOption(data.val().exercise, data.key);
+      addOption(data.val().exercise, data.key);  // defined in SolveEx.js and in EditDeleteEx.js
       exercises.set(data.key, data.val().exercise);
-      onOptionChange();
+      onOptionChange();      // defined in SolveEx.js
       flag = true;
     });
     loading("div3");
