@@ -28,6 +28,24 @@ For more information: https://firebase.google.com/docs/auth/?authuser=0
 
 Go to Authentication, in the "Sign-in method" enable GitHub.
 
+Enable the admin privilege (for the backup):
+
+First download the package with:
+
+    pip3 install firebase_admin
+
+Then, you need to add to the project the private key that you download here:
+       
+    Go to settings -> Service Account -> Generate New private key.
+
+Then put the file in the folder database_exports.
+
+In the file firebase_save.py, change the path to the file and change the storage bucket name too with the name of your firebase project:
+
+    Go to storage -> copy the link <your_project>.appspot.com 
+
+
+
 Once Firebase is initialized you need to install all the network stuff.
 
 ## Installing the server
