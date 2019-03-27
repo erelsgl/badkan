@@ -10,14 +10,15 @@ It was developed by Pinchas Weisberg. It has some advantages over badkan 2.0:
 
 * Allows to upload exercises by a zip file.
 * Allows to submit exercises by a zip file.
-...
+* Supports several courses.
+* Has a beautiful GUI.
 
 One goal of badkan 3.0 is to combine the advantages of both systems: 
- 
-* Badkan allows users to submit entire programming projects through GitHub or zipped folder;
+
+* Badkan is dynamic and gives immediate real-time feedback on each submission through web interface. 
+* Badkan allows users to submit entire programming projects through a GitHub URL, or zipped folder;
 * Badkan allows instructors to upload and update exercises easily throught GitLab or zipped folder;
 * Badkan has a simple registration process, either with email+password or without a password through a github account.
-* Badkan is dynamic: submission visualization from the website at real time...;
 * Badkan should be easy to use for every user (beginner or expert).
 * Badkan should have a short tutorial for students and for instructors.
 
@@ -37,11 +38,14 @@ Thus, each instructor can either learn how to write a grading system by using ot
 
 ## 2. See the available exercises
 Each instructor could see all the "public" (see use case 1) exercises of the platform. The search must be efficient: the instructor can as example search only for java exercises or hard exercises.
+
 Each exercise will have some "tags" that will help find similar exercises.
 For example: tag by language, tag by level, tag by concept (e.g. "operator overloading") and so on.
 
 ## 3. Help to create exercise
 If an instructor has no time (or anything else) to program the grading system, but he want to create a particular exercise, Badkan allows the instructor to write a message (from the website) explaining the purpose of the exercise, and a programmer of the team Badkan will implement the grading system for the instructor.
+
+Templates for common exercise types, for example: Java, C++,  ...
 
 ## 4. Submission via GitHub or via a source folder
 An exercise creator can decide what kind of submissions to allow:
@@ -61,7 +65,7 @@ change their order, add notes to each exercise, delete exercises, etc.
 Each user will be able to register to one or more courses, so that he sees only the relevant exercises.
 The "solve exercise" and "records" pages will show the division to courses.
 In the grades table, it will be possible to download grades of a single course.
- 
+
 ## 6. peer-to-peer grading
 (suggested by Gil Ben-Artzi)
 Suppose an exercise has two parts: 

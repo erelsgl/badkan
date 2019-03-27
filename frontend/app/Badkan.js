@@ -18,18 +18,8 @@ var ex = JSON.parse(localStorage.getItem("exercise"));
 var selectedValue = JSON.parse(localStorage.getItem("selectedValue"));
 $("#exercise").html(ex.name);
 
-/**
- * The button to clear the submission terminal.
- */
-$("button#clear").click(() => {
-  $("div#output").html("")
-  return false;
-})
 
-/**
- * The button to submit the exercise.
- */
-$("button#submit").click(() => {
+function submit() {
   // Choose a backend port at random
   var backendPort = getParameterByName("backend"); // in utils.js
   if (!backendPort)
@@ -80,6 +70,22 @@ $("button#submit").click(() => {
       uploadGrade(grade, giturl);
     }
   }
+}
+
+/**
+ * The button to clear the submission terminal.
+ */
+$("button#clear").click(() => {
+  $("div#output").html("")
+  submit();
+  return false;
+})
+
+/**
+ * The button to submit the exercise.
+ */
+$("button#submit").click(() => {
+  submit();
   return false;
 })
 
