@@ -10,7 +10,6 @@ firebase.auth().onAuthStateChanged(user => {
   if (user) {
     var userId = firebase.auth().currentUser.uid;
     loadCurrentUser(userId);   // Load current user data to localStorage. in file  util/Firebase.js
-    loadExercises();           // Load user solved exercises data to localStorage. in file  util/Firebase.js
   }
 });
 
