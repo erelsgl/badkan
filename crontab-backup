@@ -17,10 +17,6 @@ PATH=/bin:/usr/bin:/usr/local/bin
 
 41 3 */4 * * cd badkan; start/export.sh 96-hours
 
-# Backup exercises each day:
+# Backup exercises to storage each day:
 
 41 2 * * * cd badkan; start/export_exercises.sh
-
-# Save the file in firebase storage each day:
-
-41 2 * * * cd badkan/database_exports; python3 firebase_save.py
