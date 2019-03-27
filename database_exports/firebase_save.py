@@ -7,12 +7,27 @@ firebase_admin.initialize_app(cred, {
     'storageBucket': 'badkanlocal.appspot.com'
 })
 
-f = open("test.txt", "rb")
+firebase_two_hours = open("02-hours.json", "rb")
+firebase_height_hours = open("08-hours.json", "rb")
+firebase_tweny_four_hours = open("24-hours.json", "rb")
+firebase_ninety_six_hours = open("96-hours.json", "rb")
+firebase_before_backend_update = open("before-backend-update.json", "rb")
 
 bucket = storage.bucket()
 
-blob = bucket.blob('test.txt')
+blob = bucket.blob('02-hours.json')
+blob.upload_from_file(firebase_two_hours)
 
-blob.upload_from_file(f)
+blob = bucket.blob('08-hours.json')
+blob.upload_from_file(firebase_height_hours)
+
+blob = bucket.blob('24-hours.json')
+blob.upload_from_file(firebase_tweny_four_hours)
+
+blob = bucket.blob('96-hours.json')
+blob.upload_from_file(firebase_ninety_six_hours)
+
+blob = bucket.blob('before-backend-update.json')
+blob.upload_from_file(firebase_before_backend_update)
 
 print(blob.public_url)
