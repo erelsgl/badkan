@@ -21,7 +21,11 @@ from concurrent.futures import ProcessPoolExecutor
 PORT = sys.argv[1] if len(sys.argv)>=2 else 5670   # same port as in frontend/index.html
 EXERCISE_DIR = "../exercises"
 
-GIT_REGEXP = re.compile("http.*github[.]com/(.*)/(.*)", re.IGNORECASE)
+
+# Example https: https://github.com/SamuelBismuth/badkan.git
+# Example ssh: git@github.com:SamuelBismuth/badkan.git
+
+GIT_REGEXP = re.compile(".*github[.]com.(.*)/(.*)", re.IGNORECASE)
 GIT_CLEAN  = re.compile(".git.*", re.IGNORECASE)
 GRADE_REGEXP = re.compile("[*].*grade.*:\\s*(\\d+).*[*]", re.IGNORECASE)
 
