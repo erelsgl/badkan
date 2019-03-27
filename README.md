@@ -30,6 +30,12 @@ Go to Authentication, in the "Sign-in method" enable GitHub.
 
 Enable the admin privilege:
 
+First download the package with:
+
+    pip3 install firebase_admin
+
+Then, you need to add to the project the private key that you download here:
+       
     Go to settings -> Service Account -> Generate New private key.
 
 Then put the file in the folder database_exports.
