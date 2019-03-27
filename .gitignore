@@ -109,4 +109,5 @@ ENV/
 backend/trace_table.csv
 exercises/*/
 database_exports/*
+!database_exports/test.js
 frontend/util/FirebaseConfig.js
