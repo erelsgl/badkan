@@ -87,9 +87,7 @@ document.getElementById("grades").addEventListener('click', async e => {
   let rows = [];
   rows.push(["Exercise Name", "id", "name", "lastName", "grade", "url"]);
   for (let i = 0; i < values.length; i++) {
-    if (i % 10 == 0) {
-        console.log("Row "+i+" of "+values.length);
-    }
+    console.log("Row "+i+" of "+values.length);
     for (let j = 1; j < values[i].grades.gradeObj.length; j++) {
         let row = [];
         await database.ref('/users/' + values[i].grades.gradeObj[j].id).once('value').then(function(snapshot) {
