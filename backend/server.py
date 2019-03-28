@@ -147,11 +147,11 @@ async def run(websocket, path):
     submission_json = await websocket.recv()   # returns a string
     print("< {} ".format(submission_json))
     submission = json.loads(submission_json)   # converts the string to a python dict
-    if   (submission_json[2] == 'g'):
+    if submission_json[2] == 'g':
         await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
-    elif (submission_json[3] == 'o'):
+    elif submission_json[3] == 'o':
         await edit_ex(submission["folderName"], submission["exFolder"])
-    elif (submission_json[2] == 'd'):
+    elif submission_json[2] == 'd':
         await delete_ex(submission["delete_exercise"])
     else:
         await check_submission(websocket, submission)
