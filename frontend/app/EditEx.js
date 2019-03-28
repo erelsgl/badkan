@@ -1,36 +1,33 @@
 var ex = JSON.parse(localStorage.getItem("selectedExObj"));
-
 document.getElementById("exName").defaultValue = ex.name
 document.getElementById("exDescr").defaultValue = ex.description
 document.getElementById("exEx").defaultValue = ex.example
 document.getElementById("link").defaultValue = ex.link
 document.getElementById("exFolder").defaultValue = ex.exFolder
-
 document.getElementById("link").readOnly = true
 document.getElementById("exFolder").readOnly = true
-
-//document.getElementById("user").defaultValue = ex.username
 
 /**
  * BUTTON CONFIRM (SAVE CHANGES).
  */
 document.getElementById("btnEdit").addEventListener('click', e => {
-
   const name = escapeHtml(document.getElementById("exName").value);
   const descr = escapeHtml(document.getElementById("exDescr").value);
   const example = escapeHtml(document.getElementById("exEx").value);
+  if (checkEmptyFields(name, descr, example)) {
+    uploadExercise(name, descr, example);
+  }
+});
 
+function checkEmptyFields(name, descr, example) {
   var emptyField = document.getElementById("emptyField");
-
   if (name === "" || descr === "" || example == "") {
     emptyField.className = "show";
     setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
-    return;
+    return false;
   }
-
-  uploadExercise(name, descr, example);
-
-});
+  return true;
+}
 
 /**
  * This function edit on the firebase the exercise.
@@ -41,20 +38,13 @@ document.getElementById("btnEdit").addEventListener('click', e => {
  */
 function uploadExercise(name, descr, example) {
   // The ref of the folder must be PK.
-
   var user = firebase.auth().currentUser;
-
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   var folderName = JSON.parse(localStorage.getItem("selectedEx"));
-
-
   sendLinkHTTP(folderName, ex.exFolder);
-
   let exercise = new Exercise(name, descr, example, user.uid, ex.link, ex.exFolder, ex.grades);
-
   incrementEditExWithoutCommingHome(user.uid, homeUser);
   writeExercise(exercise, folderName);
-
   pullSuccess.className = "show";
   setTimeout(function () { pullSuccess.className = pullSuccess.className.replace("show", ""); }, 2500);
 }
@@ -69,12 +59,10 @@ function sendLinkHTTP(folderName, exFolder) {
   if (!backendPort)
     backendPort = 5670; // default port - same as in ../server.py
   var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
-
   var submission_json = JSON.stringify({
     folderName: folderName,
     exFolder: exFolder,
   });
-
   logClient("color:#888", submission_json);  // in utils.js
   var websocket = new WebSocket(websocketurl);
   websocket.onopen = (event) => {
@@ -97,6 +85,5 @@ function sendLinkHTTP(folderName, exFolder) {
   websocket.onmessage = (event) => {
     logServer("color:black; margin:0 1em 0 1em", event.data);
   }
-
   return false;
 }

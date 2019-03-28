@@ -2,7 +2,6 @@
 * BUTTON CONFIRM.
 */
 document.getElementById("btnConfirm").addEventListener('click', e => {
-
   const name = escapeHtml(document.getElementById("exName").value);
   const descr = escapeHtml(document.getElementById("exDescr").value);
   const example = escapeHtml(document.getElementById("exEx").value);
@@ -10,18 +9,20 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
   const exFolder = escapeHtml(document.getElementById("exFolder").value);
   const username = escapeHtml(document.getElementById("user").value);
   const pass = escapeHtml(document.getElementById("pass").value);
+  if (checkEmptyFields(name, descr, example, link, exFolder, username, pass)) {
+    uploadExercise(name, descr, example, link, username, pass, exFolder);
+  }
+});
 
+function checkEmptyFields(name, descr, example, exFolder, user, pass, link) {
   var emptyField = document.getElementById("emptyField");
-
   if (name === "" || descr === "" || example == "" || exFolder == "" || user == "" || pass == "" || link == "") {
     emptyField.className = "show";
     setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
-    return;
+    return false;
   }
-
-  uploadExercise(name, descr, example, link, username, pass, exFolder);
-
-});
+  return true;
+}
 
 /**
  * BUTTON HELP.
@@ -36,48 +37,40 @@ document.getElementById("btnHelp").addEventListener('click', e => {
 
 /**
  * This function upload the exercise on the database and on the server using websocket.
- * @param {string} name 
- * @param {string} descr 
- * @param {string} example 
- * @param {string} link 
- * @param {string} username 
- * @param {string} pass 
- * @param {string} exFolder 
+ * @param {String} name 
+ * @param {String} descr 
+ * @param {String} example 
+ * @param {String} link 
+ * @param {String} username 
+ * @param {String} pass 
+ * @param {String} exFolder 
  */
 function uploadExercise(name, descr, example, link, username, pass, exFolder) {
-
   // The ref of the folder must be PK.
   var user = firebase.auth().currentUser;
-
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   var folderName = user.uid + "_" + homeUser.createdEx;
-
   sendLinkHTTP(link, folderName, username, pass, exFolder);
-
   let grade = new Grade("id", 90, "url");
   let grades = new Grades([grade]);
-
   let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades);
-
   incrementCreatedExAndSubmit(user.uid, homeUser);
   writeExercise(exercise, folderName);
-
 }
 
 /**
  * This function send the exercise to the server using websockets.
- * @param {string} link 
- * @param {string} folderName 
- * @param {string} username 
- * @param {string} pass 
- * @param {string} exFolder 
+ * @param {String} link 
+ * @param {String} folderName 
+ * @param {String} username 
+ * @param {String} pass 
+ * @param {String} exFolder 
  */
 function sendLinkHTTP(link, folderName, username, pass, exFolder) {
   var backendPort = getParameterByName("backend");     // in utils.js
   if (!backendPort)
     backendPort = 5670; // default port - same as in ../server.py
   var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
-
   var submission_json = JSON.stringify({
     git_url: link,
     folderName: folderName,
@@ -85,7 +78,6 @@ function sendLinkHTTP(link, folderName, username, pass, exFolder) {
     exFolder: exFolder,
     pass: pass,
   });
-
   logClient("color:#888", submission_json);  // in utils.js
   var websocket = new WebSocket(websocketurl);
   websocket.onopen = (event) => {
@@ -108,6 +100,5 @@ function sendLinkHTTP(link, folderName, username, pass, exFolder) {
   websocket.onmessage = (event) => {
     logServer("color:black; margin:0 1em 0 1em", event.data);
   }
-
   return false;
 }

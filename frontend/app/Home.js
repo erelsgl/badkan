@@ -5,6 +5,7 @@
 
 /**
  * ON STATE CHANGE.
+ * Every time the state of the user is changed, this function is called.
  */
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
@@ -46,15 +47,3 @@ document.getElementById("btnLogOut").addEventListener('click', e => {
   firebase.auth().signOut();
   document.location.href = "index.html";
 });
-
-/**
- * This function hide the loading circle of active him.
- */
-function hideLoading() {
-  var x = document.getElementById("loading");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}

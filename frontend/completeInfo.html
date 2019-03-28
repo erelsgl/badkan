@@ -10,18 +10,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
-    <script src='../util/FirebaseConfig.js'></script>
-    <script type="text/javascript" src="../util/Firebase.js"></script>
-    <script type="text/javascript" src="../util/SignOut.js"></script>
-    <script type="text/javascript" src="../objects/User.js"></script>
-    <script type="text/javascript" src="../objects/ExerciseSolved.js"></script>
-    <script type="text/javascript" src="../objects/Exercise.js"></script>
-    <script type="text/javascript" src="../objects/Grade.js"></script>
-    <script type="text/javascript" src="../objects/Grades.js"></script>
+    <script src='util/FirebaseConfig.js'></script>
+    <script type="text/javascript" src="util/Firebase.js"></script>
+    <script type="text/javascript" src="util/SignOut.js"></script>
+    <script type="text/javascript" src="objects/User.js"></script>
+    <script type="text/javascript" src="objects/ExerciseSolved.js"></script>
+    <script type="text/javascript" src="objects/Exercise.js"></script>
+    <script type="text/javascript" src="objects/Grade.js"></script>
+    <script type="text/javascript" src="objects/Grades.js"></script>
 
     <!-- Import css. -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../style/snackbar.css">
+    <link rel="stylesheet" href="style/snackbar.css">
     <link rel="stylesheet" href="style/style.css">
 
 </head>
@@ -30,9 +30,9 @@
     <div class="container">
         <h1>Please complete the information.</h1>
         <!-- input. -->
-        <input size = 39 type="name" id="txtName" placeholder="Enter first name" /> <br />
-        <input size = 39 type="lastName" id="txtLastName" placeholder="Enter last name" /> <br />
-        <input size = 39 type="id" id="txtId" placeholder="Enter ID number - must be the same as in Moodle" /><br />
+        <input size=39 type="name" id="txtName" placeholder="Enter first name" /> <br />
+        <input size=39 type="lastName" id="txtLastName" placeholder="Enter last name" /> <br />
+        <input size=39 type="id" id="txtId" placeholder="Enter ID number - must be the same as in Moodle" /><br />
 
         <!-- button. -->
         <button id="confirm" type="button" class="btn btn-success">Confirm</button>
@@ -41,7 +41,7 @@
     <!-- snackbar. -->
     <div id="emptyField">Please fill all the fields.</div>
 
-    <script type="module" type="text/javascript" src="../app/CompleteInfo.js"></script>
+    <script type="module" type="text/javascript" src="app/CompleteInfo.js"></script>
 </body>
 
 </html>

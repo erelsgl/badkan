@@ -7,7 +7,6 @@ var BACKEND_PORTS = [5670, 5671, 5672, 5673, 5674, 5675, 5676, 5677, 5678, 5679,
 var backendPort = BACKEND_PORTS[5670]
 var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
 
-
 /**
  * When the user is directed in this page, we should first reload all the submited exercise.
  */
@@ -35,14 +34,11 @@ document.getElementById("btnEdit").addEventListener('click', e => {
 document.getElementById("btnDelete").addEventListener('click', e => {
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   var user = firebase.auth().currentUser;
-
   deleteExerciseById(select.value);
   incrementDeletedEx(user.uid, homeUser);
-
   var submission_json = JSON.stringify({
     delete_exercise: select.value,
   });
-
   logClient("color:#888", submission_json); // in utils.js
   var websocket = new WebSocket(websocketurl);
   websocket.onopen = (event) => {
