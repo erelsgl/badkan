@@ -6,7 +6,7 @@ AUTHOR: Erel Segal-Halevi
 SINCE: 2019-03
 """
 
-from terminal import *
+from terminal import * 
 
 import websockets, subprocess, asyncio, os, urllib,  json, re
 import csv, time
