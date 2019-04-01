@@ -63,6 +63,11 @@ async def check_submission(websocket:object, submission:dict):
         return
 
     matches = GIT_REGEXP.search(git_url)
+    if matches is None:
+        await tee(websocket, "Wrong format of link to github repository!")
+        await tee(websocket, "Final Grade: 0")
+        return
+
     username = matches.group(1)
     repository = GIT_CLEAN.sub("",matches.group(2))
     repository_folder = "/submissions/{}/{}".format(username,repository)
