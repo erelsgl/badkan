@@ -46,13 +46,13 @@ async def docker_command(command_words):
         *(["docker"] + command_words),
         stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
 
-async def store_solution_file(path, file):
+# async def store_solution_file(path, file):
 
-async def store_solution_url(path, url):
+# async def store_solution_url(path, url):
 
-async def dealing_with_file():
+# async def dealing_with_file():
 
-async def dealing_with_url():
+# async def dealing_with_url():
 
 
 async def check_submission(websocket:object, submission:dict):
@@ -65,7 +65,7 @@ async def check_submission(websocket:object, submission:dict):
            must be of the form https://xxx.git.
     """
     solution=submission["solution"]
-    print(solution)
+    print('solution', solution)
     exercise=submission["exercise"]
     git_url =submission["solution"]
     ids = submission["ids"]
@@ -155,6 +155,12 @@ async def run(websocket, path):
     Run a websocket server that receives submissions and grades them.
     """
     submission_json = await websocket.recv()   # returns a string
+    if isinstance(submission_json, bytes):
+        f = open('my_file', 'w+b')
+        f.write(submission_json)
+        f.close()
+        print("hello")
+
     print("< {} ".format(submission_json))
     submission = json.loads(submission_json)   # converts the string to a python dict
     if submission_json[2] == 'g':

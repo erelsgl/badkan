@@ -31,25 +31,25 @@ function submit() {
   // Create the json for submission
   const collab1Id = escapeHtml(document.getElementById("collab1").value);
   const collab2Id = escapeHtml(document.getElementById("collab2").value);
-  var sol = escapeHtmlWithRespectGit(document.getElementById("giturl").value);
-  // if (flag) {
-  //   solution = escapeHtmlWithRespectGit(document.getElementById("giturl").value);
-  // }
-  // else {
-  //   const file = document.getElementById('filename').files[0];
-  //   var reader = new FileReader();
-  //   solution = new ArrayBuffer();
-  //   reader.loadend = function () {
-  //   }
-  //   reader.onload = function (e) {
-  //     solution = e.target.result;
-  //   }
-  //   reader.readAsArrayBuffer(file);
-  // }
-  // console.log(solution)
+  var solution;
+  if (flag) {
+    solution = escapeHtmlWithRespectGit(document.getElementById("giturl").value);
+  }
+  else {
+    solution = document.getElementById('filename').files[0];
+    var reader = new FileReader();
+    solution = new ArrayBuffer();
+    reader.loadend = function () {
+    }
+    reader.onload = function (e) {
+      solution = e.target.result;
+    }
+    reader.readAsArrayBuffer(file);
+    
+  }
   var submission_json = JSON.stringify({
     exercise: exercise + "/" + ex.exFolder,
-    solution: sol,
+    solution: solution,
     ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
     name: ex.name
   }); // the variable "submission_json" is read in server.py:run
