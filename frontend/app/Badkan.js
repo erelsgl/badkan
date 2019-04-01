@@ -3,21 +3,22 @@
  */
 
 // This line should be the same as in myExercises.js.
-var BACKEND_PORTS = [5670, 5671, 5672, 5673, 5674, 5675, 5676, 5677, 5678, 5679, ];
+var BACKEND_PORTS = [5670];
+
+var flag = true  // True = github url, false = file.
 
 var grade = 0;  // The grade by default.
 var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));  // The current user.
 
 document.getElementById("currentId").value = homeUser.id;  // The id of the current user.
 document.getElementById('currentId').readOnly = true;  // Make it as readonly.
- 
+
 var exercise = getParameterByName("exercise"); // in utils.js
 if (!exercise)
   exercise = "multiply"; // default exercise
 var ex = JSON.parse(localStorage.getItem("exercise"));
 var selectedValue = JSON.parse(localStorage.getItem("selectedValue"));
 $("#exercise").html(ex.name);
-
 
 function submit() {
   // Choose a backend port at random
@@ -30,10 +31,25 @@ function submit() {
   // Create the json for submission
   const collab1Id = escapeHtml(document.getElementById("collab1").value);
   const collab2Id = escapeHtml(document.getElementById("collab2").value);
-  const giturl = escapeHtmlWithRespectGit(document.getElementById("giturl").value);
+  var sol = escapeHtmlWithRespectGit(document.getElementById("giturl").value);
+  // if (flag) {
+  //   solution = escapeHtmlWithRespectGit(document.getElementById("giturl").value);
+  // }
+  // else {
+  //   const file = document.getElementById('filename').files[0];
+  //   var reader = new FileReader();
+  //   solution = new ArrayBuffer();
+  //   reader.loadend = function () {
+  //   }
+  //   reader.onload = function (e) {
+  //     solution = e.target.result;
+  //   }
+  //   reader.readAsArrayBuffer(file);
+  // }
+  // console.log(solution)
   var submission_json = JSON.stringify({
     exercise: exercise + "/" + ex.exFolder,
-    git_url: giturl,
+    solution: sol,
     ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
     name: ex.name
   }); // the variable "submission_json" is read in server.py:run

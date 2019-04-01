@@ -57,7 +57,7 @@ async def check_submission(websocket:object, submission:dict):
            must be of the form https://xxx.git.
     """
     exercise=submission["exercise"]
-    git_url =submission["git_url"]
+    git_url =submission["solution"]
     ids = submission["ids"]
     name = submission["name"]
     currentDT = datetime.datetime.now()
