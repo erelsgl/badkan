@@ -96,15 +96,24 @@ async def check_submission(websocket:object, submission:dict):
     combined_command = "{} && {} ; {}".format(move_command, grade_command, exitcode_command)
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
 
-    async for line in proc.stdout:
-        line = line.decode('utf-8').strip()
-        await tee(websocket, line)
-        matches = GRADE_REGEXP.search(line)
-        if matches is not None:
-            grade = matches.group(1)
-            await tee(websocket, "Final Grade: " + grade)
+
+    while True:
+        try:
+            async for line in proc.stdout:
+                line = line.decode('utf-8').strip()
+                await tee(websocket, line)
+                matches = GRADE_REGEXP.search(line)
+                if matches is not None:
+                    grade = matches.group(1)
+                    await tee(websocket, "Final Grade: " + grade)
                     # This line is read at app/Badkan.js, in websocket.onmessage.
+        except ValueError:
+            await tee(websocket, "Your program generated a very very long line! Please check it.")
+            continue
+        else:
+            break
     await proc.wait()
+
     if grade is None:
         await tee(websocket, "Final Grade: 0")
 
