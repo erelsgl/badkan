@@ -46,6 +46,14 @@ async def docker_command(command_words):
         *(["docker"] + command_words),
         stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
 
+async def store_solution_file(path, file):
+
+async def store_solution_url(path, url):
+
+async def dealing_with_file():
+
+async def dealing_with_url():
+
 
 async def check_submission(websocket:object, submission:dict):
     """
@@ -56,6 +64,8 @@ async def check_submission(websocket:object, submission:dict):
            "git_url"  - a url for cloning the student's git repository containing the submitted solution.
            must be of the form https://xxx.git.
     """
+    solution=submission["solution"]
+    print(solution)
     exercise=submission["exercise"]
     git_url =submission["solution"]
     ids = submission["ids"]

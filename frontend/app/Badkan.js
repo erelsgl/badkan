@@ -10,7 +10,7 @@ var flag = true  // True = github url, false = file.
 var grade = 0;  // The grade by default.
 var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));  // The current user.
 
-document.getElementById("currentId").value = homeUser.id;  // The id of the current user.
+document.getElementById("currentId").value = homeUser.id;  // The country id of the current user.
 document.getElementById('currentId').readOnly = true;  // Make it as readonly.
 
 var exercise = getParameterByName("exercise"); // in utils.js
