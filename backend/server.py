@@ -64,6 +64,9 @@ async def check_submission(websocket:object, submission:dict):
            "git_url"  - a url for cloning the student's git repository containing the submitted solution.
            must be of the form https://xxx.git.
     """
+
+    # TODO: NEED TO CHECK IF EITHER THE SOLUTION IS A ZIP OR A GITHUB REPO.
+    
     solution=submission["solution"]
     print('solution', solution)
     exercise=submission["exercise"]
@@ -155,12 +158,6 @@ async def run(websocket, path):
     Run a websocket server that receives submissions and grades them.
     """
     submission_json = await websocket.recv()   # returns a string
-    if isinstance(submission_json, bytes):
-        f = open('my_file', 'w+b')
-        f.write(submission_json)
-        f.close()
-        print("hello")
-
     print("< {} ".format(submission_json))
     submission = json.loads(submission_json)   # converts the string to a python dict
     if submission_json[2] == 'g':

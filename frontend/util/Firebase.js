@@ -293,7 +293,6 @@ function deleteUserById(userId) {
  * @param {grade} grade
  */
 function writeExerciseHistoric(selectedValue, grade) {
-  console.log(grade);
   database.ref('exercises/' + selectedValue).once('value').then(function(snapshot) {
     var exercise = snapshot.val().exercise;
     for (var i = 0; i < grade.length; i++) {

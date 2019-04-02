@@ -1,6 +1,13 @@
 import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import cgi
+import subprocess
+
+"""
+IF THERE IS A PROBLEM OF SIMULTANEOUS SUBMISSION TWO SOLUTION:
+USE NUMEROUS PORT.
+MULTIPROCESSING.
+"""
 
 HOST_NAME = 'localhost'
 PORT_NUMBER = 9000
@@ -8,12 +15,14 @@ PORT_NUMBER = 9000
 class MyHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
-        filename = "test"
+        filename = self.headers['Accept-Language']
         filesize = int(self.headers['Content-Length'])
         contents = self.rfile.read(filesize)
-        f = open('my_file', 'w+b')
-        f.write(contents)
+        f = open(filename, 'w+b')
+        f.write(contents)   
         f.close()
+        if self.headers['Accept'] == 'create':
+            shellscript = subprocess.Popen(['bash','create-ex.sh', filename])
         self.send_response(200)
 
 
@@ -39,6 +48,7 @@ if __name__ == '__main__':
     print(time.asctime(), 'Server Starts - %s:%s' % (HOST_NAME, PORT_NUMBER))
     try:
         httpd.serve_forever()
+        print("hello")
     except KeyboardInterrupt:
         pass
     httpd.server_close()

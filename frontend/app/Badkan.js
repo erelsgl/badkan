@@ -4,8 +4,7 @@
 
 // This line should be the same as in myExercises.js.
 var BACKEND_PORTS = [5670];
-
-var flag = true  // True = github url, false = file.
+var BACKEND_FILE_PORTS = [9000];
 
 var grade = 0;  // The grade by default.
 var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));  // The current user.
@@ -20,7 +19,51 @@ var ex = JSON.parse(localStorage.getItem("exercise"));
 var selectedValue = JSON.parse(localStorage.getItem("selectedValue"));
 $("#exercise").html(ex.name);
 
+/**
+ * This function send the file to the server.
+ * @param {File} file 
+ */
+function dealWithFile(file) {
+  var uid = firebase.auth().currentUser.uid;
+  var reader = new FileReader();
+  reader.readAsArrayBuffer(file);
+  var rawData = new ArrayBuffer();
+  reader.loadend = function () {
+  }
+  reader.onload = function (e) {
+    rawData = e.target.result;
+    // create the request
+    const xhr = new XMLHttpRequest();
+    var backendPort = getParameterByName("backend"); // in utils.js
+    if (!backendPort)
+      backendPort = BACKEND_FILE_PORTS[Math.floor(Math.random() * BACKEND_FILE_PORTS.length)];
+    var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
+    xhr.open('POST', httpurl, true);
+    xhr.setRequestHeader('Accept-Language', uid);  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.onreadystatechange = function () {
+      if (this.readyState == 4) {
+        sendWebsocket(uid);
+      }
+    };
+    xhr.send(rawData);
+  }
+}
+
+function dealWithUrl(url) {
+  sendWebsocket(url);
+}
+
 function submit() {
+  if ($('.nav-pills .active').text() === 'Zip file') {
+    var file = document.getElementById('filename').files[0];
+    dealWithFile(file);
+  }
+  else {
+    dealWithUrl(escapeHtmlWithRespectGit(document.getElementById("giturl").value));
+  }
+}
+
+function sendWebsocket(solution) {
   // Choose a backend port at random
   var backendPort = getParameterByName("backend"); // in utils.js
   if (!backendPort)
@@ -31,22 +74,6 @@ function submit() {
   // Create the json for submission
   const collab1Id = escapeHtml(document.getElementById("collab1").value);
   const collab2Id = escapeHtml(document.getElementById("collab2").value);
-  var solution;
-  if (flag) {
-    solution = escapeHtmlWithRespectGit(document.getElementById("giturl").value);
-  }
-  else {
-    solution = document.getElementById('filename').files[0];
-    var reader = new FileReader();
-    solution = new ArrayBuffer();
-    reader.loadend = function () {
-    }
-    reader.onload = function (e) {
-      solution = e.target.result;
-    }
-    reader.readAsArrayBuffer(file);
-    
-  }
   var submission_json = JSON.stringify({
     exercise: exercise + "/" + ex.exFolder,
     solution: solution,

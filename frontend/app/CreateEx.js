@@ -5,18 +5,38 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
   const name = escapeHtml(document.getElementById("exName").value);
   const descr = escapeHtml(document.getElementById("exDescr").value);
   const example = escapeHtml(document.getElementById("exEx").value);
-  const link = escapeHtmlWithRespectGit(document.getElementById("link").value);
-  const exFolder = escapeHtml(document.getElementById("exFolder").value);
-  const username = escapeHtml(document.getElementById("user").value);
-  const pass = escapeHtml(document.getElementById("pass").value);
-  if (checkEmptyFields(name, descr, example, link, exFolder, username, pass)) {
-    uploadExercise(name, descr, example, link, username, pass, exFolder);
+  if ($('.nav-pills .active').text() === 'Zip file') {
+    var file = document.getElementById('filename').files[0];
+    if (checkEmptyFieldsFile(name, descr, example, file)) {
+      uploadExerciseFile(name, descr, example, file);
+    }
   }
+  else {
+
+    const link = escapeHtmlWithRespectGit(document.getElementById("link").value);
+    const exFolder = escapeHtml(document.getElementById("exFolder").value);
+    const username = escapeHtml(document.getElementById("user").value);
+    const pass = escapeHtml(document.getElementById("pass").value);
+    if (checkEmptyFieldsGit(name, descr, example, link, exFolder, username, pass)) {
+      uploadExerciseGit(name, descr, example, link, username, pass, exFolder);
+    }
+  }
+
 });
 
-function checkEmptyFields(name, descr, example, exFolder, user, pass, link) {
+function checkEmptyFieldsGit(name, descr, example, exFolder, user, pass, link) {
   var emptyField = document.getElementById("emptyField");
   if (name === "" || descr === "" || example == "" || exFolder == "" || user == "" || pass == "" || link == "") {
+    emptyField.className = "show";
+    setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
+    return false;
+  }
+  return true;
+}
+
+function checkEmptyFieldsFile(name, descr, example, file) {
+  var emptyField = document.getElementById("emptyField");
+  if (name === "" || descr === "" || example == "" || !file) {
     emptyField.className = "show";
     setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
     return false;
@@ -45,17 +65,54 @@ document.getElementById("btnHelp").addEventListener('click', e => {
  * @param {String} pass 
  * @param {String} exFolder 
  */
-function uploadExercise(name, descr, example, link, username, pass, exFolder) {
-  // The ref of the folder must be PK.
+function uploadExerciseGit(name, descr, example, link, username, pass, exFolder) {
   var user = firebase.auth().currentUser;
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
-  var folderName = user.uid + "_" + homeUser.createdEx;
-  sendLinkHTTP(link, folderName, username, pass, exFolder);
+  folderName = user.uid + "_" + homeUser.createdEx;
+  sendLinkWEBSOCKET(link, folderName, username, pass, exFolder);
   let grade = new Grade("id", 90, "url");
   let grades = new Grades([grade]);
   let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades);
   incrementCreatedExAndSubmit(user.uid, homeUser);
   writeExercise(exercise, folderName);
+}
+
+function uploadExerciseFile(name, descr, example, file) {
+  var user = firebase.auth().currentUser;
+  var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+  folderName = user.uid + "_" + homeUser.createdEx;
+  sendFileHTTP(file, folderName)
+  let grade = new Grade("id", 90, "url");
+  let grades = new Grades([grade]);
+  let exercise = new Exercise(name, descr, example, user.uid, "zip", "zip", grades);
+  incrementCreatedExAndSubmit(user.uid, homeUser);
+  writeExercise(exercise, folderName);
+}
+
+function sendFileHTTP(file, folderName) {
+  var reader = new FileReader();
+  reader.readAsArrayBuffer(file);
+  var rawData = new ArrayBuffer();
+  reader.loadend = function () {
+  }
+  reader.onload = function (e) {
+    rawData = e.target.result;
+    // create the request
+    const xhr = new XMLHttpRequest();
+    var backendPort = getParameterByName("backend"); // in utils.js
+    if (!backendPort)
+      backendPort = 9000;
+    var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
+    xhr.open('POST', httpurl, true);
+    xhr.setRequestHeader('Accept-Language', folderName);  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.setRequestHeader('Accept', 'create');  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.onreadystatechange = function () {
+      if (this.readyState == 4) {
+        console.log("success");
+      }
+    };
+    xhr.send(rawData);
+  }
 }
 
 /**
@@ -66,7 +123,7 @@ function uploadExercise(name, descr, example, link, username, pass, exFolder) {
  * @param {String} pass 
  * @param {String} exFolder 
  */
-function sendLinkHTTP(link, folderName, username, pass, exFolder) {
+function sendLinkWEBSOCKET(link, folderName, username, pass, exFolder) {
   var backendPort = getParameterByName("backend");     // in utils.js
   if (!backendPort)
     backendPort = 5670; // default port - same as in ../server.py
