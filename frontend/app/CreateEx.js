@@ -84,7 +84,7 @@ function uploadExerciseFile(name, descr, example, file) {
   sendFileHTTP(file, folderName)
   let grade = new Grade("id", 90, "url");
   let grades = new Grades([grade]);
-  let exercise = new Exercise(name, descr, example, user.uid, "zip", "zip", grades);
+  let exercise = new Exercise(name, descr, example, user.uid, "zip", "", grades);
   incrementCreatedExAndSubmit(user.uid, homeUser);
   writeExercise(exercise, folderName);
 }
