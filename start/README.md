@@ -33,3 +33,7 @@ FROM YOUR COMPUTER, to push local changes, pull them on the server and restart t
 or
 
       start/remote_update_frontend.sh
+
+If you run in local and want to update the frontend server run:
+
+      start/update_frontend_local.sh

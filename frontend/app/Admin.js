@@ -1,10 +1,16 @@
 /**
  * Here the current user must be loaded and all the data needed must be loaded in the internal storage.
  * Really important.
+ * 
+ * 
+ * 
+ * This page is only for the admin privilege use.
+ * You can access it by typing in the url "admin".
  */
 
 /**
  * ON STATE CHANGE.
+ * Every time the state of the user is changed, this function is called.
  */
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
@@ -26,12 +32,12 @@ document.getElementById("btnCreateEx").addEventListener('click', e => {
  * Send he user to the createEx page.
  */
 document.getElementById("btnEditEx").addEventListener('click', e => {
-  document.location.href = "editDeleteEx.html";
+  document.location.href = "myExercises.html";
 });
 
 /**
  * BUTTON SOLVEEX.
- * Send he user to the createEx page.
+ * Send he user to the solveEx page.
  */
 document.getElementById("btnSolveEx").addEventListener('click', e => {
   document.location.href = "solveEx.html";
@@ -39,7 +45,7 @@ document.getElementById("btnSolveEx").addEventListener('click', e => {
 
 /**
  * BUTTON RECORDS.
- * Send he user to the createEx page.
+ * Send he user to the records page.
  */
 document.getElementById("records").addEventListener('click', e => {
   document.location.href = "records.html";
@@ -62,15 +68,3 @@ document.getElementById("btnLogOut").addEventListener('click', e => {
   firebase.auth().signOut();
   document.location.href = "index.html";
 });
-
-/**
- * This function hide the loading circle of active him.
- */
-function hideLoading() {
-  var x = document.getElementById("loading");
-  if (x.style.display === "none") {
-    x.style.display = "block";
-  } else {
-    x.style.display = "none";
-  }
-}

@@ -2,7 +2,7 @@
  * This file is used when the student clicks "Submit".
  */
 
-// This line should be the same as in EditDeleteEx.js.
+// This line should be the same as in myExercises.js.
 var BACKEND_PORTS = [5670, 5671, 5672, 5673, 5674, 5675, 5676, 5677, 5678, 5679, ];
 
 var grade = 0;  // The grade by default.
@@ -100,7 +100,7 @@ $("button#clear_and_submit").click(() => {
 /**
  * This function upload the grade of the users (if collaborator) in the database.
  * @param {grade} grade 
- * @param {string} giturl 
+ * @param {String} giturl 
  */
 function uploadGrade(grade, giturl) {
   const collab1Id = document.getElementById("collab1").value;
@@ -127,7 +127,7 @@ function uploadGrade(grade, giturl) {
  * If there is only one collab.
  * @param {grade} grade 
  * @param {int} collab1Id 
- * @param {string} giturl 
+ * @param {String} giturl 
  */
 function uploadGradeWithOneCollab(grade, collab1Id, giturl) {
   uploadHomeUserGrade(grade);
@@ -143,7 +143,7 @@ function uploadGradeWithOneCollab(grade, collab1Id, giturl) {
  * @param {grade} grade 
  * @param {int} collab1Id 
  * @param {int} collab1Id 
- * @param {string} giturl 
+ * @param {String} giturl 
  */
 function uploadGradeWithTwoCollab(grade, collab1Id, collab2Id, giturl) {
   uploadHomeUserGrade(grade);
@@ -161,7 +161,7 @@ function uploadGradeWithTwoCollab(grade, collab1Id, collab2Id, giturl) {
  * @param {grade} grade 
  * @param {user} collab 
  * @param {int} collabId 
- * @param {string} giturl 
+ * @param {String} giturl 
  */
 function uploadCollabGrade(grade, collab, collabId, giturl) {
   exerciseSolved = new ExerciseSolved(grade, selectedValue);

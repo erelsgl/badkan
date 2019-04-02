@@ -8,9 +8,8 @@ var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 document.getElementById("heading").innerHTML =
     "Records for " + homeUser.name + " " + homeUser.lastName + " " + homeUser.id;
 
-loadAllExercises(function(exercises){     // defined in Firebase.js.
+loadAllExercises(function (exercises) {     // defined in Firebase.js.
     // exercises maps the exercise ID to the exercise data.
-
     var str = "";
     for (i = 0; i < homeUser.exerciseSolved.length; i++) {
         var exerciseSolutionObject = homeUser.exerciseSolved[i]
@@ -24,16 +23,10 @@ loadAllExercises(function(exercises){     // defined in Firebase.js.
             str = str + "Exercise: " + exerciseData.name + ", Grade: " + grade + "<br />";
         }
     }
-
-
     if (str === "") {
         document.getElementById("records").innerHTML = "You didn't solve any exercise yet."
     }
     else {
         document.getElementById("records").innerHTML = str;
     }
-
 })
-
-
-

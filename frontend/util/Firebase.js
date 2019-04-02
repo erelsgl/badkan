@@ -9,7 +9,7 @@ var storage = firebase.storage();
 /**
  * This method upload the user in firebase.
  * @param {user} user 
- * @param {string} userId 
+ * @param {String} userId 
  */
 function writeUserData(user, userId) {
   database.ref("users/" + userId).set({
@@ -20,9 +20,22 @@ function writeUserData(user, userId) {
 }
 
 /**
+ * This method upload the user in firebase.
+ * @param {user} user 
+ * @param {String} userId 
+ */
+function writeUserDataAdmin(user, userId) {
+  database.ref("users/" + userId).set({
+    user
+  }).then(function() {
+    document.location.href = "admin.html";
+  });
+}
+
+/**
  * This method upload the user on firebase and then submit the form.
  * @param {user} user 
- * @param {string} userId 
+ * @param {String} userId 
  */
 function writeUserDataAndSubmit(user, userId) {
   database.ref("users/" + userId).set({
@@ -34,10 +47,24 @@ function writeUserDataAndSubmit(user, userId) {
 }
 
 /**
+ * This method upload the user on firebase and then submit the form.
+ * @param {user} user 
+ * @param {String} userId 
+ */
+function writeUserDataAndSubmitAdmin(user, userId) {
+  database.ref("users/" + userId).set({
+    user
+  }).then(function() {
+    document.getElementById("form").submit();
+    document.location.href = "admin.html";
+  });
+}
+
+/**
  * This method upload the user in firebase.
  * Note that we're not comming home here.
  * @param {user} user 
- * @param {string} userId 
+ * @param {String} userId 
  */
 function writeUserDataWithoutComingHome(user, userId) {
   database.ref("users/" + userId).set({
@@ -48,7 +75,7 @@ function writeUserDataWithoutComingHome(user, userId) {
 /**
  * This function upload an exercise.
  * @param {exercise} exercise 
- * @param {string} exerciseId 
+ * @param {String} exerciseId 
  */
 function writeExercise(exercise, exerciseId) {
   firebase.database().ref("exercises/" + exerciseId).set({
@@ -58,7 +85,7 @@ function writeExercise(exercise, exerciseId) {
 
 /**
  * This function increment the number of created exercise.
- * @param {string} userId 
+ * @param {String} userId 
  * @param {user}homeUser 
  */
 function incrementCreatedEx(userId, homeUser) {
@@ -69,28 +96,28 @@ function incrementCreatedEx(userId, homeUser) {
 /**
  * This function increment the number of created exercise.
  * Note that this function submit the form.
- * @param {string} userId 
+ * @param {String} userId 
  * @param {user}homeUser 
  */
 function incrementCreatedExAndSubmit(userId, homeUser) {
   homeUser.createdEx++;
-  writeUserDataAndSubmit(homeUser, userId);
+  writeUserDataAndSubmitAdmin(homeUser, userId);
 }
 
 /**
  * This function increment the number of deleted exercise.
- * @param {string} userId 
+ * @param {String} userId 
  * @param {user}homeUser 
  */
 function incrementDeletedEx(userId, homeUser) {
   console.log("increment delete");
   homeUser.deletedEx++;
-  writeUserData(homeUser, userId);
+  writeUserDataAdmin(homeUser, userId);
 }
 
 /**
  * This function increment the number of edited exercise.
- * @param {string} userId 
+ * @param {String} userId 
  * @param {user}homeUser 
  */
 function incrementEditEx(userId, homeUser) {
@@ -101,7 +128,7 @@ function incrementEditEx(userId, homeUser) {
 /**
  * This function increment the number of edited exercise.
  * Note that this function is not bring you at home.
- * @param {string} userId 
+ * @param {String} userId 
  * @param {user}homeUser 
  */
 function incrementEditExWithoutCommingHome(userId, homeUser) {
@@ -111,7 +138,7 @@ function incrementEditExWithoutCommingHome(userId, homeUser) {
 
 /**
  * This function downloads the user from the firebase given his id.
- * @param {string} userId 
+ * @param {String} userId 
  */
 function loadCurrentUser(userId) {
   database.ref('/users/' + userId).once('value').then(function(snapshot) {
@@ -137,8 +164,6 @@ function loadCurrentUser(userId) {
   });
 }
 
-
-
 /**
  * This function load the collab.
  * @param {int} userId 342533064
@@ -159,7 +184,7 @@ function loadCollabById(userId, grade) {
 /**
  * This method download any user by is country id.
  * @param {int} id 
- * @param {string} giturl 
+ * @param {String} giturl 
  */
 function loadUidById(id, giturl) {
   database.ref('/users/').orderByChild("/user/id").equalTo(id).once('value').then(function(snapshot) {
@@ -174,7 +199,7 @@ function loadUidById(id, giturl) {
  * This method download two users by their country ids.
  * @param {int} id1 
  * @param {int} id2 
- * @param {string} giturl 
+ * @param {String} giturl 
  */
 function loadUidByIds(id1, id2, giturl) {
   database.ref('/users/').orderByChild("/user/id").equalTo(id1).once('value').then(function(snapshot) {
@@ -224,7 +249,6 @@ function loadAllExercises(onFinish) {
     onFinish(exercises)
   });
 }
-
 
 /**
  * This function load all the exercises of the database.

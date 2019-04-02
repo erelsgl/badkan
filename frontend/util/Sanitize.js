@@ -1,6 +1,6 @@
 /**
  * Sanitize the input of any user.
- * @param {string} unsafe 
+ * @param {String} unsafe 
  */
 function escapeHtml(unsafe) {
   return unsafe
@@ -13,7 +13,7 @@ function escapeHtml(unsafe) {
 
 /**
  * Sanitize the input of any user with respect to git.
- * @param {string} unsafe 
+ * @param {String} unsafe 
  */
 function escapeHtmlWithRespectGit(unsafe) {
   return unsafe

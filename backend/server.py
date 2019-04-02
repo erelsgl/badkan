@@ -6,7 +6,7 @@ AUTHOR: Erel Segal-Halevi
 SINCE: 2019-03
 """
 
-from terminal import *
+from terminal import * 
 
 import websockets, subprocess, asyncio, os, urllib,  json, re
 import csv, time
@@ -21,7 +21,11 @@ from concurrent.futures import ProcessPoolExecutor
 PORT = sys.argv[1] if len(sys.argv)>=2 else 5670   # same port as in frontend/index.html
 EXERCISE_DIR = "../exercises"
 
-GIT_REGEXP = re.compile("http.*github[.]com/(.*)/(.*)", re.IGNORECASE)
+
+# Example https: https://github.com/SamuelBismuth/badkan.git
+# Example ssh: git@github.com:SamuelBismuth/badkan.git
+
+GIT_REGEXP = re.compile(".*github[.]com.(.*)/(.*)", re.IGNORECASE)
 GIT_CLEAN  = re.compile(".git.*", re.IGNORECASE)
 GRADE_REGEXP = re.compile("[*].*grade.*:\\s*(\\d+).*[*]", re.IGNORECASE)
 
@@ -157,11 +161,11 @@ async def run(websocket, path):
     submission_json = await websocket.recv()   # returns a string
     print("< {} ".format(submission_json))
     submission = json.loads(submission_json)   # converts the string to a python dict
-    if   (submission_json[2] == 'g'):
+    if submission_json[2] == 'g':
         await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
-    elif (submission_json[3] == 'o'):
+    elif submission_json[3] == 'o':
         await edit_ex(submission["folderName"], submission["exFolder"])
-    elif (submission_json[2] == 'd'):
+    elif submission_json[2] == 'd':
         await delete_ex(submission["delete_exercise"])
     else:
         await check_submission(websocket, submission)

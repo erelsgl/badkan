@@ -2,9 +2,16 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import storage
 
+import re
+
+with open('../frontend/util/FirebaseConfig.js') as dataFile:
+    data = dataFile.read()
+
+id = re.search('projectId: "(.+?)",', data)
+
 cred = credentials.Certificate('private_key.json')
 firebase_admin.initialize_app(cred, {
-    'storageBucket': 'badkanlocal.appspot.com'
+    'storageBucket': id.group(1) + '.appspot.com'
 })
 
 firebase_two_hours = open("02-hours.json", "rb")
