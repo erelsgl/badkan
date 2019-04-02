@@ -22,7 +22,7 @@ class MyHandler(BaseHTTPRequestHandler):
         f.write(contents)   
         f.close()
         if self.headers['Accept'] == 'create':
-            shellscript = subprocess.Popen(['bash','create-ex.sh', filename])
+            shellscript = subprocess.Popen(['bash','create-ex.sh', filename], stdout=subprocess.PIPE)
         self.send_response(200)
 
 
