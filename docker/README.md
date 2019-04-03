@@ -27,3 +27,7 @@ To remove old versions do:
 To copy a folder into the container do e.g:
 
     sudo docker cp 00-multiply badkan:/
+
+To enter in the bash of the docker:
+
+    sudo docker exec -it badkan bash

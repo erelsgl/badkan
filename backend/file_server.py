@@ -4,7 +4,7 @@ import cgi
 import subprocess
 
 """
-IF THERE IS A PROBLEM OF SIMULTANEOUS SUBMISSION TWO SOLUTION:
+IF THERE IS A PROBLEM OF SIMULTANEOUS SUBMISSION THERE EXISTS TWO SOLUTION:
 USE NUMEROUS PORT.
 MULTIPROCESSING.
 """
@@ -23,6 +23,8 @@ class MyHandler(BaseHTTPRequestHandler):
         f.close()
         if self.headers['Accept'] == 'create':
             shellscript = subprocess.Popen(['bash','create-ex.sh', filename], stdout=subprocess.PIPE)
+        else:
+            shellscript = subprocess.Popen(['bash','solve-ex.sh', filename], stdout=subprocess.PIPE)
         self.send_response(200)
 
 
@@ -48,7 +50,6 @@ if __name__ == '__main__':
     print(time.asctime(), 'Server Starts - %s:%s' % (HOST_NAME, PORT_NUMBER))
     try:
         httpd.serve_forever()
-        print("hello")
     except KeyboardInterrupt:
         pass
     httpd.server_close()

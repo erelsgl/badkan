@@ -46,13 +46,25 @@ async def docker_command(command_words):
         *(["docker"] + command_words),
         stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
 
-# async def store_solution_file(path, file):
 
-# async def store_solution_url(path, url):
+async def dealing_with_file(filename, websocket, owner_firebase_id, exercise):
+    proc = await docker_command(["exec", "badkan", "bash", "get-submission-file.sh", owner_firebase_id, exercise])
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        await tee(websocket, line)
+    await proc.wait()
+    
 
-# async def dealing_with_file():
-
-# async def dealing_with_url():
+async def dealing_with_url(git_url, websocket, owner_firebase_id, exercise):
+    matches = GIT_REGEXP.search(git_url)
+    username = matches.group(1)
+    repository = GIT_CLEAN.sub("",matches.group(2))
+    # Clone or pull the student's submission from github to the docker container "badkan":
+    proc = await docker_command(["exec", "badkan", "bash", "get-submission.sh", username, repository, owner_firebase_id, exercise])
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        await tee(websocket, line)
+    await proc.wait()
 
 
 async def check_submission(websocket:object, submission:dict):
@@ -63,37 +75,31 @@ async def check_submission(websocket:object, submission:dict):
            "exercise" - name of the exercise; represents a sub-folder of the "exercises" folder.
            "git_url"  - a url for cloning the student's git repository containing the submitted solution.
            must be of the form https://xxx.git.
-    """
-
-    # TODO: NEED TO CHECK IF EITHER THE SOLUTION IS A ZIP OR A GITHUB REPO.
-    
+    """    
     solution=submission["solution"]
-    print('solution', solution)
     exercise=submission["exercise"]
-    git_url =submission["solution"]
     ids = submission["ids"]
     name = submission["name"]
+    owner_firebase_id = submission["owner_firebase_id"]
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), git_url, ids, "START", name)
+    edit_csv(str(currentDT), solution, ids, "START", name)
+
     if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
 
-    matches = GIT_REGEXP.search(git_url)
-    username = matches.group(1)
-    repository = GIT_CLEAN.sub("",matches.group(2))
-    repository_folder = "/submissions/{}/{}".format(username,repository)
+    repository_folder = "/submissions/{}/{}".format(owner_firebase_id, exercise)
 
-    # Clone or pull the student's submission from github to the docker container "badkan":
-    proc = await docker_command(["exec", "badkan", "bash", "get-submission.sh", username, repository])
-    async for line in proc.stdout:
-        line = line.decode('utf-8').strip()
-        await tee(websocket, line)
-    await proc.wait()
+    if "github" in solution:
+        await dealing_with_url(solution, websocket, owner_firebase_id, exercise)
+    else:
+        await dealing_with_file(solution, websocket, owner_firebase_id, exercise)
+        print("ZIP")
 
     # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
     current_exercise_dir = os.path.realpath(EXERCISE_DIR + "/" + exercise)
     await tee(websocket, "copying from {}".format(current_exercise_dir))
+    print("hello")
     proc = await docker_command(["cp", current_exercise_dir, "badkan:{}/grading_files".format(repository_folder)])
     async for line in proc.stdout:  print(line)
     await proc.wait()
@@ -103,7 +109,7 @@ async def check_submission(websocket:object, submission:dict):
     move_command = "mv grading_files/* . && rm -rf grading_files"
     TIMEOUT_SOFT = 10 # seconds
     TIMEOUT_HARD = 20 # seconds
-    grade_command = "timeout -s 9 {} timeout {} nice -n 5 ./grade {} {}".format(TIMEOUT_HARD, TIMEOUT_SOFT, username,repository)
+    grade_command = "timeout -s 9 {} timeout {} nice -n 5 ./grade {} {}".format(TIMEOUT_HARD, TIMEOUT_SOFT, owner_firebase_id, exercise)
     exitcode_command = "echo Exit code: $?"
     combined_command = "{} && {} ; {}".format(move_command, grade_command, exitcode_command)
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
@@ -121,7 +127,7 @@ async def check_submission(websocket:object, submission:dict):
         await tee(websocket, "Final Grade: 0")
 
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), git_url, ids, grade, name)
+    edit_csv(str(currentDT), solution, ids, grade, name)
 
 
 async def load_ex(url, folder_name, username, password, exercise):
