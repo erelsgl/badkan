@@ -20,7 +20,7 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
     var badMail = document.getElementById("badMail");
     firebase.auth().createUserWithEmailAndPassword(email, pass).then(function () {
       let exerciseSolved = new ExerciseSolved(90, "id");
-      let homeUser = new User(name, lastName, id, email, 0, 0, 0, [exerciseSolved]);
+      let homeUser = new User(name, lastName, id, email, 0, 0, 0, [exerciseSolved], ["dummyCourseId"]);
       var user = firebase.auth().currentUser;
       writeUserData(homeUser, user.uid);
     }).catch(function (error) {
