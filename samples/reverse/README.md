@@ -1,5 +1,6 @@
-This is a sample exercise.
-The assignment is:
+# reverse
+
+This is a sample exercise, for demonstrating how the badkan works. The exercise is:
 
 > Write a C++ unit named "reverse" (files reverse.h and reverse.cpp)
 with a single function named "reverse"
