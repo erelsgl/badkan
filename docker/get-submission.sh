@@ -13,7 +13,7 @@ if [ ! -d $USERNAME ]; then
 fi
 
 echo "! cd $USERNAME"
-cd $USERNAME
+cd $USERNAMEuf
 
 if [ -d $REPOSITORY ]; then
     echo "! cd $REPOSITORY"
