@@ -30,6 +30,11 @@ document.getElementById("records").addEventListener('click', e => {
   document.location.href = "records.html";
 });
 
+
+document.getElementById("btnManageCourses").addEventListener('click', e => {
+  document.location.href = "manageCourses.html";
+});
+
 /**
  * BUTTON SETTINGS.
  * Send he user to the settings page.

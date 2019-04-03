@@ -12,7 +12,6 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
     }
   }
   else {
-
     const link = escapeHtmlWithRespectGit(document.getElementById("link").value);
     const exFolder = escapeHtml(document.getElementById("exFolder").value);
     const username = escapeHtml(document.getElementById("user").value);

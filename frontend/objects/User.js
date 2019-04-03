@@ -9,7 +9,7 @@ class User {
    * @param {string} lastName 
    * @param {int} id 
    * @param {string} email 
-   * @param {int} createdEx 
+   * @param {int} createdEx  // Also courses.
    * @param {int} deletedEx 
    * @param {int} editedEx 
    * @param {int} exerciseSolved 

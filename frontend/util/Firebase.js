@@ -83,6 +83,15 @@ function writeExercise(exercise, exerciseId) {
   });
 }
 
+function writeCourse(course, courseId) {
+  firebase.database().ref("courses/" + courseId).set({
+    course
+  }).then(function() {
+    document.getElementById("form").submit();
+    document.location.href = "manageCourses.html";
+  });
+}
+
 /**
  * This function increment the number of created exercise.
  * @param {String} userId 
@@ -91,6 +100,17 @@ function writeExercise(exercise, exerciseId) {
 function incrementCreatedEx(userId, homeUser) {
   homeUser.createdEx++;
   writeUserData(homeUser, userId);
+}
+
+/**
+ * This function increment the number of created exercise.
+ * @param {String} userId 
+ * @param {user}homeUser 
+ */
+function incrementCreatedExWithoutCommingHome(userId, homeUser) {
+  homeUser.createdEx++;
+  writeUserDataWithoutComingHome(homeUser, userId);
+  localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
 }
 
 /**
@@ -153,11 +173,7 @@ function loadCurrentUser(userId) {
         document.getElementById("name").innerHTML =
             "Hello " + homeUser.name + " " + homeUser.lastName +"! <br />" +
             "ID number: " + homeUser.id + "<br />" +
-            "Email: " + homeUser.email + "<br />" +
-            "Created exercise(s): " + homeUser.createdEx + "<br />" +
-            "Deleted exercise(s): " + homeUser.deletedEx + "<br />" +
-            "Edited exercise(s): " + homeUser.editedEx + "<br />" +
-            "Solved exercise(s): " + (homeUser.exerciseSolved.length - 1);
+            "Email: " + homeUser.email + "<br />";
         loading("div1");
         loading("loading");
     }
@@ -237,6 +253,16 @@ function loadExerciseByOwner(ownExercises) {
   });
 }
 
+function loadCoursesByOwner() {
+  database.ref().child('courses/').on("value", function(snapshot) {
+    snapshot.forEach(function(data) {
+      if (data.val().course.ownerId === firebase.auth().currentUser.uid) {
+        addCourseHTML(data.val().course);
+      }
+    });
+  });
+}
+
 /**
  * This function load all the exercises of the database.
  */
@@ -253,12 +279,12 @@ function loadAllExercises(onFinish) {
 /**
  * This function load all the exercises of the database.
  */
-function loadAllExercisesAndAddOptions(exercises) {
+function loadAllExercisesAndAddOptions(exercisesMap) {
   var flag = false;
   database.ref().child('exercises/').on("value", function(snapshot) {
     snapshot.forEach(function(data) {
       addOption(data.val().exercise, data.key);  // defined in SolveEx.js and in EditDeleteEx.js
-      exercises.set(data.key, data.val().exercise);
+      exercisesMap.set(data.key, data.val().exercise);
       onOptionChange();      // defined in SolveEx.js
       flag = true;
     });
