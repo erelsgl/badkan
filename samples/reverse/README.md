@@ -8,3 +8,5 @@ that accepts a string and returns it in reverse.
 
 A sample solution can be found at:
 https://github.com/ereltest/reverse.git
+
+The subfolders whose name starts with "solution-" are not a part of the exercise - they are sample solutions to the exercise that receive different grades.
