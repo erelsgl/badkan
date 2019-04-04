@@ -10,7 +10,7 @@ document.getElementById("confirm").addEventListener('click', e => {
   if (checkEmptyFields(name, lastName, id)) {
     var user = firebase.auth().currentUser;
     let exerciseSolved = new ExerciseSolved(90, "id");
-    let currentUser = new User(name, lastName, id, user.email, 0, 0, 0, [exerciseSolved], ["dummyCourseId"]);
+    let currentUser = new User(name, lastName, id, user.email, 0, 0, 0, [exerciseSolved]);
     writeUserData(currentUser, user.uid);
     document.location.href = "home.html";
   }

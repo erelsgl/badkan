@@ -1,8 +1,14 @@
+var select = document.getElementById("exercises");
+
+function addOption(exercise, key) {
+    select.options[select.options.length] = new Option(exercise.name, key);
+}
+
 var exercisesMap = new Map();
+loadAllExercisesAndAddOptions(exercisesMap);  // defined in Firebase.js.
 
 // We need to load all the exercise since it's possible that the owner of the course is not 
 // the owner of the exercise. 
-loadAllExercisesAsync(exercisesMap);  // defined in Firebase.js. 
 
 loadCoursesByOwner();
 
@@ -99,4 +105,8 @@ function addCourseHTML(course) {
 
     $newPanel.find(".panel-body").append(text_html);
     $("#accordion").append($newPanel.fadeIn());
+}
+
+function onOptionChange() {
+    // Dummy function.
 }

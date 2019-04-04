@@ -14,7 +14,7 @@ class User {
    * @param {int} editedEx 
    * @param {int} exerciseSolved 
    */
-  constructor(name, lastName, id, email, createdEx, deletedEx, editedEx, exerciseSolved, myCourses) {
+  constructor(name, lastName, id, email, createdEx, deletedEx, editedEx, exerciseSolved) {
     this.name = name;
     this.lastName = lastName;
     this.id = id;
@@ -23,6 +23,5 @@ class User {
     this.deletedEx = deletedEx;
     this.editedEx = editedEx;
     this.exerciseSolved = exerciseSolved;
-    this.myCourses = myCourses;
   }
 }

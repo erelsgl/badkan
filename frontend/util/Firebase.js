@@ -83,6 +83,12 @@ function writeExercise(exercise, exerciseId) {
   });
 }
 
+function editCourse(course, courseId) {
+  firebase.database().ref("courses/" + courseId).set({
+    course
+  });
+}
+
 function writeCourse(course, courseId) {
   firebase.database().ref("courses/" + courseId).set({
     course
@@ -266,7 +272,7 @@ function loadCoursesByOwner() {
 function loadAllCourses() {
   database.ref().child('courses/').on("value", function (snapshot) {
     snapshot.forEach(function (data) {
-      addAllCoursesHTML(data.val().course)
+      addAllCoursesHTML(data.key, data.val().course);
     })
   });
 }
