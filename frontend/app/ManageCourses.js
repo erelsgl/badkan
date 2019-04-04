@@ -30,7 +30,6 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     const name = escapeHtml(document.getElementById("courseName").value);
     var values = $('#exercises').val();
-    console.log(values);
     if (!values[0]) {
         values = ["dummyExerciseId"];
     }
@@ -75,12 +74,14 @@ function checkEmptyFieldsPrivate(name, password) {
 
 var $template = $(".template");
 
+let hash = 2;
+
 function addCourseHTML(course) {
     var $newPanel = $template.clone();
     $newPanel.find(".collapse").removeClass("in");
-    $newPanel.find(".accordion-toggle").attr("href", "#" + (course.name))
+    $newPanel.find(".accordion-toggle").attr("href", "#" + (hash))
         .text(course.name);
-    $newPanel.find(".panel-collapse").attr("id", course.name).addClass("collapse").removeClass("in");
+    $newPanel.find(".panel-collapse").attr("id", hash++).addClass("collapse").removeClass("in");
     $newPanel.find(".panel-body").text('')
     text_html = "";
     if (course.exercises.length === 1 && course.exercises[0] === "dummyExerciseId") {
@@ -102,7 +103,6 @@ function addCourseHTML(course) {
     text_html += "<button id=\"submit\" class=\"btn btn-primary\">Dowload Grades</button>";
     text_html += "<button id=\"submit\" class=\"btn btn-primary\">Edit Course</button>";
     text_html += "<button id=\"submit\" class=\"btn btn-primary\">Delete Course</button>"
-
     $newPanel.find(".panel-body").append(text_html);
     $("#accordion").append($newPanel.fadeIn());
 }

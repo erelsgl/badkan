@@ -89,12 +89,14 @@ function isRegistered(course) {
   }
 }
 
+let hash = 2;
+
 function notRegistered(key, course) {
   var $newPanel = $template.clone();
   $newPanel.find(".collapse").removeClass("in");
-  $newPanel.find(".accordion-toggle").attr("href", "#" + (course.name))
+  $newPanel.find(".accordion-toggle").attr("href", "#" + (hash))
     .text(course.name);
-  $newPanel.find(".panel-collapse").attr("id", course.name).addClass("collapse").removeClass("in");
+  $newPanel.find(".panel-collapse").attr("id", hash++).addClass("collapse").removeClass("in");
   $newPanel.find(".panel-body").text('')
   text_html = "";
   if (course.exercises.length === 1 && course.exercises[0] === "dummyExerciseId") {
@@ -103,9 +105,11 @@ function notRegistered(key, course) {
   for (var i = 0; i < course.exercises.length; i++) {
     if (course.exercises[i] != "dummyExerciseId") {
       let exerciseObj = exercisesMap.get(course.exercises[i]);
+      text_html += "<pre>"
       text_html += "Exercise name: " + exerciseObj.name + "<br />";
       text_html += "Exercise example: " + exerciseObj.example + "<br />";
       text_html += "Exercise description: " + exerciseObj.description + "<br />";
+      text_html += "</pre>"
       text_html += "<br />";
     }
   }
@@ -118,41 +122,48 @@ function notRegistered(key, course) {
 function registered(key, course) {
   var $newPanel = $template.clone();
   $newPanel.find(".collapse").removeClass("in");
-  $newPanel.find(".accordion-toggle").attr("href", "#" + (course.name))
+  $newPanel.find(".accordion-toggle").attr("href", "#" + (hash))
     .text(course.name);
-  $newPanel.find(".panel-collapse").attr("id", course.name).addClass("collapse").removeClass("in");
+  $newPanel.find(".panel-collapse").attr("id", hash++).addClass("collapse").removeClass("in");
   $newPanel.find(".panel-body").text('')
   text_html = "";
+
   if (course.exercises.length === 1 && course.exercises[0] === "dummyExerciseId") {
     text_html += "<h5>There is not available exercise for this course!</h5>"
   }
+
   for (var i = 0; i < course.exercises.length; i++) {
     if (course.exercises[i] != "dummyExerciseId") {
       let exerciseId = course.exercises[i];
       let exerciseObj = exercisesMap.get(exerciseId);
+      text_html += "<pre>"
       text_html += "Exercise name: " + exerciseObj.name + "<br />";
       text_html += "Exercise example: " + exerciseObj.example + "<br />";
       text_html += "Exercise description: " + exerciseObj.description + "<br />";
-      text_html += "<br />";
       var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
       let grade = -1;
-      for (var i = 0; i < homeUser.exerciseSolved.length; i ++) {
-        if (homeUser.exerciseSolved[i] === exerciseId) {
-          grade = homeUser.exerciseSolved[i].grade;
+      for (var j = 0; j < homeUser.exerciseSolved.length; j++) {
+        if (homeUser.exerciseSolved[j].exerciseId === exerciseId) {
+          grade = homeUser.exerciseSolved[j].grade;
         }
       }
-      text_html += "My actual grades: " + grade + "<br />";
-      text_html +=  "<button name =\"" + exerciseId + "\" id=\"solve\" class=\"btn btn-success\"\">Solve</button>";
+      text_html += "My actual grade: " + grade + "<br />";
+      text_html += "</pre>"
+      text_html += "<button name =\"" + exerciseId + "\" id=\"solve\" class=\"btn btn-success\"\">Solve</button>";
+      if (i != course.exercises.length - 1) { text_html += "<br /> <br />"; }
     }
-    console.log(text_html);
   }
   $newPanel.find(".panel-body").append(text_html);
   $("#accordion").append($newPanel.fadeIn());
 }
 
-// $('body').on('click', '#solve', function (e) {
-
-// });
+$('body').on('click', '#solve', function (e) {
+  let exerciseId = e.target.name;
+  localStorage.setItem("exercise", JSON.stringify(exercisesMap.get(exerciseId)));
+  localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
+  document.location.href = "badkan.html?exercise=" + exerciseId;
+  console.log("hi");
+});
 
 $('body').on('click', '#register', function (e) {
   let courseId = e.target.name;
