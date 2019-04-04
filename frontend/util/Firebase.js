@@ -51,6 +51,20 @@ function writeUserDataAndSubmit(user, userId) {
  * @param {user} user 
  * @param {String} userId 
  */
+function writeUserDataAndSubmitCourse(user, userId) {
+  database.ref("users/" + userId).set({
+    user
+  }).then(function () {
+    document.getElementById("form").submit();
+    document.location.href = "manageCourses.html";
+  });
+}
+
+/**
+ * This method upload the user on firebase and then submit the form.
+ * @param {user} user 
+ * @param {String} userId 
+ */
 function writeUserDataAndSubmitAdmin(user, userId) {
   database.ref("users/" + userId).set({
     user
@@ -125,9 +139,9 @@ function incrementCreatedExWithoutCommingHome(userId, homeUser) {
  * @param {String} userId 
  * @param {user}homeUser 
  */
-function incrementCreatedExAndSubmit(userId, homeUser) {
+function incrementCreatedExAndSubmitCourse(userId, homeUser) {
   homeUser.createdEx++;
-  writeUserDataAndSubmitAdmin(homeUser, userId);
+  writeUserDataAndSubmitCourse(homeUser, userId);
 }
 
 /**
@@ -263,7 +277,7 @@ function loadCoursesByOwner() {
   database.ref().child('courses/').on("value", function (snapshot) {
     snapshot.forEach(function (data) {
       if (data.val().course.ownerId === firebase.auth().currentUser.uid) {
-        addCourseHTML(data.val().course)
+        addCourseHTML(data.key, data.val().course)
       }
     })
   });
@@ -315,10 +329,6 @@ function loadAllExercisesAndAddOptions(exercisesMap) {
     });
     loading("div3");
     loading("loading3");
-    if (!flag) {
-      alert("There is no available exercise!");
-      window.location.href = 'home.html';
-    }
   });
 }
 

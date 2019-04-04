@@ -22,7 +22,7 @@ fi
 
 mkdir $EXID
 cd $EXID
-unzip -j ../../../$OWNERID -x *.git* # CHECK if github has been submitted.
-rm ../../../$OWNERID
+unzip -j //$OWNERID -x *.git* # CHECK if github has been submitted.
+rm //$OWNERID
 
 

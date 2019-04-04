@@ -74,9 +74,6 @@ function sendWebsocket(solution) {
   // Create the json for submission
   const collab1Id = escapeHtml(document.getElementById("collab1").value);
   const collab2Id = escapeHtml(document.getElementById("collab2").value);
-  if (solution != "") {
-    exercise = exercise + "/" + ex.exFolder;
-  }
   var submission_json = JSON.stringify({
     exercise: exercise,
     solution: solution,
@@ -84,6 +81,7 @@ function sendWebsocket(solution) {
     name: ex.name,
     owner_firebase_id: firebase.auth().currentUser.uid
   }); // the variable "submission_json" is read in server.py:run
+
   logClient("color:#888", submission_json); // in utils.js
   var websocket = new WebSocket(websocketurl);
   websocket.onopen = (event) => {

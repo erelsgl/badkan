@@ -12,6 +12,8 @@ loadAllExercisesAndAddOptions(exercisesMap);  // defined in Firebase.js.
 
 loadCoursesByOwner();
 
+var coursesMap = new Map();
+
 var public = true;
 
 $('input[type=radio][name=privacy]').change(function () {
@@ -76,7 +78,8 @@ var $template = $(".template");
 
 let hash = 2;
 
-function addCourseHTML(course) {
+function addCourseHTML(courseId, course) {
+    coursesMap.set(courseId, course);
     var $newPanel = $template.clone();
     $newPanel.find(".collapse").removeClass("in");
     $newPanel.find(".accordion-toggle").attr("href", "#" + (hash))
@@ -90,22 +93,51 @@ function addCourseHTML(course) {
     for (var i = 0; i < course.exercises.length; i++) {
         if (course.exercises[i] != "dummyExerciseId") {
             text_html +=
-                "<button id=\"submit\" class=\"btn btn-link\">" +
+                "<button name =\"" + course.exercises[i] + "\" id=\"exercise\" class=\"btn btn-link\">" +
                 exercisesMap.get(course.exercises[i]).name +
                 "</button>";
-            if (i != course.exercises.length -1) text_html += "<br />";
+            if (i != course.exercises.length - 1) text_html += "<br />";
         }
     }
     if (course.password) {
         text_html += "<br />" + "Password: " + course.password + "<br />";
     }
-    text_html += "<button id=\"submit\" class=\"btn btn-primary\">Create Exercise</button>";
-    text_html += "<button id=\"submit\" class=\"btn btn-primary\">Dowload Grades</button>";
-    text_html += "<button id=\"submit\" class=\"btn btn-primary\">Edit Course</button>";
-    text_html += "<button id=\"submit\" class=\"btn btn-primary\">Delete Course</button>"
+    text_html += "<button name =\"" + courseId + "\" id=\"create\" class=\"btn btn-primary\">Create Exercise</button>";
+    text_html += "<button name =\"" + courseId + "\" id=\"download\" class=\"btn btn-primary\">Dowload Grades</button>";
+    text_html += "<button name =\"" + courseId + "\" id=\"edit\" class=\"btn btn-primary\">Edit Course</button>";
+    text_html += "<button name =\"" + courseId + "\" id=\"delete\" class=\"btn btn-primary\">Delete Course</button>"
     $newPanel.find(".panel-body").append(text_html);
     $("#accordion").append($newPanel.fadeIn());
 }
+
+$('body').on('click', '#exercise', function (e) {
+    let exerciseId = e.target.name;
+    console.log("exercise" + exerciseId);
+});
+
+$('body').on('click', '#create', function (e) {
+    let courseId = e.target.name;
+    let course = coursesMap.get(courseId);
+    localStorage.setItem("course", JSON.stringify(course));
+    localStorage.setItem("courseId", JSON.stringify(courseId));
+    document.location.href = "createEx.html";
+    console.log("create" + courseId);
+});
+
+$('body').on('click', '#download', function (e) {
+    let courseId = e.target.name;
+    console.log("download" + courseId);
+});
+
+$('body').on('click', '#edit', function (e) {
+    let courseId = e.target.name;
+    console.log("edit" + courseId);
+});
+
+$('body').on('click', '#delete', function (e) {
+    let courseId = e.target.name;
+    console.log("delete" + courseId);
+});
 
 function onOptionChange() {
     // Dummy function.

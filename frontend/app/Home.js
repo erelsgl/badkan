@@ -3,6 +3,8 @@
  * Really important.
  */
 
+var flag = false;
+
 /**
  * ON STATE CHANGE.
  * Every time the state of the user is changed, this function is called.
@@ -11,6 +13,7 @@ firebase.auth().onAuthStateChanged(user => {
   if (user) {
     var userId = firebase.auth().currentUser.uid;
     loadCurrentUser(userId);   // Load current user data to localStorage. in file  util/Firebase.js
+    flag = true;
   }
 });
 
@@ -24,6 +27,14 @@ loadAllCourses();
 
 var coursesMap = new Map();
 
+if (flag) {
+  refresh();
+}
+
+function refresh() {
+  var userId = firebase.auth().currentUser.uid;
+  loadCurrentUser(userId);   // Load current user data to localStorage. in file  util/Firebase.js
+}
 // /**
 //  * BUTTON SOLVEEX.
 //  * Send he user to the createEx page.

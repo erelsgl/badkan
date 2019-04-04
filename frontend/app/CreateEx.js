@@ -20,7 +20,6 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
       uploadExerciseGit(name, descr, example, link, username, pass, exFolder);
     }
   }
-
 });
 
 function checkEmptyFieldsGit(name, descr, example, exFolder, user, pass, link) {
@@ -41,6 +40,14 @@ function checkEmptyFieldsFile(name, descr, example, file) {
     return false;
   }
   return true;
+}
+
+function editCourseCreate(exerciseId) {
+  console.log("hello");
+  let courseId = JSON.parse(localStorage.getItem("courseId"));
+  let course = JSON.parse(localStorage.getItem("course"));
+  course.exercises.push(exerciseId);
+  editCourse(course, courseId);
 }
 
 /**
@@ -72,8 +79,9 @@ function uploadExerciseGit(name, descr, example, link, username, pass, exFolder)
   let grade = new Grade("id", 90, "url");
   let grades = new Grades([grade]);
   let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades);
-  incrementCreatedExAndSubmit(user.uid, homeUser);
+  incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
+  editCourseCreate(folderName)
 }
 
 function uploadExerciseFile(name, descr, example, file) {
@@ -84,8 +92,9 @@ function uploadExerciseFile(name, descr, example, file) {
   let grade = new Grade("id", 90, "url");
   let grades = new Grades([grade]);
   let exercise = new Exercise(name, descr, example, user.uid, "zip", "", grades);
-  incrementCreatedExAndSubmit(user.uid, homeUser);
+  incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
+  editCourseCreate(folderName);
 }
 
 function sendFileHTTP(file, folderName) {
