@@ -1,5 +1,5 @@
 /**
- * A main program for grading the "00-reverse" exercise.
+ * A main program for grading the "reverse" exercise.
  * AUTHOR: Erel Segal-Halevi
  */
 
@@ -22,5 +22,6 @@ int main() {
 	check("Case 1", "abc", "cba");
 	check("Case 2", "xyzyx", "xyzyx");
 	int grade = 100*rightCount / (rightCount+wrongCount);
-	cout << "*** Right: " << rightCount << ". Wrong: " << wrongCount << ". Grade: " << grade << "% ***" << endl;
+	cout << "*** Right: " << rightCount << ". Wrong: " << wrongCount << " ***" << endl;
+	cout << "*** Grade: " << grade << " ***" << endl;
 }

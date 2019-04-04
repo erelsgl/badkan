@@ -1,8 +1,7 @@
-# A makefile for the "00-reverse" exercise.
-# AUTHOR: Erel Segal-Halevi
+#!make -f
 
-CXX=clang++-5.0
-CXXFLAGS=-std=c++17
+a.out: reverse.cpp test_reverse.cpp
+	clang++-5.0 $^
 
-all:
-	$(CXX) $(CXXFLAGS) *.cpp
+clean:
+	rm -f *.o a.out

@@ -77,7 +77,6 @@ function submit() {
  */
 $("button#clear").click(() => {
   $("div#output").html("")
-  submit();
   return false;
 })
 
@@ -85,6 +84,15 @@ $("button#clear").click(() => {
  * The button to submit the exercise.
  */
 $("button#submit").click(() => {
+  submit();
+  return false;
+})
+
+/**
+ * The button to submit the exercise.
+ */
+$("button#clear_and_submit").click(() => {
+  $("div#output").html("")
   submit();
   return false;
 })
