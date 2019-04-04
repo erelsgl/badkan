@@ -332,6 +332,20 @@ function loadAllExercisesAndAddOptions(exercisesMap) {
   });
 }
 
+function loadUserByOwner(usersMap, coursesMap) {
+  for (let pair of coursesMap) {
+    let key = pair[0];
+    let value = pair[1]
+    for (var j = 0; j < value.students.length; j++) {
+      if (value.students[j] != "dummyStudentId") {
+        database.ref().child('users/' + value.students[j]).once('value').then(function (snapshot) {
+          usersMap.set(snapshot.key, snapshot.val().user);
+        })
+      }
+    }
+  }
+}
+
 /**
  * This function remove an exercise from the database.
  * @param {string} exerciseId 
@@ -346,6 +360,14 @@ function deleteExerciseById(exerciseId) {
  */
 function deleteUserById(userId) {
   database.ref().child('users/' + userId).remove();
+}
+
+/**
+ * This function remove a course from the database.
+ * @param {string} courseId 
+ */
+function deleteCourseById(courseId) {
+  database.ref().child('courses/' + courseId).remove();
 }
 
 /**

@@ -3,8 +3,6 @@
  * Really important.
  */
 
-var flag = false;
-
 /**
  * ON STATE CHANGE.
  * Every time the state of the user is changed, this function is called.
@@ -27,9 +25,11 @@ loadAllCourses();
 
 var coursesMap = new Map();
 
-if (flag) {
-  refresh();
-}
+// var flag = JSON.parse(localStorage.getItem("flag"));
+
+// if (flag) {
+//   refresh();
+// }
 
 function refresh() {
   var userId = firebase.auth().currentUser.uid;
@@ -72,7 +72,6 @@ document.getElementById("btnSettings").addEventListener('click', e => {
  * Log out the user and redirect hinm to the register page.
  */
 document.getElementById("btnLogOut").addEventListener('click', e => {
-  console.log('logged out');
   firebase.auth().signOut();
   document.location.href = "index.html";
 });

@@ -4,13 +4,16 @@ function addOption(exercise, key) {
     select.options[select.options.length] = new Option(exercise.name, key);
 }
 
-var exercisesMap = new Map();
-loadAllExercisesAndAddOptions(exercisesMap);  // defined in Firebase.js.
-
 // We need to load all the exercise since it's possible that the owner of the course is not 
 // the owner of the exercise. 
 
+var exercisesMap = new Map();
+loadAllExercisesAndAddOptions(exercisesMap);  // defined in Firebase.js.
+
+var usersMap = new Map();
+
 loadCoursesByOwner();
+
 
 var coursesMap = new Map();
 
@@ -100,14 +103,16 @@ function addCourseHTML(courseId, course) {
         }
     }
     if (course.password) {
-        text_html += "<br />" + "Password: " + course.password + "<br />";
+        text_html += "<br /> <br />" + " <pre> Password: " + course.password + " </pre>";
     }
+    text_html += "<br /> <br />";
     text_html += "<button name =\"" + courseId + "\" id=\"create\" class=\"btn btn-primary\">Create Exercise</button>";
-    text_html += "<button name =\"" + courseId + "\" id=\"download\" class=\"btn btn-primary\">Dowload Grades</button>";
-    text_html += "<button name =\"" + courseId + "\" id=\"edit\" class=\"btn btn-primary\">Edit Course</button>";
-    text_html += "<button name =\"" + courseId + "\" id=\"delete\" class=\"btn btn-primary\">Delete Course</button>"
+    text_html += "<button name =\"" + courseId + "\" id=\"download\" class=\"btn btn-success\">Dowload Grades</button>";
+    text_html += "<button name =\"" + courseId + "\" id=\"edit\" class=\"btn btn-warning\">Edit Course</button>";
+    text_html += "<button name =\"" + courseId + "\" id=\"delete\" class=\"btn btn-danger\">Delete Course</button>"
     $newPanel.find(".panel-body").append(text_html);
     $("#accordion").append($newPanel.fadeIn());
+    loadUserByOwner(usersMap, coursesMap);
 }
 
 $('body').on('click', '#exercise', function (e) {
@@ -121,22 +126,55 @@ $('body').on('click', '#create', function (e) {
     localStorage.setItem("course", JSON.stringify(course));
     localStorage.setItem("courseId", JSON.stringify(courseId));
     document.location.href = "createEx.html";
-    console.log("create" + courseId);
 });
 
+/**
+ * This function is called when the admin clicks "Download grades".
+ */
 $('body').on('click', '#download', function (e) {
     let courseId = e.target.name;
-    console.log("download" + courseId);
+    let course = coursesMap.get(courseId);
+    let rows = [];
+    rows.push(["Exercise Name", "id", "name", "lastName", "grade", "url"]);
+    for (var i = 0; i < course.exercises.length; i++) {
+        let exercise = exercisesMap.get(course.exercises[i]);
+        for (var j = 1; j < exercise.grades.gradeObj.length; j++) {
+            submission = exercise.grades.gradeObj[j];
+            let user = usersMap.get(submission.id);
+            let row = [];
+            row.push(exercise.name);
+            row.push(user.id);
+            row.push(user.name);
+            row.push(user.lastName);
+            row.push(submission.grade);
+            row.push(submission.url);
+            rows.push(row);
+        }
+    }
+    let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+    var encodedUri = encodeURI(csvContent);
+    window.open(encodedUri);
 });
 
+/**
+ * Can change the name of the course or the password.
+ */
 $('body').on('click', '#edit', function (e) {
     let courseId = e.target.name;
-    console.log("edit" + courseId);
+    let course = coursesMap.get(courseId);
+    var newName = prompt("New name here:", course.name);
+    var newPassword = prompt("New password here:", course.password);
+    course.name = newName;
+    course.password = newPassword;
+    editCourse(course, courseId)
+    document.location.href = "home.html";
+
 });
 
 $('body').on('click', '#delete', function (e) {
     let courseId = e.target.name;
-    console.log("delete" + courseId);
+    deleteCourseById(courseId);
+    document.location.href = "manageCourses.html";
 });
 
 function onOptionChange() {
