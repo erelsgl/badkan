@@ -17,6 +17,10 @@
   <script src='library/jquery-3.2.1.min.js'></script>
   <script src='util/utils.js'></script>
   <script src='util/collaps.js'></script>
+  
+  <script type="text/javascript" src="objects/Penality.js"></script>
+  <script type="text/javascript" src="objects/Deadline.js"></script>
+
   <script type="text/javascript" src="objects/Grade.js"></script>
   <script type="text/javascript" src="objects/Grades.js"></script>
   <script type="text/javascript" src="util/Sanitize.js"></script>
@@ -37,11 +41,6 @@
 
     <!-- input. -->
     <form id="form">
-      <ul class="nav nav-pills">
-        <li class="active"><a data-toggle="pill" href="#home">GitLab clone</a></li>
-        <li><a data-toggle="pill" href="#menu1">Zip file</a></li>
-      </ul>
-
       <div class="form-group">
         <label for="usr">Name:</label>
         <input type="text" class="form-control" id="exName" placeholder="Enter a name for the exercise" /> <br />
@@ -60,7 +59,12 @@
         <textarea class="form-control" rows="10" id="exEx" name="comment"
           placeholder="Enter an example for the exercise"></textarea>
       </div>
-      
+
+      <ul class="nav nav-pills">
+        <li class="active"><a data-toggle="pill" href="#home">GitLab clone</a></li>
+        <li><a data-toggle="pill" href="#menu1">Zip file</a></li>
+      </ul>
+
       <div class="tab-content">
         <div id="home" class="tab-pane fade in active">
 
@@ -98,14 +102,103 @@
         </div>
 
         <div id="menu1" class="tab-pane fade">
-            <br />
-            <label for="usr">Select a zip file with the grading system:</label>
-            <input type="file" id="filename" />
+          <br />
+          <label for="usr">Select a zip file with the grading system:</label>
+          <input type="file" id="filename" />
         </div>
 
+        <br />
 
-        <!-- button. -->
-        <button id="btnConfirm" type="button" class="btn btn-primary">Confirm</button>
+
+
+
+
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-default template">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                  ADD DEADLINE.
+                </a>
+              </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+              <div class="panel-body">
+                Deadline: <input type="date" name="dealine" id="deadline">
+                <div class="form-group row">
+
+                  <div style="width: 100%; overflow: hidden;">
+
+                    <div class="col-xs-3" style="width: 300px; float: left;">
+                      <label for="ex1">Penality 1:</label> <br />
+                      Days late: <input type="number" class="form-control" id="penalityLate1"
+                        placeholder="Enter the number of days late" />
+                      Fewer point: <input type="number" class="form-control" id="penalityGrade1"
+                        placeholder="Enter the number of fewer point" />
+                    </div>
+
+                    <div class="col-xs-3" style="margin-left: 320px;">
+                      <label for="ex1">Penality 2:</label> <br />
+                      Days late: <input type="number" class="form-control" id="penalityLate2"
+                        placeholder="Enter the number of days late" />
+                      Fewer point: <input type="number" class="form-control" id="penalityGrade2"
+                        placeholder="Enter the number of fewer point" />
+
+                    </div>
+                  </div>
+
+                  <br />
+
+                  <div id="3-4" style="width: 100%; overflow: hidden; display: none;">
+
+                    <div class="col-xs-3" style="width: 300px; float: left;">
+                      <label for="ex1">Penality 3:</label> <br />
+                      Days late: <input type="number" class="form-control" id="penalityLate3"
+                        placeholder="Enter the number of days late" />
+                      Fewer point: <input type="number" class="form-control" id="penalityGrade3"
+                        placeholder="Enter the number of fewer point" />
+                    </div>
+
+                    <div class="col-xs-3" style="margin-left: 320px;">
+                      <label for="ex1">Penality 4:</label> <br />
+                      Days late: <input type="number" class="form-control" id="penalityLate4"
+                        placeholder="Enter the number of days late" />
+                      Fewer point: <input type="number" class="form-control" id="penalityGrade4"
+                        placeholder="Enter the number of fewer point" />
+                    </div>
+                  </div>
+                  <br />
+
+                  <div id="5-6" style="width: 100%; overflow: hidden; display: none;">
+
+                    <div class="col-xs-3" style="width: 300px; float: left;">
+                      <label for="ex1">Penality 5:</label> <br />
+                      Days late: <input type="number" class="form-control" id="penalityLate5"
+                        placeholder="Enter the number of days late" />
+                      Fewer point: <input type="number" class="form-control" id="penalityGrade5"
+                        placeholder="Enter the number of fewer point" />
+                    </div>
+
+                    <div class="col-xs-3" style="margin-left: 320px;">
+                      <label for="ex1">Penality 6:</label> <br />
+                      Days late: <input type="number" class="form-control" id="penalityLate6"
+                        placeholder="Enter the number of days late" />
+                      Fewer point: <input type="number" class="form-control" id="penalityGrade6"
+                        placeholder="Enter the number of fewer point" />
+                    </div>
+                  </div>
+
+                  <br />
+                  <div style="width: 100%; overflow: hidden;">
+                  <button id="morePenalities" type="button" class="btn btn-primary" style="width: 100%; float: left;">Hide/Show penalities</button>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- button. -->
+          <button id="btnConfirm" type="button" class="btn btn-primary">Confirm</button>
 
     </form>
   </div>

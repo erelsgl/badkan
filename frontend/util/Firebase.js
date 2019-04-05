@@ -141,6 +141,7 @@ function incrementCreatedExWithoutCommingHome(userId, homeUser) {
  */
 function incrementCreatedExAndSubmitCourse(userId, homeUser) {
   homeUser.createdEx++;
+  localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
   writeUserDataAndSubmitCourse(homeUser, userId);
 }
 

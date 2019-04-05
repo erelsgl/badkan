@@ -6,7 +6,6 @@
 var BACKEND_PORTS = [5670];
 var BACKEND_FILE_PORTS = [9000];
 
-var grade = 0;  // The grade by default.
 var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));  // The current user.
 
 document.getElementById("currentId").value = homeUser.id;  // The country id of the current user.
@@ -17,6 +16,11 @@ if (!exercise)
   exercise = "multiply"; // default exercise
 var ex = JSON.parse(localStorage.getItem("exercise"));
 var selectedValue = JSON.parse(localStorage.getItem("selectedValue"));
+
+// TODO FINISH HERE.
+
+var grade = 0 - isPenalized(ex.deadline);  // The grade by default.
+
 $("#exercise").html(ex.name);
 
 /**

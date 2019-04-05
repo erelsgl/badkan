@@ -169,10 +169,16 @@ function registered(key, course) {
 
 $('body').on('click', '#solve', function (e) {
   let exerciseId = e.target.name;
-  localStorage.setItem("exercise", JSON.stringify(exercisesMap.get(exerciseId)));
-  localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
-  document.location.href = "badkan.html?exercise=" + exerciseId;
-  console.log("hi");
+  let exercise = exercisesMap.get(exerciseId);
+  console.log(exercise);
+  if (isOpen(exercise.deadline)) {
+    localStorage.setItem("exercise", JSON.stringify(exercise));
+    localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
+    document.location.href = "badkan.html?exercise=" + exerciseId;
+  }
+  else {
+    alert("The deadline for this exercise is over.")
+  }
 });
 
 $('body').on('click', '#register', function (e) {

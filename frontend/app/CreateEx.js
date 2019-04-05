@@ -5,10 +5,23 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
   const name = escapeHtml(document.getElementById("exName").value);
   const descr = escapeHtml(document.getElementById("exDescr").value);
   const example = escapeHtml(document.getElementById("exEx").value);
+
+  const date = document.getElementById("deadline").value;
+  let penalities = [];
+  for (var i = 1; i < 7; i++) {
+    if (document.getElementById("penalityLate" + i).value) {
+      let late = document.getElementById("penalityLate" + i).value;
+      let point = document.getElementById("penalityGrade" + i).value;
+      penalities.push(new Penality(late, point));
+    }
+  }
+
+  let deadline = new Deadline(date, penalities);
+
   if ($('.nav-pills .active').text() === 'Zip file') {
     var file = document.getElementById('filename').files[0];
     if (checkEmptyFieldsFile(name, descr, example, file)) {
-      uploadExerciseFile(name, descr, example, file);
+      uploadExerciseFile(name, descr, example, file, deadline);
     }
   }
   else {
@@ -17,7 +30,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
     const username = escapeHtml(document.getElementById("user").value);
     const pass = escapeHtml(document.getElementById("pass").value);
     if (checkEmptyFieldsGit(name, descr, example, link, exFolder, username, pass)) {
-      uploadExerciseGit(name, descr, example, link, username, pass, exFolder);
+     uploadExerciseGit(name, descr, example, link, username, pass, exFolder, deadline);
     }
   }
 });
@@ -43,7 +56,6 @@ function checkEmptyFieldsFile(name, descr, example, file) {
 }
 
 function editCourseCreate(exerciseId) {
-  console.log("hello");
   let courseId = JSON.parse(localStorage.getItem("courseId"));
   let course = JSON.parse(localStorage.getItem("course"));
   course.exercises.push(exerciseId);
@@ -71,27 +83,27 @@ document.getElementById("btnHelp").addEventListener('click', e => {
  * @param {String} pass 
  * @param {String} exFolder 
  */
-function uploadExerciseGit(name, descr, example, link, username, pass, exFolder) {
+function uploadExerciseGit(name, descr, example, link, username, pass, exFolder, deadline) {
   var user = firebase.auth().currentUser;
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   folderName = user.uid + "_" + homeUser.createdEx;
   sendLinkWEBSOCKET(link, folderName, username, pass, exFolder);
   let grade = new Grade("id", 90, "url");
   let grades = new Grades([grade]);
-  let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades);
+  let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades, deadline);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName)
 }
 
-function uploadExerciseFile(name, descr, example, file) {
+function uploadExerciseFile(name, descr, example, file, deadline) {
   var user = firebase.auth().currentUser;
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   folderName = user.uid + "_" + homeUser.createdEx;
   sendFileHTTP(file, folderName)
   let grade = new Grade("id", 90, "url");
   let grades = new Grades([grade]);
-  let exercise = new Exercise(name, descr, example, user.uid, "zip", "", grades);
+  let exercise = new Exercise(name, descr, example, user.uid, "zip", "", grades, deadline);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName);
@@ -167,3 +179,15 @@ function sendLinkWEBSOCKET(link, folderName, username, pass, exFolder) {
   }
   return false;
 }
+
+
+document.getElementById("morePenalities").addEventListener('click', e => {
+  if (document.getElementById("3-4").style.display === 'block') {
+    document.getElementById("3-4").style.display = 'none';
+    document.getElementById("5-6").style.display = 'none';
+  }
+  else {
+    document.getElementById("3-4").style.display = 'block';
+    document.getElementById("5-6").style.display = 'block';
+  }
+});
