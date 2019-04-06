@@ -115,9 +115,23 @@ function addCourseHTML(courseId, course) {
     loadUserByOwner(usersMap, coursesMap);
 }
 
+/**
+ * Here the user is redirected into a new page "viewExercise".
+ * 
+ * From there, he can:
+ * - Edit the exercise.
+ * - Run a code of any user of all of them.
+ * - Read and edit any file of any user.
+ * - Run the moss command.
+ * - dl the summary of the input/output of the student.
+ * - optional: dl the grade of the exercise.
+ */
 $('body').on('click', '#exercise', function (e) {
     let exerciseId = e.target.name;
-    console.log("exercise" + exerciseId);
+    let exercise = exercisesMap.get(exerciseId);
+    localStorage.setItem("exercise", JSON.stringify(exercise));
+    localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
+    document.location.href = "viewExercise.html";
 });
 
 $('body').on('click', '#create', function (e) {
@@ -137,18 +151,20 @@ $('body').on('click', '#download', function (e) {
     let rows = [];
     rows.push(["Exercise Name", "id", "name", "lastName", "grade", "url"]);
     for (var i = 0; i < course.exercises.length; i++) {
-        let exercise = exercisesMap.get(course.exercises[i]);
-        for (var j = 1; j < exercise.grades.gradeObj.length; j++) {
-            submission = exercise.grades.gradeObj[j];
-            let user = usersMap.get(submission.id);
-            let row = [];
-            row.push(exercise.name);
-            row.push(user.id);
-            row.push(user.name);
-            row.push(user.lastName);
-            row.push(submission.grade);
-            row.push(submission.url);
-            rows.push(row);
+        if (course.exercises[i] != 'dummyExerciseId') {
+            let exercise = exercisesMap.get(course.exercises[i]);
+            for (var j = 1; j < exercise.grades.gradeObj.length; j++) {
+                submission = exercise.grades.gradeObj[j];
+                let user = usersMap.get(submission.id);
+                let row = [];
+                row.push(exercise.name);
+                row.push(user.id);
+                row.push(user.name);
+                row.push(user.lastName);
+                row.push(submission.grade);
+                row.push(submission.url);
+                rows.push(row);
+            }
         }
     }
     let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
@@ -167,7 +183,7 @@ $('body').on('click', '#edit', function (e) {
     course.name = newName;
     course.password = newPassword;
     editCourse(course, courseId)
-    document.location.href = "home.html";
+    document.location.href = "manageCourses.html";
 
 });
 

@@ -5,7 +5,6 @@ class Deadline {
         this.penalities = penalities;
     }
 
-
 }
 
 /**
@@ -15,23 +14,18 @@ function isPenalized(deadline) {
     var currentTime = new Date();
     var finalDate = new Date(deadline.date);
     let sumPoint = 0;
-    for (var i =0; currentTime > finalDate || i < deadline.penalities.length; i++){
-        sumPoint += deadline.penalities[i].point
-        finalDate = finalDate.addDays(deadline.penalities[i].late);
+    for (var i = 0; currentTime > finalDate && i < deadline.penalities.length; i++) {
+        sumPoint += parseInt(deadline.penalities[i].point)
+        finalDate.setDate(finalDate.getDate() + parseInt(deadline.penalities[i].late));
     }
+    return sumPoint;
 }
 
 function isOpen(deadline) {
     var currentTime = new Date();
     var finalDate = new Date(deadline.date);
     for (var penality in deadline.penalities) {
-        finalDate = finalDate.addDays(deadline.penalities[penality].late);
+        finalDate.setDate(finalDate.getDate() + parseInt(deadline.penalities[penality].late));
     }
     return (currentTime < finalDate);
-}
-
-Date.prototype.addDays = function (days) {
-    var date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
 }

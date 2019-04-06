@@ -119,6 +119,18 @@ function notRegistered(key, course) {
       text_html += "Exercise name: " + exerciseObj.name + "<br />";
       text_html += "Exercise example: " + exerciseObj.example + "<br />";
       text_html += "Exercise description: " + exerciseObj.description + "<br />";
+      if (exerciseObj.deadline) {
+        text_html += "<br />";
+        text_html += "Exercise dealine: " + exerciseObj.deadline.date + "<br />";
+        let penalities = exerciseObj.deadline.penalities;
+        if (penalities) {
+          text_html += "<strong> Penalties </strong>: <br />";
+          for (var p = 0; p < penalities.length; p++) {
+            text_html += "Submitted with " + penalities[p].late +
+            " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
+          }
+        }
+      }
       text_html += "</pre>"
       text_html += "<br />";
     }
@@ -150,6 +162,18 @@ function registered(key, course) {
       text_html += "Exercise name: " + exerciseObj.name + "<br />";
       text_html += "Exercise example: " + exerciseObj.example + "<br />";
       text_html += "Exercise description: " + exerciseObj.description + "<br />";
+      if (exerciseObj.deadline) {
+        text_html += "<br />";
+        text_html += "Exercise dealine: " + exerciseObj.deadline.date + "<br />";
+        let penalities = exerciseObj.deadline.penalities;
+        if (penalities) {
+          text_html += "<strong> Penalties </strong>: <br />";
+          for (var p = 0; p < penalities.length; p++) {
+            text_html += "Submitted with " + penalities[p].late +
+            " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
+          }
+        }
+      }
       var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
       let grade = -1;
       for (var j = 0; j < homeUser.exerciseSolved.length; j++) {
@@ -170,14 +194,20 @@ function registered(key, course) {
 $('body').on('click', '#solve', function (e) {
   let exerciseId = e.target.name;
   let exercise = exercisesMap.get(exerciseId);
-  console.log(exercise);
-  if (isOpen(exercise.deadline)) {
+  if (exercise.deadline) {
+    if (isOpen(exercise.deadline)) {
+      localStorage.setItem("exercise", JSON.stringify(exercise));
+      localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
+      document.location.href = "badkan.html?exercise=" + exerciseId;
+    }
+    else {
+      alert("The deadline for this exercise is over.")
+    }
+  }
+  else {
     localStorage.setItem("exercise", JSON.stringify(exercise));
     localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
     document.location.href = "badkan.html?exercise=" + exerciseId;
-  }
-  else {
-    alert("The deadline for this exercise is over.")
   }
 });
 

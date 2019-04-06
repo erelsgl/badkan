@@ -18,8 +18,11 @@ var ex = JSON.parse(localStorage.getItem("exercise"));
 var selectedValue = JSON.parse(localStorage.getItem("selectedValue"));
 
 // TODO FINISH HERE.
-
-var grade = 0 - isPenalized(ex.deadline);  // The grade by default.
+let grade = 0;
+let penality = 0;
+if (ex.deadline) {
+penality = isPenalized(ex.deadline);  // The grade by default.
+}
 
 $("#exercise").html(ex.name);
 
@@ -115,7 +118,10 @@ function sendWebsocket(solution) {
     logServer("color:black; margin:0 1em 0 1em", event.data);
     // The line "Final Grade:<grade>" is written in server.py:check_submission
     if (event.data.includes("Final Grade:")) {
-      grade = event.data.substring(12, event.data.length);
+      grade = event.data.substring(12, event.data.length) - penality;
+      if (penality) {
+        alert("you grade is registered with a penalty of " + penality + " points.")
+      }
       uploadGrade(grade, giturl);
     }
   }

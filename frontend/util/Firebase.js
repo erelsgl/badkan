@@ -20,19 +20,6 @@ function writeUserData(user, userId) {
 }
 
 /**
- * This method upload the user in firebase.
- * @param {user} user 
- * @param {String} userId 
- */
-function writeUserDataAdmin(user, userId) {
-  database.ref("users/" + userId).set({
-    user
-  }).then(function () {
-    document.location.href = "admin.html";
-  });
-}
-
-/**
  * This method upload the user on firebase and then submit the form.
  * @param {user} user 
  * @param {String} userId 
@@ -57,20 +44,6 @@ function writeUserDataAndSubmitCourse(user, userId) {
   }).then(function () {
     document.getElementById("form").submit();
     document.location.href = "manageCourses.html";
-  });
-}
-
-/**
- * This method upload the user on firebase and then submit the form.
- * @param {user} user 
- * @param {String} userId 
- */
-function writeUserDataAndSubmitAdmin(user, userId) {
-  database.ref("users/" + userId).set({
-    user
-  }).then(function () {
-    document.getElementById("form").submit();
-    document.location.href = "admin.html";
   });
 }
 
@@ -153,7 +126,7 @@ function incrementCreatedExAndSubmitCourse(userId, homeUser) {
 function incrementDeletedEx(userId, homeUser) {
   console.log("increment delete");
   homeUser.deletedEx++;
-  writeUserDataAdmin(homeUser, userId);
+  writeUserData(homeUser, userId);
 }
 
 /**
