@@ -131,7 +131,8 @@ $('body').on('click', '#exercise', function (e) {
     let exercise = exercisesMap.get(exerciseId);
     localStorage.setItem("exercise", JSON.stringify(exercise));
     localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
-    document.location.href = "viewExercise.html";
+    localStorage.setItem("usersMap", JSON.stringify(Array.from(usersMap.entries())));
+    document.location.href = "viewExercise.html";    
 });
 
 $('body').on('click', '#create', function (e) {

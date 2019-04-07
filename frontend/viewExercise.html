@@ -28,57 +28,81 @@
 </head>
 
 <body>
-<a class='home' href="home.html">Badkan Home</a>
-  <div class="container">
-    <h1>Edit Exercise</h1>
+  <a class='home' href="home.html">Badkan Home</a>
 
-    <!-- input. -->
-    <div class="form-group">
-      <label for="exName">Name:</label>
-      <input type="text" class="form-control" id="exName" />
+  <h1>View exercise <b><span id="exercise"></span></b> </h1>
+  <br />
+
+  <div class="panel-group" id="accordion">
+    <div class="panel panel-default template">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+            Edit Exercise
+          </a>
+        </h4>
+      </div>
+      <div id="collapseThree" class="panel-collapse collapse">
+        <div class="panel-body">
+          <div class="container">
+            <!-- input. -->
+            <div class="form-group">
+              <label for="exName">Name:</label>
+              <input type="text" class="form-control" id="exName" />
+            </div>
+            <!-- test area. -->
+            <div class="form-group">
+              <label for="exDescr">Description:</label>
+              <textarea class="form-control" rows="10" id="exDescr" name="comment" form="usrform"></textarea>
+            </div>
+            <!-- text area. -->
+            <div class="form-group">
+              <label for="exEx">Example:</label>
+              <textarea class="form-control" rows="10" id="exEx" name="comment" form="usrform"> </textarea>
+            </div>
+            <div class="form-group">
+              <label for="link">GitLab repository:</label>
+              <input type="text" class="form-control" id="link"
+                placeholder="Enter here a clone-link to a repository in GitLab. It must begin with https: and end with .git" />
+              <br />
+            </div>
+            <!-- input. -->
+            <div class="form-group">
+              <label for="exFolder">Exercise folder:</label>
+              <input type="text" class="form-control" id="exFolder"
+                placeholder="Enter here a subfolder of the repository where the exercise files are located. Must be accurate." />
+              <br />
+            </div>
+            <div class="form-group">
+              NOTE: To change the exercise grader,
+              push the changes to your GitLab repository,
+              and then click the "Save changes" button below.
+              The system will automatically pull the changes from your repository.
+            </div>
+            <!-- button. -->
+            <button id="btnEdit" type="button" class="btn btn-primary">Save changes &amp; pull</button>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <!-- test area. -->
-    <div class="form-group">
-      <label for="exDescr">Description:</label>
-      <textarea class="form-control" rows="10" id="exDescr" name="comment" form="usrform"></textarea>
-    </div>
-
-    <!-- text area. -->
-    <div class="form-group">
-      <label for="exEx">Example:</label>
-      <textarea class="form-control" rows="10" id="exEx" name="comment" form="usrform"> </textarea>
-    </div>
-
-    <div class="form-group">
-      <label for="link">GitLab repository:</label>
-      <input type="text" class="form-control" id="link" placeholder="Enter here a clone-link to a repository in GitLab. It must begin with https: and end with .git"/> <br />
-    </div>
-
-    <!-- input. -->
-    <div class="form-group">
-      <label for="exFolder">Exercise folder:</label>
-      <input type="text" class="form-control" id="exFolder"  placeholder="Enter here a subfolder of the repository where the exercise files are located. Must be accurate."/> <br />
-    </div>
-
-    <div class="form-group">
-      NOTE: To change the exercise grader,
-      push the changes to your GitLab repository,
-      and then click the "Save changes" button below.
-      The system will automatically pull the changes from your repository.
-    </div>
-
-    <!-- button. -->
-    <button id="btnEdit" type="button" class="btn btn-primary">Save changes &amp; pull</button>
-
   </div>
+
+  <h2>Current submissions:</h2>
+  <pre>
+  <div id="submissions"></div>
+</pre>
+  <br />
+
+  <button id="btnRunAll" type="button" class="btn btn-warning">Run all submission</button>
+  <button id="btnMoss" type="button" class="btn btn-success">Moss command</button>
+  <button id="btnDlSummary" type="button" class="btn btn-primary">Download Summary</button>
 
   <!-- snackbar. -->
   <div id="emptyField">Please fill all the fields.</div>
   <div id="pullSuccess">We successfully pull the repository!</div>
 
 
-  <script type="text/javascript" src="app/EditEx.js"></script>
+  <script type="text/javascript" src="app/ViewExercise.js"></script>
 
 </body>
 

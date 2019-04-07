@@ -1,6 +1,18 @@
+/**
+* From there, he can:
+* - Edit the exercise.
+* - Run a code of any user of all of them.
+* - Read and edit any file of any user.
+* - Run the moss command.
+* - dl the summary of the input/output of the student.
+*/
+
 let exerciseId = JSON.parse(localStorage.getItem("selectedValue"));
 let exercise = JSON.parse(localStorage.getItem("exercise"));
+let usersMap =  new Map(JSON.parse(localStorage.getItem("usersMap")));
 
+
+$("#exercise").html(exercise.name);
 
 document.getElementById("exName").defaultValue = exercise.name
 document.getElementById("exDescr").defaultValue = exercise.description
@@ -9,6 +21,29 @@ document.getElementById("link").defaultValue = exercise.link
 document.getElementById("exFolder").defaultValue = exercise.exFolder
 document.getElementById("link").readOnly = true
 document.getElementById("exFolder").readOnly = true
+
+console.log(exercise.grades.gradeObj.length)
+
+let html_text = "";
+for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
+    html_text += 
+    "<button name =\"" + exercise.grades.gradeObj[i].id + "\" id=\"exercise\" class=\"btn btn-link\">" +
+    usersMap.get(exercise.grades.gradeObj[i].id).name + " " +
+    usersMap.get(exercise.grades.gradeObj[i].id).lastName + " " +
+    usersMap.get(exercise.grades.gradeObj[i].id).id +
+    "</button>";
+    html_text += "<br />";
+}
+
+$("#submissions").append(html_text);
+
+$('body').on('click', '#exercise', function (e) {
+    let userId = e.target.name;
+    let user = usersMap.get(userId);
+    localStorage.setItem("userId", JSON.stringify(userId));
+    localStorage.setItem("user", JSON.stringify(user));
+    document.location.href = "manageExercise.html";    
+});
 
 /**
  * BUTTON CONFIRM (SAVE CHANGES).
@@ -90,3 +125,5 @@ function sendLinkHTTP(folderName, exFolder) {
     }
     return false;
 }
+
+
