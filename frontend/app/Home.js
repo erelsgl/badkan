@@ -194,7 +194,7 @@ function registered(key, course) {
 $('body').on('click', '#solve', function (e) {
   let exerciseId = e.target.name;
   let exercise = exercisesMap.get(exerciseId);
-  if (exercise.deadline) {
+  if (exercise.deadline.date) {
     if (isOpen(exercise.deadline)) {
       localStorage.setItem("exercise", JSON.stringify(exercise));
       localStorage.setItem("selectedValue", JSON.stringify(exerciseId));

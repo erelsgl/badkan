@@ -6,32 +6,44 @@
 * - Run the moss command.
 * - dl the summary of the input/output of the student.
 */
-
 let exerciseId = JSON.parse(localStorage.getItem("selectedValue"));
 let exercise = JSON.parse(localStorage.getItem("exercise"));
-let usersMap =  new Map(JSON.parse(localStorage.getItem("usersMap")));
-
+let usersMap = new Map(JSON.parse(localStorage.getItem("usersMap")));
 
 $("#exercise").html(exercise.name);
 
 document.getElementById("exName").defaultValue = exercise.name
+document.getElementById("exNameZip").defaultValue = exercise.name
+
 document.getElementById("exDescr").defaultValue = exercise.description
+document.getElementById("exDescrZip").defaultValue = exercise.description
+
 document.getElementById("exEx").defaultValue = exercise.example
+document.getElementById("exExZip").defaultValue = exercise.example
+
 document.getElementById("link").defaultValue = exercise.link
 document.getElementById("exFolder").defaultValue = exercise.exFolder
 document.getElementById("link").readOnly = true
 document.getElementById("exFolder").readOnly = true
 
-console.log(exercise.grades.gradeObj.length)
+
+if (exercise.link == 'zip') {
+    document.getElementById("git").style.display = "none";
+    document.getElementById("zip").style.display = "block";
+}
+else {
+    document.getElementById("git").style.display = "block";
+    document.getElementById("zip").style.display = "none";
+}
 
 let html_text = "";
 for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
-    html_text += 
-    "<button name =\"" + exercise.grades.gradeObj[i].id + "\" id=\"exercise\" class=\"btn btn-link\">" +
-    usersMap.get(exercise.grades.gradeObj[i].id).name + " " +
-    usersMap.get(exercise.grades.gradeObj[i].id).lastName + " " +
-    usersMap.get(exercise.grades.gradeObj[i].id).id +
-    "</button>";
+    html_text +=
+        "<button name =\"" + exercise.grades.gradeObj[i].id + "\" id=\"exercise\" class=\"btn btn-link\">" +
+        usersMap.get(exercise.grades.gradeObj[i].id).name + " " +
+        usersMap.get(exercise.grades.gradeObj[i].id).lastName + " " +
+        usersMap.get(exercise.grades.gradeObj[i].id).id +
+        "</button>";
     html_text += "<br />";
 }
 
@@ -42,7 +54,17 @@ $('body').on('click', '#exercise', function (e) {
     let user = usersMap.get(userId);
     localStorage.setItem("userId", JSON.stringify(userId));
     localStorage.setItem("user", JSON.stringify(user));
-    document.location.href = "manageExercise.html";    
+    document.location.href = "manageExercise.html";
+});
+
+document.getElementById("btnEditZip").addEventListener('click', e => {
+    const name = escapeHtml(document.getElementById("exNameZip").value);
+    const descr = escapeHtml(document.getElementById("exDescrZip").value);
+    const example = escapeHtml(document.getElementById("exExZip").value);
+    var file = document.getElementById('filename').files[0];
+    if (checkEmptyFields(name, descr, example)) {
+        uploadExerciseFile(name, descr, example, file);
+    }
 });
 
 /**
@@ -78,15 +100,25 @@ function uploadExercise(name, descr, example) {
     // The ref of the folder must be PK.
     var user = firebase.auth().currentUser;
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
-    var folderName = JSON.parse(localStorage.getItem("selectedEx"));
-    sendLinkHTTP(folderName, ex.exFolder);
-    let exercise = new Exercise(name, descr, example, user.uid, ex.link, ex.exFolder, ex.grades);
+    sendLinkHTTP(exerciseId, exercise.exFolder);
+    let ex = new Exercise(name, descr, example, user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
-    writeExercise(exercise, folderName);
+    writeExercise(ex, exerciseId);
     pullSuccess.className = "show";
     setTimeout(function () { pullSuccess.className = pullSuccess.className.replace("show", ""); }, 2500);
 }
 
+function uploadExerciseFile(name, descr, example, file) {
+    // The ref of the folder must be PK.
+    var user = firebase.auth().currentUser;
+    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+    sendFileHTTP(exerciseId, file);
+    let ex = new Exercise(name, descr, example, user.uid, 'zip', "", exercise.grades, exercise.deadline);
+    incrementEditExWithoutCommingHome(user.uid, homeUser);
+    writeExercise(ex, exerciseId);
+    pullSuccess.className = "show";
+    setTimeout(function () { pullSuccess.className = pullSuccess.className.replace("show", ""); }, 2500);
+}
 /**
  * Send a push request on the backend server.
  * @param {string} folderName 
@@ -124,6 +156,32 @@ function sendLinkHTTP(folderName, exFolder) {
         logServer("color:black; margin:0 1em 0 1em", event.data);
     }
     return false;
+}
+
+function sendFileHTTP(folderName, file) {
+    var reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    var rawData = new ArrayBuffer();
+    reader.loadend = function () {
+    }
+    reader.onload = function (e) {
+        rawData = e.target.result;
+        // create the request
+        const xhr = new XMLHttpRequest();
+        var backendPort = getParameterByName("backend"); // in utils.js
+        if (!backendPort)
+            backendPort = 9000;
+        var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
+        xhr.open('POST', httpurl, true);
+        xhr.setRequestHeader('Accept-Language', folderName);  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+        xhr.setRequestHeader('Accept', 'create');  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                // success.
+            }
+        };
+        xhr.send(rawData);
+    }
 }
 
 

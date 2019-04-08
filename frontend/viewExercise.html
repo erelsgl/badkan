@@ -34,7 +34,7 @@
   <br />
 
   <div class="panel-group" id="accordion">
-    <div class="panel panel-default template">
+    <div class="panel panel-default template" >
       <div class="panel-heading">
         <h4 class="panel-title">
           <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
@@ -44,9 +44,12 @@
       </div>
       <div id="collapseThree" class="panel-collapse collapse">
         <div class="panel-body">
-          <div class="container">
+
+
+
+          <div class="container" id="git" style="display: none;">
             <!-- input. -->
-            <div class="form-group">
+            <div class="form-group" >
               <label for="exName">Name:</label>
               <input type="text" class="form-control" id="exName" />
             </div>
@@ -82,6 +85,36 @@
             <!-- button. -->
             <button id="btnEdit" type="button" class="btn btn-primary">Save changes &amp; pull</button>
           </div>
+
+
+          <div class="container" id="zip" style="display: none;">
+              <!-- input. -->
+              <div class="form-group" >
+                <label for="exNameZip">Name:</label>
+                <input type="text" class="form-control" id="exNameZip" />
+              </div>
+              <!-- test area. -->
+              <div class="form-group">
+                <label for="exDescrZip">Description:</label>
+                <textarea class="form-control" rows="10" id="exDescrZip" name="comment" form="usrform"></textarea>
+              </div>
+              <!-- text area. -->
+              <div class="form-group">
+                <label for="exExZip">Example:</label>
+                <textarea class="form-control" rows="10" id="exExZip" name="comment" form="usrform"> </textarea>
+              </div>
+
+              <div class="form-group">
+                  <label for="usr">Select a zip file with the grading system:</label>
+                  <input type="file" id="filename" />
+              </div>
+              <!-- Here input the new file. -->
+
+              <!-- button. -->
+              <button id="btnEditZip" type="button" class="btn btn-primary">Save changes</button>
+            </div>
+
+
         </div>
       </div>
     </div>
@@ -99,7 +132,7 @@
 
   <!-- snackbar. -->
   <div id="emptyField">Please fill all the fields.</div>
-  <div id="pullSuccess">We successfully pull the repository!</div>
+  <div id="pullSuccess">We successfully edit the exercise!</div>
 
 
   <script type="text/javascript" src="app/ViewExercise.js"></script>

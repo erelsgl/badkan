@@ -30,7 +30,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
     const username = escapeHtml(document.getElementById("user").value);
     const pass = escapeHtml(document.getElementById("pass").value);
     if (checkEmptyFieldsGit(name, descr, example, link, exFolder, username, pass)) {
-     uploadExerciseGit(name, descr, example, link, username, pass, exFolder, deadline);
+      uploadExerciseGit(name, descr, example, link, username, pass, exFolder, deadline);
     }
   }
 });
