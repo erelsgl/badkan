@@ -66,6 +66,35 @@ async def dealing_with_url(git_url, websocket, owner_firebase_id, exercise):
         await tee(websocket, line)
     await proc.wait()
 
+async def run_for_admin(owner_firebase_id, exercise_id, websocket):
+    repository_folder = "/submissions/{}/{}".format(owner_firebase_id, exercise_id)
+    current_exercise_dir = os.path.realpath(EXERCISE_DIR + "/" + exercise_id)
+    await tee(websocket, "copying from {}".format(current_exercise_dir))
+    proc = await docker_command(["cp", current_exercise_dir, "badkan:{}/grading_files".format(repository_folder)])
+    async for line in proc.stdout:  print(line)
+    await proc.wait()
+     # Grade the submission inside the docker container "badkan"
+    grade = None
+    move_command = "mv grading_files/* . && rm -rf grading_files"
+    TIMEOUT_SOFT = 10 # seconds
+    TIMEOUT_HARD = 20 # seconds
+    grade_command = "timeout -s 9 {} timeout {} nice -n 5 ./grade {} {}".format(TIMEOUT_HARD, TIMEOUT_SOFT, owner_firebase_id, exercise_id)
+    exitcode_command = "echo Exit code: $?"
+    combined_command = "{} && {} ; {}".format(move_command, grade_command, exitcode_command)
+    proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
+
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        await tee(websocket, line)
+        matches = GRADE_REGEXP.search(line)
+        if matches is not None:
+            grade = matches.group(1)
+            await tee(websocket, "Final Grade: " + grade)
+                    # This line is read at app/Badkan.js, in websocket.onmessage.
+    await proc.wait()
+    if grade is None:
+        await tee(websocket, "Final Grade: 0")
+
 
 async def check_submission(websocket:object, submission:dict):
     """
@@ -99,7 +128,6 @@ async def check_submission(websocket:object, submission:dict):
     # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
     current_exercise_dir = os.path.realpath(EXERCISE_DIR + "/" + exercise)
     await tee(websocket, "copying from {}".format(current_exercise_dir))
-    print("hello")
     proc = await docker_command(["cp", current_exercise_dir, "badkan:{}/grading_files".format(repository_folder)])
     async for line in proc.stdout:  print(line)
     await proc.wait()
@@ -166,12 +194,19 @@ async def run(websocket, path):
     submission_json = await websocket.recv()   # returns a string
     print("< {} ".format(submission_json))
     submission = json.loads(submission_json)   # converts the string to a python dict
-    if submission_json[2] == 'g':
+
+    target = submission["target"]  # The target fields is mandatory for all websocket protocol we use.
+
+    if target == 'load_ex':
         await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
-    elif submission_json[3] == 'o':
+    elif target == 'edit_ex':
         await edit_ex(submission["folderName"], submission["exFolder"])
-    elif submission_json[2] == 'd':
+    elif target == 'delete_ex':
         await delete_ex(submission["delete_exercise"])
+    elif target == 'run_admin':
+        await run_for_admin(submission["owner_firebase_id"], submission["exercise_id"], websocket)
+     elif target == 'load_project':
+        await load_project(submission["owner_firebase_id"], submission["exercise_id"], websocket)
     else:
         await check_submission(websocket, submission)
     print ("> Closing connection")

@@ -82,6 +82,7 @@ function sendWebsocket(solution) {
   const collab1Id = escapeHtml(document.getElementById("collab1").value);
   const collab2Id = escapeHtml(document.getElementById("collab2").value);
   var submission_json = JSON.stringify({
+    target: "check_submission",
     exercise: exercise,
     solution: solution,
     ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,

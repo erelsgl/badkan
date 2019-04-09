@@ -130,6 +130,7 @@ function sendLinkHTTP(folderName, exFolder) {
         backendPort = 5670; // default port - same as in ../server.py
     var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
     var submission_json = JSON.stringify({
+        target: "edit_ex",
         folderName: folderName,
         exFolder: exFolder,
     });

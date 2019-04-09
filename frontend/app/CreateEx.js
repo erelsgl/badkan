@@ -149,6 +149,7 @@ function sendLinkWEBSOCKET(link, folderName, username, pass, exFolder) {
     backendPort = 5670; // default port - same as in ../server.py
   var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
   var submission_json = JSON.stringify({
+    target: "load_ex",
     git_url: link,
     folderName: folderName,
     username: username,
