@@ -42,8 +42,7 @@ function writeUserDataAndSubmitCourse(user, userId) {
   database.ref("users/" + userId).set({
     user
   }).then(function () {
-    document.getElementById("form").submit();
-    document.location.href = "manageCourses.html";
+    console.log("success")
   });
 }
 

@@ -93,7 +93,8 @@ function uploadExerciseGit(name, descr, example, link, username, pass, exFolder,
   let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades, deadline);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
-  editCourseCreate(folderName)
+  editCourseCreate(folderName);
+  uploadPdf(folderName);
 }
 
 function uploadExerciseFile(name, descr, example, file, deadline) {
@@ -107,6 +108,7 @@ function uploadExerciseFile(name, descr, example, file, deadline) {
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName);
+  uploadPdf(folderName);
 }
 
 function sendFileHTTP(file, folderName) {
@@ -192,3 +194,21 @@ document.getElementById("morePenalities").addEventListener('click', e => {
     document.getElementById("5-6").style.display = 'block';
   }
 });
+
+
+function uploadPdf(exerciseId) {
+  // If a pdf exist:
+  var file = document.getElementById('instruction').files[0];
+  if (file) {
+    storage.ref(exerciseId).put(file).then(function (snapshot) {
+      document.getElementById("form").submit();
+      document.location.href = "manageCourses.html";
+    }).catch(error => {
+      alert(error)
+    })
+  }
+  else {
+    document.getElementById("form").submit();
+    document.location.href = "manageCourses.html";
+  }
+}

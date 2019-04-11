@@ -205,7 +205,7 @@ async def run(websocket, path):
         await delete_ex(submission["delete_exercise"])
     elif target == 'run_admin':
         await run_for_admin(submission["owner_firebase_id"], submission["exercise_id"], websocket)
-     elif target == 'load_project':
+    elif target == 'load_project':
         await load_project(submission["owner_firebase_id"], submission["exercise_id"], websocket)
     else:
         await check_submission(websocket, submission)

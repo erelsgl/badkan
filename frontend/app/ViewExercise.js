@@ -47,7 +47,13 @@ for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
     html_text += "<br />";
 }
 
-$("#submissions").append(html_text);
+if (html_text) {
+    $("#submissions").append(html_text);
+}
+else {
+    $("#submissions").append("There is no submission yet.");
+
+}
 
 $('body').on('click', '#exercise', function (e) {
     let userId = e.target.name;
@@ -63,7 +69,9 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
     const example = escapeHtml(document.getElementById("exExZip").value);
     var file = document.getElementById('filename').files[0];
     if (checkEmptyFields(name, descr, example)) {
+        var pdf = document.getElementById('instructionZIP').files[0];
         uploadExerciseFile(name, descr, example, file);
+        editPdf(pdf);
     }
 });
 
@@ -75,7 +83,9 @@ document.getElementById("btnEdit").addEventListener('click', e => {
     const descr = escapeHtml(document.getElementById("exDescr").value);
     const example = escapeHtml(document.getElementById("exEx").value);
     if (checkEmptyFields(name, descr, example)) {
+        var pdf = document.getElementById('instructionGIT').files[0];
         uploadExercise(name, descr, example);
+        editPdf(pdf);
     }
 });
 
@@ -104,20 +114,18 @@ function uploadExercise(name, descr, example) {
     let ex = new Exercise(name, descr, example, user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
-    pullSuccess.className = "show";
-    setTimeout(function () { pullSuccess.className = pullSuccess.className.replace("show", ""); }, 2500);
 }
 
 function uploadExerciseFile(name, descr, example, file) {
     // The ref of the folder must be PK.
     var user = firebase.auth().currentUser;
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
-    sendFileHTTP(exerciseId, file);
+    if (file) {
+        sendFileHTTP(exerciseId, file);
+    }
     let ex = new Exercise(name, descr, example, user.uid, 'zip', "", exercise.grades, exercise.deadline);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
-    pullSuccess.className = "show";
-    setTimeout(function () { pullSuccess.className = pullSuccess.className.replace("show", ""); }, 2500);
 }
 /**
  * Send a push request on the backend server.
@@ -182,6 +190,21 @@ function sendFileHTTP(folderName, file) {
             }
         };
         xhr.send(rawData);
+    }
+}
+
+function editPdf(file) {
+    if (file) {
+        storage.ref(exerciseId).put(file).then(function (snapshot) {
+            pullSuccess.className = "show";
+            setTimeout(function () { pullSuccess.className = pullSuccess.className.replace("show", ""); }, 2500);
+        }).catch(error => {
+            alert(error)
+        })
+    }
+    else {
+        pullSuccess.className = "show";
+            setTimeout(function () { pullSuccess.className = pullSuccess.className.replace("show", ""); }, 2500);
     }
 }
 

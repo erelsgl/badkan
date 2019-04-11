@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Edit Exercise</title>
+  <title>View Exercise</title>
 
   <!-- Import js. -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -20,21 +20,22 @@
   <script type="text/javascript" src="objects/Grade.js"></script>
   <script type="text/javascript" src="objects/Grades.js"></script>
   <script type="text/javascript" src="util/Sanitize.js"></script>
+  <script type="text/javascript" src="util/Loading.js"></script>
 
   <!-- Import css. -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="style/snackbar.css">
   <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="style/loading.css">
 </head>
 
 <body>
   <a class='home' href="home.html">Badkan Home</a>
-
   <h1>View exercise <b><span id="exercise"></span></b> </h1>
   <br />
 
   <div class="panel-group" id="accordion">
-    <div class="panel panel-default template" >
+    <div class="panel panel-default template">
       <div class="panel-heading">
         <h4 class="panel-title">
           <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
@@ -45,11 +46,9 @@
       <div id="collapseThree" class="panel-collapse collapse">
         <div class="panel-body">
 
-
-
           <div class="container" id="git" style="display: none;">
             <!-- input. -->
-            <div class="form-group" >
+            <div class="form-group">
               <label for="exName">Name:</label>
               <input type="text" class="form-control" id="exName" />
             </div>
@@ -82,38 +81,60 @@
               and then click the "Save changes" button below.
               The system will automatically pull the changes from your repository.
             </div>
+
+              <!-- input. -->
+              <div class="form-group">
+                <br />
+                <label for="usr">Exercise Instructions: (Note that if you're not uploading new files, the previous files will stay unchanged).</label>
+                <input type="file" id="instructionGIT" />
+              </div>
+
             <!-- button. -->
             <button id="btnEdit" type="button" class="btn btn-primary">Save changes &amp; pull</button>
           </div>
 
 
           <div class="container" id="zip" style="display: none;">
-              <!-- input. -->
-              <div class="form-group" >
-                <label for="exNameZip">Name:</label>
-                <input type="text" class="form-control" id="exNameZip" />
-              </div>
-              <!-- test area. -->
-              <div class="form-group">
-                <label for="exDescrZip">Description:</label>
-                <textarea class="form-control" rows="10" id="exDescrZip" name="comment" form="usrform"></textarea>
-              </div>
-              <!-- text area. -->
-              <div class="form-group">
-                <label for="exExZip">Example:</label>
-                <textarea class="form-control" rows="10" id="exExZip" name="comment" form="usrform"> </textarea>
-              </div>
-
-              <div class="form-group">
-                  <label for="usr">Select a zip file with the grading system:</label>
-                  <input type="file" id="filename" />
-              </div>
-              <!-- Here input the new file. -->
-
-              <!-- button. -->
-              <button id="btnEditZip" type="button" class="btn btn-primary">Save changes</button>
+            <h2>Note that if you're not uploading new files, the previous files will stay unchanged.</h2>
+            <!-- input. -->
+            <div class="form-group">
+              <label for="exNameZip">Name:</label>
+              <input type="text" class="form-control" id="exNameZip" />
+            </div>
+            <!-- test area. -->
+            <div class="form-group">
+              <label for="exDescrZip">Description:</label>
+              <textarea class="form-control" rows="10" id="exDescrZip" name="comment" form="usrform"></textarea>
+            </div>
+            <!-- text area. -->
+            <div class="form-group">
+              <label for="exExZip">Example:</label>
+              <textarea class="form-control" rows="10" id="exExZip" name="comment" form="usrform"> </textarea>
             </div>
 
+            <div class="form-group">
+              <label for="usr">Select a zip file with the grading system:</label>
+              <input type="file" id="filename" />
+            </div>
+            <!-- Here input the new file. -->
+
+             <!-- input. -->
+             <div class="form-group">
+              <br />
+              <label for="usr">Exercise Instructions: </label>
+              <input type="file" id="instructionZIP" />
+            </div>
+
+            <!-- button. -->
+            <button id="btnEditZip" type="button" class="btn btn-primary">Save changes</button>
+
+
+           
+
+
+
+
+          </div>
 
         </div>
       </div>

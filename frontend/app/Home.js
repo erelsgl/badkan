@@ -121,13 +121,13 @@ function notRegistered(key, course) {
       text_html += "Exercise description: " + exerciseObj.description + "<br />";
       if (exerciseObj.deadline) {
         text_html += "<br />";
-        text_html += "Exercise dealine: " + exerciseObj.deadline.date + "<br />";
+        text_html += "Exercise deadline: " + exerciseObj.deadline.date + "<br />";
         let penalities = exerciseObj.deadline.penalities;
         if (penalities) {
           text_html += "<strong> Penalties </strong>: <br />";
           for (var p = 0; p < penalities.length; p++) {
             text_html += "Submitted with " + penalities[p].late +
-            " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
+              " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
           }
         }
       }
@@ -164,13 +164,13 @@ function registered(key, course) {
       text_html += "Exercise description: " + exerciseObj.description + "<br />";
       if (exerciseObj.deadline) {
         text_html += "<br />";
-        text_html += "Exercise dealine: " + exerciseObj.deadline.date + "<br />";
+        text_html += "Exercise deadline: " + exerciseObj.deadline.date + "<br />";
         let penalities = exerciseObj.deadline.penalities;
         if (penalities) {
           text_html += "<strong> Penalties </strong>: <br />";
           for (var p = 0; p < penalities.length; p++) {
             text_html += "Submitted with " + penalities[p].late +
-            " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
+              " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
           }
         }
       }
@@ -181,7 +181,8 @@ function registered(key, course) {
           grade = homeUser.exerciseSolved[j].grade;
         }
       }
-      text_html += "My actual grade: " + grade + "<br />";
+      text_html += "My actual grade: " + grade + "<br /> <br />";
+      text_html += "<button name =\"" + exerciseId + "\" id=\"dl\" class=\"btn btn-link\"\">Download PDF</button>";
       text_html += "</pre>"
       text_html += "<button name =\"" + exerciseId + "\" id=\"solve\" class=\"btn btn-success\"\">Solve</button>";
       if (i != course.exercises.length - 1) { text_html += "<br /> <br />"; }
@@ -190,6 +191,16 @@ function registered(key, course) {
   $newPanel.find(".panel-body").append(text_html);
   $("#accordion").append($newPanel.fadeIn());
 }
+
+$('body').on('click', '#dl', function (e) {
+  let exerciseId = e.target.name;
+  const file = firebase.storage().ref().child(exerciseId);
+  file.getDownloadURL().then((url) => {
+    window.open(url); 
+  }).catch(function (error) {
+    alert("There is no PDF for this exercise!")
+  })
+});
 
 $('body').on('click', '#solve', function (e) {
   let exerciseId = e.target.name;
