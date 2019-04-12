@@ -97,6 +97,13 @@
                 <br />
               </div>
 
+               <!-- input. -->
+               <div class="form-group">
+                <label for="usr">The main file: (required)</label>
+                <input type="text" class="form-control" id="main" placeholder="Main, Ex01, a..." />
+                <br />
+              </div>
+
               <h5>
                 By default, on this template, the program should read its input from standard input.
                 But you can choose a file as input e.g: input.txt, input.csv...
@@ -119,6 +126,52 @@
                 <br />
               </div>
 
+              <!-- input. -->
+              <div class="form-group">
+                <label for="usr">Number of test(s): </label>
+                <input type="number" class="form-control" id="tests" />
+                <br />
+              </div>
+
+              <div id= "coef" class="form-group">
+                <label for="usr">Number of test(s): (required)</label>
+                <br />
+                <input type="radio" name="coeff" value="same" checked="checked" onclick="hide();">
+                Same coefficients for each test<br>
+                <input type="radio" name="coeff" value="custo" onclick="show();">
+                Customize the coefficients<br>
+                <br />
+              </div>
+
+              <!-- text area. -->
+              <div id=coefficient class="form-group" style="visibility: none;">
+                <label for="comment">coefficients:  (required)</label>
+                <h5>
+                  Please input the coefficient like in the placeholder. <br />
+                  That is, you need to write the :number of tests: lines with numbers between 0 and 1. <br />
+                  Note: the sum of all the coefficients must be 1.
+                </h5>
+                <textarea class="form-control" rows="10" id="coefficients" name="comment"
+                  placeholder="0.2 &#x0a;0.3 &#x0a;..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <h5>
+                  <strong>
+                    Once you finish to fill all the field, click on the button "Download the Grade file" <br />
+                    Then, in the same folder, put the grade file provided by the website with all the input.io output.io files.
+
+                    For each test a input-1.io and output-1.io file is required. When -1 is the number of the test. (from 1 to :number of test:)<br /> <br />
+
+                    Finally, compress the folder in a zip file or create a GitLab repository with all the files in a folder and you're able to upload your exercise.
+
+                  </strong>
+                </h5>
+
+                <button id="btnDlGrade" type="button" class="btn btn-primary">Download the Grade file</button>
+
+
+              </div>
             </div>
           </div>
         </div>
@@ -272,6 +325,8 @@
   <div id="emptyField">Please fill all the fields.</div>
 
   <script type="text/javascript" src="app/CreateEx.js"></script>
+  <script type="text/javascript" src="util/createGradeFile.js"></script>
+
 
 </body>
 
