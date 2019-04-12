@@ -94,7 +94,7 @@ async def check_submission(websocket:object, submission:dict):
 
     # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
     await tee(websocket, "copying from {}/. to badkan:{}/".format(current_exercise_folder,repository_folder))
-    proc = await docker_command(["cp", current_exercise_folder+"/.", "badkan:{}".format(repository_folder)])
+    proc = await docker_command(["cp", current_exercise_folder+"/.", "badkan:{}/".format(repository_folder)])
     async for line in proc.stdout:  print(line)
     await proc.wait()
 
