@@ -35,21 +35,6 @@ function refresh() {
   var userId = firebase.auth().currentUser.uid;
   loadCurrentUser(userId);   // Load current user data to localStorage. in file  util/Firebase.js
 }
-// /**
-//  * BUTTON SOLVEEX.
-//  * Send he user to the createEx page.
-//  */
-// document.getElementById("btnSolveEx").addEventListener('click', e => {
-//   document.location.href = "solveEx.html";
-// });
-
-// /**
-//  * BUTTON RECORDS.
-//  * Send he user to the createEx page.
-//  */
-// document.getElementById("records").addEventListener('click', e => {
-//   document.location.href = "records.html";
-// });
 
 /**
  * BUTTON MANAGE COURSE.

@@ -1,4 +1,5 @@
 var isCoef = false;
+document.getElementById("coefficient").style.display = "none";
 
 /**
 * BUTTON CONFIRM.
