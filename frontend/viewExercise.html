@@ -31,6 +31,7 @@
 
 <body>
   <a class='home' href="home.html">Badkan Home</a>
+  <div id="loading" class="loader"></div>
   <h1>View exercise <b><span id="exercise"></span></b> </h1>
   <br />
 
@@ -85,8 +86,9 @@
             <!-- input. -->
             <div class="form-group">
               <br />
-              <label for="usr">Exercise Instructions: (Note that if you're not uploading new files, the previous files
-                will stay unchanged).</label>
+              <label for="usr">Exercise Instructions: Note that if you're not uploading new files, the previous files
+                will stay unchanged. <br /> Note2: If you used our template, think about Download a new "grade"
+                file.</label>
               <input type="file" id="instructionGIT" />
             </div>
 
@@ -114,7 +116,8 @@
             </div>
 
             <div class="form-group">
-              <label for="usr">Select a zip file with the grading system:</label>
+              <label for="usr">Select a zip file with the grading system. <br />
+                Note: If you used our template, think about Download a new "grade" file.</label>
               <input type="file" id="filename" />
             </div>
             <!-- Here input the new file. -->
@@ -144,6 +147,10 @@
   <button id="btnRunAll" type="button" class="btn btn-warning">Run all submission</button>
   <button id="btnMoss" type="button" class="btn btn-success">Moss command</button>
   <button id="btnDlSummary" type="button" class="btn btn-primary">Download Summary</button>
+
+  <h2>Submission result</h2>
+  <div id='output' dir='ltr' style='border: dashed 1px green; margin: 10px; padding: 5px; font-family: courier'>
+  </div>
 
   <!-- snackbar. -->
   <div id="emptyField">Please fill all the fields.</div>

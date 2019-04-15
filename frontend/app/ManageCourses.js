@@ -113,6 +113,7 @@ function addCourseHTML(courseId, course) {
     $newPanel.find(".panel-body").append(text_html);
     $("#accordion").append($newPanel.fadeIn());
     loadUserByOwner(usersMap, coursesMap);
+    document.getElementById("loading").style.display = "none";
 }
 
 /**

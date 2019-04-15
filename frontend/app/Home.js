@@ -12,6 +12,7 @@ firebase.auth().onAuthStateChanged(user => {
     var userId = firebase.auth().currentUser.uid;
     loadCurrentUser(userId);   // Load current user data to localStorage. in file  util/Firebase.js
     flag = true;
+    localStorage.setItem("homeUserId", JSON.stringify(userId));
   }
 });
 

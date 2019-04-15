@@ -8,18 +8,9 @@ document.getElementById("btnDlGrade").addEventListener('click', e => {
     const numTest = escapeHtml(document.getElementById("tests").value);
     const input = escapeHtml(document.getElementById("input").value);
     const output = escapeHtml(document.getElementById("output").value);
-    if (isCoef) {
-        const coef = escapeHtml(document.getElementById("coefficients").value);
-        if (checkEmptyFieldsWithCoef(compiler, numTest, coef, main)) {
-            compiling(compiler);
-            makeGradeWithCoef(compiler, numTest, input, output, coef, main);
-        }
-    }
-    else {
-        if (checkEmptyFieldsWithoutCoef(compiler, numTest.main)) {
-            compiling(compiler);
-            makeGradeWithoutCoef(compiler, numTest, input, output, main);
-        }
+    if (checkEmptyFieldsWithoutCoef(compiler, numTest.main)) {
+        compiling(compiler);
+        makeGradeWithoutCoef(compiler, numTest, input, output, main);
     }
 });
 
@@ -27,17 +18,6 @@ document.getElementById("btnDlGrade").addEventListener('click', e => {
 function checkEmptyFieldsWithoutCoef(compiler, numTest, main) {
     var emptyField = document.getElementById("emptyField");
     if (compiler === "" || numTest === "" || main === "") {
-        emptyField.className = "show";
-        setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
-        return false;
-    }
-    return true;
-}
-
-
-function checkEmptyFieldsWithCoef(compiler, numTest, coef, main) {
-    var emptyField = document.getElementById("emptyField");
-    if (compiler === "" || numTest === "" || coef === "" || main === "") {
         emptyField.className = "show";
         setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
         return false;
@@ -112,10 +92,6 @@ function makeGradeWithoutCoef(compiler, numTest, input, output, main) {
 
     download(grade, "grade", "")
     grade = "";
-
-}
-
-function makeGradeWithCoef(compiler, numTest, input, output, coef, main) {
 
 }
 

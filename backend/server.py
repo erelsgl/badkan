@@ -95,6 +95,15 @@ async def run_for_admin(owner_firebase_id, exercise_id, websocket):
     if grade is None:
         await tee(websocket, "Final Grade: 0")
 
+async def run_all_submissions(exercise_id, users_map, websocket):
+    for user in users_map:
+        await tee(websocket, "THE GRADE FOR THE STUDENT WITH THE ID " + user)
+        await tee(websocket, "")
+        await run_for_admin(user, exercise_id, websocket)
+        await tee(websocket, "######################################")
+        await tee(websocket, "")
+        await tee(websocket, "")
+
 
 async def check_submission(websocket:object, submission:dict):
     """
@@ -205,8 +214,8 @@ async def run(websocket, path):
         await delete_ex(submission["delete_exercise"])
     elif target == 'run_admin':
         await run_for_admin(submission["owner_firebase_id"], submission["exercise_id"], websocket)
-    elif target == 'load_project':
-        await load_project(submission["owner_firebase_id"], submission["exercise_id"], websocket)
+    elif target == 'run_all':
+        await run_all_submissions(submission["exercise_id"], submission["users_map"], websocket)
     else:
         await check_submission(websocket, submission)
     print ("> Closing connection")

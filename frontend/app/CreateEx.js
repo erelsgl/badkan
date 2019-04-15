@@ -1,6 +1,3 @@
-var isCoef = false;
-document.getElementById("coefficient").style.display = "none";
-
 /**
 * BUTTON CONFIRM.
 */
@@ -215,16 +212,5 @@ function uploadPdf(exerciseId) {
     document.location.href = "manageCourses.html";
   }
 }
-
-function hide() {
-  isCoef = false;
-  document.getElementById("coefficient").style.display = "none";
-}
-
-function show() {
-  isCoef = true;
-  document.getElementById("coefficient").style.display = "block";
-}
-
 
 

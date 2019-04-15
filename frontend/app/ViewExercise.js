@@ -1,14 +1,21 @@
 /**
-* From there, he can:
-* - Edit the exercise.
-* - Run a code of any user of all of them.
-* - Read and edit any file of any user.
-* - Run the moss command.
-* - dl the summary of the input/output of the student.
-*/
+ * From there, he can:
+ * - Edit the exercise.
+ * - Run a code of any user of all of them.
+ * - Read and edit any file of any user.
+ * - Run the moss command.
+ * - dl the summary of the input/output of the student.
+ */
 let exerciseId = JSON.parse(localStorage.getItem("selectedValue"));
 let exercise = JSON.parse(localStorage.getItem("exercise"));
 let usersMap = new Map(JSON.parse(localStorage.getItem("usersMap")));
+
+let homeUserId = JSON.parse(localStorage.getItem("homeUserId"));
+if (exercise.ownerId != homeUserId) {
+    alert("You have no access to this page...");
+    document.location.href = "manageCourses.html";
+}
+
 
 $("#exercise").html(exercise.name);
 
@@ -26,12 +33,10 @@ document.getElementById("exFolder").defaultValue = exercise.exFolder
 document.getElementById("link").readOnly = true
 document.getElementById("exFolder").readOnly = true
 
-
 if (exercise.link == 'zip') {
     document.getElementById("git").style.display = "none";
     document.getElementById("zip").style.display = "block";
-}
-else {
+} else {
     document.getElementById("git").style.display = "block";
     document.getElementById("zip").style.display = "none";
 }
@@ -49,11 +54,12 @@ for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
 
 if (html_text) {
     $("#submissions").append(html_text);
-}
-else {
+} else {
     $("#submissions").append("There is no submission yet.");
-
 }
+
+document.getElementById("loading").style.display = "none";
+
 
 $('body').on('click', '#exercise', function (e) {
     let userId = e.target.name;
@@ -93,7 +99,9 @@ function checkEmptyFields(name, descr, example) {
     var emptyField = document.getElementById("emptyField");
     if (name === "" || descr === "" || example == "") {
         emptyField.className = "show";
-        setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
+        setTimeout(function () {
+            emptyField.className = emptyField.className.replace("show", "");
+        }, 2500);
         return false;
     }
     return true;
@@ -133,7 +141,7 @@ function uploadExerciseFile(name, descr, example, file) {
  * @param {string} exFolder 
  */
 function sendLinkHTTP(folderName, exFolder) {
-    var backendPort = getParameterByName("backend");     // in utils.js
+    var backendPort = getParameterByName("backend"); // in utils.js
     if (!backendPort)
         backendPort = 5670; // default port - same as in ../server.py
     var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
@@ -142,7 +150,7 @@ function sendLinkHTTP(folderName, exFolder) {
         folderName: folderName,
         exFolder: exFolder,
     });
-    logClient("color:#888", submission_json);  // in utils.js
+    logClient("color:#888", submission_json); // in utils.js
     var websocket = new WebSocket(websocketurl);
     websocket.onopen = (event) => {
         logServer("color:blue", "Submission starting!"); // in utils.js
@@ -171,8 +179,7 @@ function sendFileHTTP(folderName, file) {
     var reader = new FileReader();
     reader.readAsArrayBuffer(file);
     var rawData = new ArrayBuffer();
-    reader.loadend = function () {
-    }
+    reader.loadend = function () {}
     reader.onload = function (e) {
         rawData = e.target.result;
         // create the request
@@ -182,8 +189,8 @@ function sendFileHTTP(folderName, file) {
             backendPort = 9000;
         var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
         xhr.open('POST', httpurl, true);
-        xhr.setRequestHeader('Accept-Language', folderName);  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
-        xhr.setRequestHeader('Accept', 'create');  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+        xhr.setRequestHeader('Accept-Language', folderName); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+        xhr.setRequestHeader('Accept', 'create'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
         xhr.onreadystatechange = function () {
             if (this.readyState == 4) {
                 // success.
@@ -197,15 +204,56 @@ function editPdf(file) {
     if (file) {
         storage.ref(exerciseId).put(file).then(function (snapshot) {
             pullSuccess.className = "show";
-            setTimeout(function () { pullSuccess.className = pullSuccess.className.replace("show", ""); }, 2500);
+            setTimeout(function () {
+                pullSuccess.className = pullSuccess.className.replace("show", "");
+            }, 2500);
         }).catch(error => {
             alert(error)
         })
-    }
-    else {
+    } else {
         pullSuccess.className = "show";
-            setTimeout(function () { pullSuccess.className = pullSuccess.className.replace("show", ""); }, 2500);
+        setTimeout(function () {
+            pullSuccess.className = pullSuccess.className.replace("show", "");
+        }, 2500);
     }
 }
 
-
+document.getElementById("btnRunAll").addEventListener('click', e => {
+    var backendPort = getParameterByName("backend");     // in utils.js
+    if (!backendPort)
+        backendPort = 5670; // default port - same as in ../server.py
+    var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
+    let keys = Array.from( usersMap.keys() );
+    var submission_json = JSON.stringify({
+        target: "run_all",
+        users_map: keys,
+        exercise_id: exerciseId,
+    });
+    logClient("color:#888", submission_json); // in utils.js
+    var websocket = new WebSocket(websocketurl);
+    websocket.onopen = (event) => {
+        logServer("color:blue", "Submission starting!"); // in utils.js
+        logClient("color:green; font-style:italic", submission_json)
+        websocket.send(submission_json);
+    }
+    websocket.onmessage = (event) => {
+        console.log(event);
+    }
+    websocket.onclose = (event) => {
+        if (event.code === 1000) {
+            logServer("color:blue", "Submission completed!");
+        } else if (event.code === 1006)
+            logServer("color:red", "Connection closed abnormally!");
+        else
+            logServer("color:red", "Connection closed abnormally! Code=" + event.code + ". Reason=" + websocketCloseReason(event.code));
+        log("&nbsp;", "&nbsp;")
+    }
+    websocket.onerror = (event) => {
+        logServer("color:red", "Error in websocket.");
+    }
+    websocket.onmessage = (event) => {
+        logServer("color:black; margin:0 1em 0 1em", event.data);
+        // The line "Final Grade:<grade>" is written in server.py:check_submission
+    }
+    return false;
+});
