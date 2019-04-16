@@ -25,9 +25,6 @@ document.getElementById("exNameZip").defaultValue = exercise.name
 document.getElementById("exDescr").defaultValue = exercise.description
 document.getElementById("exDescrZip").defaultValue = exercise.description
 
-document.getElementById("exEx").defaultValue = exercise.example
-document.getElementById("exExZip").defaultValue = exercise.example
-
 document.getElementById("link").defaultValue = exercise.link
 document.getElementById("exFolder").defaultValue = exercise.exFolder
 document.getElementById("link").readOnly = true
@@ -72,11 +69,10 @@ $('body').on('click', '#exercise', function (e) {
 document.getElementById("btnEditZip").addEventListener('click', e => {
     const name = escapeHtml(document.getElementById("exNameZip").value);
     const descr = escapeHtml(document.getElementById("exDescrZip").value);
-    const example = escapeHtml(document.getElementById("exExZip").value);
     var file = document.getElementById('filename').files[0];
-    if (checkEmptyFields(name, descr, example)) {
+    if (checkEmptyFields(name, descr)) {
         var pdf = document.getElementById('instructionZIP').files[0];
-        uploadExerciseFile(name, descr, example, file);
+        uploadExerciseFile(name, descr, file);
         editPdf(pdf);
     }
 });
@@ -87,17 +83,16 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
 document.getElementById("btnEdit").addEventListener('click', e => {
     const name = escapeHtml(document.getElementById("exName").value);
     const descr = escapeHtml(document.getElementById("exDescr").value);
-    const example = escapeHtml(document.getElementById("exEx").value);
-    if (checkEmptyFields(name, descr, example)) {
+    if (checkEmptyFields(name, descr)) {
         var pdf = document.getElementById('instructionGIT').files[0];
-        uploadExercise(name, descr, example);
+        uploadExercise(name, descr);
         editPdf(pdf);
     }
 });
 
-function checkEmptyFields(name, descr, example) {
+function checkEmptyFields(name, descr) {
     var emptyField = document.getElementById("emptyField");
-    if (name === "" || descr === "" || example == "") {
+    if (name === "" || descr === "") {
         emptyField.className = "show";
         setTimeout(function () {
             emptyField.className = emptyField.className.replace("show", "");
@@ -112,26 +107,25 @@ function checkEmptyFields(name, descr, example) {
  * Also, on the server, we proceed a push command for the repo.
  * @param {string} name 
  * @param {string} descr 
- * @param {string} example 
  */
-function uploadExercise(name, descr, example) {
+function uploadExercise(name, descr) {
     // The ref of the folder must be PK.
     var user = firebase.auth().currentUser;
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     sendLinkHTTP(exerciseId, exercise.exFolder);
-    let ex = new Exercise(name, descr, example, user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline);
+    let ex = new Exercise(name, descr, "deprecated", user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
 }
 
-function uploadExerciseFile(name, descr, example, file) {
+function uploadExerciseFile(name, descr, file) {
     // The ref of the folder must be PK.
     var user = firebase.auth().currentUser;
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     if (file) {
         sendFileHTTP(exerciseId, file);
     }
-    let ex = new Exercise(name, descr, example, user.uid, 'zip', "", exercise.grades, exercise.deadline);
+    let ex = new Exercise(name, descr, "deprecated", user.uid, 'zip', "", exercise.grades, exercise.deadline);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
 }

@@ -179,6 +179,7 @@ async def load_ex(url, folder_name, username, password, exercise):
     git_clone("../exercises", url, folder_name, username, password, exercise)
     print("your exercise is loaded.")
 
+
 async def edit_ex(folder_name, ex_folder):
     """
     :param folder_name: the folder_name of the solved exercise 

@@ -23,6 +23,8 @@ class MyHandler(BaseHTTPRequestHandler):
         f.close()
         if self.headers['Accept'] == 'create':
             shellscript = subprocess.Popen(['bash','create-ex.sh', filename], stdout=subprocess.PIPE)
+        elif self.headers['Accept'] == 'grade':
+            shellscript = subprocess.Popen(['bash','cp-grade.sh', filename], stdout=subprocess.PIPE)
         else:
             shellscript = subprocess.Popen(['bash','solve-ex.sh', filename], stdout=subprocess.PIPE)
         self.send_response(200)

@@ -52,109 +52,11 @@
         <textarea class="form-control" rows="10" id="exDescr" name="comment"
           placeholder="Enter the description of the exercise"></textarea>
       </div>
-
-      <!-- text area. -->
-      <div class="form-group">
-        <label for="comment">Example:</label>
-        <textarea class="form-control" rows="10" id="exEx" name="comment"
-          placeholder="Enter an example for the exercise"></textarea>
-      </div>
-
       <!-- input. -->
       <div class="form-group">
         <br />
         <label for="usr">Exercise Instructions:</label>
         <input type="file" id="instruction" />
-      </div>
-
-
-      <div class="panel-group" id="accordion">
-        <div class="panel panel-default template">
-          <div class="panel-heading">
-            <h4 class="panel-title">
-              <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                Input/Output <strong> Template</strong>
-              </a>
-            </h4>
-          </div>
-          <div id="collapseThree" class="panel-collapse collapse">
-            <div class="panel-body">
-              <h5>
-                <strong> The website provide a simple template for the grading system. </strong> <br />
-                The only thing you have to do is to fill all the fields, and we will compute the
-                grade of each submission according your rules. <br />
-                Note: If you don't want to follow our template, you can make your own grading system. <br />
-                To do this, please, browse all the files for the grading (compressed into a zip file) or use GitLab to
-                send us your grading system. <br />
-                Inside the folder, there should be an executable program called grade. <br /> <br />
-              </h5>
-
-              <!-- input. -->
-              <div class="form-group">
-                <label for="usr">Compiler: (required)</label>
-                <input type="text" class="form-control" id="compiler" placeholder="java, c++, python..." />
-                <br />
-              </div>
-
-              <!-- input. -->
-              <div class="form-group">
-                <label for="usr">The main file: (required)</label>
-                <input type="text" class="form-control" id="main" placeholder="Main, Ex01, a..." />
-                <br />
-              </div>
-
-              <h5>
-                By default, on this template, the program should read its input from standard input.
-                But you can choose a file as input e.g: input.txt, input.csv...
-              </h5>
-
-              <!-- input. -->
-              <div class="form-group">
-                <label for="usr">Input: </label>
-                <input type="text" class="form-control" id="input" placeholder="input.txt, input.csv..." />
-                <br />
-              </div>
-              <h5>
-                Same for the output:
-              </h5>
-
-              <!-- input. -->
-              <div class="form-group">
-                <label for="usr">Output: </label>
-                <input type="text" class="form-control" id="output" placeholder="output.txt, output.csv..." />
-                <br />
-              </div>
-
-              <!-- input. -->
-              <div class="form-group">
-                <label for="usr">Number of test(s): </label>
-                <input type="number" class="form-control" id="tests" placeholder="1"/>
-                <br />
-              </div>
-
-              <div class="form-group">
-                <h5>
-                  <strong>
-                    Once you finish to fill all the field, click on the button "Download the Grade file" <br />
-                    Then, in the same folder, put the grade file provided by the website with all the input.io output.io
-                    files.
-
-                    For each test a input-1.io and output-1.io file is required. When -1 is the number of the test.
-                    (from 1 to :number of test:)<br /> <br />
-
-                    Finally, compress the folder in a zip file or create a GitLab repository with all the files in a
-                    folder and you're able to upload your exercise.
-
-                  </strong>
-                </h5>
-
-                <button id="btnDlGrade" type="button" class="btn btn-primary">Download the Grade file</button>
-
-
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
 
       <ul class="nav nav-pills">
@@ -204,7 +106,83 @@
           <input type="file" id="filename" />
         </div>
 
-        <br />
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-default template">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                  Input/Output <strong> Template</strong>
+                </a>
+              </h4>
+            </div>
+            <div id="collapseThree" class="panel-collapse collapse">
+              <div class="panel-body">
+                <h5>
+                  <strong> The website provide a simple template for the grading system. </strong> <br />
+                  The only thing you have to do is to fill all the fields, and we will compute the
+                  grade of each submission according your rules. <br />
+                  Note: If you don't want to follow our template, you can make your own grading system. <br />
+                  To do this, please, browse all the files for the grading (compressed into a zip file) or use GitLab to
+                  send us your grading system. <br />
+                  Inside the folder, there should be an executable program called grade. <br /> <br />
+                </h5>
+
+                <!-- input. -->
+                <div class="form-group">
+                  <label for="usr">Compiler: (required)</label>
+                  <input type="text" class="form-control" id="compiler" placeholder="java, c++, python..." />
+                  <br />
+                </div>
+
+                <!-- input. -->
+                <div class="form-group">
+                  <label for="usr">The main file: (required)</label>
+                  <input type="text" class="form-control" id="main" placeholder="Main, Ex01, a..." />
+                  <br />
+                </div>
+
+                <h5>
+                  By default, on this template, the program should read its input from standard input.
+                  But you can choose a file as input e.g: input.txt, input.csv...
+                </h5>
+
+                <!-- input. -->
+                <div class="form-group">
+                  <label for="usr">Input: </label>
+                  <input type="text" class="form-control" id="input" placeholder="input.txt, input.csv..." />
+                  <br />
+                </div>
+                <h5>
+                  Same for the output:
+                </h5>
+
+                <!-- input. -->
+                <div class="form-group">
+                  <label for="usr">Output: </label>
+                  <input type="text" class="form-control" id="output" placeholder="output.txt, output.csv..." />
+                  <br />
+                </div>
+
+                <!-- input. -->
+                <div class="form-group">
+                  <label for="usr">Number of test(s): </label>
+                  <input type="number" class="form-control" id="tests" placeholder="1" />
+                  <br />
+                </div>
+
+                <div class="form-group">
+                  <h5>
+                    <strong>
+                      Once you finish to fill all the field, we will compute for you the "grade" file. <br />
+                      For each test a input-1.io and output-1.io file is required. When -"1" is the number of the test.
+                      (from 1 to :number of test:)<br /> <br />
+                    </strong>
+                  </h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div class="panel-group" id="accordion2">
           <div class="panel panel-default template">
@@ -290,6 +268,14 @@
               </div>
             </div>
           </div>
+
+          <br />
+
+          <div id="rates">
+            <input type="radio" id="use" name="grade" value="confirm">Use I/O template.<br />
+            <input type="radio" id="notuse" name="grade" value="dismiss">Use my own grade file.<br />
+          </div>
+          <br />
 
           <!-- button. -->
           <button id="btnConfirm" type="button" class="btn btn-primary">Confirm</button>

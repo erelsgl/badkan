@@ -4,7 +4,6 @@
 document.getElementById("btnConfirm").addEventListener('click', e => {
   const name = escapeHtml(document.getElementById("exName").value);
   const descr = escapeHtml(document.getElementById("exDescr").value);
-  const example = escapeHtml(document.getElementById("exEx").value);
 
   const date = document.getElementById("deadline").value;
   let penalities = [];
@@ -20,8 +19,8 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
 
   if ($('.nav-pills .active').text() === 'Zip file') {
     var file = document.getElementById('filename').files[0];
-    if (checkEmptyFieldsFile(name, descr, example, file)) {
-      uploadExerciseFile(name, descr, example, file, deadline);
+    if (checkEmptyFieldsFile(name, descr, file)) {
+      uploadExerciseFile(name, descr, file, deadline);
     }
   }
   else {
@@ -29,15 +28,15 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
     const exFolder = escapeHtml(document.getElementById("exFolder").value);
     const username = escapeHtml(document.getElementById("user").value);
     const pass = escapeHtml(document.getElementById("pass").value);
-    if (checkEmptyFieldsGit(name, descr, example, link, exFolder, username, pass)) {
-      uploadExerciseGit(name, descr, example, link, username, pass, exFolder, deadline);
+    if (checkEmptyFieldsGit(name, descr, link, exFolder, username, pass)) {
+      uploadExerciseGit(name, descr, link, username, pass, exFolder, deadline);
     }
   }
 });
 
-function checkEmptyFieldsGit(name, descr, example, exFolder, user, pass, link) {
+function checkEmptyFieldsGit(name, descr, exFolder, user, pass, link) {
   var emptyField = document.getElementById("emptyField");
-  if (name === "" || descr === "" || example == "" || exFolder == "" || user == "" || pass == "" || link == "") {
+  if (name === "" || descr === "" || exFolder == "" || user == "" || pass == "" || link == "") {
     emptyField.className = "show";
     setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
     return false;
@@ -45,9 +44,9 @@ function checkEmptyFieldsGit(name, descr, example, exFolder, user, pass, link) {
   return true;
 }
 
-function checkEmptyFieldsFile(name, descr, example, file) {
+function checkEmptyFieldsFile(name, descr, file) {
   var emptyField = document.getElementById("emptyField");
-  if (name === "" || descr === "" || example == "" || !file) {
+  if (name === "" || descr === "" || !file) {
     emptyField.className = "show";
     setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
     return false;
@@ -77,38 +76,39 @@ document.getElementById("btnHelp").addEventListener('click', e => {
  * This function upload the exercise on the database and on the server using websocket.
  * @param {String} name 
  * @param {String} descr 
- * @param {String} example 
  * @param {String} link 
  * @param {String} username 
  * @param {String} pass 
  * @param {String} exFolder 
  */
-function uploadExerciseGit(name, descr, example, link, username, pass, exFolder, deadline) {
+function uploadExerciseGit(name, descr, link, username, pass, exFolder, deadline) {
   var user = firebase.auth().currentUser;
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   folderName = user.uid + "_" + homeUser.createdEx;
   sendLinkWEBSOCKET(link, folderName, username, pass, exFolder);
   let grade = new Grade("id", 90, "url");
   let grades = new Grades([grade]);
-  let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades, deadline);
+  let exercise = new Exercise(name, descr, "deprecated", user.uid, link, exFolder, grades, deadline);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName);
   uploadPdf(folderName);
+  checkGrade(folderName);
 }
 
-function uploadExerciseFile(name, descr, example, file, deadline) {
+function uploadExerciseFile(name, descr, file, deadline) {
   var user = firebase.auth().currentUser;
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   folderName = user.uid + "_" + homeUser.createdEx;
   sendFileHTTP(file, folderName)
   let grade = new Grade("id", 90, "url");
   let grades = new Grades([grade]);
-  let exercise = new Exercise(name, descr, example, user.uid, "zip", "", grades, deadline);
+  let exercise = new Exercise(name, descr, "deprecated", user.uid, "zip", "", grades, deadline);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName);
   uploadPdf(folderName);
+  checkGrade(folderName);
 }
 
 function sendFileHTTP(file, folderName) {
@@ -213,4 +213,12 @@ function uploadPdf(exerciseId) {
   }
 }
 
-
+function checkGrade(exerciseFolderName) {
+  if (document.getElementById('use').checked) {
+    createGrade(exerciseFolderName);
+  }
+  else {
+    console.log("notUse")
+  }
+  
+}
