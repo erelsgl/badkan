@@ -1,5 +1,8 @@
 var grade = ""
 
+var BACKEND_FILE_PORTS = [9000];
+
+
 function createGrade(exerciseFoldername) {
     grade = "#!/bin/bash \n"
     grade += "echo \"*** Grade exercise ***\" \n \n"
@@ -114,7 +117,7 @@ function sendFile(file, exerciseFoldername) {
         xhr.setRequestHeader('Accept', 'grade');  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
         xhr.onreadystatechange = function () {
             if (this.readyState == 4) {
-                sendWebsocket(uid);
+                // success
             }
         };
         xhr.send(rawData);
