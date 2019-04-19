@@ -90,7 +90,7 @@ function makeGradeWithoutCoef(compiler, numTest, input, output, main, exerciseFo
         }
     }
     grade += "let \"grade = sum / total * 100\" \n"
-    grade += "echo \"Grade: $grade% ***\""
+    grade += "echo \"*** Grade: $grade% ***\""
 
     //download(grade, "grade", "")
     var file = new File([grade], "grade");
@@ -114,7 +114,7 @@ function sendFile(file, exerciseFoldername) {
         var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
         xhr.open('POST', httpurl, true);
         xhr.setRequestHeader('Accept-Language', exerciseFoldername); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
-        xhr.setRequestHeader('Accept', 'grade');  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+        xhr.setRequestHeader('Accept', 'grade'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
         xhr.onreadystatechange = function () {
             if (this.readyState == 4) {
                 // success

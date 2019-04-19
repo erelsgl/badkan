@@ -1,6 +1,6 @@
 /**
-* BUTTON CONFIRM.
-*/
+ * BUTTON CONFIRM.
+ */
 document.getElementById("btnConfirm").addEventListener('click', e => {
   const name = escapeHtml(document.getElementById("exName").value);
   const descr = escapeHtml(document.getElementById("exDescr").value);
@@ -22,8 +22,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
     if (checkEmptyFieldsFile(name, descr, file)) {
       uploadExerciseFile(name, descr, file, deadline);
     }
-  }
-  else {
+  } else {
     const link = escapeHtmlWithRespectGit(document.getElementById("link").value);
     const exFolder = escapeHtml(document.getElementById("exFolder").value);
     const username = escapeHtml(document.getElementById("user").value);
@@ -38,7 +37,9 @@ function checkEmptyFieldsGit(name, descr, exFolder, user, pass, link) {
   var emptyField = document.getElementById("emptyField");
   if (name === "" || descr === "" || exFolder == "" || user == "" || pass == "" || link == "") {
     emptyField.className = "show";
-    setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
+    setTimeout(function () {
+      emptyField.className = emptyField.className.replace("show", "");
+    }, 2500);
     return false;
   }
   return true;
@@ -48,7 +49,9 @@ function checkEmptyFieldsFile(name, descr, file) {
   var emptyField = document.getElementById("emptyField");
   if (name === "" || descr === "" || !file) {
     emptyField.className = "show";
-    setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
+    setTimeout(function () {
+      emptyField.className = emptyField.className.replace("show", "");
+    }, 2500);
     return false;
   }
   return true;
@@ -115,8 +118,7 @@ function sendFileHTTP(file, folderName) {
   var reader = new FileReader();
   reader.readAsArrayBuffer(file);
   var rawData = new ArrayBuffer();
-  reader.loadend = function () {
-  }
+  reader.loadend = function () {}
   reader.onload = function (e) {
     rawData = e.target.result;
     // create the request
@@ -126,8 +128,12 @@ function sendFileHTTP(file, folderName) {
       backendPort = 9000;
     var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
     xhr.open('POST', httpurl, true);
-    xhr.setRequestHeader('Accept-Language', folderName);  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
-    xhr.setRequestHeader('Accept', 'create');  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.setRequestHeader('Accept-Language', folderName); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    if (isGrade()) {
+      xhr.setRequestHeader('Accept', 'create-template'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    } else {
+      xhr.setRequestHeader('Accept', 'create'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    }
     xhr.onreadystatechange = function () {
       if (this.readyState == 4) {
         console.log("success");
@@ -146,7 +152,7 @@ function sendFileHTTP(file, folderName) {
  * @param {String} exFolder 
  */
 function sendLinkWEBSOCKET(link, folderName, username, pass, exFolder) {
-  var backendPort = getParameterByName("backend");     // in utils.js
+  var backendPort = getParameterByName("backend"); // in utils.js
   if (!backendPort)
     backendPort = 5670; // default port - same as in ../server.py
   var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
@@ -158,7 +164,7 @@ function sendLinkWEBSOCKET(link, folderName, username, pass, exFolder) {
     exFolder: exFolder,
     pass: pass,
   });
-  logClient("color:#888", submission_json);  // in utils.js
+  logClient("color:#888", submission_json); // in utils.js
   var websocket = new WebSocket(websocketurl);
   websocket.onopen = (event) => {
     logServer("color:blue", "Submission starting!"); // in utils.js
@@ -188,8 +194,7 @@ document.getElementById("morePenalities").addEventListener('click', e => {
   if (document.getElementById("3-4").style.display === 'block') {
     document.getElementById("3-4").style.display = 'none';
     document.getElementById("5-6").style.display = 'none';
-  }
-  else {
+  } else {
     document.getElementById("3-4").style.display = 'block';
     document.getElementById("5-6").style.display = 'block';
   }
@@ -206,8 +211,7 @@ function uploadPdf(exerciseId) {
     }).catch(error => {
       alert(error)
     })
-  }
-  else {
+  } else {
     document.getElementById("form").submit();
     document.location.href = "manageCourses.html";
   }
@@ -216,9 +220,16 @@ function uploadPdf(exerciseId) {
 function checkGrade(exerciseFolderName) {
   if (document.getElementById('use').checked) {
     createGrade(exerciseFolderName);
-  }
-  else {
+  } else {
     console.log("notUse")
   }
-  
+}
+
+
+function isGrade() {
+  if (document.getElementById('use').checked) {
+    return true;
+  } else {
+    return false;
+  }
 }

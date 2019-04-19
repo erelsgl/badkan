@@ -18,13 +18,19 @@ class MyHandler(BaseHTTPRequestHandler):
         filename = self.headers['Accept-Language']
         filesize = int(self.headers['Content-Length'])
         contents = self.rfile.read(filesize)
+        if self.headers['Accept'] == 'grade':
+            f = open("grade", 'w+b')
+            f.write(contents)   
+            f.close()
+            self.send_response(200)
+            return
         f = open(filename, 'w+b')
         f.write(contents)   
         f.close()
         if self.headers['Accept'] == 'create':
             shellscript = subprocess.Popen(['bash','create-ex.sh', filename], stdout=subprocess.PIPE)
-        elif self.headers['Accept'] == 'grade':
-            shellscript = subprocess.Popen(['bash','cp-grade.sh', filename], stdout=subprocess.PIPE)
+        elif self.headers['Accept'] == 'create-template':
+            shellscript = subprocess.Popen(['bash','create-ex-template.sh', filename], stdout=subprocess.PIPE)
         else:
             shellscript = subprocess.Popen(['bash','solve-ex.sh', filename], stdout=subprocess.PIPE)
         self.send_response(200)
