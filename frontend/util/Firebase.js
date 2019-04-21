@@ -248,9 +248,14 @@ function loadExerciseByOwner(ownExercises) {
 
 function loadCoursesByOwner() {
   database.ref().child('courses/').on("value", function (snapshot) {
+    if (!snapshot.val()) {
+      document.getElementById("loading").style.display = "none";
+    }
     snapshot.forEach(function (data) {
       if (data.val().course.ownerId === firebase.auth().currentUser.uid) {
         addCourseHTML(data.key, data.val().course)
+      } else {
+        document.getElementById("loading").style.display = "none";
       }
     })
   });
@@ -295,9 +300,9 @@ function loadAllExercisesAndAddOptions(exercisesMap) {
   var flag = false;
   database.ref().child('exercises/').on("value", function (snapshot) {
     snapshot.forEach(function (data) {
-      addOption(data.val().exercise, data.key);  // defined in SolveEx.js and in EditDeleteEx.js
+      addOption(data.val().exercise, data.key); // defined in SolveEx.js and in EditDeleteEx.js
       exercisesMap.set(data.key, data.val().exercise);
-      onOptionChange();      // defined in SolveEx.js
+      onOptionChange(); // defined in SolveEx.js
       flag = true;
     });
     loading("div3");

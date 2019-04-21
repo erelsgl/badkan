@@ -2,6 +2,8 @@
  * BUTTON CONFIRM.
  */
 document.getElementById("btnConfirm").addEventListener('click', e => {
+  document.getElementById("page").style.display = "none";
+  document.getElementById("loadingEx").style.display = "block";
   const name = escapeHtml(document.getElementById("exName").value);
   const descr = escapeHtml(document.getElementById("exDescr").value);
 

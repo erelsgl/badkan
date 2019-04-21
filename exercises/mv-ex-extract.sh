@@ -12,8 +12,8 @@ else
 fi
 
 cd $DIR/$FOLDERNAME
-unzip -j ../../backend/$1 -x *.git*
-sudo rm ../../backend/$1 
+unzip -j ../../backend/$FOLDERNAME -x *.git*
+sudo rm ../../backend/$FOLDERNAME 
 if [ -d "grade" ]; then
 	sudo chmod +x grade # Check what's happen here.
 fi

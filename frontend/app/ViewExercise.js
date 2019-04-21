@@ -246,8 +246,17 @@ document.getElementById("btnRunAll").addEventListener('click', e => {
         logServer("color:red", "Error in websocket.");
     }
     websocket.onmessage = (event) => {
+        if (event.data.includes("THE GRADE FOR THE STUDENT WITH THE ID")) {
+            let uid = event.data.substring(38, event.data.length)
+            var res = event.data.replace(uid, usersMap.get(uid).id); 
+            let name = "WITH THE NAME: " + usersMap.get(uid).name + " " + usersMap.get(uid).lastName;
+            logServer("color:black; margin:0 1em 0 1em", res);
+            logServer("color:black; margin:0 1em 0 1em", name);
+        }
+        else {
         logServer("color:black; margin:0 1em 0 1em", event.data);
         // The line "Final Grade:<grade>" is written in server.py:check_submission
+        }
     }
     return false;
 });

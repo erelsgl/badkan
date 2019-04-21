@@ -14,7 +14,6 @@ var usersMap = new Map();
 
 loadCoursesByOwner();
 
-
 var coursesMap = new Map();
 
 var public = true;
