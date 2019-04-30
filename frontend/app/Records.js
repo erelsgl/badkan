@@ -8,7 +8,7 @@ var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 document.getElementById("heading").innerHTML =
     "Records for " + homeUser.name + " " + homeUser.lastName + " " + homeUser.id;
 
-loadAllExercises(function (exercises) {     // defined in Firebase.js.
+loadAllExercises(function (exercises) { // defined in Firebase.js.
     // exercises maps the exercise ID to the exercise data.
     var str = "";
     for (i = 0; i < homeUser.exerciseSolved.length; i++) {
@@ -20,13 +20,14 @@ loadAllExercises(function (exercises) {     // defined in Firebase.js.
             // It is marked by a dummy id "id". We skip it here.
             var grade = exerciseSolutionObject.grade
             var exerciseData = exercises.get(exerciseId)
-            str = str + "Exercise: " + exerciseData.name + ", Grade: " + grade + "<br />";
+            if (exerciseData) {
+                str = str + "Exercise: " + exerciseData.name + ", Grade: " + grade + "<br />";
+            }
         }
     }
     if (str === "") {
         document.getElementById("records").innerHTML = "You didn't solve any exercise yet."
-    }
-    else {
+    } else {
         document.getElementById("records").innerHTML = str;
     }
 })
