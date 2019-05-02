@@ -29,7 +29,7 @@ To change the docker image:
 5. To run the container, first exit the previous running container:
  
 
-    sudo docker container stop badkan
+     sudo docker container stop badkan
 
 then do:
 
