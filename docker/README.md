@@ -23,12 +23,9 @@ To change the docker image:
 
         sudo docker pull erelsgl/badkan:latest
 
-5. To run the container, first exit the previous running container:
+5. To stop the running container and run a new one:
 
         sudo docker container stop badkan
-
-then do:
-
         sudo bash ../start/docker.sh
 
 6. To remove old versions do:
