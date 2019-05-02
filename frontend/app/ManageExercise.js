@@ -1,8 +1,8 @@
 /**
-* From there, he can:
-* - Run a code of the user.
-* - Read and edit any file of any user.
-*/
+ * From there, he can:
+ * - Run a code of the user.
+ * - Read and edit any file of any user.
+ */
 
 let exerciseId = JSON.parse(localStorage.getItem("selectedValue"));
 let exercise = JSON.parse(localStorage.getItem("exercise"));
@@ -11,8 +11,47 @@ let user = JSON.parse(localStorage.getItem("user"));
 
 $("#student").html(user.name + " " + user.lastName + " " + user.id);
 
+document.getElementById("btnDl").addEventListener('click', e => {
+    // create the request
+    const xhr = new XMLHttpRequest();
+    var backendPort = getParameterByName("backend"); // in utils.js
+    if (!backendPort)
+        backendPort = 9000;
+    var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
+    xhr.open('GET', httpurl, true);
+    xhr.setRequestHeader('Accept-Language', userId + "/" + exerciseId); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.setRequestHeader('Accept', 'dlProject'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == xhr.DONE && this.status == 200) {
+            var resptxt = xhr.response;
+            if (resptxt) {
+                var blob = new Blob([xhr.response], {
+                    type: "application/zip"
+                });
+                if (navigator.msSaveOrOpenBlob) {
+                    navigator.msSaveOrOpenBlob(blob, user.name + "_" + user.lastName + ".zip");
+                } else {
+                    var a = document.createElement("a");
+                    document.body.appendChild(a);
+                    a.style = "display:none";
+                    var url = window.URL.createObjectURL(blob);
+                    a.href = url;
+                    a.download =  user.name + "_" + user.lastName + ".zip";
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                }
+            } else {
+                console.log("no response")
+            }
+        }
+    };
+    xhr.responseType = "arraybuffer";
+    xhr.send();
+});
+
 document.getElementById("btnRun").addEventListener('click', e => {
-    var backendPort = getParameterByName("backend");     // in utils.js
+    var backendPort = getParameterByName("backend"); // in utils.js
     if (!backendPort)
         backendPort = 5670; // default port - same as in ../server.py
     var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"

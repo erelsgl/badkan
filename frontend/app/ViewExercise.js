@@ -213,11 +213,11 @@ function editPdf(file) {
 }
 
 document.getElementById("btnRunAll").addEventListener('click', e => {
-    var backendPort = getParameterByName("backend");     // in utils.js
+    var backendPort = getParameterByName("backend"); // in utils.js
     if (!backendPort)
         backendPort = 5670; // default port - same as in ../server.py
     var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
-    let keys = Array.from( usersMap.keys() );
+    let keys = Array.from(usersMap.keys());
     var submission_json = JSON.stringify({
         target: "run_all",
         users_map: keys,
@@ -248,15 +248,63 @@ document.getElementById("btnRunAll").addEventListener('click', e => {
     websocket.onmessage = (event) => {
         if (event.data.includes("THE GRADE FOR THE STUDENT WITH THE ID")) {
             let uid = event.data.substring(38, event.data.length)
-            var res = event.data.replace(uid, usersMap.get(uid).id); 
+            var res = event.data.replace(uid, usersMap.get(uid).id);
             let name = "WITH THE NAME: " + usersMap.get(uid).name + " " + usersMap.get(uid).lastName;
             logServer("color:black; margin:0 1em 0 1em", res);
             logServer("color:black; margin:0 1em 0 1em", name);
-        }
-        else {
-        logServer("color:black; margin:0 1em 0 1em", event.data);
-        // The line "Final Grade:<grade>" is written in server.py:check_submission
+        } else {
+            logServer("color:black; margin:0 1em 0 1em", event.data);
+            // The line "Final Grade:<grade>" is written in server.py:check_submission
         }
     }
     return false;
 });
+
+
+document.getElementById("btnDlProjects").addEventListener('click', e => {
+    var parts = exerciseId + "-";
+    let keys = Array.from(usersMap.keys());
+    for (var i = 0; i < keys.length; i++) {
+        parts += keys[i] + "/";
+    }
+    downloadProject(parts);
+});
+
+function downloadProject(parts) {
+    // create the request
+    const xhr = new XMLHttpRequest();
+    var backendPort = getParameterByName("backend"); // in utils.js
+    if (!backendPort)
+        backendPort = 9000;
+    var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
+    xhr.open('GET', httpurl, true);
+    xhr.setRequestHeader('Accept-Language', parts); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.setRequestHeader('Accept', 'dlAllProjects'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == xhr.DONE && this.status == 200) {
+            var resptxt = xhr.response;
+            if (resptxt) {
+                var blob = new Blob([xhr.response], {
+                    type: "application/zip"
+                });
+                if (navigator.msSaveOrOpenBlob) {
+                    navigator.msSaveOrOpenBlob(blob, exercise.name + ".zip");
+                } else {
+                    var a = document.createElement("a");
+                    document.body.appendChild(a);
+                    a.style = "display:none";
+                    var url = window.URL.createObjectURL(blob);
+                    a.href = url;
+                    a.download =  exercise.name + ".zip";
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                }
+            } else {
+                console.log("no response")
+            }
+        }
+    };
+    xhr.responseType = "arraybuffer";
+    xhr.send();
+}

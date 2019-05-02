@@ -2,6 +2,7 @@ import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import cgi
 import subprocess
+import os
 
 """
 IF THERE IS A PROBLEM OF SIMULTANEOUS SUBMISSION THERE EXISTS TWO SOLUTION:
@@ -35,6 +36,50 @@ class MyHandler(BaseHTTPRequestHandler):
             shellscript = subprocess.Popen(['bash','solve-ex.sh', filename], stdout=subprocess.PIPE)
         self.send_response(200)
 
+    def do_GET(self):
+        self._set_headers()
+        path = self.headers['Accept-Language']
+        if self.headers['Accept'] == 'dlProject':
+            x = path.split("/")
+            shellscript = subprocess.Popen(['bash','dl-project.sh', x[1], x[0]], stdout=subprocess.PIPE)
+            shellscript.wait()
+            zip_file = open(x[0] + ".zip", 'rb')
+            self.wfile.write(zip_file.read())
+
+            shellscript = subprocess.Popen(['bash','rm-file.sh', x[0]], stdout=subprocess.PIPE)
+        else:
+            print("all")
+            x = path.split("-")
+            exo = x[0]
+            users = x[1].replace("/", " ")
+            print(exo)
+            print(users)
+            shellscript = subprocess.Popen(['bash','dl-all-projects.sh', exo, users], stdout=subprocess.PIPE)
+            shellscript.wait()
+            zip_file = open(exo + ".zip", 'rb')
+            self.wfile.write(zip_file.read())
+
+            shellscript = subprocess.Popen(['bash','rm-file.sh', exo], stdout=subprocess.PIPE)
+
+
+
+    def _set_headers(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.send_header("Content-type:", "application/zip")
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        self.send_header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+        self.end_headers()
+
+    def do_HEAD(self):
+        self._set_headers()
+
+    def response(self, code, headers): 
+        self.send_response(int(code))
+        for key in headers: 
+            self.send_header(key, headers[key]) 
+            self.end_headers() 
 
     def handle_http(self, status_code, path):
         self.send_response(status_code)
