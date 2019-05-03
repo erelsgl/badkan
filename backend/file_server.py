@@ -39,6 +39,7 @@ class MyHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self._set_headers()
         path = self.headers['Accept-Language']
+
         if self.headers['Accept'] == 'dlProject':
             x = path.split("/")
             shellscript = subprocess.Popen(['bash','dl-project.sh', x[1], x[0]], stdout=subprocess.PIPE)
@@ -47,6 +48,13 @@ class MyHandler(BaseHTTPRequestHandler):
             self.wfile.write(zip_file.read())
 
             shellscript = subprocess.Popen(['bash','rm-file.sh', x[0]], stdout=subprocess.PIPE)
+
+        elif self.headers['Accept'] == 'dlSummary':
+            exercice_name = self.headers['Accept-Language']
+            if os.path.exists('../statistics/' + exercice_name + '/summary.csv'):
+                csv_file = open('../statistics/' + exercice_name + '/summary.csv', 'rb')
+                self.wfile.write(csv_file.read())
+
         else:
             print("all")
             x = path.split("-")
@@ -60,8 +68,6 @@ class MyHandler(BaseHTTPRequestHandler):
             self.wfile.write(zip_file.read())
 
             shellscript = subprocess.Popen(['bash','rm-file.sh', exo], stdout=subprocess.PIPE)
-
-
 
     def _set_headers(self):
         self.send_response(200)

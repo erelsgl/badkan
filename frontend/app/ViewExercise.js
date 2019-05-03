@@ -16,7 +16,6 @@ if (exercise.ownerId != homeUserId) {
     document.location.href = "manageCourses.html";
 }
 
-
 $("#exercise").html(exercise.name);
 
 document.getElementById("exName").defaultValue = exercise.name
@@ -295,7 +294,7 @@ function downloadProject(parts) {
                     a.style = "display:none";
                     var url = window.URL.createObjectURL(blob);
                     a.href = url;
-                    a.download =  exercise.name + ".zip";
+                    a.download = exercise.name + ".zip";
                     a.click();
                     window.URL.revokeObjectURL(url);
                     a.remove();
@@ -308,3 +307,42 @@ function downloadProject(parts) {
     xhr.responseType = "arraybuffer";
     xhr.send();
 }
+
+
+document.getElementById("btnDlSummary").addEventListener('click', e => {
+    const xhr = new XMLHttpRequest();
+    var backendPort = getParameterByName("backend"); // in utils.js
+    if (!backendPort)
+        backendPort = 9000;
+    var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
+    xhr.open('GET', httpurl, true);
+    xhr.setRequestHeader('Accept-Language', exerciseId); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.setRequestHeader('Accept', 'dlSummary'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState == xhr.DONE && this.status == 200) {
+            var resptxt = xhr.response;
+            if (resptxt) {
+                var blob = new Blob([resptxt], {
+                    type: "text/plain"
+                });
+                if (navigator.msSaveOrOpenBlob) {
+                    navigator.msSaveOrOpenBlob(blob, exercise.name + "_summary" +  ".csv");
+                } else {
+                    var a = document.createElement("a");
+                    document.body.appendChild(a);
+                    a.style = "display:none";
+                    var url = window.URL.createObjectURL(blob);
+                    a.href = url;
+                    a.download = exercise.name + "_summary" +  ".csv";
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                }
+            } else {
+                console.log("no response")
+            }
+        }
+    };
+    xhr.responseType = "arraybuffer";
+    xhr.send();
+});

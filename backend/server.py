@@ -13,6 +13,7 @@ import csv, time
 import sys
 from terminal import *
 from csv_trace import edit_csv
+from csv_summary import edit_csv_summary
 import datetime
 from multiprocessing import Process
 
@@ -150,10 +151,15 @@ async def check_submission(websocket:object, submission:dict):
     exitcode_command = "echo Exit code: $?"
     combined_command = "{} && {} ; {}".format(move_command, grade_command, exitcode_command)
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
-
+    output = ""
+    count = 0
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
-        await tee(websocket, line)
+        if "output:" in line:
+            output += str(count) + ":;" + line[line.find(":") + 2: len(line)] + ";"
+            count += 1
+        else:
+            await tee(websocket, line)
         matches = GRADE_REGEXP.search(line)
         if matches is not None:
             grade = matches.group(1)
@@ -165,6 +171,9 @@ async def check_submission(websocket:object, submission:dict):
 
     currentDT = datetime.datetime.now()
     edit_csv(str(currentDT), solution, ids, grade, name)
+    # name, last_name, student_id, output, exercice_name
+    edit_csv_summary(submission["student_name"], submission["student_last_name"], ids, output,exercise)
+
 
 
 async def load_ex(url, folder_name, username, password, exercise):

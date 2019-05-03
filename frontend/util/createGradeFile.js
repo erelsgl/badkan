@@ -74,6 +74,7 @@ function makeGradeWithoutCoef(compiler, numTest, input, output, main, exerciseFo
                     grade += "OUTPUT=`java " + main + " $INPUT` \n";
                     grade += "EXPECTED=`cat " + "output-" + i + ".io` \n"
                 }
+                grade += "echo output: $OUTPUT \n"
                 grade += "if [ \"$OUTPUT\" == \"$EXPECTED\" ]; then \n";
                 grade += "let sum++ \n"
                 grade += "fi \n \n"

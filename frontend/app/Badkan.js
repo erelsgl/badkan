@@ -87,7 +87,9 @@ function sendWebsocket(solution) {
     solution: solution,
     ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
     name: ex.name,
-    owner_firebase_id: firebase.auth().currentUser.uid
+    owner_firebase_id: firebase.auth().currentUser.uid,
+    student_name: homeUser.name,
+    student_last_name: homeUser.lastName
   }); // the variable "submission_json" is read in server.py:run
 
   logClient("color:#888", submission_json); // in utils.js
