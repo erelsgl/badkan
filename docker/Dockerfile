@@ -30,6 +30,7 @@ WORKDIR /
 # Copy required files into the container:
 COPY get-submission.sh   /
 COPY get-submission-file.sh   /
+COPY get-private-submission.sh   /
 COPY www-readme.md       /www/README.md
 
 # Define environment variable

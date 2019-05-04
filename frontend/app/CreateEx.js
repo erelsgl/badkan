@@ -80,7 +80,7 @@ document.getElementById("btnHelp").addEventListener('click', e => {
 /**
  * This function upload the exercise on the database and on the server using websocket.
  * @param {String} name 
- * @param {String} descr 
+ * @param {S342533064tring} descr 
  * @param {String} link 
  * @param {String} username 
  * @param {String} pass 
@@ -138,6 +138,8 @@ function sendFileHTTP(file, folderName) {
     }
     xhr.onreadystatechange = function () {
       if (this.readyState == 4) {
+        document.getElementById("form").submit();
+        document.location.href = "manageCourses.html";
         console.log("success");
       }
     };
@@ -174,6 +176,8 @@ function sendLinkWEBSOCKET(link, folderName, username, pass, exFolder) {
     websocket.send(submission_json);
   }
   websocket.onclose = (event) => {
+    document.getElementById("form").submit();
+    document.location.href = "manageCourses.html";
     if (event.code === 1000)
       logServer("color:blue", "Submission completed!");
     else if (event.code === 1006)
@@ -213,9 +217,6 @@ function uploadPdf(exerciseId) {
     }).catch(error => {
       alert(error)
     })
-  } else {
-    document.getElementById("form").submit();
-    document.location.href = "manageCourses.html";
   }
 }
 

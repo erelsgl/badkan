@@ -6,10 +6,10 @@
 var BACKEND_PORTS = [5670];
 var BACKEND_FILE_PORTS = [9000];
 
-var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));  // The current user.
+var homeUser = JSON.parse(localStorage.getItem("homeUserKey")); // The current user.
 
-document.getElementById("currentId").value = homeUser.id;  // The country id of the current user.
-document.getElementById('currentId').readOnly = true;  // Make it as readonly.
+document.getElementById("currentId").value = homeUser.id; // The country id of the current user.
+document.getElementById('currentId').readOnly = true; // Make it as readonly.
 
 var exercise = getParameterByName("exercise"); // in utils.js
 if (!exercise)
@@ -21,7 +21,7 @@ var selectedValue = JSON.parse(localStorage.getItem("selectedValue"));
 let grade = 0;
 let penality = 0;
 if (ex.deadline) {
-penality = isPenalized(ex.deadline);  // The grade by default.
+  penality = isPenalized(ex.deadline); // The grade by default.
 }
 
 $("#exercise").html(ex.name);
@@ -35,8 +35,7 @@ function dealWithFile(file) {
   var reader = new FileReader();
   reader.readAsArrayBuffer(file);
   var rawData = new ArrayBuffer();
-  reader.loadend = function () {
-  }
+  reader.loadend = function () {}
   reader.onload = function (e) {
     rawData = e.target.result;
     // create the request
@@ -46,52 +45,87 @@ function dealWithFile(file) {
       backendPort = BACKEND_FILE_PORTS[Math.floor(Math.random() * BACKEND_FILE_PORTS.length)];
     var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
     xhr.open('POST', httpurl, true);
-    xhr.setRequestHeader('Accept-Language', uid);  // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.setRequestHeader('Accept-Language', uid); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
     xhr.onreadystatechange = function () {
       if (this.readyState == 4) {
-        sendWebsocket(uid);
+        // Create the json for submission
+        const collab1Id = escapeHtml(document.getElementById("collab1").value);
+        const collab2Id = escapeHtml(document.getElementById("collab2").value);
+        json = JSON.stringify({
+          target: "check_submission",
+          exercise: exercise,
+          solution: uid,
+          ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
+          name: ex.name,
+          owner_firebase_id: firebase.auth().currentUser.uid,
+          student_name: homeUser.name,
+          student_last_name: homeUser.lastName
+        }); // the variable "submission_json" is read in server.py:run
+        sendWebsocket(json);
       }
     };
     xhr.send(rawData);
   }
 }
 
-function dealWithUrl(url) {
-  sendWebsocket(url);
-}
-
-function submit() {
-  if ($('.nav-pills .active').text() === 'Zip file') {
-    var file = document.getElementById('filename').files[0];
-    dealWithFile(file);
-  }
-  else {
-    dealWithUrl(escapeHtmlWithRespectGit(document.getElementById("giturl").value));
-  }
-}
-
-function sendWebsocket(solution) {
-  // Choose a backend port at random
-  var backendPort = getParameterByName("backend"); // in utils.js
-  if (!backendPort)
-    backendPort = BACKEND_PORTS[Math.floor(Math.random() * BACKEND_PORTS.length)];
-  var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
-  logClient("color:#888", "Submitting to backend port: " + backendPort); // in utils.js
-
+function dealWithPrivate(url, tokenUsername, tokenPassword) {
   // Create the json for submission
   const collab1Id = escapeHtml(document.getElementById("collab1").value);
   const collab2Id = escapeHtml(document.getElementById("collab2").value);
-  var submission_json = JSON.stringify({
-    target: "check_submission",
+  json = JSON.stringify({
+    target: "check_private_submission",
     exercise: exercise,
-    solution: solution,
+    solution: url,
+    tokenUsername: tokenUsername,
+    tokenPassword: tokenPassword,
     ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
     name: ex.name,
     owner_firebase_id: firebase.auth().currentUser.uid,
     student_name: homeUser.name,
     student_last_name: homeUser.lastName
   }); // the variable "submission_json" is read in server.py:run
+  sendWebsocket(json);
+}
 
+function dealWithUrl(url) {
+  // Create the json for submission
+  const collab1Id = escapeHtml(document.getElementById("collab1").value);
+  const collab2Id = escapeHtml(document.getElementById("collab2").value);
+  json = JSON.stringify({
+    target: "check_submission",
+    exercise: exercise,
+    solution: url,
+    ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
+    name: ex.name,
+    owner_firebase_id: firebase.auth().currentUser.uid,
+    student_name: homeUser.name,
+    student_last_name: homeUser.lastName
+  }); // the variable "submission_json" is read in server.py:run
+  sendWebsocket(json);
+}
+
+function submit() {
+  if ($('.nav-pills .active').text() === 'Zip file') {
+    var file = document.getElementById('filename').files[0];
+    dealWithFile(file);
+  } else if ($('.nav-pills .active').text() === 'GitLab private clone') {
+    var url = escapeHtmlWithRespectGit(document.getElementById("link").value);
+    var tokenUsername = escapeHtmlWithRespectGit(document.getElementById("user").value);
+    var tokenPassword = escapeHtmlWithRespectGit(document.getElementById("pass").value);
+    dealWithPrivate(url, tokenUsername, tokenPassword);
+  } else {
+    dealWithUrl(escapeHtmlWithRespectGit(document.getElementById("giturl").value));
+  }
+}
+
+function sendWebsocket(json) {
+  // Choose a backend port at random
+  var backendPort = getParameterByName("backend"); // in utils.js
+  if (!backendPort)
+    backendPort = BACKEND_PORTS[Math.floor(Math.random() * BACKEND_PORTS.length)];
+  var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
+  logClient("color:#888", "Submitting to backend port: " + backendPort); // in utils.js
+  var submission_json = json
   logClient("color:#888", submission_json); // in utils.js
   var websocket = new WebSocket(websocketurl);
   websocket.onopen = (event) => {

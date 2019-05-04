@@ -27,6 +27,7 @@ EXERCISE_DIR = "../exercises"
 # Example ssh: git@github.com:SamuelBismuth/badkan.git
 
 GIT_REGEXP = re.compile(".*github[.]com.(.*)/(.*)", re.IGNORECASE)
+GITLAB_REGEXP = re.compile(".*gitlab[.]com.(.*)/(.*)", re.IGNORECASE)
 GIT_CLEAN  = re.compile(".git.*", re.IGNORECASE)
 GRADE_REGEXP = re.compile("[*].*grade.*:\\s*(\\d+).*[*]", re.IGNORECASE)
 
@@ -104,6 +105,44 @@ async def run_all_submissions(exercise_id, users_map, websocket):
         await tee(websocket, "######################################")
         await tee(websocket, "")
         await tee(websocket, "")
+    
+async def check_private_submission(websocket:object, submission:dict):
+    """
+    Check a private submitted solution to the given exercise from the given git_url.
+    :param websocket: for reading the submission params and sending output messages.
+    :param submission: a JSON object with at least the following fields:
+           "exercise" - name of the exercise; represents a sub-folder of the "exercises" folder.
+           "git_url"  - a url for cloning the student's git repository containing the submitted solution.
+           must be of the form https://xxx.git.
+    """    
+    solution=submission["solution"]
+    tokenUsername=submission["tokenUsername"]
+    tokenPassword=submission["tokenPassword"]
+    exercise=submission["exercise"]
+    ids = submission["ids"]
+    name = submission["name"]
+    owner_firebase_id = submission["owner_firebase_id"]
+    currentDT = datetime.datetime.now()
+    edit_csv(str(currentDT), solution, ids, "START", name)
+
+    if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
+        await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
+        return
+
+    repository_folder = "/submissions/{}/{}".format(owner_firebase_id, exercise)
+        
+    matches = GITLAB_REGEXP.search(solution)
+    username = matches.group(1)
+    repository = GIT_CLEAN.sub("",matches.group(2))
+
+    # Clone or pull the student's submission from github to the docker container "badkan":
+    proc = await docker_command(["exec", "badkan", "bash", "get-private-submission.sh", username, repository, owner_firebase_id, exercise, tokenUsername, tokenPassword])
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        await tee(websocket, line)
+    await proc.wait()
+
+    await grade(solution, exercise, ids, name, owner_firebase_id, repository_folder, submission, websocket)
 
 
 async def check_submission(websocket:object, submission:dict):
@@ -134,6 +173,11 @@ async def check_submission(websocket:object, submission:dict):
     else:
         await dealing_with_file(solution, websocket, owner_firebase_id, exercise)
         print("ZIP")
+
+    await grade(solution, exercise, ids, name, owner_firebase_id, repository_folder, submission, websocket)
+
+
+async def grade(solution, exercise, ids, name, owner_firebase_id, repository_folder, submission, websocket):
 
     # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
     current_exercise_dir = os.path.realpath(EXERCISE_DIR + "/" + exercise)
@@ -226,6 +270,8 @@ async def run(websocket, path):
         await run_for_admin(submission["owner_firebase_id"], submission["exercise_id"], websocket)
     elif target == 'run_all':
         await run_all_submissions(submission["exercise_id"], submission["users_map"], websocket)
+    elif target == 'check_private_submission':
+        await check_private_submission(websocket, submission)
     else:
         await check_submission(websocket, submission)
     print ("> Closing connection")
