@@ -127,6 +127,7 @@ function uploadExerciseFile(name, descr, file) {
     let ex = new Exercise(name, descr, "deprecated", user.uid, 'zip', "", exercise.grades, exercise.deadline);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
+    checkGrade(exerciseId);
 }
 /**
  * Send a push request on the backend server.
@@ -183,7 +184,11 @@ function sendFileHTTP(folderName, file) {
         var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
         xhr.open('POST', httpurl, true);
         xhr.setRequestHeader('Accept-Language', folderName); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
-        xhr.setRequestHeader('Accept', 'create'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+        if (isGrade()) {
+            xhr.setRequestHeader('Accept', 'create-template'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+        } else {
+            xhr.setRequestHeader('Accept', 'create'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+        }
         xhr.onreadystatechange = function () {
             if (this.readyState == 4) {
                 // success.
@@ -326,14 +331,14 @@ document.getElementById("btnDlSummary").addEventListener('click', e => {
                     type: "text/plain"
                 });
                 if (navigator.msSaveOrOpenBlob) {
-                    navigator.msSaveOrOpenBlob(blob, exercise.name + "_summary" +  ".csv");
+                    navigator.msSaveOrOpenBlob(blob, exercise.name + "_summary" + ".csv");
                 } else {
                     var a = document.createElement("a");
                     document.body.appendChild(a);
                     a.style = "display:none";
                     var url = window.URL.createObjectURL(blob);
                     a.href = url;
-                    a.download = exercise.name + "_summary" +  ".csv";
+                    a.download = exercise.name + "_summary" + ".csv";
                     a.click();
                     window.URL.revokeObjectURL(url);
                     a.remove();
@@ -346,3 +351,19 @@ document.getElementById("btnDlSummary").addEventListener('click', e => {
     xhr.responseType = "arraybuffer";
     xhr.send();
 });
+
+function checkGrade(exerciseFolderName) {
+    if (document.getElementById('use').checked) {
+        createGrade(exerciseFolderName);
+    } else {
+        console.log("notUse")
+    }
+}
+
+function isGrade() {
+    if (document.getElementById('use').checked) {
+        return true;
+    } else {
+        return false;
+    }
+}
