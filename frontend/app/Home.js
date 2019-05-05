@@ -22,7 +22,19 @@ var exercisesMap = new Map();
 // the owner of the exercise. 
 loadAllExercisesAsync(exercisesMap);  // defined in Firebase.js. 
 
-loadAllCourses();
+
+function addCourseHTML(key, course) {
+  coursesMap.set(key, course);
+  // SEE IF REGISTER OR NOT: HERE ASSUMING NOT.         // If the user click here check if he registered if yes dl the pdf or something like this.
+  if (isRegistered(course)) {
+    registered(key, course);
+  }
+  else {
+    notRegistered(key, course);
+  }
+}
+
+loadAllCourses(addCourseHTML);
 
 var coursesMap = new Map();
 
@@ -65,17 +77,6 @@ document.getElementById("btnLogOut").addEventListener('click', e => {
 
 var $template = $(".template");
 
-function addAllCoursesHTML(key, course) {
-  coursesMap.set(key, course);
-  // SEE IF REGISTER OR NOT: HERE ASSUMING NOT.         // If the user click here check if he registered if yes dl the pdf or something like this.
-  if (isRegistered(course)) {
-    registered(key, course);
-  }
-  else {
-    notRegistered(key, course);
-  }
-}
-
 function isRegistered(course) {
   if (course.students.indexOf(firebase.auth().currentUser.uid) > -1) {
     return true;
@@ -87,6 +88,8 @@ function isRegistered(course) {
 
 let hash = 2;
 
+
+// Show a course to which the current user is not registered.
 function notRegistered(key, course) {
   var $newPanel = $template.clone();
   $newPanel.find(".collapse").removeClass("in");
@@ -123,9 +126,10 @@ function notRegistered(key, course) {
   // Ask for the user the password if there is one.
   text_html += "<button name =\"" + key + "\" id=\"register\" class=\"btn btn-success\"\">Register</button>";
   $newPanel.find(".panel-body").append(text_html);
-  $("#accordion").append($newPanel.fadeIn());
+  $("#accordion-unregistered").append($newPanel.fadeIn());
 }
 
+// Show a course to which the current user is registered.
 function registered(key, course) {
   var $newPanel = $template.clone();
   $newPanel.find(".collapse").removeClass("in");
@@ -173,7 +177,7 @@ function registered(key, course) {
     }
   }
   $newPanel.find(".panel-body").append(text_html);
-  $("#accordion").append($newPanel.fadeIn());
+  $("#accordion-registered").append($newPanel.fadeIn());
 }
 
 $('body').on('click', '#dl', function (e) {

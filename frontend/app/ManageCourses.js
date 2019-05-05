@@ -11,7 +11,6 @@ var exercisesMap = new Map();
 loadAllExercisesAndAddOptions(exercisesMap);  // defined in Firebase.js.
 
 var usersMap = new Map();
-
 loadCoursesByOwner();
 
 var coursesMap = new Map();
@@ -128,11 +127,14 @@ function addCourseHTML(courseId, course) {
  */
 $('body').on('click', '#exercise', function (e) {
     let exerciseId = e.target.name;
-    let exercise = exercisesMap.get(exerciseId);
-    localStorage.setItem("exercise", JSON.stringify(exercise));
-    localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
-    localStorage.setItem("usersMap", JSON.stringify(Array.from(usersMap.entries())));
-    document.location.href = "viewExercise.html";    
+//    let exercise = exercisesMap.get(exerciseId);
+//    localStorage.setItem("exercise", JSON.stringify(exercise));
+//    localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
+    localStorage.setItem("exercisesMap",
+        JSON.stringify(Array.from(exercisesMap.entries())));
+    localStorage.setItem("usersMap",
+        JSON.stringify(Array.from(usersMap.entries())));
+    document.location.href = "viewExercise.html?exerciseId="+exerciseId;
 });
 
 $('body').on('click', '#create', function (e) {

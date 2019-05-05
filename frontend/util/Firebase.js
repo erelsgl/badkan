@@ -261,10 +261,14 @@ function loadCoursesByOwner() {
   });
 }
 
-function loadAllCourses() {
+
+// Loads all courses from Firebase,
+//    and call the callback for each course in turn,
+//    with "key" and "course" object.
+function loadAllCourses(callback) {
   database.ref().child('courses/').on("value", function (snapshot) {
     snapshot.forEach(function (data) {
-      addAllCoursesHTML(data.key, data.val().course);
+      callback(data.key, data.val().course);
     })
   });
 }

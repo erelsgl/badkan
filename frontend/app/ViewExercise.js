@@ -6,8 +6,16 @@
  * - Run the moss command.
  * - dl the summary of the input/output of the student.
  */
-let exerciseId = JSON.parse(localStorage.getItem("selectedValue"));
-let exercise = JSON.parse(localStorage.getItem("exercise"));
+//let exerciseId = JSON.parse(localStorage.getItem("selectedValue"));
+//let exercise = JSON.parse(localStorage.getItem("exercise"));
+
+var exerciseId = getParameterByName("exerciseId"); // in utils.js
+if (!exerciseId)
+  exerciseId = "multiply"; // default exercise
+
+let exerciseMap = new Map(JSON.parse(localStorage.getItem("exerciseMap")));
+let exercise = exercisesMap.get(exerciseId);
+
 let usersMap = new Map(JSON.parse(localStorage.getItem("usersMap")));
 
 let homeUserId = JSON.parse(localStorage.getItem("homeUserId"));
