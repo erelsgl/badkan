@@ -1,6 +1,6 @@
 var grade = ""
 
-var BACKEND_FILE_PORTS = [9000];
+var BACKEND_FILE_PORTS = [9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009];
 
 
 function createGrade(exerciseFoldername) {

@@ -106,7 +106,7 @@ function notRegistered(key, course) {
         let exerciseObj = exercisesMap.get(course.exercises[i]);
         if (exerciseObj) {
           text_html += "<pre>"
-          text_html += "Exercise name: " + exerciseObj.name + "<br />";
+          text_html += "<h3>" + exerciseObj.name + "</h3> <br />";
           text_html += "Exercise description: " + exerciseObj.description + "<br />";
           if (exerciseObj.deadline) {
             text_html += "<br />";
@@ -151,7 +151,7 @@ function registered(key, course) {
         let exerciseObj = exercisesMap.get(exerciseId);
         if (exerciseObj) {
           text_html += "<pre>"
-          text_html += "Exercise name: " + exerciseObj.name + "<br />";
+          text_html += "<h3>" + exerciseObj.name + "</h3> <br />";
           text_html += "Exercise description: " + exerciseObj.description + "<br />";
           if (exerciseObj.deadline) {
             text_html += "<br />";

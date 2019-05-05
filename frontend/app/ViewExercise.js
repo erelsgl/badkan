@@ -1,3 +1,7 @@
+// This line should be the same as in myExercises.js.
+var BACKEND_PORTS = [5670, 5671, 5672, 5673, 5674, 5675, 5676, 5677, 5678, 5679];
+var BACKEND_FILE_PORTS = [9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009];
+
 /**
  * From there, he can:
  * - Edit the exercise.
@@ -152,7 +156,7 @@ function uploadExerciseFile(name, descr, file) {
 function sendLinkHTTP(folderName, exFolder) {
     var backendPort = getParameterByName("backend"); // in utils.js
     if (!backendPort)
-        backendPort = 5670; // default port - same as in ../server.py
+        backendPort = BACKEND_PORTS[Math.floor(Math.random() * BACKEND_PORTS.length)];
     var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
     var submission_json = JSON.stringify({
         target: "edit_ex",
@@ -195,7 +199,7 @@ function sendFileHTTP(folderName, file) {
         const xhr = new XMLHttpRequest();
         var backendPort = getParameterByName("backend"); // in utils.js
         if (!backendPort)
-            backendPort = 9000;
+            backendPort = BACKEND_FILE_PORTS[Math.floor(Math.random() * BACKEND_FILE_PORTS.length)];
         var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
         xhr.open('POST', httpurl, true);
         xhr.setRequestHeader('Accept-Language', folderName); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
@@ -234,7 +238,7 @@ function editPdf(file) {
 document.getElementById("btnRunAll").addEventListener('click', e => {
     var backendPort = getParameterByName("backend"); // in utils.js
     if (!backendPort)
-        backendPort = 5670; // default port - same as in ../server.py
+        backendPort = BACKEND_PORTS[Math.floor(Math.random() * BACKEND_PORTS.length)];
     var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
     let keys = Array.from(usersMap.keys());
     var submission_json = JSON.stringify({
@@ -294,7 +298,7 @@ function downloadProject(parts) {
     const xhr = new XMLHttpRequest();
     var backendPort = getParameterByName("backend"); // in utils.js
     if (!backendPort)
-        backendPort = 9000;
+        backendPort = BACKEND_FILE_PORTS[Math.floor(Math.random() * BACKEND_FILE_PORTS.length)];
     var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
     xhr.open('GET', httpurl, true);
     xhr.setRequestHeader('Accept-Language', parts); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
@@ -333,7 +337,7 @@ document.getElementById("btnDlSummary").addEventListener('click', e => {
     const xhr = new XMLHttpRequest();
     var backendPort = getParameterByName("backend"); // in utils.js
     if (!backendPort)
-        backendPort = 9000;
+        backendPort = BACKEND_FILE_PORTS[Math.floor(Math.random() * BACKEND_FILE_PORTS.length)];
     var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
     xhr.open('GET', httpurl, true);
     xhr.setRequestHeader('Accept-Language', exerciseId); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
