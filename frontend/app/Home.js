@@ -176,7 +176,10 @@ function registered(key, course) {
             }
           }
           text_html += "My actual grade: " + grade + "<br /> <br />";
-          text_html += "<button name =\"" + exerciseId + "\" id=\"dl\" class=\"btn btn-link\"\">Download PDF</button>";
+          if (exerciseObj.example === "PDF") {
+            text_html += "<button name =\"" + exerciseId + "\" id=\"dl\" class=\"btn btn-link\"\">Download PDF</button>";
+            text_html += "<br /> <br />"
+          }
           text_html += "<button name =\"" + exerciseId + "\" id=\"solve\" class=\"btn btn-success\"\">Solve</button>";
           text_html += "</pre>"
         }

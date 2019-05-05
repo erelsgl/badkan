@@ -90,6 +90,12 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
     var file = document.getElementById('filename').files[0];
     if (checkEmptyFields(name, descr)) {
         var pdf = document.getElementById('instructionZIP').files[0];
+        if (pdf) {
+            exercise.example = "PDF"
+        }
+        else {
+            exercise.example = "deprecated"
+        }
         uploadExerciseFile(name, descr, file);
         editPdf(pdf);
     }
@@ -103,6 +109,12 @@ document.getElementById("btnEdit").addEventListener('click', e => {
     const descr = escapeHtml(document.getElementById("exDescr").value);
     if (checkEmptyFields(name, descr)) {
         var pdf = document.getElementById('instructionGIT').files[0];
+        if (pdf) {
+            exercise.example = "PDF"
+        }
+        else {
+            exercise.example = "deprecated"
+        }
         uploadExercise(name, descr);
         editPdf(pdf);
     }

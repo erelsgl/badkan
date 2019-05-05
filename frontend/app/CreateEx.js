@@ -97,7 +97,12 @@ function uploadExerciseGit(name, descr, link, username, pass, exFolder, deadline
   sendLinkWEBSOCKET(link, folderName, username, pass, exFolder);
   let grade = new Grade("id", 90, "url");
   let grades = new Grades([grade]);
-  let exercise = new Exercise(name, descr, "deprecated", user.uid, link, exFolder, grades, deadline);
+  let example = "deprecated"
+  var pdf = document.getElementById('instruction').files[0];
+  if (pdf) {
+    example = "PDF"
+  }
+  let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades, deadline);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName);
@@ -112,7 +117,12 @@ function uploadExerciseFile(name, descr, file, deadline) {
   sendFileHTTP(file, folderName)
   let grade = new Grade("id", 90, "url");
   let grades = new Grades([grade]);
-  let exercise = new Exercise(name, descr, "deprecated", user.uid, "zip", "", grades, deadline);
+  let example = "deprecated"
+  var pdf = document.getElementById('instruction').files[0];
+  if (pdf) {
+    example = "PDF"
+  }
+  let exercise = new Exercise(name, descr, example, user.uid, "zip", "", grades, deadline);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName);
@@ -142,8 +152,7 @@ function sendFileHTTP(file, folderName) {
     }
     xhr.onreadystatechange = function () {
       if (this.readyState == 4) {
-        document.getElementById("form").submit();
-        document.location.href = "manageCourses.html";
+        onFinish();
         console.log("success");
       }
     };
@@ -180,8 +189,7 @@ function sendLinkWEBSOCKET(link, folderName, username, pass, exFolder) {
     websocket.send(submission_json);
   }
   websocket.onclose = (event) => {
-    document.getElementById("form").submit();
-    document.location.href = "manageCourses.html";
+    onFinish();
     if (event.code === 1000)
       logServer("color:blue", "Submission completed!");
     else if (event.code === 1006)
@@ -215,12 +223,25 @@ function uploadPdf(exerciseId) {
   // If a pdf exist:
   var file = document.getElementById('instruction').files[0];
   if (file) {
+    console.log("pdddf")
     storage.ref(exerciseId).put(file).then(function (snapshot) {
-      document.getElementById("form").submit();
-      document.location.href = "manageCourses.html";
+      onFinish();
     }).catch(error => {
       alert(error)
     })
+  }
+  else {
+    onFinish();
+  }
+}
+
+var count = 0;
+function onFinish() {
+  console.log(count);
+  count++;
+  if (count == 2) {
+    document.getElementById("form").submit();
+    document.location.href = "manageCourses.html";
   }
 }
 
