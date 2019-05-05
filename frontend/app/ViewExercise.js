@@ -46,13 +46,18 @@ if (exercise.link == 'zip') {
 }
 
 let html_text = "";
+// usersMap.get is undefined iff there are no users registered to the course.
+// TODO: Handle this case more precisely
 for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
-    html_text +=
-        "<button name =\"" + exercise.grades.gradeObj[i].id + "\" id=\"exercise\" class=\"btn btn-link\">" +
-        usersMap.get(exercise.grades.gradeObj[i].id).name + " " +
-        usersMap.get(exercise.grades.gradeObj[i].id).lastName + " " +
-        usersMap.get(exercise.grades.gradeObj[i].id).id +
-        "</button>";
+    var currentUser = usersMap.get(exercise.grades.gradeObj[i].id)
+    if (currentUser) {
+        html_text +=
+            "<button name =\"" + exercise.grades.gradeObj[i].id + "\" id=\"exercise\" class=\"btn btn-link\">" +
+            currentUser.name + " " +
+            currentUser.lastName + " " +
+            currentUser.id +
+            "</button>";
+    }
     html_text += "<br />";
 }
 

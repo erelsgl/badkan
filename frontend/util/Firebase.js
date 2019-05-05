@@ -260,9 +260,10 @@ function loadCoursesOwnedByCurrentUser(onCourse, onFinish) {
     }
 
     var numToProcess = snapshot.numChildren()
+    console.log("num courses to process="+numToProcess)
     snapshot.forEach(function (course_data) {  // for each course do
       if (course_data.val().course.ownerId === firebase.auth().currentUser.uid) {
-         (course_data.key, course_data.val().course)
+         onCourse(course_data.key, course_data.val().course)
       }
       numToProcess--;
       if (numToProcess<=0) {  // done all courses

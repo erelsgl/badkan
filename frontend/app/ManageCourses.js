@@ -148,6 +148,8 @@ function onLoadAllCourses() {
         ); // defined in frontend/util/Firebase.js
     }
 
+    // TODO: This code should be called only after all courses are processed!
+    console.log("usersMap="+JSON.stringify(usersMap))
     localStorage.setItem("usersMap",
         JSON.stringify(Array.from(usersMap.entries())));
 }
