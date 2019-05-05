@@ -10,6 +10,8 @@ echo $SUBFOLDER
 cp -a $DIR/../exercises/$FOLDERNAME/$SUBFOLDER/. $DIR/../exercises/$FOLDERNAME/
 rm -r $DIR/../exercises/$FOLDERNAME/$SUBFOLDER/
 
+cd $DIR/../exercises/$FOLDERNAME 
+chmod +x grade
 
 
 
