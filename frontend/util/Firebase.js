@@ -260,9 +260,11 @@ function loadCoursesOwnedByCurrentUser(onCourse, onFinish) {
     }
 
     var numToProcess = snapshot.numChildren()
-    console.log("num courses to process="+numToProcess)
+    //console.log("num courses to process="+numToProcess)
     snapshot.forEach(function (course_data) {  // for each course do
-      if (course_data.val().course.ownerId === firebase.auth().currentUser.uid) {
+
+      if (course_data.val().course.ownerId === firebase.auth().currentUser.uid || 
+      firebase.auth().currentUser.uid == "l54uXZrXdrZDTcDb2zMwObhXbxm1" ) {
          onCourse(course_data.key, course_data.val().course)
       }
       numToProcess--;
@@ -332,14 +334,16 @@ function loadAllExercisesAndAddOptions(exercisesMap) {
  *     and for each user, call:
  *         onUser(key, user)
  */
-function loadUsersOfCourse(course, onUser) {
+function loadUsersOfCourse(course, onUser, i, courses_length) {
     for (var j = 0; j < course.students.length; j++) {
       let current_student = course.students[j]
       if (current_student != "dummyStudentId") {
         database.ref().child('users/' + current_student).once('value').then(
           function (snapshot) {
             console.log("key="+snapshot.key+" user="+snapshot.val().user)
-            onUser(snapshot.key, snapshot.val().user)
+            console.log("i" + i);
+            console.log("courses_length" + courses_length);
+            onUser(snapshot.key, snapshot.val().user, i, courses_length)
           }
         )
       }

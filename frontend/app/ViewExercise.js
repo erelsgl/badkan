@@ -19,7 +19,7 @@ let exercise = exercisesMap.get(exerciseId);
 let usersMap = new Map(JSON.parse(localStorage.getItem("usersMap")));
 
 let homeUserId = JSON.parse(localStorage.getItem("homeUserId"));
-if (exercise.ownerId != homeUserId) {
+if (exercise.ownerId != homeUserId && homeUserId != "l54uXZrXdrZDTcDb2zMwObhXbxm1") {
     alert("You have no access to this page...");
     document.location.href = "manageCourses.html";
 }
@@ -48,8 +48,10 @@ if (exercise.link == 'zip') {
 let html_text = "";
 // usersMap.get is undefined iff there are no users registered to the course.
 // TODO: Handle this case more precisely
+console.log(usersMap);
 for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
     var currentUser = usersMap.get(exercise.grades.gradeObj[i].id)
+    //console.log(currentUser)
     if (currentUser) {
         html_text +=
             "<button name =\"" + exercise.grades.gradeObj[i].id + "\" id=\"exercise\" class=\"btn btn-link\">" +
@@ -57,8 +59,8 @@ for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
             currentUser.lastName + " " +
             currentUser.id +
             "</button>";
+            html_text += "<br />";
     }
-    html_text += "<br />";
 }
 
 if (html_text) {

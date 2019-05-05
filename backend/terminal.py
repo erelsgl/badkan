@@ -36,10 +36,10 @@ def git_pull(path, folder_name, ex_folder):
     (it's composed of the uid of the owner + "_" + nb of exercise he created).
     :param ex_folder: the name of the folder of the solved exercise.
     """
-    owd = os.getcwd()
-    os.chdir(path + "/" + folder_name + "/" + ex_folder)
-    call(["git", "pull"])
-    os.chdir(owd)
+    shellscript = subprocess.Popen(['bash','git-pull.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
+    shellscript.wait()
+    shellscript = subprocess.Popen(['bash','git-clean.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
+
 
 def rmv(path, folder_name):
     """

@@ -6,7 +6,6 @@ function addOption(exercise, key) {
 
 
 
-
 /*
  * This code belongs to the "create course" tab.
  */
@@ -18,8 +17,7 @@ $('input[type=radio][name=privacy]').change(function () {
     if (this.value == 'public') {
         public = true;
         x.style.display = "none";
-    }
-    else if (this.value == 'private') {
+    } else if (this.value == 'private') {
         public = false;
         x.style.display = "block";
     }
@@ -37,25 +35,24 @@ document.getElementById("btnCreateCourse").addEventListener('click', e => {
     if (!public) {
         const password = escapeHtml(document.getElementById("coursePassword").value);
         if (checkEmptyFieldsPrivate(name, password)) {
-            writeCourse(new Course(name, values, ["dummyStudentId"], password, ownerId
-            ), courseId);
+            writeCourse(new Course(name, values, ["dummyStudentId"], password, ownerId), courseId);
             incrementCreatedExWithoutCommingHome(ownerId, homeUser);
         }
-    }
-    else {
+    } else {
         if (checkEmptyFieldsPublic(name)) {
-            writeCourse(new Course(name, values, ["dummyStudentId"], null, ownerId
-            ), courseId);
+            writeCourse(new Course(name, values, ["dummyStudentId"], null, ownerId), courseId);
             incrementCreatedExWithoutCommingHome(ownerId, homeUser);
         }
     }
-});  // end create course
+}); // end create course
 
 function checkEmptyFieldsPublic(name) {
     var emptyField = document.getElementById("emptyField");
     if (name === "") {
         emptyField.className = "show";
-        setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
+        setTimeout(function () {
+            emptyField.className = emptyField.className.replace("show", "");
+        }, 2500);
         return false;
     }
     return true;
@@ -65,7 +62,9 @@ function checkEmptyFieldsPrivate(name, password) {
     var emptyField = document.getElementById("emptyField");
     if (name === "" || password === "") {
         emptyField.className = "show";
-        setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
+        setTimeout(function () {
+            emptyField.className = emptyField.className.replace("show", "");
+        }, 2500);
         return false;
     }
     return true;
@@ -83,7 +82,7 @@ function checkEmptyFieldsPrivate(name, password) {
 // the owner of the exercise. 
 
 var exercisesMap = new Map();
-loadAllExercisesAndAddOptions(exercisesMap);  // defined in frontend/util/Firebase.js.
+loadAllExercisesAndAddOptions(exercisesMap); // defined in frontend/util/Firebase.js.
 
 var usersMap = new Map();
 var coursesMap = new Map();
@@ -108,10 +107,12 @@ function addCourseHTML(courseId, course) {
     }
     for (var i = 0; i < course.exercises.length; i++) {
         if (course.exercises[i] != "dummyExerciseId") {
+            if (exercisesMap.get(course.exercises[i])) {
             text_html +=
                 "<button name =\"" + course.exercises[i] + "\" id=\"exercise\" class=\"btn btn-link\">" +
                 exercisesMap.get(course.exercises[i]).name +
                 "</button>";
+            }
             if (i != course.exercises.length - 1) text_html += "<br />";
         }
     }
@@ -129,9 +130,18 @@ function addCourseHTML(courseId, course) {
 addCourseHTML.template = $(".template");
 addCourseHTML.hash = 2;
 
+function onUser(key, user, i, courses_length) {
+    usersMap.set(key, user)
+    if (i === courses_length - 1) {
+        // TODO: This code should be called only after all courses are processed!
+        console.log("usersMap=" + JSON.stringify(usersMap))
+        localStorage.setItem("usersMap",
+            JSON.stringify(Array.from(usersMap.entries())));
+    }
+}
 
 function onLoadAllCourses() {
-    console.log("Done loading courses")
+    //console.log("Done loading courses")
     document.getElementById("loading").style.display = "none";
 
     localStorage.setItem("coursesMap",
@@ -139,22 +149,21 @@ function onLoadAllCourses() {
     localStorage.setItem("exercisesMap",
         JSON.stringify(Array.from(exercisesMap.entries())));
 
-    var courses=coursesMap.values()
-    for (var i=0; i<courses.length; ++i) {
-        loadUsersOfCourse(courses[i],
-            (key,user) => {
-                usersMap.set(key,user)
-            }
+    var courses = Array.from(coursesMap.entries())
+    for (var i = 0; i < courses.length; ++i) {
+        loadUsersOfCourse(courses[i][1],
+            onUser,
+             i,
+             courses.length
         ); // defined in frontend/util/Firebase.js
+        console.log("here");
     }
-
-    // TODO: This code should be called only after all courses are processed!
-    console.log("usersMap="+JSON.stringify(usersMap))
-    localStorage.setItem("usersMap",
-        JSON.stringify(Array.from(usersMap.entries())));
+    
 }
 
-loadCoursesOwnedByCurrentUser(addCourseHTML, onLoadAllCourses);    // defined in frontend/util/Firebase.js.
+
+
+loadCoursesOwnedByCurrentUser(addCourseHTML, onLoadAllCourses); // defined in frontend/util/Firebase.js.
 
 
 /**
@@ -170,10 +179,10 @@ loadCoursesOwnedByCurrentUser(addCourseHTML, onLoadAllCourses);    // defined in
  */
 $('body').on('click', '#exercise', function (e) {
     let exerciseId = e.target.name;
-//    let exercise = exercisesMap.get(exerciseId);
-//    localStorage.setItem("exercise", JSON.stringify(exercise));
-//    localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
-    document.location.href = "viewExercise.html?exerciseId="+exerciseId;
+    //    let exercise = exercisesMap.get(exerciseId);
+    //    localStorage.setItem("exercise", JSON.stringify(exercise));
+    //    localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
+    document.location.href = "viewExercise.html?exerciseId=" + exerciseId;
 });
 
 $('body').on('click', '#create', function (e) {
