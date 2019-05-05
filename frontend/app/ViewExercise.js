@@ -6,8 +6,16 @@
  * - Run the moss command.
  * - dl the summary of the input/output of the student.
  */
-let exerciseId = JSON.parse(localStorage.getItem("selectedValue"));
-let exercise = JSON.parse(localStorage.getItem("exercise"));
+//let exerciseId = JSON.parse(localStorage.getItem("selectedValue"));
+//let exercise = JSON.parse(localStorage.getItem("exercise"));
+
+var exerciseId = getParameterByName("exerciseId"); // in utils.js
+if (!exerciseId)
+  exerciseId = "multiply"; // default exercise
+
+let exercisesMap = new Map(JSON.parse(localStorage.getItem("exercisesMap")));
+let exercise = exercisesMap.get(exerciseId);
+
 let usersMap = new Map(JSON.parse(localStorage.getItem("usersMap")));
 
 let homeUserId = JSON.parse(localStorage.getItem("homeUserId"));
@@ -38,13 +46,18 @@ if (exercise.link == 'zip') {
 }
 
 let html_text = "";
+// usersMap.get is undefined iff there are no users registered to the course.
+// TODO: Handle this case more precisely
 for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
-    html_text +=
-        "<button name =\"" + exercise.grades.gradeObj[i].id + "\" id=\"exercise\" class=\"btn btn-link\">" +
-        usersMap.get(exercise.grades.gradeObj[i].id).name + " " +
-        usersMap.get(exercise.grades.gradeObj[i].id).lastName + " " +
-        usersMap.get(exercise.grades.gradeObj[i].id).id +
-        "</button>";
+    var currentUser = usersMap.get(exercise.grades.gradeObj[i].id)
+    if (currentUser) {
+        html_text +=
+            "<button name =\"" + exercise.grades.gradeObj[i].id + "\" id=\"exercise\" class=\"btn btn-link\">" +
+            currentUser.name + " " +
+            currentUser.lastName + " " +
+            currentUser.id +
+            "</button>";
+    }
     html_text += "<br />";
 }
 

@@ -22,7 +22,19 @@ var exercisesMap = new Map();
 // the owner of the exercise. 
 loadAllExercisesAsync(exercisesMap);  // defined in Firebase.js. 
 
-loadAllCourses();
+
+function addCourseHTML(key, course) {
+  coursesMap.set(key, course);
+  // SEE IF REGISTER OR NOT: HERE ASSUMING NOT.         // If the user click here check if he registered if yes dl the pdf or something like this.
+  if (isRegistered(course)) {
+    registered(key, course);
+  }
+  else {
+    notRegistered(key, course);
+  }
+}
+
+loadAllCourses(addCourseHTML);
 
 var coursesMap = new Map();
 
@@ -65,17 +77,6 @@ document.getElementById("btnLogOut").addEventListener('click', e => {
 
 var $template = $(".template");
 
-function addAllCoursesHTML(key, course) {
-  coursesMap.set(key, course);
-  // SEE IF REGISTER OR NOT: HERE ASSUMING NOT.         // If the user click here check if he registered if yes dl the pdf or something like this.
-  if (isRegistered(course)) {
-    registered(key, course);
-  }
-  else {
-    notRegistered(key, course);
-  }
-}
-
 function isRegistered(course) {
   if (course.students.indexOf(firebase.auth().currentUser.uid) > -1) {
     return true;
@@ -87,6 +88,8 @@ function isRegistered(course) {
 
 let hash = 2;
 
+
+// Show a course to which the current user is not registered.
 function notRegistered(key, course) {
   var $newPanel = $template.clone();
   $newPanel.find(".collapse").removeClass("in");
@@ -95,37 +98,40 @@ function notRegistered(key, course) {
   $newPanel.find(".panel-collapse").attr("id", hash++).addClass("collapse").removeClass("in");
   $newPanel.find(".panel-body").text('')
   text_html = "";
+  text_html += "<button name =\"" + key + "\" id=\"register\" class=\"btn btn-success\"\">Register to "+course.name+"</button>";
   if (course.exercises.length === 1 && course.exercises[0] === "dummyExerciseId") {
-    text_html += "<h5>There is not available exercise for this course!</h5>"
-  }
-  for (var i = 0; i < course.exercises.length; i++) {
-    if (course.exercises[i] != "dummyExerciseId") {
-      let exerciseObj = exercisesMap.get(course.exercises[i]);
-      text_html += "<pre>"
-      text_html += "Exercise name: " + exerciseObj.name + "<br />";
-      text_html += "Exercise description: " + exerciseObj.description + "<br />";
-      if (exerciseObj.deadline) {
-        text_html += "<br />";
-        text_html += "Exercise deadline: " + exerciseObj.deadline.date + "<br />";
-        let penalities = exerciseObj.deadline.penalities;
-        if (penalities) {
-          text_html += "<strong> Penalties </strong>: <br />";
-          for (var p = 0; p < penalities.length; p++) {
-            text_html += "Submitted with " + penalities[p].late +
-              " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
+    text_html += "<h5>There are no available exercises for this course!</h5>"
+  } else {
+    text_html += "<h3>Exercises in "+course.name+"</h3>"
+    for (var i = 0; i < course.exercises.length; i++) {
+        if (course.exercises[i] != "dummyExerciseId") {
+          let exerciseObj = exercisesMap.get(course.exercises[i]);
+          text_html += "<pre>"
+          text_html += "Exercise name: " + exerciseObj.name + "<br />";
+          text_html += "Exercise description: " + exerciseObj.description + "<br />";
+          if (exerciseObj.deadline) {
+            text_html += "<br />";
+            text_html += "Exercise deadline: " + exerciseObj.deadline.date + "<br />";
+            let penalities = exerciseObj.deadline.penalities;
+            if (penalities) {
+              text_html += "<strong> Penalties </strong>: <br />";
+              for (var p = 0; p < penalities.length; p++) {
+                text_html += "Submitted with " + penalities[p].late +
+                  " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
+              }
+            }
           }
+          text_html += "</pre>"
+          text_html += "<br />";
         }
-      }
-      text_html += "</pre>"
-      text_html += "<br />";
     }
   }
   // Ask for the user the password if there is one.
-  text_html += "<button name =\"" + key + "\" id=\"register\" class=\"btn btn-success\"\">Register</button>";
   $newPanel.find(".panel-body").append(text_html);
-  $("#accordion").append($newPanel.fadeIn());
+  $("#accordion-unregistered").append($newPanel.fadeIn());
 }
 
+// Show a course to which the current user is registered.
 function registered(key, course) {
   var $newPanel = $template.clone();
   $newPanel.find(".collapse").removeClass("in");
@@ -136,44 +142,45 @@ function registered(key, course) {
   text_html = "";
 
   if (course.exercises.length === 1 && course.exercises[0] === "dummyExerciseId") {
-    text_html += "<h5>There is not available exercise for this course!</h5>"
-  }
-
-  for (var i = 0; i < course.exercises.length; i++) {
-    if (course.exercises[i] != "dummyExerciseId") {
-      let exerciseId = course.exercises[i];
-      let exerciseObj = exercisesMap.get(exerciseId);
-      text_html += "<pre>"
-      text_html += "Exercise name: " + exerciseObj.name + "<br />";
-      text_html += "Exercise description: " + exerciseObj.description + "<br />";
-      if (exerciseObj.deadline) {
-        text_html += "<br />";
-        text_html += "Exercise deadline: " + exerciseObj.deadline.date + "<br />";
-        let penalities = exerciseObj.deadline.penalities;
-        if (penalities) {
-          text_html += "<strong> Penalties </strong>: <br />";
-          for (var p = 0; p < penalities.length; p++) {
-            text_html += "Submitted with " + penalities[p].late +
-              " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
+    text_html += "<h5>There are no available exercise for this course!</h5>"
+  } else {
+    text_html += "<h3>Exercises in "+course.name+"</h3>"
+    for (var i = 0; i < course.exercises.length; i++) {
+        if (course.exercises[i] != "dummyExerciseId") {
+          let exerciseId = course.exercises[i];
+          let exerciseObj = exercisesMap.get(exerciseId);
+          text_html += "<pre>"
+          text_html += "Exercise name: " + exerciseObj.name + "<br />";
+          text_html += "Exercise description: " + exerciseObj.description + "<br />";
+          if (exerciseObj.deadline) {
+            text_html += "<br />";
+            text_html += "Exercise deadline: " + exerciseObj.deadline.date + "<br />";
+            let penalities = exerciseObj.deadline.penalities;
+            if (penalities) {
+              text_html += "<strong> Penalties </strong>: <br />";
+              for (var p = 0; p < penalities.length; p++) {
+                text_html += "Submitted with " + penalities[p].late +
+                  " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
+              }
+            }
           }
+          var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+          let grade = -1;
+          for (var j = 0; j < homeUser.exerciseSolved.length; j++) {
+            if (homeUser.exerciseSolved[j].exerciseId === exerciseId) {
+              grade = homeUser.exerciseSolved[j].grade;
+            }
+          }
+          text_html += "My actual grade: " + grade + "<br /> <br />";
+          text_html += "<button name =\"" + exerciseId + "\" id=\"dl\" class=\"btn btn-link\"\">Download PDF</button>";
+          text_html += "<button name =\"" + exerciseId + "\" id=\"solve\" class=\"btn btn-success\"\">Solve</button>";
+          text_html += "</pre>"
+          if (i != course.exercises.length - 1) { text_html += "<br /> <br />"; }
         }
-      }
-      var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
-      let grade = -1;
-      for (var j = 0; j < homeUser.exerciseSolved.length; j++) {
-        if (homeUser.exerciseSolved[j].exerciseId === exerciseId) {
-          grade = homeUser.exerciseSolved[j].grade;
-        }
-      }
-      text_html += "My actual grade: " + grade + "<br /> <br />";
-      text_html += "<button name =\"" + exerciseId + "\" id=\"dl\" class=\"btn btn-link\"\">Download PDF</button>";
-      text_html += "</pre>"
-      text_html += "<button name =\"" + exerciseId + "\" id=\"solve\" class=\"btn btn-success\"\">Solve</button>";
-      if (i != course.exercises.length - 1) { text_html += "<br /> <br />"; }
     }
   }
   $newPanel.find(".panel-body").append(text_html);
-  $("#accordion").append($newPanel.fadeIn());
+  $("#accordion-registered").append($newPanel.fadeIn());
 }
 
 $('body').on('click', '#dl', function (e) {
@@ -189,7 +196,7 @@ $('body').on('click', '#dl', function (e) {
 $('body').on('click', '#solve', function (e) {
   let exerciseId = e.target.name;
   let exercise = exercisesMap.get(exerciseId);
-  if (exercise.deadline.date) {
+  if (exercise.deadline && exercise.deadline.date) {
     if (isOpen(exercise.deadline)) {
       localStorage.setItem("exercise", JSON.stringify(exercise));
       localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
