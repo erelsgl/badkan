@@ -13,7 +13,7 @@ var exerciseId = getParameterByName("exerciseId"); // in utils.js
 if (!exerciseId)
   exerciseId = "multiply"; // default exercise
 
-let exerciseMap = new Map(JSON.parse(localStorage.getItem("exerciseMap")));
+let exercisesMap = new Map(JSON.parse(localStorage.getItem("exercisesMap")));
 let exercise = exercisesMap.get(exerciseId);
 
 let usersMap = new Map(JSON.parse(localStorage.getItem("usersMap")));

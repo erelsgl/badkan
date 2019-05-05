@@ -4,18 +4,14 @@ function addOption(exercise, key) {
     select.options[select.options.length] = new Option(exercise.name, key);
 }
 
-// We need to load all the exercise since it's possible that the owner of the course is not 
-// the owner of the exercise. 
 
-var exercisesMap = new Map();
-loadAllExercisesAndAddOptions(exercisesMap);  // defined in Firebase.js.
 
-var usersMap = new Map();
-loadCoursesByOwner();
 
-var coursesMap = new Map();
+/*
+ * This code belongs to the "create course" tab.
+ */
 
-var public = true;
+var public = true; // TODO: should this variable be global?
 
 $('input[type=radio][name=privacy]').change(function () {
     var x = document.getElementById("pass");
@@ -29,7 +25,7 @@ $('input[type=radio][name=privacy]').change(function () {
     }
 });
 
-document.getElementById("btnConfirm").addEventListener('click', e => {
+document.getElementById("btnCreateCourse").addEventListener('click', e => {
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     const name = escapeHtml(document.getElementById("courseName").value);
     var values = $('#exercises').val();
@@ -53,7 +49,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
             incrementCreatedExWithoutCommingHome(ownerId, homeUser);
         }
     }
-});
+});  // end create course
 
 function checkEmptyFieldsPublic(name) {
     var emptyField = document.getElementById("emptyField");
@@ -75,17 +71,36 @@ function checkEmptyFieldsPrivate(name, password) {
     return true;
 }
 
-var $template = $(".template");
 
-let hash = 2;
 
+
+/*
+ * This code belongs to the "manage courses" tab.
+ */
+
+
+// We need to load all the exercise since it's possible that the owner of the course is not 
+// the owner of the exercise. 
+
+var exercisesMap = new Map();
+loadAllExercisesAndAddOptions(exercisesMap);  // defined in frontend/util/Firebase.js.
+
+var usersMap = new Map();
+var coursesMap = new Map();
+
+
+/**
+ * Add a single course to the HTML and to the courses map.
+ */
 function addCourseHTML(courseId, course) {
+    // TODO: Check duplicate code with Home.js addCourseHTML
     coursesMap.set(courseId, course);
-    var $newPanel = $template.clone();
+
+    var $newPanel = addCourseHTML.template.clone();
     $newPanel.find(".collapse").removeClass("in");
-    $newPanel.find(".accordion-toggle").attr("href", "#" + (hash))
+    $newPanel.find(".accordion-toggle").attr("href", "#" + (addCourseHTML.hash))
         .text(course.name);
-    $newPanel.find(".panel-collapse").attr("id", hash++).addClass("collapse").removeClass("in");
+    $newPanel.find(".panel-collapse").attr("id", addCourseHTML.hash++).addClass("collapse").removeClass("in");
     $newPanel.find(".panel-body").text('')
     text_html = "";
     if (course.exercises.length === 1 && course.exercises[0] === "dummyExerciseId") {
@@ -110,9 +125,35 @@ function addCourseHTML(courseId, course) {
     text_html += "<button name =\"" + courseId + "\" id=\"delete\" class=\"btn btn-danger\">Delete Course</button>"
     $newPanel.find(".panel-body").append(text_html);
     $("#accordion").append($newPanel.fadeIn());
-    loadUserByOwner(usersMap, coursesMap);
-    document.getElementById("loading").style.display = "none";
 }
+addCourseHTML.template = $(".template");
+addCourseHTML.hash = 2;
+
+
+function onLoadAllCourses() {
+    console.log("Done loading courses")
+    document.getElementById("loading").style.display = "none";
+
+    localStorage.setItem("coursesMap",
+        JSON.stringify(Array.from(coursesMap.entries())));
+    localStorage.setItem("exercisesMap",
+        JSON.stringify(Array.from(exercisesMap.entries())));
+
+    var courses=coursesMap.values()
+    for (var i=0; i<courses.length; ++i) {
+        loadUsersOfCourse(courses[i],
+            (key,user) => {
+                usersMap.set(key,user)
+            }
+        ); // defined in frontend/util/Firebase.js
+    }
+
+    localStorage.setItem("usersMap",
+        JSON.stringify(Array.from(usersMap.entries())));
+}
+
+loadCoursesOwnedByCurrentUser(addCourseHTML, onLoadAllCourses);    // defined in frontend/util/Firebase.js.
+
 
 /**
  * Here the user is redirected into a new page "viewExercise".
@@ -130,10 +171,6 @@ $('body').on('click', '#exercise', function (e) {
 //    let exercise = exercisesMap.get(exerciseId);
 //    localStorage.setItem("exercise", JSON.stringify(exercise));
 //    localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
-    localStorage.setItem("exercisesMap",
-        JSON.stringify(Array.from(exercisesMap.entries())));
-    localStorage.setItem("usersMap",
-        JSON.stringify(Array.from(usersMap.entries())));
     document.location.href = "viewExercise.html?exerciseId="+exerciseId;
 });
 

@@ -246,16 +246,28 @@ function loadExerciseByOwner(ownExercises) {
   });
 }
 
-function loadCoursesByOwner() {
+/**
+ * Load all the courses from Firebase,
+ *      filter only the courses owned by the currently authenticated user,
+ *      and for each such course, call:
+ *          onCourse(key, course)
+ * After all courses are read, call onFinish()
+ */
+function loadCoursesOwnedByCurrentUser(onCourse, onFinish) {
   database.ref().child('courses/').on("value", function (snapshot) {
-    if (!snapshot.val()) {
+    if (!snapshot.val()) { // TODO: is it needed?
       document.getElementById("loading").style.display = "none";
     }
-    snapshot.forEach(function (data) {
-      if (data.val().course.ownerId === firebase.auth().currentUser.uid) {
-        addCourseHTML(data.key, data.val().course)
-      } else {
-        document.getElementById("loading").style.display = "none";
+
+    var numToProcess = snapshot.numChildren()
+    snapshot.forEach(function (course_data) {  // for each course do
+      if (course_data.val().course.ownerId === firebase.auth().currentUser.uid) {
+         (course_data.key, course_data.val().course)
+      }
+      numToProcess--;
+      if (numToProcess<=0) {  // done all courses
+        document.getElementById("loading").style.display = "none"; // TODO: is it needed?
+        onFinish();
       }
     })
   });
@@ -263,12 +275,12 @@ function loadCoursesByOwner() {
 
 
 // Loads all courses from Firebase,
-//    and call the callback for each course in turn,
-//    with "key" and "course" object.
-function loadAllCourses(callback) {
+//    and for each course, call:
+//    onCourse(key, course)
+function loadAllCourses(onCourse) {
   database.ref().child('courses/').on("value", function (snapshot) {
     snapshot.forEach(function (data) {
-      callback(data.key, data.val().course);
+      onCourse(data.key, data.val().course);
     })
   });
 }
@@ -314,18 +326,23 @@ function loadAllExercisesAndAddOptions(exercisesMap) {
   });
 }
 
-function loadUserByOwner(usersMap, coursesMap) {
-  for (let pair of coursesMap) {
-    let key = pair[0];
-    let value = pair[1]
-    for (var j = 0; j < value.students.length; j++) {
-      if (value.students[j] != "dummyStudentId") {
-        database.ref().child('users/' + value.students[j]).once('value').then(function (snapshot) {
-          usersMap.set(snapshot.key, snapshot.val().user);
-        })
+/**
+ *     Read from Firebase the data of all users registered to the course,
+ *     and for each user, call:
+ *         onUser(key, user)
+ */
+function loadUsersOfCourse(course, onUser) {
+    for (var j = 0; j < course.students.length; j++) {
+      let current_student = course.students[j]
+      if (current_student != "dummyStudentId") {
+        database.ref().child('users/' + current_student).once('value').then(
+          function (snapshot) {
+            console.log("key="+snapshot.key+" user="+snapshot.val().user)
+            onUser(snapshot.key, snapshot.val().user)
+          }
+        )
       }
     }
-  }
 }
 
 /**
