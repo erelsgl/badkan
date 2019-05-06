@@ -1,6 +1,9 @@
 // This line should be the same as in myExercises.js.
+
 var BACKEND_PORTS = [5670, 5671, 5672, 5673, 5674, 5675, 5676, 5677, 5678, 5679];
-var BACKEND_FILE_PORTS = [9000, 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009];
+var BACKEND_FILE_PORTS = [9000];
+
+//var BACKEND_PORTS = [5670];
 
 /**
  * From there, he can:
