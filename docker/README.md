@@ -16,13 +16,14 @@ To change the docker image:
 3. To push the image from your computer to the repository do:
 
 
-    sudo docker login    # enter username and password to hub.docker.com
-    sudo docker push erelsgl/badkan:latest
+    sudo docker login # enter username and password to hub.docker.com sudo docker push erelsgl/badkan:latest
 
 4. To pull a new image from the repository (to another computer) do:
 
 
-    sudo docker pull erelsgl/badkan:latest
+        cd badkan/docker
+        sudo docker build -t erelsgl/badkan:latest .
+        sudo docker image ls     # look for erelsgl/badkan with tag "latest" 
 
 5. To run the container, first exit the previous running container:
  
@@ -37,7 +38,7 @@ then do:
 6. To remove old versions do:
 
 
-    sudo docker rmi <old-image-id> 
+    sudo docker rmi 
 
 7. To copy a file or a folder into the container do e.g:
 
