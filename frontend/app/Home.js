@@ -3,6 +3,12 @@
  * Really important.
  */
 
+
+var admin = getParameterByName("admin"); // in utils.js
+if (admin=="1") {
+    $("#btnManageCourses").show()
+}
+
 /**
  * ON STATE CHANGE.
  * Every time the state of the user is changed, this function is called.
