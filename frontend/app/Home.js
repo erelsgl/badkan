@@ -139,7 +139,6 @@ function notRegistered(key, course) {
             }
           }
           text_html += "</div><!--exercise-->"
-          text_html += "<br />";
         }
       }
     }
@@ -209,9 +208,9 @@ function registered(key, course) {
           text_html += "</p>";
           text_html += "</div><!--exercise-->"
         }
-        if (i != course.exercises.length - 1) {
-          text_html += "<br /> <br />";
-        }
+//        if (i != course.exercises.length - 1) {
+//          text_html += "<br /> <br />";
+//        }
       }
     }
   }
