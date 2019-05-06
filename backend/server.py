@@ -251,8 +251,8 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
                 if "output:" in line:
                     output += str(count) + ":;" + line[line.find(":") + 2: len(line)] + ";"
                     count += 1
-                else:
-                    await tee(websocket, line)
+                # else:
+                    # await tee(websocket, line)
                 print("> {}".format(line))  # Print the line to nohup.out, for debugging
                 matches = grade_regexp.search(line)
                 if matches is not None:     # This line represents the student's grade.
