@@ -6,6 +6,11 @@ export USERNAME=$1
 export REPOSITORY=$2
 export OWNERID=$3
 export EXID=$4
+export TOKENUSERNAME=$5
+export TOKENPASS=$6
+
+#  ew_url = "https://" + username + ":" + password + "@" + url[8:]
+
 
 cd submissions
 
@@ -29,7 +34,7 @@ if [ -d $EXID ]; then
     else
         cd ..
         rm -r $EXID
-        URL=https://github.com/$USERNAME/$REPOSITORY.git
+        URL=https://$TOKENUSERNAME:$TOKENPASS@gitlab.com/$USERNAME/$REPOSITORY.git
         echo "! git clone $URL $EXID"
         git clone $URL $EXID
         echo "! cd $EXID"
@@ -37,7 +42,7 @@ if [ -d $EXID ]; then
     fi;
 
 else
-    URL=https://github.com/$USERNAME/$REPOSITORY.git
+    URL=https://$TOKENUSERNAME:$TOKENPASS@gitlab.com/$USERNAME/$REPOSITORY.git
     echo "! git clone $URL $EXID"
     git clone $URL $EXID
     echo "! cd $EXID"

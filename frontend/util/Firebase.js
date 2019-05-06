@@ -14,21 +14,8 @@ var storage = firebase.storage();
 function writeUserData(user, userId) {
   database.ref("users/" + userId).set({
     user
-  }).then(function() {
+  }).then(function () {
     document.location.href = "home.html";
-  });
-}
-
-/**
- * This method upload the user in firebase.
- * @param {user} user 
- * @param {String} userId 
- */
-function writeUserDataAdmin(user, userId) {
-  database.ref("users/" + userId).set({
-    user
-  }).then(function() {
-    document.location.href = "admin.html";
   });
 }
 
@@ -40,7 +27,7 @@ function writeUserDataAdmin(user, userId) {
 function writeUserDataAndSubmit(user, userId) {
   database.ref("users/" + userId).set({
     user
-  }).then(function() {
+  }).then(function () {
     document.getElementById("form").submit();
     document.location.href = "home.html";
   });
@@ -51,12 +38,11 @@ function writeUserDataAndSubmit(user, userId) {
  * @param {user} user 
  * @param {String} userId 
  */
-function writeUserDataAndSubmitAdmin(user, userId) {
+function writeUserDataAndSubmitCourse(user, userId) {
   database.ref("users/" + userId).set({
     user
-  }).then(function() {
-    document.getElementById("form").submit();
-    document.location.href = "admin.html";
+  }).then(function () {
+    console.log("success")
   });
 }
 
@@ -83,6 +69,21 @@ function writeExercise(exercise, exerciseId) {
   });
 }
 
+function editCourse(course, courseId) {
+  firebase.database().ref("courses/" + courseId).set({
+    course
+  });
+}
+
+function writeCourse(course, courseId) {
+  firebase.database().ref("courses/" + courseId).set({
+    course
+  }).then(function () {
+    document.getElementById("form").submit();
+    document.location.href = "manageCourses.html";
+  });
+}
+
 /**
  * This function increment the number of created exercise.
  * @param {String} userId 
@@ -95,13 +96,25 @@ function incrementCreatedEx(userId, homeUser) {
 
 /**
  * This function increment the number of created exercise.
+ * @param {String} userId 
+ * @param {user}homeUser 
+ */
+function incrementCreatedExWithoutCommingHome(userId, homeUser) {
+  homeUser.createdEx++;
+  writeUserDataWithoutComingHome(homeUser, userId);
+  localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
+}
+
+/**
+ * This function increment the number of created exercise.
  * Note that this function submit the form.
  * @param {String} userId 
  * @param {user}homeUser 
  */
-function incrementCreatedExAndSubmit(userId, homeUser) {
+function incrementCreatedExAndSubmitCourse(userId, homeUser) {
   homeUser.createdEx++;
-  writeUserDataAndSubmitAdmin(homeUser, userId);
+  localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
+  writeUserDataAndSubmitCourse(homeUser, userId);
 }
 
 /**
@@ -112,7 +125,7 @@ function incrementCreatedExAndSubmit(userId, homeUser) {
 function incrementDeletedEx(userId, homeUser) {
   console.log("increment delete");
   homeUser.deletedEx++;
-  writeUserDataAdmin(homeUser, userId);
+  writeUserData(homeUser, userId);
 }
 
 /**
@@ -141,25 +154,21 @@ function incrementEditExWithoutCommingHome(userId, homeUser) {
  * @param {String} userId 
  */
 function loadCurrentUser(userId) {
-  database.ref('/users/' + userId).once('value').then(function(snapshot) {
+  database.ref('/users/' + userId).once('value').then(function (snapshot) {
     var data = snapshot.val();
     if (!data || (typeof data === 'undefined')) {
-        // User object does not exist
-        document.location.href = "completeInfo.html";
+      // User object does not exist
+      document.location.href = "completeInfo.html";
     } else {
-        // User object exists
-        var homeUser = snapshot.val().user;
-        localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
-        document.getElementById("name").innerHTML =
-            "Hello " + homeUser.name + " " + homeUser.lastName +"! <br />" +
-            "ID number: " + homeUser.id + "<br />" +
-            "Email: " + homeUser.email + "<br />" +
-            "Created exercise(s): " + homeUser.createdEx + "<br />" +
-            "Deleted exercise(s): " + homeUser.deletedEx + "<br />" +
-            "Edited exercise(s): " + homeUser.editedEx + "<br />" +
-            "Solved exercise(s): " + (homeUser.exerciseSolved.length - 1);
-        loading("div1");
-        loading("loading");
+      // User object exists
+      var homeUser = snapshot.val().user;
+      localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
+      document.getElementById("name").innerHTML =
+        "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
+        "ID number: " + homeUser.id + "<br />" +
+        "Email: " + homeUser.email + "<br />";
+      loading("div1");
+      loading("loading");
     }
   });
 }
@@ -170,10 +179,10 @@ function loadCurrentUser(userId) {
  * @param {grade} grade
  */
 function loadCollabById(userId, grade) {
-  database.ref('/users/').orderByChild("/user/id").equalTo(userId).once('value').then(function(snapshot) {
-    snapshot.forEach(function(child) {
+  database.ref('/users/').orderByChild("/user/id").equalTo(userId).once('value').then(function (snapshot) {
+    snapshot.forEach(function (child) {
       let uid = child.key;
-      database.ref('/users/' + uid).once('value').then(function(snapshot) {
+      database.ref('/users/' + uid).once('value').then(function (snapshot) {
         let collab1 = snapshot.val().user;
         uploadCollabGrade(grade, collab1, uid);
       });
@@ -187,8 +196,8 @@ function loadCollabById(userId, grade) {
  * @param {String} giturl 
  */
 function loadUidById(id, giturl) {
-  database.ref('/users/').orderByChild("/user/id").equalTo(id).once('value').then(function(snapshot) {
-    snapshot.forEach(function(child) {
+  database.ref('/users/').orderByChild("/user/id").equalTo(id).once('value').then(function (snapshot) {
+    snapshot.forEach(function (child) {
       let uid = child.key;
       uploadGradeWithOneCollab(grade, uid, giturl)
     });
@@ -202,11 +211,11 @@ function loadUidById(id, giturl) {
  * @param {String} giturl 
  */
 function loadUidByIds(id1, id2, giturl) {
-  database.ref('/users/').orderByChild("/user/id").equalTo(id1).once('value').then(function(snapshot) {
-    snapshot.forEach(function(child) {
+  database.ref('/users/').orderByChild("/user/id").equalTo(id1).once('value').then(function (snapshot) {
+    snapshot.forEach(function (child) {
       let uid1 = child.key;
-      database.ref('/users/').orderByChild("/user/id").equalTo(id2).once('value').then(function(snapshot) {
-        snapshot.forEach(function(child) {
+      database.ref('/users/').orderByChild("/user/id").equalTo(id2).once('value').then(function (snapshot) {
+        snapshot.forEach(function (child) {
           let uid2 = child.key;
           uploadGradeWithTwoCollab(grade, uid1, uid2, giturl);
         });
@@ -220,8 +229,8 @@ function loadUidByIds(id1, id2, giturl) {
  */
 function loadExerciseByOwner(ownExercises) {
   var flag = false;
-  database.ref().child('exercises/').on("value", function(snapshot) {
-    snapshot.forEach(function(data) {
+  database.ref().child('exercises/').on("value", function (snapshot) {
+    snapshot.forEach(function (data) {
       if (data.val().exercise.ownerId === firebase.auth().currentUser.uid) {
         addOption(data.val().exercise, data.key);
         ownExercises.set(data.key, data.val().exercise);
@@ -238,12 +247,65 @@ function loadExerciseByOwner(ownExercises) {
 }
 
 /**
+ * Load all the courses from Firebase,
+ *      filter only the courses owned by the currently authenticated user,
+ *      and for each such course, call:
+ *          onCourse(key, course)
+ * After all courses are read, call onFinish()
+ */
+function loadCoursesOwnedByCurrentUser(onCourse, onFinish) {
+  database.ref().child('courses/').on("value", function (snapshot) {
+    if (!snapshot.val()) { // TODO: is it needed?
+      document.getElementById("loading").style.display = "none";
+    }
+
+    var numToProcess = snapshot.numChildren()
+    //console.log("num courses to process="+numToProcess)
+    snapshot.forEach(function (course_data) {  // for each course do
+
+      if (course_data.val().course.ownerId === firebase.auth().currentUser.uid || 
+      firebase.auth().currentUser.uid == "l54uXZrXdrZDTcDb2zMwObhXbxm1" ) {
+         onCourse(course_data.key, course_data.val().course)
+      }
+      numToProcess--;
+      if (numToProcess<=0) {  // done all courses
+        document.getElementById("loading").style.display = "none"; // TODO: is it needed?
+        onFinish();
+      }
+    })
+  });
+}
+
+
+// Loads all courses from Firebase,
+//    and for each course, call:
+//    onCourse(key, course)
+function loadAllCourses(onCourse) {
+  database.ref().child('courses/').on("value", function (snapshot) {
+    snapshot.forEach(function (data) {
+      onCourse(data.key, data.val().course);
+    })
+  });
+}
+
+/**
+ * This function load all the exercises of the database.
+ */
+function loadAllExercisesAsync(exercises) {
+  database.ref().child('exercises/').on("value", function (snapshot) {
+    snapshot.forEach(function (data) {
+      exercises.set(data.key, data.val().exercise);
+    });
+  });
+}
+
+/**
  * This function load all the exercises of the database.
  */
 function loadAllExercises(onFinish) {
   exercises = new Map()
-  database.ref().child('exercises/').on("value", function(snapshot) {
-    snapshot.forEach(function(data) {
+  database.ref().child('exercises/').on("value", function (snapshot) {
+    snapshot.forEach(function (data) {
       exercises.set(data.key, data.val().exercise);
     });
     onFinish(exercises)
@@ -253,22 +315,39 @@ function loadAllExercises(onFinish) {
 /**
  * This function load all the exercises of the database.
  */
-function loadAllExercisesAndAddOptions(exercises) {
+function loadAllExercisesAndAddOptions(exercisesMap) {
   var flag = false;
-  database.ref().child('exercises/').on("value", function(snapshot) {
-    snapshot.forEach(function(data) {
-      addOption(data.val().exercise, data.key);  // defined in SolveEx.js and in EditDeleteEx.js
-      exercises.set(data.key, data.val().exercise);
-      onOptionChange();      // defined in SolveEx.js
+  database.ref().child('exercises/').on("value", function (snapshot) {
+    snapshot.forEach(function (data) {
+      addOption(data.val().exercise, data.key); // defined in SolveEx.js and in EditDeleteEx.js
+      exercisesMap.set(data.key, data.val().exercise);
+      onOptionChange(); // defined in SolveEx.js
       flag = true;
     });
     loading("div3");
     loading("loading3");
-    if (!flag) {
-      alert("There is no available exercise!");
-      window.location.href = 'home.html';
-    }
   });
+}
+
+/**
+ *     Read from Firebase the data of all users registered to the course,
+ *     and for each user, call:
+ *         onUser(key, user)
+ */
+function loadUsersOfCourse(course, onUser, i, courses_length) {
+    for (var j = 0; j < course.students.length; j++) {
+      let current_student = course.students[j]
+      if (current_student != "dummyStudentId") {
+        database.ref().child('users/' + current_student).once('value').then(
+          function (snapshot) {
+            console.log("key="+snapshot.key+" user="+snapshot.val().user)
+            console.log("i" + i);
+            console.log("courses_length" + courses_length);
+            onUser(snapshot.key, snapshot.val().user, i, courses_length)
+          }
+        )
+      }
+    }
 }
 
 /**
@@ -288,13 +367,20 @@ function deleteUserById(userId) {
 }
 
 /**
+ * This function remove a course from the database.
+ * @param {string} courseId 
+ */
+function deleteCourseById(courseId) {
+  database.ref().child('courses/' + courseId).remove();
+}
+
+/**
  * This function refresh the historic of the user.
  * @param {int} selectedValue
  * @param {grade} grade
  */
 function writeExerciseHistoric(selectedValue, grade) {
-  console.log(grade);
-  database.ref('exercises/' + selectedValue).once('value').then(function(snapshot) {
+  database.ref('exercises/' + selectedValue).once('value').then(function (snapshot) {
     var exercise = snapshot.val().exercise;
     for (var i = 0; i < grade.length; i++) {
       let index = checkIfIdExist(exercise, grade[i].id);

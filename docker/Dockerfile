@@ -4,6 +4,23 @@ FROM ubuntu:16.04
 # Install any needed packages specified in requirements.txt
 RUN apt-get update
 RUN apt-get -y install git build-essential clang++-5.0 clang-tidy-5.0 valgrind python3 pnmtopng unzip bc
+
+# Install OpenJDK-8
+RUN apt-get update && \
+    apt-get install -y openjdk-8-jdk && \
+    apt-get install -y ant && \
+    apt-get clean;
+
+# Fix certificate issues
+RUN apt-get update && \
+    apt-get install ca-certificates-java && \
+    apt-get clean && \
+    update-ca-certificates -f;
+
+# Setup JAVA_HOME -- useful for docker commandline
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
+RUN export JAVA_HOME
+
 RUN mkdir submissions
 RUN mkdir www
 
@@ -12,6 +29,8 @@ WORKDIR /
 
 # Copy required files into the container:
 COPY get-submission.sh   /
+COPY get-submission-file.sh   /
+COPY get-private-submission.sh   /
 COPY www-readme.md       /www/README.md
 
 # Define environment variable

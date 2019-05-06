@@ -4,6 +4,7 @@
  */
 function loading(id) {
     var x = document.getElementById(id);
+    if (!x) return;
     if (x.style.display === "none") {
       x.style.display = "block";
     } else {

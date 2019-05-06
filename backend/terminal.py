@@ -4,6 +4,7 @@
 Utility functions: clone git repository, pull git repository, remove path
 """
 
+import subprocess
 from subprocess import call
 import os
 
@@ -24,6 +25,8 @@ def git_clone(path, url, folder_name, username, password, exercise):
     os.chdir(path + "/" + folder_name)
     os.system("ls | grep -v " + exercise + " | xargs rm -r")
     os.chdir(owd)
+    shellscript = subprocess.Popen(['bash','git-clean.sh', folder_name, exercise], stdout=subprocess.PIPE)
+
 
 
 def git_pull(path, folder_name, ex_folder):
@@ -33,10 +36,10 @@ def git_pull(path, folder_name, ex_folder):
     (it's composed of the uid of the owner + "_" + nb of exercise he created).
     :param ex_folder: the name of the folder of the solved exercise.
     """
-    owd = os.getcwd()
-    os.chdir(path + "/" + folder_name + "/" + ex_folder)
-    call(["git", "pull"])
-    os.chdir(owd)
+    shellscript = subprocess.Popen(['bash','git-pull.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
+    shellscript.wait()
+    shellscript = subprocess.Popen(['bash','git-clean.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
+
 
 def rmv(path, folder_name):
     """
@@ -47,3 +50,6 @@ def rmv(path, folder_name):
     os.chdir(path)
     os.system("rm -r " + folder_name)
     os.chdir(owd)
+
+#def extract(path, file, folder_name):
+    
