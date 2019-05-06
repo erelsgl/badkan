@@ -280,10 +280,16 @@ function loadCoursesOwnedByCurrentUser(onCourse, onFinish) {
 // Loads all courses from Firebase,
 //    and for each course, call:
 //    onCourse(key, course)
-function loadAllCourses(onCourse) {
+//  After all courses are read, call onFinish()
+function loadAllCourses(onCourse, onFinish) {
   database.ref().child('courses/').on("value", function (snapshot) {
+    var numToProcess = snapshot.numChildren()
     snapshot.forEach(function (data) {
       onCourse(data.key, data.val().course);
+      numToProcess--;
+      if (numToProcess<=0) {  // done all courses
+        onFinish();
+      }
     })
   });
 }
