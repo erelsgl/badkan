@@ -230,7 +230,6 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
      # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
     current_exercise_dir = os.path.realpath(EXERCISE_DIR + "/" + exercise)
     await tee(websocket, "copying from {}".format(current_exercise_dir))
-    print("DEBUD GRADE", current_exercise_dir)
     proc = await docker_command(["cp", current_exercise_dir, "badkan:{}/grading_files".format(repository_folder)])
     async for line in proc.stdout:  print(line)
     await proc.wait()
