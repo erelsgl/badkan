@@ -16,7 +16,8 @@ To change the docker image:
 3. To push the image from your computer to the repository do:
 
 
-    sudo docker login # enter username and password to hub.docker.com sudo docker push erelsgl/badkan:latest
+    sudo docker login # enter username and password to hub.docker.com 
+    sudo docker push erelsgl/badkan:latest
 
 4. To pull a new image from the repository (to another computer) do:
 

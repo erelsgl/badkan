@@ -226,6 +226,38 @@ Check if the error is :
 Then, go to Firebase in the Authentication -> Sign-in method -> Authorized domain and add your domain.
 Also go to GitHub settings -> application -> choose the right application and change the Homepage URL with the new one.
 
+## Installing PERL for the MOSS command
+
+To install the perl package do:
+
+    sudo apt-get install perl
+
+Try your installation by doing:
+
+    /usr/bin/perl -e 'print "Hello, world\n";'
+
+You can check the installation and the version by typing:
+
+    perl -V
+
+You can also check that the perl folder resides at the location "/usr/bin/perl".  
+If not, you should change the location of the first line at backend/moss.pl and enter the right location.
+
+Next, you need to execute permission for the file by giving this command on shell:
+
+    chmod ug+x moss.pl
+
+Now Get all the files which you need to check for plagiarism, in a given directory.
+
+Now run the command mentioned below, from the location where your moss file is present.
+
+    ./moss.pl -l c -c "Machine Problem 3 Moss Report_FInal_c" ./directory/*
+    -l Option is for language. which is C in the above example. Its cc for C++, java for java and etc.
+    -c option s just for name of the report generated
+    ./directory/* specifies the location where all the files are present
+
+Once you run this, you would be given a URL, where you could see the report generated.
+
 ## Start
 
 The system has three different parts: docker, backend and frontend.
