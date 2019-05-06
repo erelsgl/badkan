@@ -2,16 +2,16 @@ import time
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import cgi
 import subprocess
-import os
+import os, sys
 
 """
-IF THERE IS A PROBLEM OF SIMULTANEOUS SUBMISSION THERE EXISTS TWO SOLUTION:
+IF THERE IS A PROBLEM OF SIMULTANEOUS SUBMISSION THERE ARE TWO SOLUTION:
 USE NUMEROUS PORT.
 MULTIPROCESSING.
 """
 
 HOST_NAME = 'localhost'
-PORT_NUMBER = 9000
+PORT_NUMBER = int(sys.argv[1]) if len(sys.argv)>=2 else 9000   # TODO: Where is this port used in the frontend?
 
 class MyHandler(BaseHTTPRequestHandler):
 

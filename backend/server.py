@@ -17,7 +17,7 @@ from multiprocessing import Process
 
 from concurrent.futures import ProcessPoolExecutor
 
-PORT = sys.argv[1] if len(sys.argv)>=2 else 5670   # same port as in frontend/index.html
+PORT_NUMBER = int(sys.argv[1]) if len(sys.argv)>=2 else 5670   # same port as in frontend/index.html
 
 EXERCISE_DIR = os.path.realpath(os.path.dirname(os.path.abspath(__file__))+"/../exercises")
 
@@ -337,8 +337,8 @@ async def run(websocket, path):
     print ("> Closing connection")
 
 
-websocketserver = websockets.server.serve(run, '0.0.0.0', PORT, origins=None)
-print("{} listening at {}".format(type(websocketserver), PORT))
+websocketserver = websockets.server.serve(run, '0.0.0.0', PORT_NUMBER, origins=None)
+print("{} listening at {}".format(type(websocketserver), PORT_NUMBER))
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(websocketserver)
