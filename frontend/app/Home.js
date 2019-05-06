@@ -108,7 +108,7 @@ function notRegistered(key, course) {
           text_html += "<pre>"
           text_html += "<h3>" + exerciseObj.name + "</h3> <br />";
           text_html += "Exercise description: " + exerciseObj.description + "<br />";
-          if (exerciseObj.deadline) {
+          if (exerciseObj.deadline && exerciseObj.deadline.date) {
             text_html += "<br />";
             text_html += "Exercise deadline: " + exerciseObj.deadline.date + "<br />";
             let penalities = exerciseObj.deadline.penalities;
@@ -116,7 +116,7 @@ function notRegistered(key, course) {
               text_html += "<strong> Penalties </strong>: <br />";
               for (var p = 0; p < penalities.length; p++) {
                 text_html += "Submitted with " + penalities[p].late +
-                  " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
+                  " day(s) late is penalized with " + penalities[p].point + " point(s)" + "<br />";
               }
             }
           }
@@ -163,7 +163,7 @@ function registered(key, course) {
               text_html += "<strong> Penalties </strong>: <br />";
               for (var p = 0; p < penalities.length; p++) {
                 text_html += "Submitted with " + penalities[p].late +
-                  " day(s) late is penalized with " + penalities[p].late + " point(s)" + "<br />";
+                  " day(s) late is penalized with " + penalities[p].point + " point(s)" + "<br />";
               }
             }
           }
@@ -175,7 +175,11 @@ function registered(key, course) {
               grade = homeUser.exerciseSolved[j].grade;
             }
           }
-          text_html += "My actual grade: " + grade + "<br /> <br />";
+          if (grade === -1) {
+            text_html += "My actual grade: No submission for this exercise yet. <br /> <br />";
+          } else {
+            text_html += "My actual grade: " + grade + "<br /> <br />";
+          }
           if (exerciseObj.example === "PDF") {
             text_html += "<button name =\"" + exerciseId + "\" id=\"dl\" class=\"btn btn-link\"\">Download PDF</button>";
             text_html += "<br /> <br />"

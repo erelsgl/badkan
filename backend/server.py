@@ -72,6 +72,7 @@ async def run_for_admin(owner_firebase_id, exercise_id, websocket):
     repository_folder = "/submissions/{}/{}".format(owner_firebase_id, exercise_id)
     current_exercise_dir = os.path.realpath(EXERCISE_DIR + "/" + exercise_id)
     await tee(websocket, "copying from {}".format(current_exercise_dir))
+    print("DEBUD ADMIN", current_exercise_dir)
     proc = await docker_command(["cp", current_exercise_dir, "badkan:{}/grading_files".format(repository_folder)])
     async for line in proc.stdout:  print(line)
     await proc.wait()
@@ -224,19 +225,19 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
      # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
     current_exercise_dir = os.path.realpath(EXERCISE_DIR + "/" + exercise)
     await tee(websocket, "copying from {}".format(current_exercise_dir))
-    print("DEBUD", current_exercise_dir)
+    print("DEBUD GRADE", current_exercise_dir)
     proc = await docker_command(["cp", current_exercise_dir, "badkan:{}/grading_files".format(repository_folder)])
     async for line in proc.stdout:  print(line)
     await proc.wait()
-
     # Grade the submission inside the docker container "badkan"
+    grade = None
+    move_command = "mv grading_files/* . && rm -rf grading_files"
     TIMEOUT_SOFT = 10 # seconds
     TIMEOUT_HARD = 20 # seconds
     grade_command = "timeout -s 9 {} timeout {} nice -n 5 ./grade {} {}".format(TIMEOUT_HARD, TIMEOUT_SOFT, owner_firebase_id, exercise)
     exitcode_command = "echo Exit code: $?"
-    combined_command = "{} ; {}".format(grade_command, exitcode_command)
+    combined_command = "{} && {} ; {}".format(move_command, grade_command, exitcode_command)
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
-    grade = None
     output = ""
     count = 0
     while True:

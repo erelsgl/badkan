@@ -6,4 +6,3 @@ echo $FOLDERNAME1
 echo $FOLDERNAME2
 sudo cp -a $FOLDERNAME2/. .
 rm -r $FOLDERNAME2
-
