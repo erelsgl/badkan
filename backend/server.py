@@ -122,15 +122,42 @@ async def check_private_submission(websocket:object, submission:dict):
     currentDT = datetime.datetime.now()
     edit_csv(str(currentDT), solution, ids, "START", name)
 
+    matches = GITLAB_REGEXP.search(solution)
+
+    # Read the git url and verify its format:
+    git_url =submission["git_url"]
+    matches = GIT_REGEXP.search(git_url)
+    if matches is None:
+        await tee(websocket, "Wrong format of link to github repository!")
+        await tee(websocket, "Final Grade: 0")
+        return
+
     if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
 
     repository_folder = "/submissions/{}/{}".format(owner_firebase_id, exercise)
         
-    matches = GITLAB_REGEXP.search(solution)
     username = matches.group(1)
     repository = GIT_CLEAN.sub("",matches.group(2))
+
+    # Read the name and ids of the submitters:
+    ids = submission["ids"]
+    name = submission["name"]
+
+    # Log the start of the submission:
+    currentDT = datetime.datetime.now()
+    edit_csv(str(currentDT), git_url, ids, "START", name)
+
+    # Set the regular expression for detecting the grade in the file.
+    # This is the default regular expression:
+    grade_regexp = re.compile("[*].*grade.*:\\s*(\\d+).*[*]", re.IGNORECASE)   # default
+    # If there is a "signature file", then the default is changed to "...(integer)...<signature>..."
+    signature_file = current_exercise_folder + "/signature.txt"
+    if os.path.isfile(signature_file):
+        with open(signature_file) as f:
+            grade_signature=f.read().strip()
+            grade_regexp = re.compile(".*?(\\d+).*{}.*".format(re.escape(grade_signature)))
 
     # Read the name and ids of the submitters:
     ids = submission["ids"]

@@ -38,11 +38,9 @@
     <h1>Submit exercise <b><span id="exercise"></span></b></h1>
 
     <form>
-
-      <ul class="nav nav-pills">
-        <li class="active"><a data-toggle="pill" href="#home">GitHub clone</a></li>
-        <li><a data-toggle="pill" href="#menu1">Zip file</a></li>
-        <li><a data-toggle="pill" href="#menu2">GitLab private clone</a></li>
+      <li class="active"><a data-toggle="pill" href="#home">GitHub clone</a></li>
+      <li><a data-toggle="pill" href="#menu1">Zip file</a></li>
+      <li><a data-toggle="pill" href="#menu2">GitLab private clone</a></li>
       </ul>
 
       <div class="tab-content">
@@ -60,7 +58,7 @@
 
         <div id="menu2" class="tab-pane fade">
 
-          <br/>
+          <br />
 
           <div class="form-group">
             <label for="usr">GitLab repository:</label>
@@ -101,8 +99,9 @@
           <label for="usr">Enter here the id of your second collaborator (if exist):</label>
           <input type="text" class="form-control" id="collab2" /> <br />
         </div>
-        <button id="submit" type="submit" class="btn btn-primary">Send</button>
-        <button id="clear" type="button" class="btn btn-primary">Clean+Send</button>
+        <button id="clear" type="button" class="btn btn-primary">Clean</button>
+        <button id="submit" type="button" class="btn btn-primary">Send</button>
+        <button id="clear_and_submit" type="submit" class="btn btn-primary">Clean+Send</button>
     </form>
     <h2>Submission result</h2>
     <div id='output' dir='ltr' style='border: dashed 1px green; margin: 10px; padding: 5px; font-family: courier'>
