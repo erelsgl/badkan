@@ -12,8 +12,9 @@ class Exercise {
      * @param {string} link 
      * @param {string} exFolder 
      * @param {grades} grades 
+     * @param {string} compiler
      */
-    constructor(name, description, example, ownerId, link, exFolder, grades, deadline) {
+    constructor(name, description, example, ownerId, link, exFolder, grades, deadline, compiler) {
         this.name = name;
         this.description = description;
         this.example = example;
@@ -22,6 +23,7 @@ class Exercise {
         this.grades = grades;
         this.exFolder = exFolder;
         this.deadline = deadline;
+        this.compiler = compiler;
     }
 
 }

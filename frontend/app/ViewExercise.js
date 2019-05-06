@@ -18,7 +18,7 @@ var BACKEND_FILE_PORTS = [9000];
 
 var exerciseId = getParameterByName("exerciseId"); // in utils.js
 if (!exerciseId)
-  exerciseId = "multiply"; // default exercise
+    exerciseId = "multiply"; // default exercise
 
 let exercisesMap = new Map(JSON.parse(localStorage.getItem("exercisesMap")));
 let exercise = exercisesMap.get(exerciseId);
@@ -38,6 +38,11 @@ document.getElementById("exNameZip").defaultValue = exercise.name
 
 document.getElementById("exDescr").defaultValue = exercise.description
 document.getElementById("exDescrZip").defaultValue = exercise.description
+
+if (exercise.compiler) {
+    document.getElementById("exCompiler").defaultValue = exercise.compiler
+    document.getElementById("exCompilerZip").defaultValue = exercise.compiler
+}
 
 document.getElementById("link").defaultValue = exercise.link
 document.getElementById("exFolder").defaultValue = exercise.exFolder
@@ -66,7 +71,7 @@ for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
             currentUser.lastName + " " +
             currentUser.id +
             "</button>";
-            html_text += "<br />";
+        html_text += "<br />";
     }
 }
 
@@ -90,16 +95,16 @@ $('body').on('click', '#exercise', function (e) {
 document.getElementById("btnEditZip").addEventListener('click', e => {
     const name = escapeHtml(document.getElementById("exNameZip").value);
     const descr = escapeHtml(document.getElementById("exDescrZip").value);
+    const compiler = escapeHtml(document.getElementById("exCompilerZip").value);
     var file = document.getElementById('filename').files[0];
-    if (checkEmptyFields(name, descr)) {
+    if (checkEmptyFields(name, descr, compiler)) {
         var pdf = document.getElementById('instructionZIP').files[0];
         if (pdf) {
             exercise.example = "PDF"
-        }
-        else {
+        } else {
             exercise.example = "deprecated"
         }
-        uploadExerciseFile(name, descr, file);
+        uploadExerciseFile(name, descr, file, compiler);
         editPdf(pdf);
     }
 });
@@ -110,22 +115,22 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
 document.getElementById("btnEdit").addEventListener('click', e => {
     const name = escapeHtml(document.getElementById("exName").value);
     const descr = escapeHtml(document.getElementById("exDescr").value);
-    if (checkEmptyFields(name, descr)) {
+    const compiler = escapeHtml(document.getElementById("exCompiler").value);
+    if (checkEmptyFields(name, descr, compiler)) {
         var pdf = document.getElementById('instructionGIT').files[0];
         if (pdf) {
             exercise.example = "PDF"
-        }
-        else {
+        } else {
             exercise.example = "deprecated"
         }
-        uploadExercise(name, descr);
+        uploadExercise(name, descr, compiler);
         editPdf(pdf);
     }
 });
 
-function checkEmptyFields(name, descr) {
+function checkEmptyFields(name, descr, compiler) {
     var emptyField = document.getElementById("emptyField");
-    if (name === "" || descr === "") {
+    if (name === "" || descr === "" || compiler === "") {
         emptyField.className = "show";
         setTimeout(function () {
             emptyField.className = emptyField.className.replace("show", "");
@@ -141,24 +146,24 @@ function checkEmptyFields(name, descr) {
  * @param {string} name 
  * @param {string} descr 
  */
-function uploadExercise(name, descr) {
+function uploadExercise(name, descr, compiler) {
     // The ref of the folder must be PK.
     var user = firebase.auth().currentUser;
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     sendLinkHTTP(exerciseId, exercise.exFolder);
-    let ex = new Exercise(name, descr, "deprecated", user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline);
+    let ex = new Exercise(name, descr, "deprecated", user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline, compiler);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
 }
 
-function uploadExerciseFile(name, descr, file) {
+function uploadExerciseFile(name, descr, file, compiler) {
     // The ref of the folder must be PK.
     var user = firebase.auth().currentUser;
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     if (file) {
         sendFileHTTP(exerciseId, file);
     }
-    let ex = new Exercise(name, descr, "deprecated", user.uid, 'zip', "", exercise.grades, exercise.deadline);
+    let ex = new Exercise(name, descr, "deprecated", user.uid, 'zip', "", exercise.grades, exercise.deadline, compiler);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
     checkGrade(exerciseId);
@@ -399,5 +404,60 @@ function isGrade() {
         return true;
     } else {
         return false;
+    }
+}
+
+document.getElementById("btnMoss").addEventListener('click', e => {
+    if (!exercise.compiler) {
+        alert("There is no compiler for your exercise, please edit it.")
+    }
+    let information = "";
+    for (var [key, value] of usersMap) {
+        information += key + "/" + value.name + "_" + value.lastName + "-";
+    }
+    json = JSON.stringify({
+        target: "moss_command",
+        compiler: exercise.compiler,
+        exercise_id: exerciseId,
+        info: information
+    }); // the variable "submission_json" is read in server.py:run
+    sendWebsocket(json);
+})
+
+function sendWebsocket(json) {
+    // Choose a backend port at random
+    var backendPort = getParameterByName("backend"); // in utils.js
+    if (!backendPort)
+        backendPort = BACKEND_PORTS[Math.floor(Math.random() * BACKEND_PORTS.length)];
+    var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
+    logClient("color:#888", "Submitting to backend port: " + backendPort); // in utils.js
+    var submission_json = json
+    logClient("color:#888", submission_json); // in utils.js
+    var websocket = new WebSocket(websocketurl);
+    websocket.onopen = (event) => {
+        logServer("color:blue", "Submission starting!"); // in utils.js
+        logClient("color:green; font-style:italic", submission_json)
+        websocket.send(submission_json);
+    }
+    websocket.onmessage = (event) => {
+        logServer("color:black; margin:0 1em 0 1em", event.data);
+        if (event.data.includes("http://moss.stanford")) {
+            var index = event.data.search("http://moss.stanford"); 
+            var url = event.data.substring(index, event.data.length);
+            console.log(url);
+            window.open(url, '_blank');
+        }
+    }
+    websocket.onclose = (event) => {
+        if (event.code === 1000) {
+            logServer("color:blue", "Submission completed!");
+        } else if (event.code === 1006)
+            logServer("color:red", "Connection closed abnormally!");
+        else
+            logServer("color:red", "Connection closed abnormally! Code=" + event.code + ". Reason=" + websocketCloseReason(event.code));
+        log("&nbsp;", "&nbsp;")
+    }
+    websocket.onerror = (event) => {
+        logServer("color:red", "Error in websocket.");
     }
 }

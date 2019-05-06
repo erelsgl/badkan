@@ -309,6 +309,19 @@ async def delete_ex(delete_ex):
     rmv("../exercises", delete_ex)
     print("your exercise is deleted.")
 
+async def moss_command(websocket, submission):
+    compiler=submission["compiler"]
+    exercise_id=submission["exercise_id"]
+    info=submission["info"]
+    informations = info.replace("-", " ")
+    shellscript = subprocess.Popen(['bash','../moss/exec-moss.sh', compiler, exercise_id, informations], stdout=subprocess.PIPE)
+    shellscript.wait()
+    for line in shellscript.communicate():
+        if line is not None:
+            print("DEBUG", line.decode("utf-8") )
+            print("DEBUG TYPE", type(line))
+            await tee(websocket, line.decode("utf-8") )
+
 
 async def run(websocket, path):
     """
@@ -332,6 +345,8 @@ async def run(websocket, path):
         await run_all_submissions(submission["exercise_id"], submission["users_map"], websocket)
     elif target == 'check_private_submission':
         await check_private_submission(websocket, submission)
+    elif target == 'moss_command':
+        await moss_command(websocket, submission)
     else:
         await check_submission(websocket, submission)
     print ("> Closing connection")
