@@ -409,7 +409,8 @@ function isGrade() {
 
 document.getElementById("btnMoss").addEventListener('click', e => {
     if (!exercise.compiler) {
-        alert("There is no compiler for your exercise, please edit it.")
+        alert("There is no compiler for your exercise, please edit it.");
+        return;
     }
     let information = "";
     for (var [key, value] of usersMap) {
