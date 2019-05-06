@@ -14,6 +14,7 @@ sudo killall -9 python3 2>/dev/null
 # 2. Start the backend server:
 cd $DIR/../backend
 sudo rm -f nohup.out
+date > nohup.out
 sudo nohup python3 -u server.py 5670 &
 sudo nohup python3 -u server.py 5671 &
 sudo nohup python3 -u server.py 5672 &
@@ -35,3 +36,5 @@ sudo nohup python3 -u file_server.py 9006 &
 sudo nohup python3 -u file_server.py 9007 &
 sudo nohup python3 -u file_server.py 9008 &
 sudo nohup python3 -u file_server.py 9009 &
+
+sudo less nohup.out

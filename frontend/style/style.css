@@ -7,7 +7,27 @@
 }
 
 
-div.grade {background:#eef;border:#00f solid 1px; padding:2px; margin:2px}
+div.grade {
+    background:#eef;border:#00f solid 1px; padding:2px; margin:2px
+}
+
+
+div.exercise {
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 16px;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+
+div.exercise h4 {
+   font-weight:bold
+}
 
 div.testcase {
 background:#eef;

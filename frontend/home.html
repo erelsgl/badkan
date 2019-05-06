@@ -11,6 +11,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
   <script src='util/FirebaseConfig.js'></script>
+  <script src='util/utils.js'></script>
+
   <script type="text/javascript" src="objects/Deadline.js"></script>
 
   <script type="text/javascript" src="util/Firebase.js"></script>
@@ -36,16 +38,15 @@
         <div class="panel-heading">
           <h4 class="panel-title">
             <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-              <strong>Welcome to the Badkan </strong>
+              <div>Welcome to the Badkan </div>
             </a>
           </h4>
         </div>
         <div id="collapseThree" class="panel-collapse collapse">
           <div class="panel-body">
-            Welcome to the Badkan. <br />
-            In this platform, you're able to easily create exercise which an automatic checking. <br />
-            Also, you can solve exercise, submit your solution and get graded in real time!  <br />
-            You can create course or register to them. Let's begin!
+            <p><b>Students</b> -- find your courses, register, solve exercises, submit your solutions and get graded in real time!</p>
+
+            <p><b>Teachers</b> -- create courses, fill them with existing programming exercises or create new ones, and enjoy the automatic grading!</p>
           </div>
         </div>
       </div>
@@ -58,7 +59,7 @@
 
     <!-- <button id="btnSolveEx" type="button" class="btn btn-success">Solve Exercise</button> -->
     <!-- <button id="records" type="button" class="btn btn-info">Records</button> -->
-    <button id="btnManageCourses" type="button" class="btn btn-primary">Manage courses</button>
+    <button style="display:none" id="btnManageCourses" type="button" class="btn btn-primary">Manage courses</button>
     <button id="btnSettings" type="button" class="btn btn-warning">Settings</button>
     <button id="btnLogOut" type="button" class="btn btn-danger">Log Out</button>
   </div>

@@ -3,6 +3,12 @@
  * Really important.
  */
 
+
+var admin = getParameterByName("admin"); // in utils.js
+if (admin=="1") {
+    $("#btnManageCourses").show()
+}
+
 /**
  * ON STATE CHANGE.
  * Every time the state of the user is changed, this function is called.
@@ -16,11 +22,12 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
-var exercisesMap = new Map();
 
 // We need to load all the exercise since it's possible that the owner of the course is not 
 // the owner of the exercise. 
-loadAllExercisesAsync(exercisesMap); // defined in Firebase.js. 
+var exercisesMap = new Map();
+loadAllExercisesAsync(exercisesMap); // defined in Firebase.js.
+
 
 
 function addCourseHTML(key, course) {
@@ -33,9 +40,19 @@ function addCourseHTML(key, course) {
   }
 }
 
-loadAllCourses(addCourseHTML);
+var numRegistered=0, numUnregistered=0
+function onAllCoursesLoaded() {
+    if (numUnregistered==0) {
+        $("#accordion-unregistered").append("<p>No other courses!</p>");
+    }
+    if (numRegistered==0) {
+        $("#accordion-registered").append("<p>You are not registered to any course yet!</p>");
+    }
+}
 
-var coursesMap = new Map();
+var coursesMap = new Map()
+loadAllCourses(addCourseHTML, onAllCoursesLoaded)  // in util/Firebase.js
+
 
 // var flag = JSON.parse(localStorage.getItem("flag"));
 
@@ -74,7 +91,6 @@ document.getElementById("btnLogOut").addEventListener('click', e => {
 });
 
 
-var $template = $(".template");
 
 function isRegistered(course) {
   if (course.students.indexOf(firebase.auth().currentUser.uid) > -1) {
@@ -84,11 +100,13 @@ function isRegistered(course) {
   }
 }
 
+var $template = $(".template");
 let hash = 2;
 
 
 // Show a course to which the current user is not registered.
 function notRegistered(key, course) {
+  numUnregistered++;
   var $newPanel = $template.clone();
   $newPanel.find(".collapse").removeClass("in");
   $newPanel.find(".accordion-toggle").attr("href", "#" + (hash))
@@ -98,16 +116,16 @@ function notRegistered(key, course) {
   text_html = "";
   text_html += "<button name =\"" + key + "\" id=\"register\" class=\"btn btn-success\"\">Register to " + course.name + "</button>";
   if (course.exercises.length === 1 && course.exercises[0] === "dummyExerciseId") {
-    text_html += "<h5>There are no available exercises for this course!</h5>"
+    text_html += "<p>There are no available exercises for this course!</p>"
   } else {
     text_html += "<h3>Exercises in " + course.name + "</h3>"
     for (var i = 0; i < course.exercises.length; i++) {
       if (course.exercises[i] != "dummyExerciseId") {
         let exerciseObj = exercisesMap.get(course.exercises[i]);
         if (exerciseObj) {
-          text_html += "<pre>"
-          text_html += "<h3>" + exerciseObj.name + "</h3> <br />";
-          text_html += "Exercise description: " + exerciseObj.description + "<br />";
+          text_html += "<div class='exercise'>"
+          text_html += "<h4>" + exerciseObj.name + "</h4>";
+          text_html += "<p>" + exerciseObj.description + "</p>";
           if (exerciseObj.deadline && exerciseObj.deadline.date) {
             text_html += "<br />";
             text_html += "Exercise deadline: " + exerciseObj.deadline.date + "<br />";
@@ -120,8 +138,7 @@ function notRegistered(key, course) {
               }
             }
           }
-          text_html += "</pre>"
-          text_html += "<br />";
+          text_html += "</div><!--exercise-->"
         }
       }
     }
@@ -133,6 +150,7 @@ function notRegistered(key, course) {
 
 // Show a course to which the current user is registered.
 function registered(key, course) {
+  numRegistered++;
   var $newPanel = $template.clone();
   $newPanel.find(".collapse").removeClass("in");
   $newPanel.find(".accordion-toggle").attr("href", "#" + (hash))
@@ -150,9 +168,14 @@ function registered(key, course) {
         let exerciseId = course.exercises[i];
         let exerciseObj = exercisesMap.get(exerciseId);
         if (exerciseObj) {
-          text_html += "<pre>"
-          text_html += "<h3>" + exerciseObj.name + "</h3> <br />";
-          text_html += "Exercise description: " + exerciseObj.description + "<br />";
+          text_html += "<div class='exercise'>"
+          text_html += "<h4>" + exerciseObj.name + "</h4>";
+          text_html += "<p>" + exerciseObj.description + "</p>";
+          if (exerciseObj.example === "PDF") {
+            text_html += "<button name =\"" + exerciseId + "\" id=\"dl\" class=\"btn btn-link\"\">Download PDF</button>";
+            text_html += "<br /> <br />"
+          }
+
           if (exerciseObj.deadline) {
             text_html += "<br />";
             text_html += "Exercise deadline: " + exerciseObj.deadline.date + "<br />";
@@ -175,21 +198,19 @@ function registered(key, course) {
               grade = homeUser.exerciseSolved[j].grade;
             }
           }
+          text_html += "<p>";
           if (grade === -1) {
-            text_html += "My actual grade: No submission for this exercise yet. <br /> <br />";
+            text_html += "You have not solved this exercise yet. ";
           } else {
-            text_html += "My actual grade: " + grade + "<br /> <br />";
-          }
-          if (exerciseObj.example === "PDF") {
-            text_html += "<button name =\"" + exerciseId + "\" id=\"dl\" class=\"btn btn-link\"\">Download PDF</button>";
-            text_html += "<br /> <br />"
+            text_html += "Your current grade is: " + grade + ". ";
           }
           text_html += "<button name =\"" + exerciseId + "\" id=\"solve\" class=\"btn btn-success\"\">Solve</button>";
-          text_html += "</pre>"
+          text_html += "</p>";
+          text_html += "</div><!--exercise-->"
         }
-        if (i != course.exercises.length - 1) {
-          text_html += "<br /> <br />";
-        }
+//        if (i != course.exercises.length - 1) {
+//          text_html += "<br /> <br />";
+//        }
       }
     }
   }
