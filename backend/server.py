@@ -83,17 +83,13 @@ async def run_for_admin(owner_firebase_id, exercise_id, websocket):
     current_exercise_folder = os.path.realpath(EXERCISE_DIR + "/" + exercise_id)
     await tee(websocket, "copying from {}".format(current_exercise_folder))
     print("DEBUD ADMIN", current_exercise_folder)
-    proc = await docker_command(["cp", current_exercise_folder, "badkan:{}/grading_files".format(repository_folder)])
-    async for line in proc.stdout:  print(line)
-    await proc.wait()
      # Grade the submission inside the docker container "badkan"
     grade = None
-    move_command = "mv grading_files/* . && rm -rf grading_files"
     TIMEOUT_SOFT = 10 # seconds
     TIMEOUT_HARD = 20 # seconds
     grade_command = "timeout -s 9 {} timeout {} nice -n 5 ./grade {} {}".format(TIMEOUT_HARD, TIMEOUT_SOFT, owner_firebase_id, exercise_id)
     exitcode_command = "echo Exit code: $?"
-    combined_command = "{} && {} ; {}".format(move_command, grade_command, exitcode_command)
+    combined_command = "{} ; {}".format(grade_command, exitcode_command)
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
 
     grade_regexp = get_grade_regexp(current_exercise_folder)
