@@ -112,7 +112,7 @@ function addCourseHTML(courseId, course) {
                     "<button name =\"" + course.exercises[i] + "\" id=\"exercise\" class=\"btn btn-link\">" +
                     exercisesMap.get(course.exercises[i]).name +
                     "</button>";
-            if (i != course.exercises.length - 1) text_html += "<br />";
+                if (i != course.exercises.length - 1) text_html += "<br />";
             }
         }
     }
@@ -204,18 +204,20 @@ $('body').on('click', '#download', function (e) {
     for (var i = 0; i < course.exercises.length; i++) {
         if (course.exercises[i] != 'dummyExerciseId') {
             let exercise = exercisesMap.get(course.exercises[i]);
-            for (var j = 1; j < exercise.grades.gradeObj.length; j++) {
-                let submission = exercise.grades.gradeObj[j];
-                let user = usersMap.get(submission.id);
-                if (user) {
-                    let row = [];
-                    row.push(exercise.name);
-                    row.push(user.id);
-                    row.push(user.name);
-                    row.push(user.lastName);
-                    row.push(submission.grade);
-                    row.push(submission.url);
-                    rows.push(row);
+            if (exercise) {
+                for (var j = 1; j < exercise.grades.gradeObj.length; j++) {
+                    let submission = exercise.grades.gradeObj[j];
+                    let user = usersMap.get(submission.id);
+                    if (user) {
+                        let row = [];
+                        row.push(exercise.name);
+                        row.push(user.id);
+                        row.push(user.name);
+                        row.push(user.lastName);
+                        row.push(submission.grade);
+                        row.push(submission.url);
+                        rows.push(row);
+                    }
                 }
             }
         }
