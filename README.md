@@ -245,7 +245,7 @@ If not, you should change the location of the first line at backend/moss.pl and 
 
 Next, you need to execute permission for the file by giving this command on shell:
 
-    chmod ug+x moss.pl
+    chmod ug+x moss/moss.pl
 
 Now Get all the files which you need to check for plagiarism, in a given directory.
 
