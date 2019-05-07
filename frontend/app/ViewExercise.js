@@ -101,9 +101,7 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
         var pdf = document.getElementById('instructionZIP').files[0];
         if (pdf) {
             exercise.example = "PDF"
-        } else {
-            exercise.example = "deprecated"
-        }
+        } 
         uploadExerciseFile(name, descr, file, compiler);
         editPdf(pdf);
     }
@@ -120,9 +118,7 @@ document.getElementById("btnEdit").addEventListener('click', e => {
         var pdf = document.getElementById('instructionGIT').files[0];
         if (pdf) {
             exercise.example = "PDF"
-        } else {
-            exercise.example = "deprecated"
-        }
+        } 
         uploadExercise(name, descr, compiler);
         editPdf(pdf);
     }
@@ -151,7 +147,7 @@ function uploadExercise(name, descr, compiler) {
     var user = firebase.auth().currentUser;
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     sendLinkHTTP(exerciseId, exercise.exFolder);
-    let ex = new Exercise(name, descr, "deprecated", user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline, compiler);
+    let ex = new Exercise(name, descr, exercise.example, user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline, compiler);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
 }
@@ -163,7 +159,7 @@ function uploadExerciseFile(name, descr, file, compiler) {
     if (file) {
         sendFileHTTP(exerciseId, file);
     }
-    let ex = new Exercise(name, descr, "deprecated", user.uid, 'zip', "", exercise.grades, exercise.deadline, compiler);
+    let ex = new Exercise(name, descr, exercise.example, user.uid, 'zip', "", exercise.grades, exercise.deadline, compiler);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
     checkGrade(exerciseId);
