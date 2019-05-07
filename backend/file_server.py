@@ -41,6 +41,7 @@ class MyHandler(BaseHTTPRequestHandler):
         path = self.headers['Accept-Language']
 
         if self.headers['Accept'] == 'dlProject':
+            print("debug")
             x = path.split("/")
             shellscript = subprocess.Popen(['bash','dl-project.sh', x[1], x[0]], stdout=subprocess.PIPE)
             shellscript.wait()
