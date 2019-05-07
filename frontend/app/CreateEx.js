@@ -106,7 +106,7 @@ function uploadExerciseGit(name, descr, link, username, pass, exFolder, deadline
   if (pdf) {
     example = "PDF"
   }
-  let exercise = (name, descr, example, user.uid, link, exFolder, grades, deadline, compiler);
+  let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades, deadline, compiler);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName);
