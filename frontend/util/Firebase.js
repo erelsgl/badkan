@@ -65,7 +65,7 @@ function writeUserDataWithoutComingHome(user, userId) {
  */
 function writeExercise(exercise, exerciseId) {
   if (!exercise.deadline) {
-    exercise.deadline = "null"
+    exercise.deadline = null;
   }
   firebase.database().ref("exercises/" + exerciseId).set({
     exercise

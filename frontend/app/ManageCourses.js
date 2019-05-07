@@ -108,10 +108,10 @@ function addCourseHTML(courseId, course) {
     for (var i = 0; i < course.exercises.length; i++) {
         if (course.exercises[i] != "dummyExerciseId") {
             if (exercisesMap.get(course.exercises[i])) {
-            text_html +=
-                "<button name =\"" + course.exercises[i] + "\" id=\"exercise\" class=\"btn btn-link\">" +
-                exercisesMap.get(course.exercises[i]).name +
-                "</button>";
+                text_html +=
+                    "<button name =\"" + course.exercises[i] + "\" id=\"exercise\" class=\"btn btn-link\">" +
+                    exercisesMap.get(course.exercises[i]).name +
+                    "</button>";
             }
             if (i != course.exercises.length - 1) text_html += "<br />";
         }
@@ -153,12 +153,12 @@ function onLoadAllCourses() {
     for (var i = 0; i < courses.length; ++i) {
         loadUsersOfCourse(courses[i][1],
             onUser,
-             i,
-             courses.length
+            i,
+            courses.length
         ); // defined in frontend/util/Firebase.js
         console.log("here");
     }
-    
+
 }
 
 
@@ -205,16 +205,18 @@ $('body').on('click', '#download', function (e) {
         if (course.exercises[i] != 'dummyExerciseId') {
             let exercise = exercisesMap.get(course.exercises[i]);
             for (var j = 1; j < exercise.grades.gradeObj.length; j++) {
-                submission = exercise.grades.gradeObj[j];
+                let submission = exercise.grades.gradeObj[j];
                 let user = usersMap.get(submission.id);
-                let row = [];
-                row.push(exercise.name);
-                row.push(user.id);
-                row.push(user.name);
-                row.push(user.lastName);
-                row.push(submission.grade);
-                row.push(submission.url);
-                rows.push(row);
+                if (user) {
+                    let row = [];
+                    row.push(exercise.name);
+                    row.push(user.id);
+                    row.push(user.name);
+                    row.push(user.lastName);
+                    row.push(submission.grade);
+                    row.push(submission.url);
+                    rows.push(row);
+                }
             }
         }
     }
