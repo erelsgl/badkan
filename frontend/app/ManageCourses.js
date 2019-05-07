@@ -112,8 +112,8 @@ function addCourseHTML(courseId, course) {
                     "<button name =\"" + course.exercises[i] + "\" id=\"exercise\" class=\"btn btn-link\">" +
                     exercisesMap.get(course.exercises[i]).name +
                     "</button>";
-            }
             if (i != course.exercises.length - 1) text_html += "<br />";
+            }
         }
     }
     if (course.password) {
