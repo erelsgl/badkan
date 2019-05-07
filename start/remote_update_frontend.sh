@@ -4,4 +4,4 @@
 #
 
 git push
-ssh root@104.248.40.179 "cd badkan; source start/update_frontend.sh"
+ssh root@104.248.40.179 "source /root/badkan/start/update_frontend.sh"
