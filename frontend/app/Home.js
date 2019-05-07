@@ -176,7 +176,7 @@ function registered(key, course) {
             text_html += "<br /> <br />"
           }
 
-          if (exerciseObj.deadline) {
+          if (exerciseObj.deadline && exerciseObj.deadline.date) {
             text_html += "<br />";
             text_html += "Exercise deadline: " + exerciseObj.deadline.date + "<br />";
 
