@@ -27,9 +27,19 @@ EXERCISE_DIR = os.path.realpath(os.path.dirname(os.path.abspath(__file__))+"/../
 GIT_REGEXP = re.compile(".*github[.]com.(.*)/(.*)", re.IGNORECASE)
 GITLAB_REGEXP = re.compile(".*gitlab[.]com.(.*)/(.*)", re.IGNORECASE)
 GIT_CLEAN  = re.compile(".git.*", re.IGNORECASE)
-# Set the regular expression for detecting the grade in the file.
-# This is the default regular expression:
-grade_regexp = re.compile("[*].*grade.*:\\s*(\\d+).*[*]", re.IGNORECASE)   # default
+
+
+# Calculate the regular expression for detecting the grade in the file.
+def get_grade_regexp(current_exercise_folder:str=""):
+    result = re.compile("[*].*grade.*:\\s*(\\d+).*[*]", re.IGNORECASE)   # default
+    # If there is a "signature file", then the default is changed to "...(integer)...<signature>..."
+    signature_file = current_exercise_folder + "/signature.txt"
+    if os.path.isfile(signature_file):
+        with open(signature_file) as f:
+            grade_signature=f.read().strip()
+            result = re.compile(".*?(\\d+).*{}.*".format(re.escape(grade_signature)))
+    return result
+
 
 async def tee(websocket, message):
     """
@@ -70,10 +80,10 @@ async def dealing_with_url(git_url, websocket, owner_firebase_id, exercise):
 
 async def run_for_admin(owner_firebase_id, exercise_id, websocket):
     repository_folder = "/submissions/{}/{}".format(owner_firebase_id, exercise_id)
-    current_exercise_dir = os.path.realpath(EXERCISE_DIR + "/" + exercise_id)
-    await tee(websocket, "copying from {}".format(current_exercise_dir))
-    print("DEBUD ADMIN", current_exercise_dir)
-    proc = await docker_command(["cp", current_exercise_dir, "badkan:{}/grading_files".format(repository_folder)])
+    current_exercise_folder = os.path.realpath(EXERCISE_DIR + "/" + exercise_id)
+    await tee(websocket, "copying from {}".format(current_exercise_folder))
+    print("DEBUD ADMIN", current_exercise_folder)
+    proc = await docker_command(["cp", current_exercise_folder, "badkan:{}/grading_files".format(repository_folder)])
     async for line in proc.stdout:  print(line)
     await proc.wait()
      # Grade the submission inside the docker container "badkan"
@@ -86,6 +96,7 @@ async def run_for_admin(owner_firebase_id, exercise_id, websocket):
     combined_command = "{} && {} ; {}".format(move_command, grade_command, exitcode_command)
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
 
+    grade_regexp = get_grade_regexp(current_exercise_folder)
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         await tee(websocket, line)
@@ -156,40 +167,12 @@ async def check_private_submission(websocket:object, submission:dict):
     currentDT = datetime.datetime.now()
     edit_csv(str(currentDT), solution, ids, "START", name)
 
-    current_exercise_folder = os.path.realpath(EXERCISE_DIR + "/" + exercise)
-
-    # If there is a "signature file", then the default is changed to "...(integer)...<signature>..."
-    signature_file = current_exercise_folder + "/signature.txt"
-    if os.path.isfile(signature_file):
-        with open(signature_file) as f:
-            grade_signature=f.read().strip()
-            grade_regexp = re.compile(".*?(\\d+).*{}.*".format(re.escape(grade_signature)))
-
-    # Read the name and ids of the submitters:
-    ids = submission["ids"]
-    name = submission["name"]
-
-    # Log the start of the submission:
-    currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), solution, ids, "START", name)
-
-    # Set the regular expression for detecting the grade in the file.
-    # This is the default regular expression:
-    grade_regexp = re.compile("[*].*grade.*:\\s*(\\d+).*[*]", re.IGNORECASE)   # default
-    # If there is a "signature file", then the default is changed to "...(integer)...<signature>..."
-    signature_file = current_exercise_folder + "/signature.txt"
-    if os.path.isfile(signature_file):
-        with open(signature_file) as f:
-            grade_signature=f.read().strip()
-            grade_regexp = re.compile(".*?(\\d+).*{}.*".format(re.escape(grade_signature)))
-
     # Clone or pull the student's submission from github to the docker container "badkan":
     proc = await docker_command(["exec", "badkan", "bash", "get-private-submission.sh", username, repository, owner_firebase_id, exercise, tokenUsername, tokenPassword])
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         await tee(websocket, line)
     await proc.wait()
-
     await grade(solution, exercise, ids, name, owner_firebase_id, repository_folder, submission, websocket)
 
 
@@ -225,15 +208,18 @@ async def check_submission(websocket:object, submission:dict):
     await grade(solution, exercise, ids, name, owner_firebase_id, repository_folder, submission, websocket)
 
 
+#
+#
+#
 async def grade(solution, exercise, ids, name, owner_firebase_id, repository_folder, submission, websocket):
-
-     # Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
-    current_exercise_dir = os.path.realpath(EXERCISE_DIR + "/" + exercise)
-    await tee(websocket, "copying from {}".format(current_exercise_dir))
-    proc = await docker_command(["cp", current_exercise_dir, "badkan:{}/grading_files".format(repository_folder)])
+    # 1. Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
+    current_exercise_folder = os.path.realpath(EXERCISE_DIR + "/" + exercise)
+    await tee(websocket, "copying from {}".format(current_exercise_folder))
+    proc = await docker_command(["cp", current_exercise_folder, "badkan:{}/grading_files".format(repository_folder)])
     async for line in proc.stdout:  print(line)
     await proc.wait()
-    # Grade the submission inside the docker container "badkan"
+
+    # 2. Grade the submission inside the docker container "badkan"
     grade = None
     move_command = "mv grading_files/* . && rm -rf grading_files"
     TIMEOUT_SOFT = 10 # seconds
@@ -244,6 +230,7 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
     output = ""
     count = 0
+    grade_regexp = get_grade_regexp(current_exercise_folder)
     while True:
         try:
             async for line in proc.stdout:  # Loop over all lines created by the "grade" script.
