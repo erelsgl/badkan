@@ -7,6 +7,8 @@ export REPOSITORY=$2
 export OWNERID=$3
 export EXID=$4
 
+URL="https://github.com/$USERNAME/$REPOSITORY.git"
+
 cd submissions
 
 if [ ! -d $OWNERID ]; then
@@ -21,15 +23,15 @@ if [ -d $EXID ]; then
     echo "! cd $EXID"
     cd $EXID
 
-    if [git rev-parse --git-dir > /dev/null 2>&1] && [basename `git rev-parse --show-toplevel` == $REPOSITORY]; then
-            echo "! git fetch, reset, clean"
-            git fetch
-            git reset --hard origin/master
-            git clean -fxdq
+    echo "git previous url: " $(git config --get remote.origin.url)
+    if [ $(git config --get remote.origin.url) == $URL ]; then
+        echo "! git fetch, reset, clean"
+        git fetch
+        git reset --hard origin/master
+        git clean -fxdq
     else
         cd ..
         rm -r $EXID
-        URL=https://github.com/$USERNAME/$REPOSITORY.git
         echo "! git clone $URL $EXID"
         git clone $URL $EXID
         echo "! cd $EXID"
@@ -37,7 +39,6 @@ if [ -d $EXID ]; then
     fi;
 
 else
-    URL=https://github.com/$USERNAME/$REPOSITORY.git
     echo "! git clone $URL $EXID"
     git clone $URL $EXID
     echo "! cd $EXID"
