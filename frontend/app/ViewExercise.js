@@ -89,7 +89,7 @@ $('body').on('click', '#exercise', function (e) {
     let user = usersMap.get(userId);
     localStorage.setItem("userId", JSON.stringify(userId));
     localStorage.setItem("user", JSON.stringify(user));
-    document.location.href = "manageExercise.html";
+    document.location.href = "manageExercise.html?exerciseId=" + exerciseId;
 });
 
 document.getElementById("btnEditZip").addEventListener('click', e => {

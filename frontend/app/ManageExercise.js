@@ -5,13 +5,18 @@ var BACKEND_FILE_PORTS = [9000];
 
 //var BACKEND_PORTS = [5670];
 
+
+var exerciseId = getParameterByName("exerciseId"); // in utils.js
+if (!exerciseId)
+    exerciseId = "multiply"; // default exercise
+
+
 /**
  * From there, he can:
  * - Run a code of the user.
  * - Read and edit any file of any user.
  */
 
-let exerciseId = JSON.parse(localStorage.getItem("selectedValue"));
 let exercise = JSON.parse(localStorage.getItem("exercise"));
 let userId = JSON.parse(localStorage.getItem("userId"));
 let user = JSON.parse(localStorage.getItem("user"));
