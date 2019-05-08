@@ -172,6 +172,11 @@ function loadCurrentUser(userId) {
         "Email: " + homeUser.email + "<br />";
       loading("div1");
       loading("loading");
+      if(homeUser.admin) {
+        if (homeUser.admin === true) {
+          $("#btnManageCourses").show()
+        }
+      }
     }
   });
 }

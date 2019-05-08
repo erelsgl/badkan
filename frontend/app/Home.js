@@ -4,10 +4,10 @@
  */
 
 
-var admin = getParameterByName("admin"); // in utils.js
-if (admin == "1") {
-  $("#btnManageCourses").show()
-}
+// var admin = getParameterByName("admin"); // in utils.js
+// if (admin == "1") {
+//   $("#btnManageCourses").show()
+// }
 
 /**
  * ON STATE CHANGE.
@@ -21,6 +21,15 @@ firebase.auth().onAuthStateChanged(user => {
     localStorage.setItem("homeUserId", JSON.stringify(userId));
   }
 });
+
+var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+if (homeUser) {
+  if (homeUser.admin) {
+    if (homeUser.admin === true) {
+      $("#btnManageCourses").show()
+    }
+  }
+}
 
 
 // We need to load all the exercise since it's possible that the owner of the course is not 
@@ -100,9 +109,10 @@ document.getElementById("btnSettings").addEventListener('click', e => {
 
 /**
  * BUTTON LOGOUT.
- * Log out the user and redirect hinm to the register page.
+ * Log out the user and redirect him to the register page.
  */
 document.getElementById("btnLogOut").addEventListener('click', e => {
+  document.getElementById("btnManageCourses").style.display = "none"
   firebase.auth().signOut();
   document.location.href = "index.html";
 });

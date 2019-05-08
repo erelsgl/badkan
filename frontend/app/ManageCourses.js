@@ -4,7 +4,15 @@ function addOption(exercise, key) {
     select.options[select.options.length] = new Option(exercise.name, key);
 }
 
+var homeUserForAdmin = JSON.parse(localStorage.getItem("homeUserKey"));
 
+if (!homeUserForAdmin.admin) {
+    alert("You have no access to this page.");
+    document.location.href = "home.html";
+} else if (homeUserForAdmin.admin === false) {
+    alert("You have no access to this page.");
+    document.location.href = "home.html";
+}
 
 /*
  * This code belongs to the "create course" tab.

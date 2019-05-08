@@ -1,7 +1,15 @@
-var currentUser = JSON.parse(localStorage.getItem("homeUserKey"));
-document.getElementById("txtName").defaultValue = currentUser.name
-document.getElementById("txtLastName").defaultValue = currentUser.lastName
-document.getElementById("txtId").defaultValue = currentUser.id
+var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+document.getElementById("txtName").defaultValue = homeUser.name
+document.getElementById("txtLastName").defaultValue = homeUser.lastName
+document.getElementById("txtId").defaultValue = homeUser.id
+
+var flagAlreadyAdmin = false;
+
+if (homeUser.admin === true) {
+  document.getElementById("admin").style.display = "none";
+  document.getElementById("text").innerHTML = "You already admin";
+  flagAlreadyAdmin = true;
+}
 
 /**
  * BUTTON CONFIRM.
@@ -11,11 +19,24 @@ document.getElementById("confirm").addEventListener('click', e => {
   const lastName = escapeHtml(document.getElementById("txtLastName").value);
   const id = escapeHtml(document.getElementById("txtId").value);
   if (checkEmptyFields(name, lastName, id)) {
+    let checked = document.getElementById("admin").checked;
     var user = firebase.auth().currentUser;
-    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
-    let currentUser = new User(name, lastName, id, homeUser.email, homeUser.createdEx,
-      homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved);
-    writeUserData(currentUser, user.uid);
+    if (!flagAlreadyAdmin) {
+      if (checked) {
+        var response = prompt("Please enter the password to get admin privilege:");
+        if (response === "3ubf2e9-cb") {
+          //success 
+        } else {
+          alert("wrong password");
+          return;
+        }
+      }
+    } else {
+      checked = true;
+    }
+    let newUser = new User(name, lastName, id, homeUser.email, homeUser.createdEx,
+      homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved, checked);
+    writeUserData(newUser, user.uid);
     document.location.href = "home.html";
   }
 });

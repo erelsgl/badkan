@@ -18,26 +18,42 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
     var mailUsed = document.getElementById("mailUsed");
     var passShort = document.getElementById("passShort");
     var badMail = document.getElementById("badMail");
+    let checked = document.getElementById("admin").checked;
+    if (checked) {
+      var response = prompt("Please enter the password to get admin privilege:");
+      if (response === "3ubf2e9-cb") {
+        //success 
+      } else {
+        alert("wrong password");
+        return;
+      }
+    }
     firebase.auth().createUserWithEmailAndPassword(email, pass).then(function () {
       let exerciseSolved = new ExerciseSolved(90, "id");
-      let homeUser = new User(name, lastName, id, email, 0, 0, 0, [exerciseSolved]);
+      let homeUser = new User(name, lastName, id, email, 0, 0, 0, [exerciseSolved], checked);
       var user = firebase.auth().currentUser;
       writeUserData(homeUser, user.uid);
     }).catch(function (error) {
       console.log(error.message);
       if (error.message === "The email address is already in use by another account.") {
         mailUsed.className = "show";
-        setTimeout(function () { mailUsed.className = mailUsed.className.replace("show", ""); }, 2500);
+        setTimeout(function () {
+          mailUsed.className = mailUsed.className.replace("show", "");
+        }, 2500);
         return;
       }
       if (error.message === "Password should be at least 6 characters") {
         passShort.className = "show";
-        setTimeout(function () { passShort.className = passShort.className.replace("show", ""); }, 2500);
+        setTimeout(function () {
+          passShort.className = passShort.className.replace("show", "");
+        }, 2500);
         return;
       }
       if (error.message === "The email address is badly formatted.") {
         badMail.className = "show";
-        setTimeout(function () { badMail.className = badMail.className.replace("show", ""); }, 2500);
+        setTimeout(function () {
+          badMail.className = badMail.className.replace("show", "");
+        }, 2500);
         return;
       }
     });
@@ -48,7 +64,9 @@ function checkEmptyFields(email, pass, name, lastName, id) {
   var emptyField = document.getElementById("emptyField");
   if (email === "" || pass === "" || name === "" || lastName === "" || id === "") {
     emptyField.className = "show";
-    setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
+    setTimeout(function () {
+      emptyField.className = emptyField.className.replace("show", "");
+    }, 2500);
     return false;
   }
   return true;
@@ -100,15 +118,16 @@ function github() {
     if (result.additionalUserInfo.isNewUser) {
       console.log("new User")
       document.location.href = "completeInfo.html"
-    }
-    else {
+    } else {
       console.log("old user");
       document.location.href = "home.html";
     }
   }).catch(function (error) {
     if (error.message === "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.") {
       mailGihtub.className = "show";
-      setTimeout(function () { mailGihtub.className = mailGihtub.className.replace("show", ""); }, 2500);
+      setTimeout(function () {
+        mailGihtub.className = mailGihtub.className.replace("show", "");
+      }, 2500);
       return;
     }
     console.log(error.message);
