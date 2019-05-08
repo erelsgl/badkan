@@ -5,8 +5,8 @@
 
 
 var admin = getParameterByName("admin"); // in utils.js
-if (admin=="1") {
-    $("#btnManageCourses").show()
+if (admin == "1") {
+  $("#btnManageCourses").show()
 }
 
 /**
@@ -33,25 +33,42 @@ loadAllExercisesAsync(exercisesMap); // defined in Firebase.js.
 function addCourseHTML(key, course) {
   coursesMap.set(key, course);
   // SEE IF REGISTER OR NOT: HERE ASSUMING NOT.         // If the user click here check if he registered if yes dl the pdf or something like this.
-  if (isRegistered(course)) {
-    registered(key, course);
+  // First see if course if private or not:
+  if (course.ids) {
+    // private
+    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+    let arrayIds = course.ids.split(" ")
+    if (arrayIds.includes(homeUser.id)) {
+      if (isRegistered(course)) {
+        registered(key, course);
+      } else {
+        let courseId = key;
+        registerSuccess(course, courseId);
+      }
+    }
   } else {
-    notRegistered(key, course);
+    if (isRegistered(course)) {
+      registered(key, course);
+    } else {
+      notRegistered(key, course);
+    }
   }
 }
 
-var numRegistered=0, numUnregistered=0
+var numRegistered = 0,
+  numUnregistered = 0
+
 function onAllCoursesLoaded() {
-    if (numUnregistered==0) {
-        $("#accordion-unregistered").append("<p>No other courses!</p>");
-    }
-    if (numRegistered==0) {
-        $("#accordion-registered").append("<p>You are not registered to any course yet!</p>");
-    }
+  if (numUnregistered == 0) {
+    $("#accordion-unregistered").append("<p>No other courses!</p>");
+  }
+  if (numRegistered == 0) {
+    $("#accordion-registered").append("<p>You are not registered to any course yet!</p>");
+  }
 }
 
 var coursesMap = new Map()
-loadAllCourses(addCourseHTML, onAllCoursesLoaded)  // in util/Firebase.js
+loadAllCourses(addCourseHTML, onAllCoursesLoaded) // in util/Firebase.js
 
 
 // var flag = JSON.parse(localStorage.getItem("flag"));
@@ -143,7 +160,6 @@ function notRegistered(key, course) {
       }
     }
   }
-  // Ask for the user the password if there is one.
   $newPanel.find(".panel-body").append(text_html);
   $("#accordion-unregistered").append($newPanel.fadeIn());
 }
@@ -208,9 +224,6 @@ function registered(key, course) {
           text_html += "</p>";
           text_html += "</div><!--exercise-->"
         }
-//        if (i != course.exercises.length - 1) {
-//          text_html += "<br /> <br />";
-//        }
       }
     }
   }
@@ -249,17 +262,7 @@ $('body').on('click', '#solve', function (e) {
 $('body').on('click', '#register', function (e) {
   let courseId = e.target.name;
   let course = coursesMap.get(courseId);
-  if (course.password) {
-    var response = prompt("Please enter the password:");
-    if (response === course.password) {
-      //success the student is registered.
-      registerSuccess(course, courseId);
-    } else {
-      alert("wrong password");
-    }
-  } else {
-    registerSuccess(course, courseId);
-  }
+  registerSuccess(course, courseId);
 });
 
 function registerSuccess(course, courseId) {
