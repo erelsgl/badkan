@@ -54,25 +54,25 @@ function makeGradeWithoutCoef(compiler, numTest, input, output, main, exerciseFo
                 if (input || output) {
                     if (input && output) {
                         grade += "cat > " + input + " << ENDOFFILE\n"
-                        grade += "`cat input-" + i + ".io`\n"
+                        grade += "`cat input-" + i + ".txt`\n"
                         grade += "ENDOFFILE\n\n"
                         grade += "java " + main + "\n"
                         grade += "OUTPUT=`cat " + output + "` \n"
                     } else if (!input && output) {
-                        grade += "INPUT=`cat input-" + i + ".io` \n"
+                        grade += "INPUT=`cat input-" + i + ".txt` \n"
                         grade += "java " + main + "\n"
                         grade += "OUTPUT=`cat " + output + "` \n"
                     } else if (input && !ouput) {
                         grade += "cat > " + input + " << ENDOFFILE\n"
-                        grade += "`cat input-" + i + ".io`\n"
+                        grade += "`cat input-" + i + ".txt`\n"
                         grade += "ENDOFFILE\n\n"
                         grade += "OUTPUT=`java " + main + " $INPUT` \n";
                     }
-                    grade += "EXPECTED=`cat " + "output-" + i + ".io` \n"
+                    grade += "EXPECTED=`cat " + "output-" + i + ".txt` \n"
                 } else {
-                    grade += "INPUT=`cat input-" + i + ".io` \n"
+                    grade += "INPUT=`cat input-" + i + ".txt` \n"
                     grade += "OUTPUT=`java " + main + " $INPUT` \n";
-                    grade += "EXPECTED=`cat " + "output-" + i + ".io` \n"
+                    grade += "EXPECTED=`cat " + "output-" + i + ".txt` \n"
                 }
                 grade += "echo output: $OUTPUT \n"
                 grade += "if [ \"$OUTPUT\" == \"$EXPECTED\" ]; then \n";
