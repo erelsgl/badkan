@@ -421,6 +421,11 @@ document.getElementById("btnMoss").addEventListener('click', e => {
     sendWebsocket(json);
 })
 
+document.getElementById("btnDeleteEx").addEventListener('click', e => {
+    deleteExerciseById(exerciseId);
+    document.location.href = "manageCourses.html";
+});
+
 function sendWebsocket(json) {
     // Choose a backend port at random
     var backendPort = getParameterByName("backend"); // in utils.js
