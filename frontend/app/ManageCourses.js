@@ -4,7 +4,15 @@ function addOption(exercise, key) {
     select.options[select.options.length] = new Option(exercise.name, key);
 }
 
+var homeUserForAdmin = JSON.parse(localStorage.getItem("homeUserKey"));
 
+if (!homeUserForAdmin.admin) {
+    alert("You have no access to this page.");
+    document.location.href = "home.html";
+} else if (homeUserForAdmin.admin === false) {
+    alert("You have no access to this page.");
+    document.location.href = "home.html";
+}
 
 /*
  * This code belongs to the "create course" tab.
@@ -33,9 +41,9 @@ document.getElementById("btnCreateCourse").addEventListener('click', e => {
     var ownerId = firebase.auth().currentUser.uid;
     let courseId = ownerId + "_" + homeUser.createdEx;
     if (!public) {
-        const password = escapeHtml(document.getElementById("coursePassword").value);
-        if (checkEmptyFieldsPrivate(name, password)) {
-            writeCourse(new Course(name, values, ["dummyStudentId"], password, ownerId), courseId);
+        const ids = escapeHtml(document.getElementById("students_ids").value);
+        if (checkEmptyFieldsPrivate(name, ids)) {
+            writeCourse(new Course(name, values, ["dummyStudentId"], ids, ownerId), courseId);
             incrementCreatedExWithoutCommingHome(ownerId, homeUser);
         }
     } else {
@@ -58,9 +66,9 @@ function checkEmptyFieldsPublic(name) {
     return true;
 }
 
-function checkEmptyFieldsPrivate(name, password) {
+function checkEmptyFieldsPrivate(name, ids) {
     var emptyField = document.getElementById("emptyField");
-    if (name === "" || password === "") {
+    if (name === "" || ids === "") {
         emptyField.className = "show";
         setTimeout(function () {
             emptyField.className = emptyField.className.replace("show", "");
@@ -115,9 +123,6 @@ function addCourseHTML(courseId, course) {
                 if (i != course.exercises.length - 1) text_html += "<br />";
             }
         }
-    }
-    if (course.password) {
-        text_html += "<br /> <br />" + " <pre> Password: " + course.password + " </pre>";
     }
     text_html += "<br /> <br />";
     text_html += "<button name =\"" + courseId + "\" id=\"create\" class=\"btn btn-primary\">Create Exercise</button>";
@@ -228,24 +233,28 @@ $('body').on('click', '#download', function (e) {
 });
 
 /**
- * Can change the name of the course or the password.
+ * Can change the name of the course or the ids.
  */
 $('body').on('click', '#edit', function (e) {
+    // TODO: change this
     let courseId = e.target.name;
     let course = coursesMap.get(courseId);
     var newName = prompt("New name here:", course.name);
-    var newPassword = prompt("New password here:", course.password);
+    var newIds = prompt("New ids here:", course.ids);
     course.name = newName;
-    course.password = newPassword;
+    course.ids = newIds;
     editCourse(course, courseId)
     document.location.href = "manageCourses.html";
 
 });
 
 $('body').on('click', '#delete', function (e) {
-    let courseId = e.target.name;
-    deleteCourseById(courseId);
-    document.location.href = "manageCourses.html";
+    var r = confirm("Are you sure to delete this course?");
+    if (r == true) {
+        let courseId = e.target.name;
+        deleteCourseById(courseId);
+        document.location.href = "manageCourses.html";
+    }
 });
 
 function onOptionChange() {

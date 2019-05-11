@@ -21,15 +21,15 @@ class Course {
      * @param {List} students:  A list of all the id of the students of the course.
      * The list only contains the id of the exercises. Like a pointer to the table exercises.
      * At the beginning student is null (since firebase doesn't allow null, we put a dummy student).
-     * @param {String} password: A password of the course if the instructor want the course to be private.
+     * @param {String} ids: The ids  of the course if the instructor want the course to be private.
      * Can be null.
      * @param {String} ownerId: This is the firebase ID of the owner of the course.
      */
-    constructor(name, exercises, students, password, ownerId) {
+    constructor(name, exercises, students, ids, ownerId) {
         this.name = name;
         this.exercises = exercises;
         this.students = students;
-        this.password = password;
+        this.ids = ids;
         this.ownerId = ownerId;
     }
 

@@ -27,14 +27,5 @@ sudo nohup python3 -u server.py 5678 &
 sudo nohup python3 -u server.py 5679 &
 
 sudo nohup python3 -u file_server.py 9000 &
-sudo nohup python3 -u file_server.py 9001 &
-sudo nohup python3 -u file_server.py 9002 &
-sudo nohup python3 -u file_server.py 9003 &
-sudo nohup python3 -u file_server.py 9004 &
-sudo nohup python3 -u file_server.py 9005 &
-sudo nohup python3 -u file_server.py 9006 &
-sudo nohup python3 -u file_server.py 9007 &
-sudo nohup python3 -u file_server.py 9008 &
-sudo nohup python3 -u file_server.py 9009 &
 
 sudo less nohup.out

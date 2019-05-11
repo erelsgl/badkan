@@ -89,7 +89,7 @@ $('body').on('click', '#exercise', function (e) {
     let user = usersMap.get(userId);
     localStorage.setItem("userId", JSON.stringify(userId));
     localStorage.setItem("user", JSON.stringify(user));
-    document.location.href = "manageExercise.html";
+    document.location.href = "manageExercise.html?exerciseId=" + exerciseId;
 });
 
 document.getElementById("btnEditZip").addEventListener('click', e => {
@@ -101,8 +101,6 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
         var pdf = document.getElementById('instructionZIP').files[0];
         if (pdf) {
             exercise.example = "PDF"
-        } else {
-            exercise.example = "deprecated"
         }
         uploadExerciseFile(name, descr, file, compiler);
         editPdf(pdf);
@@ -120,8 +118,6 @@ document.getElementById("btnEdit").addEventListener('click', e => {
         var pdf = document.getElementById('instructionGIT').files[0];
         if (pdf) {
             exercise.example = "PDF"
-        } else {
-            exercise.example = "deprecated"
         }
         uploadExercise(name, descr, compiler);
         editPdf(pdf);
@@ -151,7 +147,7 @@ function uploadExercise(name, descr, compiler) {
     var user = firebase.auth().currentUser;
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     sendLinkHTTP(exerciseId, exercise.exFolder);
-    let ex = new Exercise(name, descr, "deprecated", user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline, compiler);
+    let ex = new Exercise(name, descr, exercise.example, user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline, compiler);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
 }
@@ -163,7 +159,7 @@ function uploadExerciseFile(name, descr, file, compiler) {
     if (file) {
         sendFileHTTP(exerciseId, file);
     }
-    let ex = new Exercise(name, descr, "deprecated", user.uid, 'zip', "", exercise.grades, exercise.deadline, compiler);
+    let ex = new Exercise(name, descr, exercise.example, user.uid, 'zip', "", exercise.grades, exercise.deadline, compiler);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
     checkGrade(exerciseId);
@@ -425,6 +421,14 @@ document.getElementById("btnMoss").addEventListener('click', e => {
     sendWebsocket(json);
 })
 
+document.getElementById("btnDeleteEx").addEventListener('click', e => {
+    var r = confirm("Are you sure to delete this exercise?");
+    if (r == true) {
+        deleteExerciseById(exerciseId);
+        document.location.href = "manageCourses.html";
+    }
+});
+
 function sendWebsocket(json) {
     // Choose a backend port at random
     var backendPort = getParameterByName("backend"); // in utils.js
@@ -443,7 +447,7 @@ function sendWebsocket(json) {
     websocket.onmessage = (event) => {
         logServer("color:black; margin:0 1em 0 1em", event.data);
         if (event.data.includes("http://moss.stanford")) {
-            var index = event.data.search("http://moss.stanford"); 
+            var index = event.data.search("http://moss.stanford");
             var url = event.data.substring(index, event.data.length);
             console.log(url);
             window.open(url, '_blank');

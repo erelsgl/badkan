@@ -10,7 +10,7 @@ USE NUMEROUS PORT.
 MULTIPROCESSING.
 """
 
-HOST_NAME = 'localhost'
+HOST_NAME = '0.0.0.0'
 PORT_NUMBER = int(sys.argv[1]) if len(sys.argv)>=2 else 9000   # TODO: Where is this port used in the frontend?
 
 class MyHandler(BaseHTTPRequestHandler):
@@ -41,6 +41,7 @@ class MyHandler(BaseHTTPRequestHandler):
         path = self.headers['Accept-Language']
 
         if self.headers['Accept'] == 'dlProject':
+            print("debug")
             x = path.split("/")
             shellscript = subprocess.Popen(['bash','dl-project.sh', x[1], x[0]], stdout=subprocess.PIPE)
             shellscript.wait()
@@ -104,6 +105,7 @@ class MyHandler(BaseHTTPRequestHandler):
         self.wfile.write(response)
 
 if __name__ == '__main__':
+
     server_class = HTTPServer
     httpd = server_class((HOST_NAME, PORT_NUMBER), MyHandler)
     print(time.asctime(), 'Server Starts - %s:%s' % (HOST_NAME, PORT_NUMBER))
