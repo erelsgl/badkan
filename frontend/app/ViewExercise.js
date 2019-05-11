@@ -101,7 +101,7 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
         var pdf = document.getElementById('instructionZIP').files[0];
         if (pdf) {
             exercise.example = "PDF"
-        } 
+        }
         uploadExerciseFile(name, descr, file, compiler);
         editPdf(pdf);
     }
@@ -118,7 +118,7 @@ document.getElementById("btnEdit").addEventListener('click', e => {
         var pdf = document.getElementById('instructionGIT').files[0];
         if (pdf) {
             exercise.example = "PDF"
-        } 
+        }
         uploadExercise(name, descr, compiler);
         editPdf(pdf);
     }
@@ -422,8 +422,11 @@ document.getElementById("btnMoss").addEventListener('click', e => {
 })
 
 document.getElementById("btnDeleteEx").addEventListener('click', e => {
-    deleteExerciseById(exerciseId);
-    document.location.href = "manageCourses.html";
+    var r = confirm("Are you sure to delete this exercise?");
+    if (r == true) {
+        deleteExerciseById(exerciseId);
+        document.location.href = "manageCourses.html";
+    }
 });
 
 function sendWebsocket(json) {
@@ -444,7 +447,7 @@ function sendWebsocket(json) {
     websocket.onmessage = (event) => {
         logServer("color:black; margin:0 1em 0 1em", event.data);
         if (event.data.includes("http://moss.stanford")) {
-            var index = event.data.search("http://moss.stanford"); 
+            var index = event.data.search("http://moss.stanford");
             var url = event.data.substring(index, event.data.length);
             console.log(url);
             window.open(url, '_blank');

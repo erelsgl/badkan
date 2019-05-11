@@ -249,9 +249,12 @@ $('body').on('click', '#edit', function (e) {
 });
 
 $('body').on('click', '#delete', function (e) {
-    let courseId = e.target.name;
-    deleteCourseById(courseId);
-    document.location.href = "manageCourses.html";
+    var r = confirm("Are you sure to delete this course?");
+    if (r == true) {
+        let courseId = e.target.name;
+        deleteCourseById(courseId);
+        document.location.href = "manageCourses.html";
+    }
 });
 
 function onOptionChange() {
