@@ -28,26 +28,24 @@ if (ex.deadline) {
 
 $("#exercise").html(ex.name);
 
-if(!ex.submission.gitlab) {
+if (!ex.submission.gitlab) {
   document.getElementById("gitlab").style.display = "none";
 } else {
   $('[href="#menu2"]').tab('show');
 }
 
-if(!ex.submission.zip) {
+if (!ex.submission.zip) {
   document.getElementById("zip").style.display = "none";
 } else {
   console.log("here")
   $('[href="#menu1"]').tab('show');
 }
 
-if(!ex.submission.github) {
+if (!ex.submission.github) {
   document.getElementById("github").style.display = "none";
 } else {
   $('[href="#home"]').tab('show');
 }
-
-
 
 /**
  * This function send the file to the server.
@@ -178,11 +176,16 @@ function sendWebsocket(json) {
     logServer("color:black; margin:0 1em 0 1em", event.data);
     // The line "Final Grade:<grade>" is written in server.py:check_submission
     if (event.data.includes("Final Grade:")) {
-      grade = event.data.substring(12, event.data.length) - penality;
-      if (penality) {
-        alert("you grade is registered with a penalty of " + penality + " points.")
+      if (document.getElementById("grade").checked) {
+        grade = event.data.substring(12, event.data.length) - penality;
+        if (penality) {
+          alert("you grade is registered with a penalty of " + penality + " points.")
+        }
+        uploadGrade(grade, giturl);
       }
-      uploadGrade(grade, giturl);
+      else {
+        grade = -1
+      }
     }
   }
 }

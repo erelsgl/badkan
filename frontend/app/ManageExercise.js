@@ -100,3 +100,25 @@ document.getElementById("btnRun").addEventListener('click', e => {
     }
     return false;
 });
+
+document.getElementById("btnGrade").addEventListener('click', e => {
+    var response = prompt("Please enter the new grade:");
+    uploadGradeManually(response);
+});
+
+function uploadGradeManually(grade) {
+    for (let i = 0; i < user.exerciseSolved.length; i++) {
+        if (user.exerciseSolved[i].exerciseId == exerciseId) {
+            console.log("hello")
+            user.exerciseSolved[i].grade = grade;
+        }
+    }
+
+    for (let j = 0; j < exercise.grades.gradeObj.length; j++) {
+        if (exercise.grades.gradeObj[j].id == userId) {
+            exercise.grades.gradeObj[j].grade = grade;
+        }
+    }
+    writeUserDataWithoutComingHome(user, userId);
+    writeExercise(exercise, exerciseId)
+}

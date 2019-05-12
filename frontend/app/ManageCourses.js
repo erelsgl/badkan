@@ -148,9 +148,7 @@ function onUser(key, user, i, courses_length) {
 }
 
 function onLoadAllCourses() {
-    //console.log("Done loading courses")
     document.getElementById("loading").style.display = "none";
-
     localStorage.setItem("coursesMap",
         JSON.stringify(Array.from(coursesMap.entries())));
     localStorage.setItem("exercisesMap",
