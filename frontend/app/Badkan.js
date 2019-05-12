@@ -28,25 +28,26 @@ if (ex.deadline) {
 
 $("#exercise").html(ex.name);
 
-if (!ex.submission.gitlab) {
-  document.getElementById("gitlab").style.display = "none";
-} else {
-  $('[href="#menu2"]').tab('show');
-}
+if (ex.submission) {
+  if (!ex.submission.gitlab) {
+    document.getElementById("gitlab").style.display = "none";
+  } else {
+    $('[href="#menu2"]').tab('show');
+  }
 
-if (!ex.submission.zip) {
-  document.getElementById("zip").style.display = "none";
-} else {
-  console.log("here")
-  $('[href="#menu1"]').tab('show');
-}
+  if (!ex.submission.zip) {
+    document.getElementById("zip").style.display = "none";
+  } else {
+    console.log("here")
+    $('[href="#menu1"]').tab('show');
+  }
 
-if (!ex.submission.github) {
-  document.getElementById("github").style.display = "none";
-} else {
-  $('[href="#home"]').tab('show');
+  if (!ex.submission.github) {
+    document.getElementById("github").style.display = "none";
+  } else {
+    $('[href="#home"]').tab('show');
+  }
 }
-
 /**
  * This function send the file to the server.
  * @param {File} file 
@@ -182,8 +183,7 @@ function sendWebsocket(json) {
           alert("you grade is registered with a penalty of " + penality + " points.")
         }
         uploadGrade(grade, giturl);
-      }
-      else {
+      } else {
         grade = -1
       }
     }
