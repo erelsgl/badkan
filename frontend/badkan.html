@@ -7,13 +7,14 @@
 
   <!-- Import js. -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src='library/jquery-3.2.1.min.js'></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
   <script src='util/FirebaseConfig.js'></script>
-  <script src='library/jquery-3.2.1.min.js'></script>
   <script src='util/utils.js'></script>
   <script src='util/collaps.js'></script>
   <script src='objects/ExerciseSolved.js'></script>
+  <script src='objects/Submission.js'></script>
   <script src='util/Firebase.js'></script>
   <script type="text/javascript" src="util/SignOut.js"></script>
   <script type="text/javascript" src="objects/Grade.js"></script>
@@ -40,9 +41,9 @@
     <form>
 
       <ul class="nav nav-pills">
-        <li class="active"><a data-toggle="pill" href="#home">GitHub clone</a></li>
-        <li><a data-toggle="pill" href="#menu1">Zip file</a></li>
-        <li><a data-toggle="pill" href="#menu2">GitLab private clone</a></li>
+        <li id="github" class="active"><a data-toggle="pill" href="#home">GitHub clone</a></li>
+        <li><a id="zip" data-toggle="pill" href="#menu1">Zip file</a></li>
+        <li><a id="gitlab" data-toggle="pill" href="#menu2">GitLab private clone</a></li>
       </ul>
 
       <div class="tab-content">

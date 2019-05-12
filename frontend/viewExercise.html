@@ -14,6 +14,7 @@
   <script type="text/javascript" src="util/Firebase.js"></script>
   <script type="text/javascript" src="util/SignOut.js"></script>
   <script type="text/javascript" src="objects/Exercise.js"></script>
+  <script type="text/javascript" src="objects/Submission.js"></script>
   <script src='library/jquery-3.2.1.min.js'></script>
   <script src='util/utils.js'></script>
   <script src='util/collaps.js'></script>
@@ -65,6 +66,18 @@
             </div>
 
             <div class="form-group">
+              <label for="usr">Choose the submission option (at least one required):</label>
+              <ul>
+                <li><input id="githubGitHub" name="BoxSelect[]" type="checkbox" value="github" required><label>GitHub</label>
+                </li>
+                <li><input id="zipGitHub" name="BoxSelect[]" type="checkbox" value="zip" required><label>Zip</label></li>
+                <li><input id="gitlabGitHub" name="BoxSelect[]" type="checkbox" value="gitlab" required><label>GitLab</label>
+                </li>
+              </ul>
+            </div>
+
+
+            <div class="form-group">
               <label for="link">GitLab repository:</label>
               <input type="text" class="form-control" id="link"
                 placeholder="Enter here a clone-link to a repository in GitLab. It must begin with https: and end with .git" />
@@ -114,6 +127,17 @@
               <label for="exName">Compiler:</label>
               <input type="text" class="form-control" id="exCompilerZip" />
             </div>
+
+            <div class="form-group">
+                <label for="usr">Choose the submission option (at least one required):</label>
+                <ul>
+                  <li><input id="githubZip" name="BoxSelect[]" type="checkbox" value="github" required><label>GitHub</label>
+                  </li>
+                  <li><input id="zipZip" name="BoxSelect[]" type="checkbox" value="zip" required><label>Zip</label></li>
+                  <li><input id="gitlabZip" name="BoxSelect[]" type="checkbox" value="gitlab" required><label>GitLab</label>
+                  </li>
+                </ul>
+              </div>
 
             <div class="form-group">
 
@@ -193,7 +217,8 @@
                         <h5>
                           <strong>
                             Once you finish to fill all the field, we will compute for you the "grade" file. <br />
-                            For each test a input-1.txt and output-1.txt file is required. When -"1" is the number of the
+                            For each test a input-1.txt and output-1.txt file is required. When -"1" is the number of
+                            the
                             test.
                             (from 1 to :number of test:)<br /> <br />
                           </strong>

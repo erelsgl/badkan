@@ -15,6 +15,20 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
   const descr = escapeHtml(document.getElementById("exDescr").value);
   const compiler = escapeHtml(document.getElementById("exCompiler").value);
 
+  let github = document.getElementById("github").checked;
+  let zip = document.getElementById("zip").checked;
+  let gitlab = document.getElementById("gitlab").checked;
+
+  // Here we first check that the user at least check one of the parameter.
+  if (!github && !zip && !gitlab) {
+    document.getElementById("page").style.display = "block";
+    document.getElementById("loadingEx").style.display = "none";
+    alert("Please check at least one submission option.");
+    return;
+  }
+
+  let submission = new Submission(github, zip, gitlab);
+
   const date = document.getElementById("deadline").value;
   let penalities = [];
   for (var i = 1; i < 7; i++) {
@@ -30,7 +44,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
   if ($('.nav-pills .active').text() === 'Zip file') {
     var file = document.getElementById('filename').files[0];
     if (checkEmptyFieldsFile(name, descr, file, compiler)) {
-      uploadExerciseFile(name, descr, file, deadline, compiler);
+      uploadExerciseFile(name, descr, file, deadline, compiler, submission);
     }
   } else {
     const link = escapeHtmlWithRespectGit(document.getElementById("link").value);
@@ -38,7 +52,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
     const username = escapeHtml(document.getElementById("user").value);
     const pass = escapeHtml(document.getElementById("pass").value);
     if (checkEmptyFieldsGit(name, descr, link, exFolder, username, pass, compiler)) {
-      uploadExerciseGit(name, descr, link, username, pass, exFolder, deadline, compiler);
+      uploadExerciseGit(name, descr, link, username, pass, exFolder, deadline, compiler, submission);
     }
   }
 });
@@ -46,6 +60,8 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
 function checkEmptyFieldsGit(name, descr, exFolder, user, pass, link, compiler) {
   var emptyField = document.getElementById("emptyField");
   if (name === "" || descr === "" || exFolder == "" || user == "" || pass == "" || compiler === "" || link == "") {
+    document.getElementById("page").style.display = "block";
+    document.getElementById("loadingEx").style.display = "none";
     emptyField.className = "show";
     setTimeout(function () {
       emptyField.className = emptyField.className.replace("show", "");
@@ -58,6 +74,8 @@ function checkEmptyFieldsGit(name, descr, exFolder, user, pass, link, compiler) 
 function checkEmptyFieldsFile(name, descr, file, compiler) {
   var emptyField = document.getElementById("emptyField");
   if (name === "" || descr === "" || compiler === "" || !file) {
+    document.getElementById("page").style.display = "block";
+    document.getElementById("loadingEx").style.display = "none";
     emptyField.className = "show";
     setTimeout(function () {
       emptyField.className = emptyField.className.replace("show", "");
@@ -94,7 +112,7 @@ document.getElementById("btnHelp").addEventListener('click', e => {
  * @param {String} pass 
  * @param {String} exFolder 
  */
-function uploadExerciseGit(name, descr, link, username, pass, exFolder, deadline, compiler) {
+function uploadExerciseGit(name, descr, link, username, pass, exFolder, deadline, compiler, submission) {
   var user = firebase.auth().currentUser;
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   folderName = user.uid + "_" + homeUser.createdEx;
@@ -106,7 +124,7 @@ function uploadExerciseGit(name, descr, link, username, pass, exFolder, deadline
   if (pdf) {
     example = "PDF"
   }
-  let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades, deadline, compiler);
+  let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades, deadline, compiler, submission);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName);
@@ -114,7 +132,7 @@ function uploadExerciseGit(name, descr, link, username, pass, exFolder, deadline
   checkGrade(folderName);
 }
 
-function uploadExerciseFile(name, descr, file, deadline, compiler) {
+function uploadExerciseFile(name, descr, file, deadline, compiler, submission) {
   var user = firebase.auth().currentUser;
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   folderName = user.uid + "_" + homeUser.createdEx;
@@ -126,7 +144,7 @@ function uploadExerciseFile(name, descr, file, deadline, compiler) {
   if (pdf) {
     example = "PDF"
   }
-  let exercise = new Exercise(name, descr, example, user.uid, "zip", "", grades, deadline, compiler);
+  let exercise = new Exercise(name, descr, example, user.uid, "zip", "", grades, deadline, compiler, submission);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName);
@@ -233,13 +251,13 @@ function uploadPdf(exerciseId) {
     }).catch(error => {
       alert(error)
     })
-  }
-  else {
+  } else {
     onFinish();
   }
 }
 
 var count = 0;
+
 function onFinish() {
   console.log(count);
   count++;

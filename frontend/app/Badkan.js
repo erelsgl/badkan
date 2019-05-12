@@ -20,7 +20,6 @@ if (!exercise)
 var ex = JSON.parse(localStorage.getItem("exercise"));
 var selectedValue = JSON.parse(localStorage.getItem("selectedValue"));
 
-// TODO FINISH HERE.
 let grade = 0;
 let penality = 0;
 if (ex.deadline) {
@@ -28,6 +27,27 @@ if (ex.deadline) {
 }
 
 $("#exercise").html(ex.name);
+
+if(!ex.submission.gitlab) {
+  document.getElementById("gitlab").style.display = "none";
+} else {
+  $('[href="#menu2"]').tab('show');
+}
+
+if(!ex.submission.zip) {
+  document.getElementById("zip").style.display = "none";
+} else {
+  console.log("here")
+  $('[href="#menu1"]').tab('show');
+}
+
+if(!ex.submission.github) {
+  document.getElementById("github").style.display = "none";
+} else {
+  $('[href="#home"]').tab('show');
+}
+
+
 
 /**
  * This function send the file to the server.

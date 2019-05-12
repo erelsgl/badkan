@@ -44,6 +44,17 @@ if (exercise.compiler) {
     document.getElementById("exCompilerZip").defaultValue = exercise.compiler
 }
 
+console.log(exercise.submission.github);
+document.getElementById("githubGitHub").checked = exercise.submission.github
+document.getElementById("githubZip").checked = exercise.submission.github
+
+document.getElementById("zipGitHub").checked = exercise.submission.zip
+document.getElementById("zipZip").checked = exercise.submission.zip
+
+document.getElementById("gitlabGitHub").checked = exercise.submission.gitlab
+document.getElementById("gitlabZip").checked = exercise.submission.gitlab
+
+
 document.getElementById("link").defaultValue = exercise.link
 document.getElementById("exFolder").defaultValue = exercise.exFolder
 document.getElementById("link").readOnly = true
@@ -97,12 +108,26 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
     const descr = escapeHtml(document.getElementById("exDescrZip").value);
     const compiler = escapeHtml(document.getElementById("exCompilerZip").value);
     var file = document.getElementById('filename').files[0];
+
+    let githubZip = document.getElementById("githubZip").checked;
+    let zipZip = document.getElementById("zipZip").checked;
+    let gitlabZip = document.getElementById("gitlabZip").checked;
+  
+    // Here we first check that the user at least check one of the parameter.
+    if (!githubZip && !zipZip && !gitlabZip) {
+      alert("Please check at least one submission option.");
+      return;
+    }
+  
+    let submissionZip = new Submission(githubZip, zipZip, gitlabZip);
+  
+
     if (checkEmptyFields(name, descr, compiler)) {
         var pdf = document.getElementById('instructionZIP').files[0];
         if (pdf) {
             exercise.example = "PDF"
         }
-        uploadExerciseFile(name, descr, file, compiler);
+        uploadExerciseFile(name, descr, file, compiler, submissionZip);
         editPdf(pdf);
     }
 });
@@ -114,12 +139,25 @@ document.getElementById("btnEdit").addEventListener('click', e => {
     const name = escapeHtml(document.getElementById("exName").value);
     const descr = escapeHtml(document.getElementById("exDescr").value);
     const compiler = escapeHtml(document.getElementById("exCompiler").value);
+
+    let githubGitHub = document.getElementById("githubGitHub").checked;
+    let zipGitHub = document.getElementById("zipGitHub").checked;
+    let gitlabGitHub = document.getElementById("gitlabGitHub").checked;
+  
+    // Here we first check that the user at least check one of the parameter.
+    if (!githubGitHub && !zipGitHub && !gitlabGitHub) {
+      alert("Please check at least one submission option.");
+      return;
+    }
+  
+    let submissionGitHub = new Submission(githubGitHub, zipGitHub, gitlabGitHub);
+
     if (checkEmptyFields(name, descr, compiler)) {
         var pdf = document.getElementById('instructionGIT').files[0];
         if (pdf) {
             exercise.example = "PDF"
         }
-        uploadExercise(name, descr, compiler);
+        uploadExercise(name, descr, compiler, submissionGitHub);
         editPdf(pdf);
     }
 });
@@ -142,24 +180,24 @@ function checkEmptyFields(name, descr, compiler) {
  * @param {string} name 
  * @param {string} descr 
  */
-function uploadExercise(name, descr, compiler) {
+function uploadExercise(name, descr, compiler, submissionGitHub) {
     // The ref of the folder must be PK.
     var user = firebase.auth().currentUser;
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     sendLinkHTTP(exerciseId, exercise.exFolder);
-    let ex = new Exercise(name, descr, exercise.example, user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline, compiler);
+    let ex = new Exercise(name, descr, exercise.example, user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline, compiler, submissionGitHub);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
 }
 
-function uploadExerciseFile(name, descr, file, compiler) {
+function uploadExerciseFile(name, descr, file, compiler, submissionZip) {
     // The ref of the folder must be PK.
     var user = firebase.auth().currentUser;
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     if (file) {
         sendFileHTTP(exerciseId, file);
     }
-    let ex = new Exercise(name, descr, exercise.example, user.uid, 'zip', "", exercise.grades, exercise.deadline, compiler);
+    let ex = new Exercise(name, descr, exercise.example, user.uid, 'zip', "", exercise.grades, exercise.deadline, compiler, submissionZip);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
     checkGrade(exerciseId);
