@@ -345,6 +345,11 @@ document.getElementById("btnRunAll").addEventListener('click', e => {
 document.getElementById("btnDlProjects").addEventListener('click', e => {
     var parts = exerciseId + "@$@";
     for (var [key, value] of usersMap) {
+        var position = value.name.search(/[\u0590-\u05FF]/);
+        if (position >= 0) {
+            value.name = "unknown";
+            value.lastName = "unknown";
+        }
         parts += key + "/" + value.name + "_" + value.lastName + "-";
     }
     console.log(parts)
