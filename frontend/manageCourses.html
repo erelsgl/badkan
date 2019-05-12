@@ -46,7 +46,7 @@
                 <div class="panel-body">
                     <form id="form">
                         <div class="form-group">
-                            <label for="usr">Course name:</label>
+                            <label for="usr">Course name (required):</label>
                             <input type="text" class="form-control" id="courseName"
                                 placeholder="Enter a name for the course." />
                             <br />
@@ -59,10 +59,18 @@
                             <select multiple="multiple" class="form-control" id="exercises"
                                 onchange="onOptionChange();"></select> <br />
                         </div>
+                        <div id="graderPrivilege" class="form-group">
+                            <label for="usr">Enter the id of the grader to get him an access to the "manage course" page (grader privilege):</label>
+                            <h5>Notice: The user must be admin to get the grader privilege</h5>
+                            <input type="text" class="form-control" id="grader_id"
+                                placeholder="000000000" />
+                            <br />
+                        </div>
                         <input type="radio" name="privacy" value="public" checked> Public<br>
                         <input type="radio" name="privacy" value="private"> Private<br>
                         <div id="pass" class="form-group" style="display: none;">
-                            <label for="usr">Enter a the id's of the students of the course to give them an access to the course:</label>
+                            <label for="usr">Enter the id's of the students of the course to give them an access to
+                                the course:</label>
                             <h5>Please, respect the format 000000000 000000000 ....</h5>
                             <input type="text" class="form-control" id="students_ids"
                                 placeholder="000000000 000000000" />

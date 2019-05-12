@@ -56,7 +56,7 @@ The grading process should remain the same in both options.
 Also, an exercise creator will be able to upload files via a GitLab link (as in badkan 2.0) or via a zipped folder.
 
 ## 5. Create/edit a course
-Every user will be able to create a new course (buttons "create course" and "edit course" in the admin page).
+Every user will be able to create a  (buttons "create course" and "edit course" in the admin page).
 
 Each course will contain a list of exercises. 
 The course-creator will be able to add existing exercises to the list,

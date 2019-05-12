@@ -261,7 +261,7 @@ function loadExerciseByOwner(ownExercises) {
  *          onCourse(key, course)
  * After all courses are read, call onFinish()
  */
-function loadCoursesOwnedByCurrentUser(onCourse, onFinish) {
+function loadCoursesOwnedByCurrentUser(onCourse, onFinish, homeUserForAdmin) {
   database.ref().child('courses/').on("value", function (snapshot) {
     if (!snapshot.val()) { // TODO: is it needed?
       document.getElementById("loading").style.display = "none";
@@ -272,6 +272,7 @@ function loadCoursesOwnedByCurrentUser(onCourse, onFinish) {
     snapshot.forEach(function (course_data) {  // for each course do
 
       if (course_data.val().course.ownerId === firebase.auth().currentUser.uid || 
+      course_data.val().course.grader === homeUserForAdmin.id ||
       firebase.auth().currentUser.uid == "l54uXZrXdrZDTcDb2zMwObhXbxm1" ) {
          onCourse(course_data.key, course_data.val().course)
       }

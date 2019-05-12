@@ -34,6 +34,7 @@ $('input[type=radio][name=privacy]').change(function () {
 document.getElementById("btnCreateCourse").addEventListener('click', e => {
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     const name = escapeHtml(document.getElementById("courseName").value);
+    const grader = escapeHtml(document.getElementById("grader_id").value);
     var values = $('#exercises').val();
     if (!values[0]) {
         values = ["dummyExerciseId"];
@@ -43,12 +44,12 @@ document.getElementById("btnCreateCourse").addEventListener('click', e => {
     if (!public) {
         const ids = escapeHtml(document.getElementById("students_ids").value);
         if (checkEmptyFieldsPrivate(name, ids)) {
-            writeCourse(new Course(name, values, ["dummyStudentId"], ids, ownerId), courseId);
+            writeCourse(new Course(name, values, ["dummyStudentId"], ids, ownerId, grader), courseId);
             incrementCreatedExWithoutCommingHome(ownerId, homeUser);
         }
     } else {
         if (checkEmptyFieldsPublic(name)) {
-            writeCourse(new Course(name, values, ["dummyStudentId"], null, ownerId), courseId);
+            writeCourse(new Course(name, values, ["dummyStudentId"], null, ownerId, grader), courseId);
             incrementCreatedExWithoutCommingHome(ownerId, homeUser);
         }
     }
@@ -117,9 +118,10 @@ function addCourseHTML(courseId, course) {
         if (course.exercises[i] != "dummyExerciseId") {
             if (exercisesMap.get(course.exercises[i])) {
                 text_html +=
-                    "<button name =\"" + course.exercises[i] + "\" id=\"exercise\" class=\"btn btn-link\">" +
+                    "<button name =\"" + course.exercises[i] + "$@$" + courseId + "\" id=\"exercise\" class=\"btn btn-link\">" +
                     exercisesMap.get(course.exercises[i]).name +
                     "</button>";
+
                 if (i != course.exercises.length - 1) text_html += "<br />";
             }
         }
@@ -166,10 +168,7 @@ function onLoadAllCourses() {
 
 }
 
-
-
-loadCoursesOwnedByCurrentUser(addCourseHTML, onLoadAllCourses); // defined in frontend/util/Firebase.js.
-
+loadCoursesOwnedByCurrentUser(addCourseHTML, onLoadAllCourses, homeUserForAdmin); // defined in frontend/util/Firebase.js.
 
 /**
  * Here the user is redirected into a new page "viewExercise".
@@ -183,10 +182,14 @@ loadCoursesOwnedByCurrentUser(addCourseHTML, onLoadAllCourses); // defined in fr
  * - optional: dl the grade of the exercise.
  */
 $('body').on('click', '#exercise', function (e) {
-    let exerciseId = e.target.name;
+    let arraySPlitted = e.target.name.split("$@$");
+    let exerciseId = arraySPlitted[0];
+    let courseId = arraySPlitted[1];
+    localStorage.setItem("courseForGrader", JSON.stringify(coursesMap.get(courseId)));
     //    let exercise = exercisesMap.get(exerciseId);
     //    localStorage.setItem("exercise", JSON.stringify(exercise));
     //    localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
+    //
     document.location.href = "viewExercise.html?exerciseId=" + exerciseId;
 });
 

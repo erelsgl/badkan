@@ -24,13 +24,15 @@ class Course {
      * @param {String} ids: The ids  of the course if the instructor want the course to be private.
      * Can be null.
      * @param {String} ownerId: This is the firebase ID of the owner of the course.
+     * @param {String} grader
      */
-    constructor(name, exercises, students, ids, ownerId) {
+    constructor(name, exercises, students, ids, ownerId, grader) {
         this.name = name;
         this.exercises = exercises;
         this.students = students;
         this.ids = ids;
         this.ownerId = ownerId;
+        this.grader = grader;
     }
 
 }
