@@ -48,7 +48,7 @@ document.getElementById("btnDl").addEventListener('click', e => {
                     a.style = "display:none";
                     var url = window.URL.createObjectURL(blob);
                     a.href = url;
-                    a.download =  user.name + "_" + user.lastName + ".zip";
+                    a.download = user.name + "_" + user.lastName + ".zip";
                     a.click();
                     window.URL.revokeObjectURL(url);
                     a.remove();
@@ -103,13 +103,14 @@ document.getElementById("btnRun").addEventListener('click', e => {
 
 document.getElementById("btnGrade").addEventListener('click', e => {
     var response = prompt("Please enter the new grade:");
-    uploadGradeManually(response);
+    if (response) {
+        uploadGradeManually(response);
+    }
 });
 
 function uploadGradeManually(grade) {
     for (let i = 0; i < user.exerciseSolved.length; i++) {
         if (user.exerciseSolved[i].exerciseId == exerciseId) {
-            console.log("hello")
             user.exerciseSolved[i].grade = grade;
         }
     }

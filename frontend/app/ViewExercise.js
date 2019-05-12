@@ -343,11 +343,11 @@ document.getElementById("btnRunAll").addEventListener('click', e => {
 
 
 document.getElementById("btnDlProjects").addEventListener('click', e => {
-    var parts = exerciseId + "-";
-    let keys = Array.from(usersMap.keys());
-    for (var i = 0; i < keys.length; i++) {
-        parts += keys[i] + "/";
+    var parts = exerciseId + "@$@";
+    for (var [key, value] of usersMap) {
+        parts += key + "/" + value.name + "_" + value.lastName + "-";
     }
+    console.log(parts)
     downloadProject(parts);
 });
 

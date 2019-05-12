@@ -57,13 +57,10 @@ class MyHandler(BaseHTTPRequestHandler):
                 self.wfile.write(csv_file.read())
 
         else:
-            print("all")
-            x = path.split("-")
+            x = path.split("@$@")
             exo = x[0]
-            users = x[1].replace("/", " ")
-            print(exo)
-            print(users)
-            shellscript = subprocess.Popen(['bash','dl-all-projects.sh', exo, users], stdout=subprocess.PIPE)
+            informations = x[1].replace("-", " ")
+            shellscript = subprocess.Popen(['bash','dl-all-projects.sh', exo, informations], stdout=subprocess.PIPE)
             shellscript.wait()
             zip_file = open(exo + ".zip", 'rb')
             self.wfile.write(zip_file.read())
