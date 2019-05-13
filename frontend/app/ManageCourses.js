@@ -192,29 +192,33 @@ $('body').on('click', '#exercise', function (e) {
 });
 
 $('body').on('click', '#create', function (e) {
-    
-    $( function() {
-        $( "#dialog-confirm" ).dialog({
-          resizable: false,
-          height: "auto",
-          width: 400,
-          modal: true,
-          buttons: {
-            "Normal Exercise": function() {
-              $( this ).dialog( "close" );
-            },
-            "Peer to peer Exercise": function() {
-              $( this ).dialog( "close" );
-            }
-          }
-        });
-      } );
 
-    // let courseId = e.target.name;
-    // let course = coursesMap.get(courseId);
-    // localStorage.setItem("course", JSON.stringify(course));
-    // localStorage.setItem("courseId", JSON.stringify(courseId));
-    // document.location.href = "createEx.html";
+    $(function () {
+        $("#dialog-confirm").dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+                "Normal Exercise": function () {
+                    let courseId = e.target.name;
+                    let course = coursesMap.get(courseId);
+                    localStorage.setItem("course", JSON.stringify(course));
+                    localStorage.setItem("courseId", JSON.stringify(courseId));
+                    document.location.href = "createEx.html";
+                    $(this).dialog("close");
+                },
+                "Peer to peer Exercise": function () {
+                    let courseId = e.target.name;
+                    let course = coursesMap.get(courseId);
+                    localStorage.setItem("course", JSON.stringify(course));
+                    localStorage.setItem("courseId", JSON.stringify(courseId));
+                    document.location.href = "createPeer.html";
+                    $(this).dialog("close");
+                }
+            }
+        });
+    });
 });
 
 /**

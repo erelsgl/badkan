@@ -15,9 +15,20 @@ class PeerExercise {
      * @param {int} minTest 
      * @param {map} signatureMap 
      */
-    constructor(name, description, ownerId, peerGrades, dealdineTest, 
+    constructor(name, description, ownerId, peerGrades, dealdineTest,
         dealdineSolution, deadlineConflicts, compilerSolution, compilerTest, submission, minTest, signatureMap) {
-            
+        this.name = name;
+        this.description = description;
+        this.ownerId = ownerId;
+        this.peerGrades = peerGrades;
+        this.dealdineTest = dealdineTest;
+        this.dealdineSolution = dealdineSolution;
+        this.deadlineConflicts = deadlineConflicts;
+        this.compilerSolution = compilerSolution;
+        this.compilerTest = compilerTest;
+        this.submission = submission;
+        this.minTest = minTest;
+        this.signatureMap = signatureMap;
     }
-
+    
 }

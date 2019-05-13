@@ -72,6 +72,12 @@ function writeExercise(exercise, exerciseId) {
   });
 }
 
+function writePeerExercise(peerExercise, peerExerciseId) {
+  firebase.database().ref("peerExercises/" + peerExerciseId).set({
+    peerExercise
+  });
+}
+
 function editCourse(course, courseId) {
   firebase.database().ref("courses/" + courseId).set({
     course

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Peer Exercise</title>
+
+    <!-- Import js. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+    <script src='util/FirebaseConfig.js'></script>
+    <script type="text/javascript" src="util/Firebase.js"></script>
+    <script type="text/javascript" src="util/SignOut.js"></script>
+    <script type="text/javascript" src="objects/Submission.js"></script>
+    <script type="text/javascript" src="util/Loading.js"></script>
+    <script type="text/javascript" src="objects/PeerExercise.js"></script>
+    <script type="text/javascript" src="objects/PeerGrade.js"></script>
+    <script src='library/jquery-3.2.1.min.js'></script>
+    <script src='util/utils.js'></script>
+    <script src='util/collaps.js'></script>
+    <script type="text/javascript" src="util/Sanitize.js"></script>
+
+    <!-- Import css. -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style/snackbar.css">
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/loading.css">
+</head>
+
+<body>
+    <a class='home' href="home.html">Badkan Home</a>
+    <div id="loadingEx" class="loader" style="display:none;"></div>
+    <div id="page">
+        <div class="container">
+            <h1>Create a Peer-to-Peer exercise.</h1>
+
+            <h3>First time?
+                <button id="btnHelp" type="button" class="btn btn-link">help</button></h3>
+
+            <h5>*All the fields are required.*</h5>
+
+            <!-- input. -->
+            <form id="form">
+                <div class="form-group">
+                    <label for="usr">Name:</label>
+                    <input type="text" class="form-control" id="exName" placeholder="Enter a name for the exercise" />
+                    <br />
+                </div>
+
+                <!-- text area. -->
+                <div class="form-group">
+                    <label for="comment">Description:</label>
+                    <textarea class="form-control" rows="10" id="exDescr" name="comment"
+                        placeholder="Enter the description of the exercise"></textarea>
+                </div>
+                <!-- input. -->
+                <div class="form-group">
+                    <br />
+                    <label for="usr">Exercise Instructions:</label>
+                    <input type="file" id="instruction" />
+                </div>
+
+                <div class="form-group">
+                    <label for="usr">Exercise Language:</label>
+                    <input type="text" class="form-control" id="exCompiler"
+                        placeholder="Enter a name for the exercise" /> <br />
+                </div>
+
+                <div class="form-group">
+                    <label for="usr">Choose the submission option (at least one required):</label>
+                    <ul>
+                        <li><input id="github" name="BoxSelect[]" type="checkbox" value="github"
+                                required><label>GitHub</label></li>
+                        <li><input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required><label>Zip</label>
+                        </li>
+                        <li><input id="gitlab" name="BoxSelect[]" type="checkbox" value="gitlab"
+                                required><label>GitLab</label></li>
+                    </ul>
+                </div>
+
+                <!-- button. -->
+                <button id="btnConfirm" type="button" class="btn btn-primary">Confirm</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- snackbar. -->
+    <div id="emptyField">Please fill all the fields.</div>
+
+    <script type="text/javascript" src="app/CreatePeer.js"></script>
+
+</body>
+
+</html>
