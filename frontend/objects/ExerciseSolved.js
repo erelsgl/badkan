@@ -5,7 +5,6 @@ class ExerciseSolved {
 
     /**
      * 
-     * @param {string} exercise
      * @param {grade} grade 
      * @param {string} exerciseId 
      */

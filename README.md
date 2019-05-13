@@ -38,13 +38,13 @@ Then, you need to add to the project the private key that you download here:
        
     Go to settings -> Service Account -> Generate New private key.
 
-Then put the file in the folder database_exports.
+Then put the file in the folder database_exports and change its name to private_key.json.
 
-In the file firebase_save.py, change the path to the file and change the storage bucket name too with the name of your firebase project:
+Then, go to the Database onglet from your firebase project.
+Create a database and then start in test mode.
 
-    Go to storage -> copy the link <your_project>.appspot.com 
-
-
+Go to rules pages, and change the read and write option from false to true. 
+Publish the changes.
 
 Once Firebase is initialized you need to install all the network stuff.
 
