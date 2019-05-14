@@ -14,40 +14,56 @@ var homeUser = JSON.parse(localStorage.getItem("homeUserKey")); // The current u
 document.getElementById("currentId").value = homeUser.id; // The country id of the current user.
 document.getElementById('currentId').readOnly = true; // Make it as readonly.
 
-var exercise = getParameterByName("exercise"); // in utils.js
-if (!exercise)
-  exercise = "multiply"; // default exercise
-var ex = JSON.parse(localStorage.getItem("exercise"));
-var selectedValue = JSON.parse(localStorage.getItem("selectedValue"));
+var exerciseId = getParameterByName("exercise"); // in utils.js
+let peerTestExercise = getParameterByName("peerTestExercise"); // in utils.js
+let peerSolutionExercise = getParameterByName("peerSolutionExercise"); // in utils.js
 
-let grade = 0;
-let penality = 0;
-if (ex.deadline) {
-  penality = isPenalized(ex.deadline); // The grade by default.
-}
+if (!exerciseId && !peerTestExercise && !peerSolutionExercise)
+  exerciseId = "multiply"; // default exercise
 
-$("#exercise").html(ex.name);
+var exercise = JSON.parse(localStorage.getItem("exercise"));
+$("#exercise").html(exercise.name);
 
-if (ex.submission) {
-  if (!ex.submission.gitlab) {
+if (exercise.submission) {
+  if (!exercise.submission.gitlab) {
     document.getElementById("gitlab").style.display = "none";
   } else {
     $('[href="#menu2"]').tab('show');
   }
 
-  if (!ex.submission.zip) {
+  if (!exercise.submission.zip) {
     document.getElementById("zip").style.display = "none";
   } else {
-    console.log("here")
     $('[href="#menu1"]').tab('show');
   }
 
-  if (!ex.submission.github) {
+  if (!exercise.submission.github) {
     document.getElementById("github").style.display = "none";
   } else {
     $('[href="#home"]').tab('show');
   }
 }
+
+// If we are in peer to peer process, we want to hide the "save grade" radio button
+if (peerTestExercise || peerSolutionExercise) {
+  document.getElementById("saveGrade").style.display = "none";
+
+}
+
+// From Here 
+let grade = 0;
+let penality = 0;
+if (exercise.deadline) {
+  penality = isPenalized(exercise.deadline); // The grade by default.
+}
+// to here we are in the normal section.
+
+
+/*
+ * From here only function are writed.
+ */
+
+
 /**
  * This function send the file to the server.
  * @param {File} file 
@@ -57,7 +73,7 @@ function dealWithFile(file) {
   var reader = new FileReader();
   reader.readAsArrayBuffer(file);
   var rawData = new ArrayBuffer();
-  reader.loadend = function () {}
+  reader.loadend = function () { }
   reader.onload = function (e) {
     rawData = e.target.result;
     // create the request
@@ -75,10 +91,10 @@ function dealWithFile(file) {
         const collab2Id = escapeHtml(document.getElementById("collab2").value);
         json = JSON.stringify({
           target: "check_submission",
-          exercise: exercise,
+          exercise: exerciseId,
           solution: uid,
           ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
-          name: ex.name,
+          name: exercise.name,
           owner_firebase_id: firebase.auth().currentUser.uid,
           student_name: homeUser.name,
           student_last_name: homeUser.lastName
@@ -96,12 +112,12 @@ function dealWithPrivate(url, tokenUsername, tokenPassword) {
   const collab2Id = escapeHtml(document.getElementById("collab2").value);
   json = JSON.stringify({
     target: "check_private_submission",
-    exercise: exercise,
+    exercise: exerciseId,
     solution: url,
     tokenUsername: tokenUsername,
     tokenPassword: tokenPassword,
     ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
-    name: ex.name,
+    name: exercise.name,
     owner_firebase_id: firebase.auth().currentUser.uid,
     student_name: homeUser.name,
     student_last_name: homeUser.lastName
@@ -115,10 +131,10 @@ function dealWithUrl(url) {
   const collab2Id = escapeHtml(document.getElementById("collab2").value);
   json = JSON.stringify({
     target: "check_submission",
-    exercise: exercise,
+    exercise: exerciseId,
     solution: url,
     ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
-    name: ex.name,
+    name: exercise.name,
     owner_firebase_id: firebase.auth().currentUser.uid,
     student_name: homeUser.name,
     student_last_name: homeUser.lastName
@@ -237,7 +253,7 @@ function uploadGrade(grade, giturl) {
     uploadHomeUserGrade(grade);
     var uid = firebase.auth().currentUser.uid;
     let newGrade = new Grade(uid, grade, giturl)
-    writeExerciseHistoric(selectedValue, [newGrade]);
+    writeExerciseHistoric(exerciseId, [newGrade]);
   }
 }
 
@@ -253,7 +269,7 @@ function uploadGradeWithOneCollab(grade, collab1Id, giturl) {
   let newGrade1 = new Grade(uid, grade, giturl)
   let newGrade2 = new Grade(collab1Id, grade, giturl)
   let gradevector = [newGrade1, newGrade2];
-  writeExerciseHistoric(selectedValue, gradevector);
+  writeExerciseHistoric(exerciseId, gradevector);
 }
 
 /**
@@ -270,7 +286,7 @@ function uploadGradeWithTwoCollab(grade, collab1Id, collab2Id, giturl) {
   let newGrade2 = new Grade(collab1Id, grade, giturl)
   let newGrade3 = new Grade(collab2Id, grade, giturl)
   let gradevector = [newGrade1, newGrade2, newGrade3];
-  writeExerciseHistoric(selectedValue, gradevector);
+  writeExerciseHistoric(exercise, gradevector);
 
 }
 
@@ -282,10 +298,10 @@ function uploadGradeWithTwoCollab(grade, collab1Id, collab2Id, giturl) {
  * @param {String} giturl 
  */
 function uploadCollabGrade(grade, collab, collabId, giturl) {
-  exerciseSolved = new ExerciseSolved(grade, selectedValue);
+  exerciseSolved = new ExerciseSolved(grade, exerciseId);
   flag = true;
   for (i = 0; i < collab.exerciseSolved.length; i++) {
-    if (collab.exerciseSolved[i].exerciseId === selectedValue) {
+    if (collab.exerciseSolved[i].exerciseId === exerciseId) {
       collab.exerciseSolved[i] = exerciseSolved;
       flag = false;
     }
@@ -301,10 +317,10 @@ function uploadCollabGrade(grade, collab, collabId, giturl) {
  * @param {grade} grade 
  */
 function uploadHomeUserGrade(grade) {
-  exerciseSolved = new ExerciseSolved(grade, selectedValue);
+  exerciseSolved = new ExerciseSolved(grade, exerciseId);
   flag = true;
   for (i = 0; i < homeUser.exerciseSolved.length; i++) {
-    if (homeUser.exerciseSolved[i].exerciseId === selectedValue) {
+    if (homeUser.exerciseSolved[i].exerciseId === exercise) {
       homeUser.exerciseSolved[i] = exerciseSolved;
       flag = false;
     }

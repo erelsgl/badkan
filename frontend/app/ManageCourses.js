@@ -36,7 +36,7 @@ document.getElementById("btnCreateCourse").addEventListener('click', e => {
     const name = escapeHtml(document.getElementById("courseName").value);
     const grader = escapeHtml(document.getElementById("grader_id").value);
     var values = $('#exercises').val();
-    if (!values[0]) {
+    if (!values) {
         values = ["dummyExerciseId"];
     }
     var ownerId = firebase.auth().currentUser.uid;
@@ -93,6 +93,9 @@ function checkEmptyFieldsPrivate(name, ids) {
 var exercisesMap = new Map();
 loadAllExercisesAndAddOptions(exercisesMap); // defined in frontend/util/Firebase.js.
 
+var peerExercisesMap = new Map();
+loadAllPeerExercises(peerExercisesMap);
+
 var usersMap = new Map();
 var coursesMap = new Map();
 
@@ -116,6 +119,8 @@ function addCourseHTML(courseId, course) {
     }
     for (var i = 0; i < course.exercises.length; i++) {
         if (course.exercises[i] != "dummyExerciseId") {
+
+
             if (exercisesMap.get(course.exercises[i])) {
                 text_html +=
                     "<button name =\"" + course.exercises[i] + "$@$" + courseId + "\" id=\"exercise\" class=\"btn btn-link\">" +
@@ -124,6 +129,20 @@ function addCourseHTML(courseId, course) {
 
                 if (i != course.exercises.length - 1) text_html += "<br />";
             }
+
+
+            if (peerExercisesMap.get(course.exercises[i])) {
+                text_html +=
+                    "<button name =\"peer" + course.exercises[i] + "$@$" + courseId + "\" id=\"exercise\" class=\"btn btn-link\">"
+                    + "<span class=\"glyphicon glyphicon-transfer\"></span>  " +
+                    peerExercisesMap.get(course.exercises[i]).name
+                    + "  <span class=\"glyphicon glyphicon-transfer\"></span>" +
+                    "</button>";
+
+                if (i != course.exercises.length - 1) text_html += "<br />";
+            }
+
+
         }
     }
     text_html += "<br /> <br />";
@@ -153,6 +172,8 @@ function onLoadAllCourses() {
         JSON.stringify(Array.from(coursesMap.entries())));
     localStorage.setItem("exercisesMap",
         JSON.stringify(Array.from(exercisesMap.entries())));
+    localStorage.setItem("peerExercisesMap",
+        JSON.stringify(Array.from(peerExercisesMap.entries())));
 
     var courses = Array.from(coursesMap.entries())
     for (var i = 0; i < courses.length; ++i) {
@@ -180,15 +201,21 @@ loadCoursesOwnedByCurrentUser(addCourseHTML, onLoadAllCourses, homeUserForAdmin)
  * - optional: dl the grade of the exercise.
  */
 $('body').on('click', '#exercise', function (e) {
-    let arraySPlitted = e.target.name.split("$@$");
-    let exerciseId = arraySPlitted[0];
-    let courseId = arraySPlitted[1];
-    localStorage.setItem("courseForGrader", JSON.stringify(coursesMap.get(courseId)));
-    //    let exercise = exercisesMap.get(exerciseId);
-    //    localStorage.setItem("exercise", JSON.stringify(exercise));
-    //    localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
-    //
-    document.location.href = "viewExercise.html?exerciseId=" + exerciseId;
+    let info = e.target.name;
+    if (info.startsWith("peer")) {
+        let substring = info.substring(4, info.length);
+        let arraySPlittedPeer = substring.split("$@$");
+        let peerExerciseId = arraySPlittedPeer[0];
+        let peerCourseId = arraySPlittedPeer[1];
+        localStorage.setItem("courseForGrader", JSON.stringify(coursesMap.get(peerCourseId)));
+        document.location.href = "viewPeerExercise.html?exerciseId=" + peerExerciseId;
+    } else {
+        let arraySPlitted = info.split("$@$");
+        let exerciseId = arraySPlitted[0];
+        let courseId = arraySPlitted[1];
+        localStorage.setItem("courseForGrader", JSON.stringify(coursesMap.get(courseId)));
+        document.location.href = "viewExercise.html?exerciseId=" + exerciseId;
+    }
 });
 
 $('body').on('click', '#create', function (e) {

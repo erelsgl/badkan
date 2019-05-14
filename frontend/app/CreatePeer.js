@@ -9,8 +9,8 @@
  * @param {string} description 
  * @param {string} ownerId 
  * @param {Object} peerGrades // Object we created with the gradees.
- * @param {date} dealdineTest 
- * @param {date} dealdineSolution 
+ * @param {date} deadlineTest 
+ * @param {date} deadlineSolution 
  * @param {date} deadlineConflicts 
  * @param {string} compilerSolution // java by default (on the frontend readonly).
  * @param {string} compilerTest // junit by default (on the frontend readonly).
@@ -83,6 +83,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
     let signatures = escapeHtml(document.getElementById("signatures").value);
     let signatureMap = parseMap(signatures);
 
+    console.log(signatureMap)
     if (checkEmptyFieldsPeer(name, descr, file, dealineTest, dealineSol, dealineCon, compilerTest, 
         compilerSolution, submission, minTest, signatureMap)) {
         uploadPeerExercise(name, descr, dealineTest, dealineSol, dealineCon, compilerTest, 
@@ -103,10 +104,10 @@ function logicalTime(date1, date2, date3) {
  */
 function parseMap(signatures) {
     let signaturesSplitted = signatures.split(";");
-    let signatureMap = new Map();
+    let signatureMap = [];
     for (let i = 0; i < signaturesSplitted.length; i++) {
         if (i + 1 < signaturesSplitted.length) {
-            signatureMap.set(signaturesSplitted[i++], signaturesSplitted[i])
+            signatureMap.push(new Signature(signaturesSplitted[i++], signaturesSplitted[i]))
         }
     }
     return signatureMap;
@@ -118,10 +119,10 @@ function parseMap(signatures) {
  * @param {*} file 
  * @param {*} compiler 
  */
-function checkEmptyFieldsPeer(name, descr, file, dealdineTest, dealdineSolution, deadlineConflicts,
+function checkEmptyFieldsPeer(name, descr, file, deadlineTest, deadlineSolution, deadlineConflicts,
     compilerSolution, compilerTest, submission, minTest, signatureMap) {
     var emptyField = document.getElementById("emptyField");
-    if (!name || !descr || !file || !dealdineTest || !dealdineSolution || !deadlineConflicts ||
+    if (!name || !descr || !file || !deadlineTest || !deadlineSolution || !deadlineConflicts ||
         !compilerSolution || !compilerTest || !submission || !minTest || !signatureMap || signatureMap.size == 0) {
         document.getElementById("page").style.display = "block";
         document.getElementById("loadingEx").style.display = "none";
@@ -142,7 +143,7 @@ function checkEmptyFieldsPeer(name, descr, file, dealdineTest, dealdineSolution,
  * @param {String} pass 
  * @param {String} exFolder 
  */
-function uploadPeerExercise(name, descr, dealdineTest, dealdineSolution, deadlineConflicts,
+function uploadPeerExercise(name, descr, deadlineTest, deadlineSolution, deadlineConflicts,
     compilerSolution, compilerTest, submission, minTest, signatureMap) {
     var userId = firebase.auth().currentUser.uid;
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
@@ -150,11 +151,13 @@ function uploadPeerExercise(name, descr, dealdineTest, dealdineSolution, deadlin
 
     let peerGrades = new PeerGrade("id", 90, 90, "urlTest", "urlSolution"); // Dummy grade for firebase.
 
+
     let peerExercise = new PeerExercise(
-        name, descr, userId, peerGrades, dealdineTest,
-        dealdineSolution, deadlineConflicts, compilerSolution, compilerTest, submission, minTest, signatureMap
+        name, descr, userId, peerGrades, deadlineTest,
+        deadlineSolution, deadlineConflicts, compilerSolution, compilerTest, submission, minTest, signatureMap
     );
 
+    console.log(peerExercise)
     incrementCreatedExAndSubmitCourse(userId, homeUser);
     writePeerExercise(peerExercise, folderName);
     editCourseCreatePeer(folderName);

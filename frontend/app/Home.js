@@ -37,6 +37,8 @@ if (homeUser) {
 var exercisesMap = new Map();
 loadAllExercisesAsync(exercisesMap); // defined in Firebase.js.
 
+var peerExercisesMap = new Map();
+loadAllPeerExercisesAsync(peerExercisesMap); // defined in Firebase.js.
 
 
 function addCourseHTML(key, course) {
@@ -147,8 +149,12 @@ function notRegistered(key, course) {
   } else {
     text_html += "<h3>Exercises in " + course.name + "</h3>"
     for (var i = 0; i < course.exercises.length; i++) {
+
       if (course.exercises[i] != "dummyExerciseId") {
+
+
         let exerciseObj = exercisesMap.get(course.exercises[i]);
+        let peerExerciseObj = peerExercisesMap.get(course.exercises[i]);
         if (exerciseObj) {
           text_html += "<div class='exercise'>"
           text_html += "<h4>" + exerciseObj.name + "</h4>";
@@ -165,6 +171,18 @@ function notRegistered(key, course) {
               }
             }
           }
+          text_html += "</div><!--exercise-->"
+        }
+
+        if (peerExerciseObj) {
+          text_html += "<div class='exercise'>"
+          text_html += "<h4>" + "<span class=\"glyphicon glyphicon-transfer\"></span>  "
+            + peerExerciseObj.name
+            + "  <span class=\"glyphicon glyphicon-transfer\"></span>" + "</h4>";
+          text_html += "<p>" + peerExerciseObj.description + "</p>";
+          text_html += "Test deadline: " + peerExerciseObj.deadlineTest + "<br />";
+          text_html += "Solution deadline: " + peerExerciseObj.deadlineSolution + "<br />";
+          text_html += "Conflicts deadline: " + peerExerciseObj.deadlineConflicts + "<br />";
           text_html += "</div><!--exercise-->"
         }
       }
@@ -193,6 +211,8 @@ function registered(key, course) {
       if (course.exercises[i] != "dummyExerciseId") {
         let exerciseId = course.exercises[i];
         let exerciseObj = exercisesMap.get(exerciseId);
+        let peerExerciseObj = peerExercisesMap.get(exerciseId);
+
         if (exerciseObj) {
           text_html += "<div class='exercise'>"
           text_html += "<h4>" + exerciseObj.name + "</h4>";
@@ -216,7 +236,6 @@ function registered(key, course) {
               }
             }
           }
-
           var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
           let grade = -1;
           for (var j = 0; j < homeUser.exerciseSolved.length; j++) {
@@ -234,12 +253,118 @@ function registered(key, course) {
           text_html += "</p>";
           text_html += "</div><!--exercise-->"
         }
+
+        /* @param {string} name 
+         * @param {string} description 
+         * @param {date} deadlineTest 
+         * @param {date} deadlineSolution 
+         * @param {date} deadlineConflicts 
+         * @param {string} compilerSolution // java by default (on the frontend readonly).
+         * @param {string} compilerTest // junit by default (on the frontend readonly).
+         */
+        if (peerExerciseObj) {
+          text_html += "<div class='exercise'>"
+          text_html += "<h4>" + "<span class=\"glyphicon glyphicon-transfer\"></span>  "
+            + peerExerciseObj.name
+            + "  <span class=\"glyphicon glyphicon-transfer\"></span>" + "</h4>";
+
+          text_html += "<p>" + peerExerciseObj.description + "</p>";
+          text_html += "<button name =\"" + exerciseId + "\" id=\"dl\" class=\"btn btn-link\"\">Download PDF</button>";
+          text_html += "<br /> <br />"
+
+
+          text_html += "Test deadline: " + peerExerciseObj.deadlineTest + "<br />";
+          text_html += "Solution deadline: " + peerExerciseObj.deadlineSolution + "<br />";
+          text_html += "Conflicts deadline: " + peerExerciseObj.deadlineConflicts + "<br />";
+
+          text_html += "Test language: " + peerExerciseObj.compilerTest + "<br />";
+          text_html += "Solution language: " + peerExerciseObj.compilerSolution + "<br />";
+
+          let phase = whichPhase(peerExerciseObj);
+          text_html += "<h5><strong>" + phase + ":</strong></h5>"
+
+          switch (phase) {
+            case "Test Phase":
+              testPhase(peerExerciseObj, exerciseId);
+              break;
+            case "Solution Phase":
+              solutionPhase(peerExerciseObj, exerciseId);
+              break;
+            case "Conflicts Phase":
+              conflictsPhase(exerciseId);
+              break;
+            default:
+              endGame(peerExerciseObj);
+          }
+
+          text_html += "</p>";
+          text_html += "</div><!--exercise-->"
+        }
+
       }
     }
   }
   $newPanel.find(".panel-body").append(text_html);
   $("#accordion-registered").append($newPanel.fadeIn());
 }
+
+/* 
+ * @param {int} minTest 
+ * @param {map} signatureMap 
+ */
+function testPhase(peerExerciseObj, exerciseId) {
+  text_html += "You need to implement at least : " + peerExerciseObj.minTest + " tests." + "<br />";
+  text_html += "Here is the list of the function you have to test: <br />";
+  for (let sign of peerExerciseObj.signatureMap) {
+    text_html += "The function signature is: <strong>" + sign.func + "</strong> -> The class where the function reside is: <strong>" + sign.cla + "</strong> <br />";
+  }
+  text_html += "<button name =\"" + exerciseId + "\" id=\"btnTestPhase\" class=\"btn btn-primary\"\">Submit test</button>";
+
+}
+
+/*
+ * @param {map} signatureMap 
+ */
+function solutionPhase(peerExerciseObj, exerciseId) {
+  text_html += "Here is the list of the function you have to implements: <br />";
+  for (let sign of peerExerciseObj.signatureMap) {
+    text_html += "The function signature is: <strong>" + sign.func + "</strong> -> The class where the function reside is: <strong>" + sign.cla + "</strong> <br />";
+  }
+
+  text_html += "<button name =\"" + exerciseId + "\" id=\"btnSolutionPhase\" class=\"btn btn-success\"\">Submit Solution</button>";
+}
+
+function conflictsPhase(exerciseId) {
+  text_html += "<button name =\"" + exerciseId + "\" id=\"btnConflictsPhase\" class=\"btn btn-danger\"\">Check for conflicts</button>";
+}
+
+/* @param {Object} peerGrades // Object we created with the grades. */
+function endGame(peerExerciseObj) {
+  // TODO: See how to integrate the peer-to-peer grade (need to create a new object PeerExerciseSolved.js).
+  // Or use the object.
+}
+
+
+$('body').on('click', '#btnTestPhase', function (e) {
+  let exerciseId = e.target.name;
+  let exercise = peerExercisesMap.get(exerciseId);
+  localStorage.setItem("exercise", JSON.stringify(exercise));
+  document.location.href = "badkan.html?peerTestExercise=" + exerciseId;
+});
+
+
+$('body').on('click', '#btnSolutionPhase', function (e) {
+  let exerciseId = e.target.name;
+  let exercise = peerExercisesMap.get(exerciseId);
+  localStorage.setItem("exercise", JSON.stringify(exercise));
+  document.location.href = "badkan.html?peerSolutionExercise=" + exerciseId;
+});
+
+
+$('body').on('click', '#btnConflictsPhase', function (e) {
+  let exerciseId = e.target.name;
+  document.location.href = "conflicts.html?exercise=" + exerciseId;
+});
 
 $('body').on('click', '#dl', function (e) {
   let exerciseId = e.target.name;
@@ -257,14 +382,12 @@ $('body').on('click', '#solve', function (e) {
   if (exercise.deadline && exercise.deadline.date) {
     if (isOpen(exercise.deadline)) {
       localStorage.setItem("exercise", JSON.stringify(exercise));
-      localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
       document.location.href = "badkan.html?exercise=" + exerciseId;
     } else {
       alert("The deadline for this exercise is over.")
     }
   } else {
     localStorage.setItem("exercise", JSON.stringify(exercise));
-    localStorage.setItem("selectedValue", JSON.stringify(exerciseId));
     document.location.href = "badkan.html?exercise=" + exerciseId;
   }
 });

@@ -323,6 +323,17 @@ function loadAllExercisesAsync(exercises) {
 }
 
 /**
+ * This function load all the peer-to-peer exercises of the database.
+ */
+function loadAllPeerExercisesAsync(peerExercises) {
+  database.ref().child('peerExercises/').on("value", function (snapshot) {
+    snapshot.forEach(function (data) {
+      peerExercises.set(data.key, data.val().peerExercise);
+    });
+  });
+}
+
+/**
  * This function load all the exercises of the database.
  */
 function loadAllExercises(onFinish) {
@@ -339,13 +350,22 @@ function loadAllExercises(onFinish) {
  * This function load all the exercises of the database.
  */
 function loadAllExercisesAndAddOptions(exercisesMap) {
-  var flag = false;
   database.ref().child('exercises/').on("value", function (snapshot) {
     snapshot.forEach(function (data) {
-      addOption(data.val().exercise, data.key); // defined in SolveEx.js and in EditDeleteEx.js
       exercisesMap.set(data.key, data.val().exercise);
-      onOptionChange(); // defined in SolveEx.js
-      flag = true;
+    });
+    loading("div3");
+    loading("loading3");
+  });
+}
+
+/**
+ * This function load all the peer-to-peer exercises of the database.
+ */
+function loadAllPeerExercises(peerExercisesMap) {
+  database.ref().child('peerExercises/').on("value", function (snapshot) {
+    snapshot.forEach(function (data) {
+      peerExercisesMap.set(data.key, data.val().peerExercise);
     });
     loading("div3");
     loading("loading3");
