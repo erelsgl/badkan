@@ -73,6 +73,8 @@ function writeExercise(exercise, exerciseId) {
 }
 
 function writePeerExercise(peerExercise, peerExerciseId) {
+  console.log(peerExercise)
+  console.log(peerExerciseId)
   firebase.database().ref("peerExercises/" + peerExerciseId).set({
     peerExercise
   });

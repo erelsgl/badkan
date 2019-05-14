@@ -46,7 +46,6 @@
                 <div class="form-group">
                     <label for="usr">Name:</label>
                     <input type="text" class="form-control" id="exName" placeholder="Enter a name for the exercise" />
-                    <br />
                 </div>
 
                 <!-- text area. -->
@@ -57,16 +56,22 @@
                 </div>
                 <!-- input. -->
                 <div class="form-group">
-                    <br />
                     <label for="usr">Exercise Instructions:</label>
                     <input type="file" id="instruction" />
                 </div>
 
                 <div class="form-group">
-                    <label for="usr">Exercise Language:</label>
-                    <input type="text" class="form-control" id="exCompiler"
-                        placeholder="Enter a name for the exercise" /> <br />
+                    <label for="usr">Test Language:</label>
+                    <input type="text" class="form-control" id="testLanguage"
+                        placeholder="Enter a name for the exercise" value="Junit" readonly />
                 </div>
+
+                <div class="form-group">
+                    <label for="usr">Solution Language:</label>
+                    <input type="text" class="form-control" id="solLanguage" placeholder="Enter a name for the exercise"
+                        value="java" readonly /> <br />
+                </div>
+
 
                 <div class="form-group">
                     <label for="usr">Choose the submission option (at least one required):</label>
@@ -79,6 +84,28 @@
                                 required><label>GitLab</label></li>
                     </ul>
                 </div>
+
+                <div class="form-group">
+                    <label for="usr">Be careful, the date must be chronological:</label> <br />
+                    Deadline for the test: <input type="date" name="dealineTest" id="dealineTest"> <br />
+                    Deadline for the solution: <input type="date" name="dealineSol" id="dealineSol"> <br />
+                    Deadline for the conflicts: <input type="date" name="dealineCon" id="dealineCon"> <br />
+                </div>
+
+                <div class="form-group">
+                    <label for="usr">Minimum test required:</label>
+                    <input type="number" class="form-control" id="minTest" /> <br />
+                </div>
+
+                 <!-- text area. -->
+                 <div class="form-group">
+                        <label for="comment">Signatures:</label>
+                        <h5>Please respect the format:</h5>
+                        <h5>function signature; class where the function resides;</h5>
+                        <h5>e.g: public static int myFun(int num1, int num2); MyClass.java;</h5>
+                        <textarea class="form-control" rows="10" id="signatures"
+                            placeholder="Enter the signatures of the exercise"></textarea>
+                    </div>
 
                 <!-- button. -->
                 <button id="btnConfirm" type="button" class="btn btn-primary">Confirm</button>
