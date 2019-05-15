@@ -56,7 +56,7 @@ let penality = 0;
 if (exercise.deadline) {
   penality = isPenalized(exercise.deadline); // The grade by default.
 }
-// to here we are in the normal section.
+// to here we are in the normal=(!peer_to_peer) section.
 
 
 /*
@@ -218,7 +218,13 @@ $("button#clear").click(() => {
  * The button to submit the exercise.
  */
 $("button#submit").click(() => {
-  submit();
+  if (exerciseId) {
+    submit();
+  } else if (peerTestExercise) {
+    submitTest();
+  } else {
+    submitSolution();
+  }
   return false;
 })
 
@@ -227,7 +233,13 @@ $("button#submit").click(() => {
  */
 $("button#clear_and_submit").click(() => {
   $("div#output").html("")
-  submit();
+  if (exerciseId) {
+    submit();
+  } else if (peerTestExercise) {
+    submitTest();
+  } else {
+    submitSolution();
+  }
   return false;
 })
 
