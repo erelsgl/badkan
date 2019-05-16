@@ -280,7 +280,7 @@ function registered(key, course) {
           text_html += "Test language: " + peerExerciseObj.compilerTest + "<br />";
           text_html += "Solution language: " + peerExerciseObj.compilerSolution + "<br />";
 
-          let phase = peerExerciseObj.whichPhase;
+          let phase = whichPhase(peerExerciseObj);
           text_html += "<h5><strong>" + phase + ":</strong></h5>"
 
           switch (phase) {
