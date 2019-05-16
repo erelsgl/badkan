@@ -243,6 +243,9 @@ async def check_test_peer_submission(websocket: object, submission: dict):
     # and cp it to the docker in the good place.
     # TODO: continue here...
     print("debug", signature_map)
+    for signature in signature_map:
+        print(signature)
+
 
     # Then, run the gradle test command and send result to the user.
 

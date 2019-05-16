@@ -31,6 +31,9 @@ WORKDIR /
 COPY get-submission.sh   /
 COPY get-submission-file.sh   /
 COPY get-private-submission.sh   /
+COPY get-test-submission-file.sh   /
+COPY build.gradle   /
+COPY create_template_gradle.sh   /
 COPY www-readme.md       /www/README.md
 
 # Define environment variable

@@ -86,10 +86,9 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
     let signatures = escapeHtml(document.getElementById("signatures").value);
     let signatureMap = parseMap(signatures);
 
-    console.log(signatureMap)
-    if (checkEmptyFieldsPeer(name, descr, file, dealineTest, dealineSol, dealineCon, compilerTest, 
+    if (checkEmptyFieldsPeer(name, descr, file, dealineTest, dealineSol, dealineCon, compilerTest,
         compilerSolution, submission, minTest, signatureMap)) {
-        uploadPeerExercise(name, descr, dealineTest, dealineSol, dealineCon, compilerTest, 
+        uploadPeerExercise(name, descr, dealineTest, dealineSol, dealineCon, compilerTest,
             compilerSolution, submission, minTest, signatureMap);
     }
 
@@ -108,10 +107,18 @@ function logicalTime(date1, date2, date3) {
 function parseMap(signatures) {
     let signaturesSplitted = signatures.split(";");
     let signatureMap = [];
+    let helpMap = new Map();
     for (let i = 0; i < signaturesSplitted.length; i++) {
         if (i + 1 < signaturesSplitted.length) {
-            signatureMap.push(new Signature(signaturesSplitted[i++], signaturesSplitted[i]))
+            if (!helpMap.has(signaturesSplitted[i + 1])) {
+                helpMap.set(signaturesSplitted[i + 1], [signaturesSplitted[i++]]);
+            } else {
+                helpMap.get(signaturesSplitted[i+1]).push(signaturesSplitted[i++]);
+            }
         }
+    }
+    for (var [key, value] of helpMap) {
+        signatureMap.push(new Signature(value, key));
     }
     return signatureMap;
 }
