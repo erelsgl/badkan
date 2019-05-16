@@ -40,6 +40,9 @@ document.getElementById("btnHelp").addEventListener('click', e => {
     alert("On this page, you can create a new peer-to-peer exercise. \n");
 });
 
+
+
+
 /**
  * BUTTON CONFIRM.
  */
