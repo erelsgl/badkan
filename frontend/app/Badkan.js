@@ -44,9 +44,16 @@ if (exercise.submission) {
   }
 }
 
-// If we are in peer to peer process, we want to hide the "save grade" radio button
+// If we are in peer to peer process, we want to hide the "save grade" radio button 
+// and remove collaborators 
 if (peerTestExercise || peerSolutionExercise) {
   document.getElementById("saveGrade").style.display = "none";
+
+  var display_collaborators = document.getElementsByClassName("collaborators");
+  for (var i = 0; i < display_collaborators.length; i++) {
+    display_collaborators[i].style.display = "none";
+  } 
+
 
 }
 
@@ -105,6 +112,7 @@ function dealWithFile(file) {
     xhr.send(rawData);
   }
 }
+
 
 function dealWithPrivate(url, tokenUsername, tokenPassword) {
   // Create the json for submission
@@ -221,9 +229,17 @@ $("button#submit").click(() => {
   if (exerciseId) {
     submit();
   } else if (peerTestExercise) {
-    submitTest();
+    var file = document.getElementById('filename').files[0];
+    if(!file)
+      alert("You didn't upload a zip file")
+    else
+      dealWithFilePeerToPeerTest(file);
   } else {
-    submitSolution();
+    var file = document.getElementById('filename').files[0];
+    if(!file)
+      alert("You didn't upload a zip file")
+    else
+      dealWithFilePeerToPeerSolution(file);
   }
   return false;
 })
@@ -236,9 +252,17 @@ $("button#clear_and_submit").click(() => {
   if (exerciseId) {
     submit();
   } else if (peerTestExercise) {
-    submitTest();
+    var file = document.getElementById('filename').files[0];
+    if(!file)
+      alert("You didn't upload a zip file")
+    else
+      dealWithFilePeerToPeerTest(file);
   } else {
-    submitSolution();
+    var file = document.getElementById('filename').files[0];
+    if(!file)
+      alert("You didn't upload a zip file")
+    else
+      dealWithFilePeerToPeerSolution(file);
   }
   return false;
 })
