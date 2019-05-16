@@ -30,38 +30,21 @@ class PeerExercise {
         this.minTest = minTest;
         this.signatureMap = signatureMap;
     }
+}
 
-    whichPhase() {
-        var currentTime = new Date();
-        var deadlineTest = new Date(PeerExercise.deadlineTest);
-        var deadlineSolution = new Date(PeerExercise.deadlineSolution);
-        var deadlineConflicts = new Date(PeerExercise.deadlineConflicts);
-        if (currentTime < deadlineTest) {
-            return "Test Phase"
-        } else if (currentTime < deadlineSolution) {
-            return "Solution Phase"
-        } else if (currentTime < deadlineConflicts) {
-            return "Conflicts Phase"
-        }
-        else {
-            return "The exercise is over"
-        }
-
+function whichPhase(PeerExercise) {
+    var currentTime = new Date();
+    var deadlineTest = new Date(PeerExercise.deadlineTest);
+    var deadlineSolution = new Date(PeerExercise.deadlineSolution);
+    var deadlineConflicts = new Date(PeerExercise.deadlineConflicts);
+    if (currentTime < deadlineTest) {
+        return "Test Phase"
+    } else if (currentTime < deadlineSolution) {
+        return "Solution Phase"
+    } else if (currentTime < deadlineConflicts) {
+        return "Conflicts Phase"
     }
-
-    // function whichPhase(PeerExercise) {
-    //     var currentTime = new Date();
-    //     var deadlineTest = new Date(PeerExercise.deadlineTest);
-    //     var deadlineSolution = new Date(PeerExercise.deadlineSolution);
-    //     var deadlineConflicts = new Date(PeerExercise.deadlineConflicts);
-    //     if (currentTime < deadlineTest) {
-    //         return "Test Phase"
-    //     } else if (currentTime < deadlineSolution) {
-    //         return "Solution Phase"
-    //     } else if (currentTime < deadlineConflicts) {
-    //         return "Conflicts Phase"
-    //     }
-    //     else {
-    //         return "The exercise is over"
-    //     }
+    else {
+        return "The exercise is over"
+    }
 }
