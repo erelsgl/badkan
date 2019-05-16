@@ -52,11 +52,11 @@ function sendWebsocketPeer(json) {
   var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
   logClient("color:#888", "Submitting to backend port: " + backendPort); // in utils.js
   var submission_json = json
-  logClient("color:#888", submission_json); // in utils.js
+  // logClient("color:#888", submission_json); // in utils.js No need to show this, Reut please accept this conflict.
   var websocket = new WebSocket(websocketurl);
   websocket.onopen = (event) => {
     logServer("color:blue", "Submission starting!"); // in utils.js
-    logClient("color:green; font-style:italic", submission_json)
+    // logClient("color:green; font-style:italic", submission_json) No need to show this, Reut please accept this conflict.
     websocket.send(submission_json);
   }
   websocket.onclose = (event) => {

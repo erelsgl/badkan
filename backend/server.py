@@ -227,21 +227,21 @@ async def check_test_peer_submission(websocket: object, submission: dict):
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         print(line)
-        await proc.wait()
+    await proc.wait()
 
     # if not, create the template.
     proc = await docker_command(["exec", "badkan", "bash", "create-template-gradle.sh", owner_firebase_id, exercise_id])
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         print(line)
-        await proc.wait()
+    await proc.wait()
 
     # We need here to store in the docker all the submission in the good format.
     proc = await docker_command(["exec", "badkan", "bash", "get-test-submission-file.sh", owner_firebase_id, exercise_id])
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         print(line)
-        await proc.wait()
+    await proc.wait()
 
     # Clean the src/main/java/ folder.
 
@@ -250,7 +250,7 @@ async def check_test_peer_submission(websocket: object, submission: dict):
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         print(line)
-        await proc.wait()
+    await proc.wait()
 
     # Then, create the signature file (by using the signature map in the src/main/java folder)
     # and cp it to the docker in the good place.
@@ -270,10 +270,21 @@ async def check_test_peer_submission(websocket: object, submission: dict):
         async for line in proc.stdout:
             line = line.decode('utf-8').strip()
             print(line)
-            await proc.wait()
+        await proc.wait()
 
     # Then, run the gradle test command and send result to the user.
-    
+    repository_folder = "/submissions/{}/{}".format(
+        owner_firebase_id, exercise_id)
+    command = "gradle test"
+    proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", command])
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        if line == ":compileTestJava":
+            await tee(websocket, "Your submission compile successfuly!")
+            return; # No more interest: we only show the compilation.
+        await tee(websocket, line)
+    await proc.wait()
+
 
 # TODO: When the submission phase begin, we'll have to rm the signature file (all the files.java in the src/main/java folder).
 
