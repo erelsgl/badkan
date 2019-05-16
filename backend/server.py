@@ -208,11 +208,14 @@ async def check_test_peer_submission(websocket: object, submission: dict):
     exercise_id = submission["exerciseId"]
     exercise_name = submission["name"]
     owner_firebase_id = submission["owner_firebase_id"]
-    student_name: submission["student_name"]
-    student_last_name: submission["student_last_name"]
+    student_name = submission["student_name"]
+    student_last_name = submission["student_last_name"]
     country_id = submission["country_id"]
-    min_test: submission["min_test"]
-    signature_map: submission["signature_map"]
+    min_test = submission["min_test"]
+    signature_map = submission["signature_map"]
+
+    print(submission)
+
 
     currentDT = datetime.datetime.now()
     edit_csv(str(currentDT), "Zip", country_id, "START", exercise_name)
@@ -222,23 +225,23 @@ async def check_test_peer_submission(websocket: object, submission: dict):
 
     # Check if the folder exists in the docker if yes, rm everything in the folder src/test/java
     # if not, create the template.
-    proc = await docker_command(["exec", "badkan", "bash", "create_template_gradle.sh", owner_firebase_id, exercise])
+    proc = await docker_command(["exec", "badkan", "bash", "create_template_gradle.sh", owner_firebase_id, exercise_id])
     async for line in proc.stdout:
-            line = line.decode('utf-8').strip()
-            print(line)
+        line = line.decode('utf-8').strip()
+        print(line)
         await proc.wait()
 
 
     # We need here to store in the docker all the submission in the good format.
-    proc = await docker_command(["exec", "badkan", "bash", "get-submission-file.sh", owner_firebase_id, exercise])
+    proc = await docker_command(["exec", "badkan", "bash", "get-test-submission-file.sh", owner_firebase_id, exercise_id])
     async for line in proc.stdout:
-            line = line.decode('utf-8').strip()
-            print(line)
+        line = line.decode('utf-8').strip()
+        print(line)
         await proc.wait()
 
     # Then, create the signature file (by using the signature map in the src/main/java folder)
     # and cp it to the docker in the good place.
-
+    # TODO: continue here...
     print("debug", signature_map)
 
     # Then, run the gradle test command and send result to the user.

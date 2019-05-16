@@ -7,7 +7,6 @@ export EXID=$2
 
 cd submissions/$OWNERID/$EXID/src/test/java/
 
-# NEED TO TEST IT.
 unzip -j //$OWNERID -x *.git* # CHECK if github has been submitted.
 rm //$OWNERID
 

@@ -27,7 +27,7 @@
           // Create the json for submission
           json = JSON.stringify({
             target: "check_solution_peer_submission",
-            exerciseId: exerciseId,
+            exerciseId: peerSolutionExercise,
             name: exercise.name,
             owner_firebase_id: firebase.auth().currentUser.uid,
             student_name: homeUser.name,

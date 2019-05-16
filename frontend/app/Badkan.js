@@ -77,9 +77,9 @@ if (exercise.deadline) {
  */
 function dealWithFile(file) {
   var uid = firebase.auth().currentUser.uid;
-  var reader = new FileReader();
-  reader.readAsArrayBuffer(file);
-  var rawData = new ArrayBuffer();
+  var reader = new FilexerciseIdeReader();
+  reader.readAsArrayBuexerciseIdffer(file);
+  var rawData = new ArexerciseIdrayBuffer();
   reader.loadend = function () { }
   reader.onload = function (e) {
     rawData = e.target.result;
