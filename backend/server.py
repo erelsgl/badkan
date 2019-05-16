@@ -7,7 +7,13 @@ SINCE: 2019-03
 """
 
 
-import websockets, asyncio, os, json, re, sys, datetime
+import websockets
+import asyncio
+import os
+import json
+import re
+import sys
+import datetime
 
 from terminal import *
 from csv_trace import edit_csv
@@ -17,27 +23,31 @@ from multiprocessing import Process
 
 from concurrent.futures import ProcessPoolExecutor
 
-PORT_NUMBER = int(sys.argv[1]) if len(sys.argv)>=2 else 5670   # same port as in frontend/index.html
+# same port as in frontend/index.html
+PORT_NUMBER = int(sys.argv[1]) if len(sys.argv) >= 2 else 5670
 
-EXERCISE_DIR = os.path.realpath(os.path.dirname(os.path.abspath(__file__))+"/../exercises")
+EXERCISE_DIR = os.path.realpath(os.path.dirname(
+    os.path.abspath(__file__))+"/../exercises")
 
 
 # Example https: https://github.com/SamuelBismuth/badkan.git
 # Example ssh: git@github.com:SamuelBismuth/badkan.git
 GIT_REGEXP = re.compile(".*github[.]com.(.*)/(.*)", re.IGNORECASE)
 GITLAB_REGEXP = re.compile(".*gitlab[.]com.(.*)/(.*)", re.IGNORECASE)
-GIT_CLEAN  = re.compile(".git.*", re.IGNORECASE)
+GIT_CLEAN = re.compile(".git.*", re.IGNORECASE)
 
 
 # Calculate the regular expression for detecting the grade in the file.
-def get_grade_regexp(current_exercise_folder:str=""):
-    result = re.compile("[*].*grade.*:\\s*(\\d+).*[*]", re.IGNORECASE)   # default
+def get_grade_regexp(current_exercise_folder: str = ""):
+    result = re.compile("[*].*grade.*:\\s*(\\d+).*[*]",
+                        re.IGNORECASE)   # default
     # If there is a "signature file", then the default is changed to "...(integer)...<signature>..."
     signature_file = current_exercise_folder + "/signature.txt"
     if os.path.isfile(signature_file):
         with open(signature_file) as f:
-            grade_signature=f.read().strip()
-            result = re.compile(".*?(\\d+).*{}.*".format(re.escape(grade_signature)))
+            grade_signature = f.read().strip()
+            result = re.compile(
+                ".*?(\\d+).*{}.*".format(re.escape(grade_signature)))
     return result
 
 
@@ -65,12 +75,12 @@ async def dealing_with_file(filename, websocket, owner_firebase_id, exercise):
         line = line.decode('utf-8').strip()
         await tee(websocket, line)
     await proc.wait()
-    
+
 
 async def dealing_with_url(git_url, websocket, owner_firebase_id, exercise):
     matches = GIT_REGEXP.search(git_url)
     username = matches.group(1)
-    repository = GIT_CLEAN.sub("",matches.group(2))
+    repository = GIT_CLEAN.sub("", matches.group(2))
     # Clone or pull the student's submission from github to the docker container "badkan":
     proc = await docker_command(["exec", "badkan", "bash", "get-submission.sh", username, repository, owner_firebase_id, exercise])
     async for line in proc.stdout:
@@ -78,16 +88,20 @@ async def dealing_with_url(git_url, websocket, owner_firebase_id, exercise):
         await tee(websocket, line)
     await proc.wait()
 
+
 async def run_for_admin(owner_firebase_id, exercise_id, websocket):
-    repository_folder = "/submissions/{}/{}".format(owner_firebase_id, exercise_id)
-    current_exercise_folder = os.path.realpath(EXERCISE_DIR + "/" + exercise_id)
+    repository_folder = "/submissions/{}/{}".format(
+        owner_firebase_id, exercise_id)
+    current_exercise_folder = os.path.realpath(
+        EXERCISE_DIR + "/" + exercise_id)
     await tee(websocket, "copying from {}".format(current_exercise_folder))
     print("DEBUD ADMIN", current_exercise_folder)
-     # Grade the submission inside the docker container "badkan"
+    # Grade the submission inside the docker container "badkan"
     grade = None
-    TIMEOUT_SOFT = 10 # seconds
-    TIMEOUT_HARD = 20 # seconds
-    grade_command = "timeout -s 9 {} timeout {} nice -n 5 ./grade {} {}".format(TIMEOUT_HARD, TIMEOUT_SOFT, owner_firebase_id, exercise_id)
+    TIMEOUT_SOFT = 10  # seconds
+    TIMEOUT_HARD = 20  # seconds
+    grade_command = "timeout -s 9 {} timeout {} nice -n 5 ./grade {} {}".format(
+        TIMEOUT_HARD, TIMEOUT_SOFT, owner_firebase_id, exercise_id)
     exitcode_command = "echo Exit code: $?"
     combined_command = "{} ; {}".format(grade_command, exitcode_command)
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
@@ -100,10 +114,11 @@ async def run_for_admin(owner_firebase_id, exercise_id, websocket):
         if matches is not None:
             grade = matches.group(1)
             await tee(websocket, "Final Grade: " + grade)
-                    # This line is read at app/Badkan.js, in websocket.onmessage.
+            # This line is read at app/Badkan.js, in websocket.onmessage.
     await proc.wait()
     if grade is None:
         await tee(websocket, "Final Grade: 0")
+
 
 async def run_all_submissions(exercise_id, users_map, websocket):
     for user in users_map:
@@ -113,8 +128,9 @@ async def run_all_submissions(exercise_id, users_map, websocket):
         await tee(websocket, "######################################")
         await tee(websocket, "")
         await tee(websocket, "")
-    
-async def check_private_submission(websocket:object, submission:dict):
+
+
+async def check_private_submission(websocket: object, submission: dict):
     """
     Check a private submitted solution to the given exercise from the given git_url.
     :param websocket: for reading the submission params and sending output messages.
@@ -122,11 +138,11 @@ async def check_private_submission(websocket:object, submission:dict):
            "exercise" - name of the exercise; represents a sub-folder of the "exercises" folder.
            "git_url"  - a url for cloning the student's git repository containing the submitted solution.
            must be of the form https://xxx.git.
-    """    
-    solution=submission["solution"]
-    tokenUsername=submission["tokenUsername"]
-    tokenPassword=submission["tokenPassword"]
-    exercise=submission["exercise"]
+    """
+    solution = submission["solution"]
+    tokenUsername = submission["tokenUsername"]
+    tokenPassword = submission["tokenPassword"]
+    exercise = submission["exercise"]
     ids = submission["ids"]
     name = submission["name"]
     owner_firebase_id = submission["owner_firebase_id"]
@@ -137,7 +153,8 @@ async def check_private_submission(websocket:object, submission:dict):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
 
-    repository_folder = "/submissions/{}/{}".format(owner_firebase_id, exercise)
+    repository_folder = "/submissions/{}/{}".format(
+        owner_firebase_id, exercise)
 
     matches = GITLAB_REGEXP.search(solution)
 
@@ -150,10 +167,11 @@ async def check_private_submission(websocket:object, submission:dict):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
 
-    repository_folder = "/submissions/{}/{}".format(owner_firebase_id, exercise)
-        
+    repository_folder = "/submissions/{}/{}".format(
+        owner_firebase_id, exercise)
+
     username = matches.group(1)
-    repository = GIT_CLEAN.sub("",matches.group(2))
+    repository = GIT_CLEAN.sub("", matches.group(2))
 
     # Read the name and ids of the submitters:
     ids = submission["ids"]
@@ -172,7 +190,63 @@ async def check_private_submission(websocket:object, submission:dict):
     await grade(solution, exercise, ids, name, owner_firebase_id, repository_folder, submission, websocket)
 
 
-async def check_submission(websocket:object, submission:dict):
+async def check_test_peer_submission(websocket: object, submission: dict):
+    """
+    Check a submitted solution to the given peer_to_peer exercise from the given git_url or zip.
+    :param websocket: for reading the submission params and sending output messages.
+    :param submission: a JSON object with at least the following fields:
+            exerciseId: exerciseId,
+            name: peerExercise.name,
+            owner_firebase_id: firebase.auth().currentUser.uid,
+            student_name: homeUser.name,
+            student_last_name: homeUser.lastName,
+            country_id = homeUser.id,
+            min_test: peerExercise.minTest,
+            Signature_map: peerExercise.signatureMap
+
+    """
+    exercise_id = submission["exerciseId"]
+    exercise_name = submission["name"]
+    owner_firebase_id = submission["owner_firebase_id"]
+    student_name: submission["student_name"]
+    student_last_name: submission["student_last_name"]
+    country_id = submission["country_id"]
+    min_test: submission["min_test"]
+    signature_map: submission["signature_map"]
+
+    currentDT = datetime.datetime.now()
+    edit_csv(str(currentDT), "Zip", country_id, "START", exercise_name)
+
+    repository_folder = "/submissions/{}/{}".format(
+        owner_firebase_id, exercise_id)
+
+    # Check if the folder exists in the docker if yes, rm everything in the folder src/test/java
+    # if not, create the template.
+    proc = await docker_command(["exec", "badkan", "bash", "create_template_gradle.sh", owner_firebase_id, exercise])
+    async for line in proc.stdout:
+            line = line.decode('utf-8').strip()
+            print(line)
+        await proc.wait()
+
+
+    # We need here to store in the docker all the submission in the good format.
+    proc = await docker_command(["exec", "badkan", "bash", "get-submission-file.sh", owner_firebase_id, exercise])
+    async for line in proc.stdout:
+            line = line.decode('utf-8').strip()
+            print(line)
+        await proc.wait()
+
+    # Then, create the signature file (by using the signature map in the src/main/java folder)
+    # and cp it to the docker in the good place.
+
+    print("debug", signature_map)
+
+    # Then, run the gradle test command and send result to the user.
+
+# TODO: When the submission phase begin, we'll have to rm the signature file (all the files.java in the src/main/java folder).
+
+
+async def check_submission(websocket: object, submission: dict):
     """
     Check a submitted solution to the given exercise from the given git_url.
     :param websocket: for reading the submission params and sending output messages.
@@ -180,9 +254,9 @@ async def check_submission(websocket:object, submission:dict):
            "exercise" - name of the exercise; represents a sub-folder of the "exercises" folder.
            "git_url"  - a url for cloning the student's git repository containing the submitted solution.
            must be of the form https://xxx.git.
-    """    
-    solution=submission["solution"]
-    exercise=submission["exercise"]
+    """
+    solution = submission["solution"]
+    exercise = submission["exercise"]
     ids = submission["ids"]
     name = submission["name"]
     owner_firebase_id = submission["owner_firebase_id"]
@@ -193,7 +267,8 @@ async def check_submission(websocket:object, submission:dict):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
         return
 
-    repository_folder = "/submissions/{}/{}".format(owner_firebase_id, exercise)
+    repository_folder = "/submissions/{}/{}".format(
+        owner_firebase_id, exercise)
 
     if "github" in solution:
         await dealing_with_url(solution, websocket, owner_firebase_id, exercise)
@@ -212,17 +287,20 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
     current_exercise_folder = os.path.realpath(EXERCISE_DIR + "/" + exercise)
     await tee(websocket, "copying from {}".format(current_exercise_folder))
     proc = await docker_command(["cp", current_exercise_folder, "badkan:{}/grading_files".format(repository_folder)])
-    async for line in proc.stdout:  print(line)
+    async for line in proc.stdout:
+        print(line)
     await proc.wait()
 
     # 2. Grade the submission inside the docker container "badkan"
     grade = None
     move_command = "mv grading_files/* . && rm -rf grading_files"
-    TIMEOUT_SOFT = 10 # seconds
-    TIMEOUT_HARD = 20 # seconds
-    grade_command = "timeout -s 9 {} timeout {} nice -n 5 ./grade {} {}".format(TIMEOUT_HARD, TIMEOUT_SOFT, owner_firebase_id, exercise)
+    TIMEOUT_SOFT = 10  # seconds
+    TIMEOUT_HARD = 20  # seconds
+    grade_command = "timeout -s 9 {} timeout {} nice -n 5 ./grade {} {}".format(
+        TIMEOUT_HARD, TIMEOUT_SOFT, owner_firebase_id, exercise)
     exitcode_command = "echo Exit code: $?"
-    combined_command = "{} && {} ; {}".format(move_command, grade_command, exitcode_command)
+    combined_command = "{} && {} ; {}".format(
+        move_command, grade_command, exitcode_command)
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
     output = ""
     count = 0
@@ -232,11 +310,13 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
             async for line in proc.stdout:  # Loop over all lines created by the "grade" script.
                 line = line.decode('utf-8').strip()
                 if "output:" in line:
-                    output += str(count) + ":;" + line[line.find(":") + 2: len(line)] + ";"
+                    output += str(count) + ":;" + \
+                        line[line.find(":") + 2: len(line)] + ";"
                     count += 1
                 # else:
                     # await tee(websocket, line)
-                print("> {}".format(line))  # Print the line to nohup.out, for debugging
+                # Print the line to nohup.out, for debugging
+                print("> {}".format(line))
                 matches = grade_regexp.search(line)
                 if matches is not None:     # This line represents the student's grade.
                     await websocket.send("<p style='display:none'>"+line+"</p>\n")
@@ -247,7 +327,8 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
                         await tee(websocket, "Signed duplicate grades\n")
                         grade = 0
                 else:
-                    await websocket.send(line+"\n")   # If the line does not contain a signature - send it to the student
+                    # If the line does not contain a signature - send it to the student
+                    await websocket.send(line+"\n")
         except ValueError:
             await tee(websocket, "Your program generated a very very long line! Please check it.")
             continue
@@ -258,13 +339,13 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
     if grade is None:
         grade = 0
     await tee(websocket, "Final Grade: {}".format(grade))
-        # This line is read at app/Badkan.js, in websocket.onmessage.
+    # This line is read at app/Badkan.js, in websocket.onmessage.
 
     currentDT = datetime.datetime.now()
     edit_csv(str(currentDT), solution, ids, grade, name)
     # name, last_name, student_id, output, exercice_name
-    edit_csv_summary(submission["student_name"], submission["student_last_name"], ids, output, exercise)
-
+    edit_csv_summary(submission["student_name"],
+                     submission["student_last_name"], ids, output, exercise)
 
 
 async def load_ex(url, folder_name, username, password, exercise):
@@ -289,6 +370,7 @@ async def edit_ex(folder_name, ex_folder):
     git_pull("../exercises", folder_name, ex_folder)
     print("your exercise is edited.")
 
+
 async def delete_ex(delete_ex):
     """
     :param delete_ex: the name of the folder of the exercise to delete.
@@ -296,18 +378,20 @@ async def delete_ex(delete_ex):
     rmv("../exercises", delete_ex)
     print("your exercise is deleted.")
 
+
 async def moss_command(websocket, submission):
-    compiler=submission["compiler"]
-    exercise_id=submission["exercise_id"]
-    info=submission["info"]
+    compiler = submission["compiler"]
+    exercise_id = submission["exercise_id"]
+    info = submission["info"]
     informations = info.replace("-", " ")
-    shellscript = subprocess.Popen(['bash','../moss/exec-moss.sh', compiler, exercise_id, informations], stdout=subprocess.PIPE)
+    shellscript = subprocess.Popen(
+        ['bash', '../moss/exec-moss.sh', compiler, exercise_id, informations], stdout=subprocess.PIPE)
     shellscript.wait()
     for line in shellscript.communicate():
         if line is not None:
-            print("DEBUG", line.decode("utf-8") )
+            print("DEBUG", line.decode("utf-8"))
             print("DEBUG TYPE", type(line))
-            await tee(websocket, line.decode("utf-8") )
+            await tee(websocket, line.decode("utf-8"))
 
 
 async def run(websocket, path):
@@ -316,9 +400,11 @@ async def run(websocket, path):
     """
     submission_json = await websocket.recv()   # returns a string
     print("< {} ".format(submission_json))
-    submission = json.loads(submission_json)   # converts the string to a python dict
+    # converts the string to a python dict
+    submission = json.loads(submission_json)
 
-    target = submission["target"]  # The target fields is mandatory for all websocket protocol we use.
+    # The target fields is mandatory for all websocket protocol we use.
+    target = submission["target"]
 
     if target == 'load_ex':
         await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
@@ -334,12 +420,15 @@ async def run(websocket, path):
         await check_private_submission(websocket, submission)
     elif target == 'moss_command':
         await moss_command(websocket, submission)
+    elif target == "check_test_peer_submission":
+        await check_test_peer_submission(websocket, submission)
     else:
         await check_submission(websocket, submission)
-    print ("> Closing connection")
+    print("> Closing connection")
 
 
-websocketserver = websockets.server.serve(run, '0.0.0.0', PORT_NUMBER, origins=None)
+websocketserver = websockets.server.serve(
+    run, '0.0.0.0', PORT_NUMBER, origins=None)
 print("{} listening at {}".format(type(websocketserver), PORT_NUMBER))
 
 loop = asyncio.get_event_loop()
