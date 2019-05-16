@@ -5,7 +5,7 @@ repositories {
 }
 
 dependencies {
-    testImplementation(
+    testCompile(
             'junit:junit:4.12',
             'org.junit.jupiter:junit-jupiter-api:5.4.2'
     )

@@ -3,7 +3,7 @@ FROM ubuntu:16.04
 
 # Install any needed packages specified in requirements.txt
 RUN apt-get update
-RUN apt-get -y install git build-essential clang++-5.0 clang-tidy-5.0 valgrind python3 pnmtopng unzip bc
+RUN apt-get -y install git build-essential clang++-5.0 clang-tidy-5.0 valgrind python3 pnmtopng unzip bc gradle
 
 # Install OpenJDK-8
 RUN apt-get update && \
@@ -32,12 +32,11 @@ COPY get-submission.sh   /
 COPY get-submission-file.sh   /
 COPY get-private-submission.sh   /
 COPY get-test-submission-file.sh   /
+COPY create-template-gradle.sh   /
+COPY create-signature.sh   /
+COPY clean-folder.sh   /
 COPY build.gradle   /
-COPY create_template_gradle.sh   /
 COPY www-readme.md       /www/README.md
-
-# Define environment variable
-# ENV NAME World
 
 # Run bash when the container launches
 CMD /bin/bash
