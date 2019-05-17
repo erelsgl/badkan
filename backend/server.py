@@ -244,7 +244,6 @@ async def check_test_peer_submission(websocket: object, submission: dict):
     await proc.wait()
 
     # Clean the src/main/java/ folder.
-
     path = "submissions/" + owner_firebase_id + "/" + exercise_id + "/src/main/java"
     proc = await docker_command(["exec", "badkan", "bash", "clean-folder.sh", path])
     async for line in proc.stdout:
@@ -258,14 +257,16 @@ async def check_test_peer_submission(websocket: object, submission: dict):
     for signature in signature_map:
         info = ""
         for function in signature["func"]:
+            clean_signature = function[:function.index("(")]
             info = info + function + " {\n"
-            if "int" or "double" or "float" or "short" or "long" in function:
+            if "int" in clean_signature or "double" in clean_signature or "float" in clean_signature or "short" in clean_signature or "long" in clean_signature:
                 info = info + "         return 0;"
-            elif "boolean" in function:
+            elif "boolean" in clean_signature:
                 info = info + "         return true;"
             else:
                 info = info + "         return null;"
             info = info + "\n   }"
+        print("DEBUG2", info)
         proc = await docker_command(["exec", "badkan", "bash", "create-signature.sh", signature["cla"], info, owner_firebase_id, exercise_id])
         async for line in proc.stdout:
             line = line.decode('utf-8').strip()
@@ -281,12 +282,66 @@ async def check_test_peer_submission(websocket: object, submission: dict):
         line = line.decode('utf-8').strip()
         if line == ":compileTestJava":
             await tee(websocket, "Your submission compile successfuly!")
-            return; # No more interest: we only show the compilation.
+            return  # No more interest: we only show the compilation.
+        elif line == "Execution failed for task ':compileJava'.":
+            await tee(websocket, "There is a problem with the signature, please check with the instructor!")
+            return  # No more interest: we only show the compilation.
         await tee(websocket, line)
     await proc.wait()
 
 
-# TODO: When the submission phase begin, we'll have to rm the signature file (all the files.java in the src/main/java folder).
+# TODO: When the submission phase begin, we'll have to rm the signature
+# file (all the files.java in the src/main/java folder).
+async def check_solution_peer_submission(websocket: object, submission: dict):
+    """
+     target: "check_solution_peer_submission",
+           exerciseId: exerciseId,
+           name: exercise.name,
+           owner_firebase_id: firebase.auth().currentUser.uid,
+           student_name: homeUser.name,
+           student_last_name: homeUser.lastName,
+           country_id: homeUser.id,
+    """
+    exercise_id = submission["exerciseId"]
+    exercise_name = submission["name"]
+    owner_firebase_id = submission["owner_firebase_id"]
+    student_name = submission["student_name"]
+    student_last_name = submission["student_last_name"]
+    country_id = submission["country_id"]
+
+    # BIG WORK: TODO:
+    # Union of all the test or cp in all the project...
+    # DESIGN ISSUE: the submissions folder works: userid/exeid: need to switch them.
+
+    # rm everything in the folder src/main/java
+    path = "submissions/" + owner_firebase_id + "/" + exercise_id + "/src/main/java"
+    proc = await docker_command(["exec", "badkan", "bash", "clean-folder.sh", path])
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        print(line)
+    await proc.wait()
+
+    # We need here to store in the docker all the submission in the good format.
+    proc = await docker_command(["exec", "badkan", "bash", "get-solution-submission-file.sh", owner_firebase_id, exercise_id])
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        print(line)
+    await proc.wait()
+
+    # Then, run the gradle test command and send result to the user.
+    # TODO: See what to send to the user... Need to make filter.
+    repository_folder = "/submissions/{}/{}".format(
+        owner_firebase_id, exercise_id)
+    command = "gradle test"
+    proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", command])
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        await tee(websocket, line)
+    await proc.wait()
+
+    # Send the index.html produced by Gradle corp.
+
+    # Maybe we need to store the failed test in firebase for the conflicts phase...
 
 
 async def check_submission(websocket: object, submission: dict):
@@ -322,9 +377,6 @@ async def check_submission(websocket: object, submission: dict):
     await grade(solution, exercise, ids, name, owner_firebase_id, repository_folder, submission, websocket)
 
 
-#
-#
-#
 async def grade(solution, exercise, ids, name, owner_firebase_id, repository_folder, submission, websocket):
     # 1. Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
     current_exercise_folder = os.path.realpath(EXERCISE_DIR + "/" + exercise)
@@ -394,7 +446,7 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
 async def load_ex(url, folder_name, username, password, exercise):
     """
     :param url: the url of the submission.
-    :param folder_name: the folder_name of the solved exercise 
+    :param folder_name: the folder_name of the solved exercise
     (it's composed of the uid of the owner + "_" + nb of exercise he created).
     :param username: the username of the deploy token to clone the private repo.
     :param password: the password of the deploy token to clone the private repo.
@@ -406,7 +458,7 @@ async def load_ex(url, folder_name, username, password, exercise):
 
 async def edit_ex(folder_name, ex_folder):
     """
-    :param folder_name: the folder_name of the solved exercise 
+    :param folder_name: the folder_name of the solved exercise
     (it's composed of the uid of the owner + "_" + nb of exercise he created).
     :param exercise: the name of the folder of the solved exercise.
     """
@@ -465,6 +517,8 @@ async def run(websocket, path):
         await moss_command(websocket, submission)
     elif target == "check_test_peer_submission":
         await check_test_peer_submission(websocket, submission)
+    elif target == "check_solution_peer_submission":
+        await check_solution_peer_submission(websocket, submission)
     else:
         await check_submission(websocket, submission)
     print("> Closing connection")

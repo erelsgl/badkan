@@ -32,6 +32,7 @@ COPY get-submission.sh   /
 COPY get-submission-file.sh   /
 COPY get-private-submission.sh   /
 COPY get-test-submission-file.sh   /
+COPY get-solution-submission-file.sh   /
 COPY create-template-gradle.sh   /
 COPY create-signature.sh   /
 COPY clean-folder.sh   /

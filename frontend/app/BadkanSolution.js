@@ -35,7 +35,7 @@
             country_id: homeUser.id,
           }); // the variable "submission_json" is read in server.py:run
          
-          sendWebsocket(json);
+          sendWebsocketPeer(json); // Please accept this conflict too: minor bug in the frontend.
         }
       };
       xhr.send(rawData);
