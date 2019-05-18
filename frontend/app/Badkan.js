@@ -83,7 +83,7 @@ function dealWithFile(file) {
           student_name: homeUser.name,
           student_last_name: homeUser.lastName
         }); // the variable "submission_json" is read in server.py:run
-        sendWebsocket(json);
+        sendWebsocket(json, "Zip");
       }
     };
     xhr.send(rawData);
@@ -106,7 +106,7 @@ function dealWithPrivate(url, tokenUsername, tokenPassword) {
     student_name: homeUser.name,
     student_last_name: homeUser.lastName
   }); // the variable "submission_json" is read in server.py:run
-  sendWebsocket(json);
+  sendWebsocket(json, url);
 }
 
 function dealWithUrl(url) {
@@ -123,7 +123,7 @@ function dealWithUrl(url) {
     student_name: homeUser.name,
     student_last_name: homeUser.lastName
   }); // the variable "submission_json" is read in server.py:run
-  sendWebsocket(json);
+  sendWebsocket(json, url);
 }
 
 function submit() {
@@ -140,7 +140,7 @@ function submit() {
   }
 }
 
-function sendWebsocket(json) {
+function sendWebsocket(json, giturl) {
   // Choose a backend port at random
   var backendPort = getParameterByName("backend"); // in utils.js
   if (!backendPort)
@@ -221,6 +221,7 @@ $("button#clear_and_submit").click(() => {
  * @param {String} giturl 
  */
 function uploadGrade(grade, giturl) {
+  console.log(giturl)
   const collab1Id = document.getElementById("collab1").value;
   const collab2Id = document.getElementById("collab2").value;
   if (collab1Id != "" && collab2Id != "") {
