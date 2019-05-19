@@ -52,5 +52,6 @@ def rmv(path, folder_name):
     os.system("rm -r " + folder_name)
     os.chdir(owd)
 
-#def extract(path, file, folder_name):
+def extract_test(str_file, line, test_name):
+
     
