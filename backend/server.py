@@ -266,7 +266,6 @@ async def check_test_peer_submission(websocket: object, submission: dict):
             else:
                 info = info + "         return null;"
             info = info + "\n   }"
-        print("DEBUG2", info)
         proc = await docker_command(["exec", "badkan", "bash", "create-signature.sh", signature["cla"], info, owner_firebase_id, exercise_id])
         async for line in proc.stdout:
             line = line.decode('utf-8').strip()
@@ -280,7 +279,8 @@ async def check_test_peer_submission(websocket: object, submission: dict):
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", command])
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
-        if line == ":compileTestJava":
+        print("DEBUG", line)
+        if ":compileTestJava" == line or ":compileTestJava UP-TO-DATE" == line:
             await tee(websocket, "Your submission compile successfuly!")
             return  # No more interest: we only show the compilation.
         elif line == "Execution failed for task ':compileJava'.":
@@ -309,12 +309,8 @@ async def check_solution_peer_submission(websocket: object, submission: dict):
     student_last_name = submission["student_last_name"]
     country_id = submission["country_id"]
 
-    # BIG WORK: TODO:
-    # Union of all the test or cp in all the project...
-    # DESIGN ISSUE: the submissions folder works: userid/exeid: need to switch them.
-
-    # rm everything in the folder src/main/java
-    path = "submissions/" + owner_firebase_id + "/" + exercise_id + "/src/main/java"
+    # rm everything in allthe folder src/main/java
+    path = "submissions/" + "*" + "/" + exercise_id + "/src/main/java"
     proc = await docker_command(["exec", "badkan", "bash", "clean-folder.sh", path])
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
@@ -328,18 +324,27 @@ async def check_solution_peer_submission(websocket: object, submission: dict):
         print(line)
     await proc.wait()
 
-    # Then, run the gradle test command and send result to the user.
-    # TODO: See what to send to the user... Need to make filter.
-    repository_folder = "/submissions/{}/{}".format(
-        owner_firebase_id, exercise_id)
-    command = "gradle test"
-    proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", command])
+    proc = await docker_command(["exec", "-w", "", "badkan", "bash", "-c", "echo submissions/*/" + exercise_id])
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
-        await tee(websocket, line)
     await proc.wait()
 
+    # Then, run the gradle test command to all the folder and send result to the user.
+    # TODO: See what to send to the user... Need to make filter.
     # Send the index.html produced by Gradle corp.
+    projects = line.split(" ")
+    it = 1
+    for repository_folder in projects:
+        await tee(websocket, "RESULT FOR TEST NUMBER " + str(it) + ":")
+        it = it + 1
+        command = "gradle test"
+        proc = await docker_command(["exec", "-w", "/" + repository_folder, "badkan", "bash", "-c", command])
+        async for line in proc.stdout:
+            line = line.decode('utf-8').strip()
+            await tee(websocket, line)
+        await proc.wait()
+
+    str_test = 
 
     # Maybe we need to store the failed test in firebase for the conflicts phase...
 
@@ -484,8 +489,6 @@ async def moss_command(websocket, submission):
     shellscript.wait()
     for line in shellscript.communicate():
         if line is not None:
-            print("DEBUG", line.decode("utf-8"))
-            print("DEBUG TYPE", type(line))
             await tee(websocket, line.decode("utf-8"))
 
 

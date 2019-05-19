@@ -27,4 +27,11 @@ public class testCases {
 		assertTrue(expected == 8 * 4);
 	}
 
+	@Test
+	public void testWithExp() {
+		double actual = Signature.multiply(2, 4);
+		double expected = 8 * 4;
+		assertEquals(actual, actual);
+	}
+
 }

@@ -42,6 +42,6 @@ To change the docker image:
         sudo docker exec badkan ls
 
 10. To enter into the bash of the docker:
-
+ 
         sudo docker exec -it badkan bash
 

@@ -80,3 +80,4 @@ def extract_test(str_file, line_num):
             brackets_stack.pop()
 
     return res        
+
