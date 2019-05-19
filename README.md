@@ -24,7 +24,7 @@ But first you need to provide client ID and Client Secret from github.
 To do this, go to https://github.com/settings/developers.
 Click on new OAuth App.
 Fill all the field and in the field: Authorization callback URL, enter the url that firebase provide.
-For more information: https://firebase.google.com/docs/auth/?authuser=0
+For more information: https://firebase.google.com/docs/auth/?authuser=0 
 
 Go to Authentication, in the "Sign-in method" enable GitHub.
 
