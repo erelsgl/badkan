@@ -350,7 +350,7 @@ async def check_solution_peer_submission(websocket: object, submission: dict):
                     next_line = False
                     info = line[line.find("at") + 3:]
                     splited = info.split(":")
-                    #str_test = extract_test(splited[0], splited[1])
+                    str_test = extract_test(splited[0], splited[1])
                     repository_folder_splited = repository_folder.split("/")
                     test_id = repository_folder_splited[1]
                 if "FAILED" in line:
@@ -358,7 +358,7 @@ async def check_solution_peer_submission(websocket: object, submission: dict):
                 if "tests completed" in line:
                     break
             await tee(websocket, line)
-        write_conflict(owner_firebase_id, test_id ,line, exercise_id)
+        write_conflict(owner_firebase_id, str_test ,line, exercise_id)
         await proc.wait()
 
 
