@@ -52,5 +52,31 @@ def rmv(path, folder_name):
     os.system("rm -r " + folder_name)
     os.chdir(owd)
 
-#def extract(path, file, folder_name):
+def extract_test(str_file, line_num):
+    """
+    :param str_file: string of the test file with the failed test.
+    :param line_num: line number of the failed test.
+    """
+    index = line_num - 1 #line_num to index
+    lines = str_file.splitlines(True)
+    brackets_stack = []
+    res = ""
+    while not brackets_stack and index+1 < len(lines):
+        res += lines[index]
+        if "{" in lines[index]:
+            brackets_stack.append("{")
+        else:
+            index+=1
     
+    if "}" in lines[index]:
+        return res
+    
+    while brackets_stack and index+1 < len(lines):
+        index+=1
+        res += lines[index]
+        if "{" in lines[index]:
+            brackets_stack.append("{")
+        if "}" in lines[index]:
+            brackets_stack.pop()
+
+    return res        
