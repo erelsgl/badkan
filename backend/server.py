@@ -344,6 +344,8 @@ async def check_solution_peer_submission(websocket: object, submission: dict):
             await tee(websocket, line)
         await proc.wait()
 
+    str_test = 
+
     # Maybe we need to store the failed test in firebase for the conflicts phase...
 
 
