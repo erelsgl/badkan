@@ -19,6 +19,7 @@ from terminal import *
 from csv_trace import edit_csv
 from csv_summary import edit_csv_summary
 import datetime
+from realtime_database import write_conflict
 from multiprocessing import Process
 
 from concurrent.futures import ProcessPoolExecutor
@@ -339,12 +340,27 @@ async def check_solution_peer_submission(websocket: object, submission: dict):
         it = it + 1
         command = "gradle test"
         proc = await docker_command(["exec", "-w", "/" + repository_folder, "badkan", "bash", "-c", command])
+        flag_test_division = False
+        next_line = False
         async for line in proc.stdout:
             line = line.decode('utf-8').strip()
+            if line == ":test" or flag_test_division:
+                flag_test_division = True
+                if next_line:
+                    next_line = False
+                    info = line[line.find("at") + 3:]
+                    splited = info.split(":")
+                    #str_test = extract_test(splited[0], splited[1])
+                    repository_folder_splited = repository_folder.split("/")
+                    test_id = repository_folder_splited[1]
+                if "FAILED" in line:
+                    next_line = True
+                if "tests completed" in line:
+                    break
             await tee(websocket, line)
+        write_conflict(owner_firebase_id, test_id ,line, exercise_id)
         await proc.wait()
 
-    str_test = 
 
     # Maybe we need to store the failed test in firebase for the conflicts phase...
 

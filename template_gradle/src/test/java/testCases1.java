@@ -2,13 +2,13 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class testCases {
+public class testCases1 {
 
 	@Test
 	public void test() {
 		Signature.add();
 		//add();
-		//fail("Not yet implemented");
+		fail("Not yet implemented");
 	}
 
 	@Test
@@ -18,7 +18,7 @@ public class testCases {
 		Signature.add();
 		//Integer.parseInt("hello");
 		//add();
-		//fail("Not yet implemented");
+		fail("Not yet implemented");
 	}
 
 	@Test
