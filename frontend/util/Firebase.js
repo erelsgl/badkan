@@ -180,7 +180,7 @@ function loadCurrentUser(userId) {
         "Email: " + homeUser.email + "<br />";
       loading("div1");
       loading("loading");
-      if(homeUser.admin) {
+      if (homeUser.admin) {
         if (homeUser.admin === true) {
           $("#btnManageCourses").show()
         }
@@ -277,15 +277,15 @@ function loadCoursesOwnedByCurrentUser(onCourse, onFinish, homeUserForAdmin) {
 
     var numToProcess = snapshot.numChildren()
     //console.log("num courses to process="+numToProcess)
-    snapshot.forEach(function (course_data) {  // for each course do
+    snapshot.forEach(function (course_data) { // for each course do
 
-      if (course_data.val().course.ownerId === firebase.auth().currentUser.uid || 
-      course_data.val().course.grader === homeUserForAdmin.id ||
-      firebase.auth().currentUser.uid == "l54uXZrXdrZDTcDb2zMwObhXbxm1" ) {
-         onCourse(course_data.key, course_data.val().course)
+      if (course_data.val().course.ownerId === firebase.auth().currentUser.uid ||
+        course_data.val().course.grader === homeUserForAdmin.id ||
+        firebase.auth().currentUser.uid == "l54uXZrXdrZDTcDb2zMwObhXbxm1") {
+        onCourse(course_data.key, course_data.val().course)
       }
       numToProcess--;
-      if (numToProcess<=0) {  // done all courses
+      if (numToProcess <= 0) { // done all courses
         document.getElementById("loading").style.display = "none"; // TODO: is it needed?
         onFinish();
       }
@@ -304,7 +304,7 @@ function loadAllCourses(onCourse, onFinish) {
     snapshot.forEach(function (data) {
       onCourse(data.key, data.val().course);
       numToProcess--;
-      if (numToProcess<=0) {  // done all courses
+      if (numToProcess <= 0) { // done all courses
         onFinish();
       }
     })
@@ -378,19 +378,19 @@ function loadAllPeerExercises(peerExercisesMap) {
  *         onUser(key, user)
  */
 function loadUsersOfCourse(course, onUser, i, courses_length) {
-    for (var j = 0; j < course.students.length; j++) {
-      let current_student = course.students[j]
-      if (current_student != "dummyStudentId") {
-        database.ref().child('users/' + current_student).once('value').then(
-          function (snapshot) {
-            console.log("key="+snapshot.key+" user="+snapshot.val().user)
-            console.log("i" + i);
-            console.log("courses_length" + courses_length);
-            onUser(snapshot.key, snapshot.val().user, i, courses_length)
-          }
-        )
-      }
+  for (var j = 0; j < course.students.length; j++) {
+    let current_student = course.students[j]
+    if (current_student != "dummyStudentId") {
+      database.ref().child('users/' + current_student).once('value').then(
+        function (snapshot) {
+          console.log("key=" + snapshot.key + " user=" + snapshot.val().user)
+          console.log("i" + i);
+          console.log("courses_length" + courses_length);
+          onUser(snapshot.key, snapshot.val().user, i, courses_length)
+        }
+      )
     }
+  }
 }
 
 /**
@@ -451,4 +451,10 @@ function checkIfIdExist(exercise, id) {
     }
   }
   return -1;
+}
+
+function writeNewReclamationIds(id, peerSolutionExercise, testId, functionName) {
+  database.ref('/tests/' + peerSolutionExercise + "/" + testId + "/" + functionName + "/ids/" + id).set({
+    "reclam": "true"
+  });
 }

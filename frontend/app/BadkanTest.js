@@ -11,7 +11,7 @@ function dealWithFilePeerToPeerTest(file) {
   var reader = new FileReader();
   reader.readAsArrayBuffer(file);
   var rawData = new ArrayBuffer();
-  reader.loadend = function () { }
+  reader.loadend = function () {}
   reader.onload = function (e) {
     rawData = e.target.result;
     // create the request
@@ -45,6 +45,8 @@ function dealWithFilePeerToPeerTest(file) {
 }
 
 function sendWebsocketPeer(json) {
+  let owner_test_id = ""
+  let function_name = ""
   // Choose a backend port at random
   var backendPort = getParameterByName("backend"); // in utils.js
   if (!backendPort)
@@ -72,14 +74,33 @@ function sendWebsocketPeer(json) {
     logServer("color:red", "Error in websocket.");
   }
   websocket.onmessage = (event) => {
-    logServer("color:black; margin:0 1em 0 1em", event.data);
+    if (event.data.includes("INDICATION FOR BACKEND:")) {
+      owner_test_id = event.data.substring(23, event.data.length)
+    } else if (event.data.includes("INDICATION FOR BACKEND FUNCTION:")) {
+      function_name = event.data.substring(32, event.data.length - 1)
+    } else if (event.data.includes("{")) {
+      logCheckServer("color:red; margin:0 1em 0 1em", event.data, 
+      owner_test_id, function_name);
+    } else {
+      logServer("color:black; margin:0 1em 0 1em", event.data);
+    }
   }
 }
 
-/*
 
 
 
-
-
-*/
+// Pass the checkbox name to the function
+function getCheckedBoxes(chkboxName) {
+  var checkboxes = document.getElementsByName(chkboxName);
+  var checkboxesChecked = [];
+  // loop over them all
+  for (var i=0; i<checkboxes.length; i++) {
+     // And stick the checked ones onto an array...
+     if (checkboxes[i].checked) {
+        checkboxesChecked.push(checkboxes[i]);
+     }
+  }
+  // Return the array if it is non-empty, or null
+  return checkboxesChecked.length > 0 ? checkboxesChecked : null;
+}

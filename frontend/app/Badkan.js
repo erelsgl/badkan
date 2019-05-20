@@ -48,14 +48,15 @@ if (exercise.submission) {
 // and remove collaborators 
 if (peerTestExercise || peerSolutionExercise) {
   document.getElementById("saveGrade").style.display = "none";
-
   var display_collaborators = document.getElementsByClassName("collaborators");
   for (var i = 0; i < display_collaborators.length; i++) {
     display_collaborators[i].style.display = "none";
-  } 
-
-
+  }
 }
+if (!peerSolutionExercise) {
+  document.getElementById("reclamation").style.display = "none";
+}
+
 
 // From Here 
 let grade = 0;
@@ -80,7 +81,7 @@ function dealWithFile(file) {
   var reader = new FilexerciseIdeReader();
   reader.readAsArrayBuexerciseIdffer(file);
   var rawData = new ArexerciseIdrayBuffer();
-  reader.loadend = function () { }
+  reader.loadend = function () {}
   reader.onload = function (e) {
     rawData = e.target.result;
     // create the request
@@ -230,13 +231,13 @@ $("button#submit").click(() => {
     submit();
   } else if (peerTestExercise) {
     var file = document.getElementById('filename').files[0];
-    if(!file)
+    if (!file)
       alert("You didn't upload a zip file")
     else
       dealWithFilePeerToPeerTest(file);
   } else {
     var file = document.getElementById('filename').files[0];
-    if(!file)
+    if (!file)
       alert("You didn't upload a zip file")
     else
       dealWithFilePeerToPeerSolution(file);
@@ -253,13 +254,13 @@ $("button#clear_and_submit").click(() => {
     submit();
   } else if (peerTestExercise) {
     var file = document.getElementById('filename').files[0];
-    if(!file)
+    if (!file)
       alert("You didn't upload a zip file")
     else
       dealWithFilePeerToPeerTest(file);
   } else {
     var file = document.getElementById('filename').files[0];
-    if(!file)
+    if (!file)
       alert("You didn't upload a zip file")
     else
       dealWithFilePeerToPeerSolution(file);
@@ -368,3 +369,16 @@ function uploadHomeUserGrade(grade) {
   var userId = firebase.auth().currentUser.uid;
   writeUserDataWithoutComingHome(homeUser, userId);
 }
+
+
+// TODO: Finish here
+
+/** In link with peer to peer */
+$("button#reclamationTest").click(() => {
+  var checkedBoxes = getCheckedBoxes("wrong");
+  for (var i = 0; i < checkedBoxes.length; i++) {
+    array_info = checkedBoxes[i].id.split("_");
+    writeNewReclamationIds(firebase.auth().currentUser.uid, peerSolutionExercise, array_info[0], array_info[1])
+  }
+})
+

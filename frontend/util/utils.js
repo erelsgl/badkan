@@ -10,6 +10,16 @@ function logServer(style, message) {
     log(style, "< "+message);
 }
 
+function logCheck(style, message,owner_test_id, function_name) {
+    $("div#output").append("<div style='"+style+"'>"+
+    message+"<input type=\"checkbox\" name=\"wrong\" id=\"" + owner_test_id + "_" + function_name +
+     "\" value=\"Wrong\">Wrong test<br></div>")
+}
+
+function logCheckServer(style, message, owner_test_id, function_name) {
+    logCheck(style, "<pre>" + message + "<\pre>", owner_test_id, function_name);
+}
+
 /*  From  https://stackoverflow.com/a/28396165/827927 */
 function websocketCloseReason(code) {
     if (code == 1000)

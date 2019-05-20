@@ -19,7 +19,7 @@ from terminal import *
 from csv_trace import edit_csv
 from csv_summary import edit_csv_summary
 import datetime
-from realtime_database import write_conflict
+from realtime_database import write_conflict, write_test
 from multiprocessing import Process
 
 from concurrent.futures import ProcessPoolExecutor
@@ -280,7 +280,6 @@ async def check_test_peer_submission(websocket: object, submission: dict):
     proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", command])
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
-        print("DEBUG", line)
         if ":compileTestJava" == line or ":compileTestJava UP-TO-DATE" == line:
             await tee(websocket, "Your submission compile successfuly!")
             return  # No more interest: we only show the compilation.
@@ -336,29 +335,44 @@ async def check_solution_peer_submission(websocket: object, submission: dict):
     projects = line.split(" ")
     it = 1
     for repository_folder in projects:
+        repository_folder_splited = repository_folder.split("/")
+        test_id = repository_folder_splited[1]
         await tee(websocket, "RESULT FOR TEST NUMBER " + str(it) + ":")
+        await tee(websocket, "INDICATION FOR BACKEND:" + test_id)
         it = it + 1
         command = "gradle test"
         proc = await docker_command(["exec", "-w", "/" + repository_folder, "badkan", "bash", "-c", command])
         flag_test_division = False
         next_line = False
+        array_test = []
         async for line in proc.stdout:
             line = line.decode('utf-8').strip()
             if line == ":test" or flag_test_division:
                 flag_test_division = True
                 if next_line:
+                    
                     next_line = False
                     info = line[line.find("at") + 3:]
                     splited = info.split(":")
-                    str_test = extract_test(splited[0], splited[1])
-                    repository_folder_splited = repository_folder.split("/")
-                    test_id = repository_folder_splited[1]
+                    proc = await docker_command(["exec", "-w", "/" + repository_folder 
+                    + "/src/test/java", "badkan", "bash", "-c", "cat < \"" + splited[0] + "\""])
+                    new_file = ""
+                    async for test_line in proc.stdout:
+                        test_line = test_line.decode('utf-8').strip()
+                        new_file = new_file + "\n" +  test_line   
+                    test_case = extract_test(new_file, splited[1])
+                    await tee(websocket, test_case)      
+                    array_test.append(test_case)
                 if "FAILED" in line:
                     next_line = True
                 if "tests completed" in line:
-                    break
+                    flag_test_division = False
+            if "FAILED" in line and ">" in line:
+                function_name = line[line.find(">") + 2:len(line) - 6]
+                # write_test(owner_firebase_id, test_id, exercise_id, function_name)
+                await tee(websocket, "INDICATION FOR BACKEND FUNCTION:" + function_name)
             await tee(websocket, line)
-        write_conflict(owner_firebase_id, str_test ,line, exercise_id)
+        write_conflict(owner_firebase_id, test_id, array_test, exercise_id)
         await proc.wait()
 
 

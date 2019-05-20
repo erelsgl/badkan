@@ -14,13 +14,21 @@ cred = credentials.Certificate('../database_exports/private_key.json')
 firebase_admin.initialize_app(cred, {'databaseURL': url})
 
 
-def write_conflict(owner_firebase_id, test_id ,str_test, exercise_id):
-    ref = db.reference('conflicts/' + exercise_id + "/" + owner_firebase_id + "_" +  test_id)
+def write_conflict(owner_firebase_id, test_id, str_test, exercise_id):
+    ref = db.reference('conflicts/' + exercise_id + "/" +
+                       owner_firebase_id + "_" + test_id)
     ref.set({
-            'solution_id' : owner_firebase_id,
-            'test_id' : test_id,
-            'test' : str_test,
-            'exercise_id' : exercise_id
+            'solution_id': owner_firebase_id,
+            'test_id': test_id,
+            'test': str_test,
+            'exercise_id': exercise_id
+            })
+
+
+def write_test(owner_firebase_id, test_id, exercise_id, function_name):
+    ref = db.reference('tests/' + exercise_id + "/" + test_id + "/")
+    ref_function_name = ref.child(function_name)
+    #if not ref_function_name:
+    ref_function_name.set({
+        'dummyfield': ["dummyfield"]
     })
-
-

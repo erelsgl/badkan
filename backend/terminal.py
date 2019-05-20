@@ -8,6 +8,7 @@ import subprocess
 from subprocess import call
 import os
 
+
 def git_clone(path, url, folder_name, username, password, exercise):
     """
     :param path: the path to clone the repo.
@@ -25,7 +26,8 @@ def git_clone(path, url, folder_name, username, password, exercise):
     os.chdir(path + "/" + folder_name)
     os.system("ls | grep -v " + exercise + " | xargs rm -r")
     os.chdir(owd)
-    shellscript = subprocess.Popen(['bash','git-clean.sh', folder_name, exercise], stdout=subprocess.PIPE)
+    shellscript = subprocess.Popen(
+        ['bash', 'git-clean.sh', folder_name, exercise], stdout=subprocess.PIPE)
     shellscript.wait()
 
 
@@ -36,9 +38,11 @@ def git_pull(path, folder_name, ex_folder):
     (it's composed of the uid of the owner + "_" + nb of exercise he created).
     :param ex_folder: the name of the folder of the solved exercise.
     """
-    shellscript = subprocess.Popen(['bash','git-pull.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
+    shellscript = subprocess.Popen(
+        ['bash', 'git-pull.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
     shellscript.wait()
-    shellscript = subprocess.Popen(['bash','git-clean.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
+    shellscript = subprocess.Popen(
+        ['bash', 'git-clean.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
     shellscript.wait()
 
 
@@ -52,12 +56,13 @@ def rmv(path, folder_name):
     os.system("rm -r " + folder_name)
     os.chdir(owd)
 
+
 def extract_test(str_file, line_num):
     """
     :param str_file: string of the test file with the failed test.
     :param line_num: line number of the failed test.
     """
-    index = line_num - 1 #line_num to index
+    index = int(line_num) - 2 #line_num to index
     lines = str_file.splitlines(True)
     brackets_stack = []
     res = ""
@@ -67,7 +72,6 @@ def extract_test(str_file, line_num):
             brackets_stack.append("{")
         else:
             index+=1
-    
     if "}" in lines[index]:
         return res
     
@@ -80,4 +84,3 @@ def extract_test(str_file, line_num):
             brackets_stack.pop()
 
     return res        
-
