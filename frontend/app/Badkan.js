@@ -57,7 +57,7 @@ function dealWithFile(file) {
   var reader = new FileReader();
   reader.readAsArrayBuffer(file);
   var rawData = new ArrayBuffer();
-  reader.loadend = function () {}
+  reader.loadend = function () { }
   reader.onload = function (e) {
     rawData = e.target.result;
     // create the request
@@ -305,9 +305,11 @@ function uploadHomeUserGrade(grade) {
   exerciseSolved = new ExerciseSolved(grade, selectedValue);
   flag = true;
   for (i = 0; i < homeUser.exerciseSolved.length; i++) {
-    if (homeUser.exerciseSolved[i].exerciseId === selectedValue) {
-      homeUser.exerciseSolved[i] = exerciseSolved;
-      flag = false;
+    if (homeUser.exerciseSolved[i]) {
+      if (homeUser.exerciseSolved[i].exerciseId === selectedValue) {
+        homeUser.exerciseSolved[i] = exerciseSolved;
+        flag = false;
+      }
     }
   }
   if (flag) {
