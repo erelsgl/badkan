@@ -459,6 +459,16 @@ function writeNewReclamationIds(id, peerSolutionExercise, testId, functionName) 
   });
 }
 
-function getConflictsByUid(exerciseId, uid) {
-  
+function getConflictsByUid(exerciseId, uid, addItemToList) {
+  database.ref('/tests/' + exerciseId + "/" + uid).once('value').then(function (snapshot) {
+    snapshot.forEach(function (child) {
+      let arr = Object.keys(child.val().ids);
+      console.log(arr)
+      addItemToList(child.key, arr.length)
+    });
+  });
+}
+
+function changeReclamation(uid, exerciseId, functionName) {
+
 }
