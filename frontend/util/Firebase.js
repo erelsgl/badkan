@@ -458,3 +458,7 @@ function writeNewReclamationIds(id, peerSolutionExercise, testId, functionName) 
     "reclam": "true"
   });
 }
+
+function getConflictsByUid(exerciseId, uid) {
+  
+}
