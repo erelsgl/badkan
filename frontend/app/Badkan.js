@@ -369,16 +369,16 @@ function uploadHomeUserGrade(grade) {
   writeUserDataWithoutComingHome(homeUser, userId);
 }
 
-
-// TODO: Finish here
-
 /** In link with peer to peer */
 $("button#reclamationTest").click(() => {
   //  Next release: First we remove the last reclamation since only the last reclamation count.
   var checkedBoxes = getCheckedBoxes("wrong");  // in util/utils.js
   for (var i = 0; i < checkedBoxes.length; i++) {
     array_info = checkedBoxes[i].id.split("_");
-    writeNewReclamationIds(firebase.auth().currentUser.uid, peerSolutionExercise, array_info[0], array_info[1])
+    testId = array_info[0];
+    functionName = array_info[1];
+    functionContent = tests.get(functionName)
+    writeNewReclamationIds(firebase.auth().currentUser.uid, peerSolutionExercise, testId, functionName, functionContent)
   }
 })
 

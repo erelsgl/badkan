@@ -453,22 +453,26 @@ function checkIfIdExist(exercise, id) {
   return -1;
 }
 
-function writeNewReclamationIds(id, peerSolutionExercise, testId, functionName) {
-  database.ref('/tests/' + peerSolutionExercise + "/" + testId + "/" + functionName + "/ids/" + id).set({
+function writeNewReclamationIds(id, peerSolutionExercise, testId, functionName, functionContent) {
+  database.ref('/conflicts/' + peerSolutionExercise + "/" + testId + "/" + functionName + "/" + "about").set({
+    "content": functionContent 
+  })
+  database.ref('/conflicts/' + peerSolutionExercise + "/" + testId + "/" + functionName + "/ids/" + id).set({
     "reclam": "true"
-  });
+  }).then(/*document.location.href = "home.html"*/);
 }
 
 function getConflictsByUid(exerciseId, uid, addItemToList, noConflicts) {
   let flag = false;
-  database.ref('/tests/' + exerciseId + "/" + uid).once('value').then(function (snapshot) {
+  database.ref('/conflicts/' + exerciseId + "/" + uid).once('value').then(function (snapshot) {
     snapshot.forEach(function (child) {
       if (child.val().ids) {
         flag = true;
         let arr = Object.keys(child.val().ids);
-        addItemToList(child.key, arr.length)
+        addItemToList(child.key, arr.length, child.val().about.content)
       }
-    });
+    })
+  }).then(function () {
     if (!flag) {
       noConflicts();
     }
@@ -476,7 +480,7 @@ function getConflictsByUid(exerciseId, uid, addItemToList, noConflicts) {
 }
 
 function changeReclamation(uid, exerciseId, functionName) {
-  database.ref('/tests/' + exerciseId + "/" + uid + "/" + functionName).set({
+  database.ref('/conflicts/' + exerciseId + "/" + uid + "/" + functionName).set({
     "deprecated": "true"
-  }).then(document.location.href = "conflicts.html");
+  }).then(document.location.href = "conflicts.html?exercise=" + exerciseId);
 }

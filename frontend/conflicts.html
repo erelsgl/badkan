@@ -11,6 +11,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
     <script src='util/FirebaseConfig.js'></script>
+    <script type="text/javascript" src="util/Loading.js"></script>
     <script type="text/javascript" src="util/Firebase.js"></script>
     <script type="text/javascript" src="util/SignOut.js"></script>
     <script type="text/javascript" src="util/Sanitize.js"></script>
@@ -19,12 +20,16 @@
     <!-- Import css. -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/loading.css">
 </head>
 
 <body>
     <a class='home' href="home.html">Badkan Home</a>
 
     <h1>Conflicts</h1>
+
+    <div id=loading class="loader">
+    </div>
 
     <div id="conflicts" style="display: none">
 

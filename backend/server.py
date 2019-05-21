@@ -19,7 +19,6 @@ from terminal import *
 from csv_trace import edit_csv
 from csv_summary import edit_csv_summary
 import datetime
-from realtime_database import write_conflict, write_test
 from multiprocessing import Process
 
 from concurrent.futures import ProcessPoolExecutor
@@ -372,9 +371,6 @@ async def check_solution_peer_submission(websocket: object, submission: dict):
                 await tee(websocket, "INDICATION FOR BACKEND FUNCTION:" + function_name)
             await tee(websocket, line)
         await proc.wait()
-
-
-    # Maybe we need to store the failed test in firebase for the conflicts phase...
 
 
 async def check_submission(websocket: object, submission: dict):

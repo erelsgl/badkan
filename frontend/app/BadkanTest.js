@@ -1,11 +1,6 @@
-/**
- * This function send the file to the server.
- * @param {File} file 
- */
+// Map with key: function name, value, function content.
+tests = new Map();
 
-
-
-//TODO: make test
 function dealWithFilePeerToPeerTest(file) {
   var uid = firebase.auth().currentUser.uid;
   var reader = new FileReader();
@@ -79,6 +74,8 @@ function sendWebsocketPeer(json) {
     } else if (event.data.includes("INDICATION FOR BACKEND FUNCTION:")) {
       function_name = event.data.substring(32, event.data.length - 1)
     } else if (event.data.includes("{")) {
+      // Store the function name and it content into the map. 
+      tests.set(function_name, event.data);
       logCheckServer("color:red; margin:0 1em 0 1em", event.data, 
       owner_test_id, function_name);
     } else {
