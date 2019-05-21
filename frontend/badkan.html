@@ -23,6 +23,7 @@
   <script type="text/javascript" src="util/Sanitize.js"></script>
   <script type="text/javascript" src="app/BadkanTest.js"></script>
   <script type="text/javascript" src="app/BadkanSolution.js"></script>
+  <script type="text/javascript" src="util/Notif.js"></script>
 
   <!-- Import css. -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -33,20 +34,42 @@
   <link rel="stylesheet" href="style/style.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
     integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  <link rel="stylesheet" href="style/notif.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 
 <body>
-    <a class='fa fa-home' href="home.html" style="padding: 25px 25px; font-size: 25px;"></a>
-    <div class="container">
+  <!-- The footer -->
+  <div>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li id="noti_Container">
+        <div id="noti_Counter"></div>
+        <!--SHOW NOTIFICATIONS COUNT.-->
+
+        <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
+        <div id="noti_Button"></div>
+
+        <!--THE NOTIFICAIONS DROPDOWN BOX.-->
+        <div id="notifications">
+          <h3>Notifications</h3>
+          <div id=addNotif></div>
+          <div style="height:300px;"></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <div class="container">
     <h1>Submit exercise <b><span id="exercise"></span></b></h1>
 
     <form>
-
-      <ul class="nav nav-pills">
-        <li id="github" class="active"><a data-toggle="pill" href="#home">GitHub clone</a></li>
-        <li><a id="zip" data-toggle="pill" href="#menu1">Zip file</a></li>
-        <li><a id="gitlab" data-toggle="pill" href="#menu2">GitLab private clone</a></li>
-      </ul>
+        <ul class="nav nav-pills">
+          <li id="github" class="active"><a data-toggle="pill" href="#home">GitHub clone</a></li>
+          <li ><a id="zip"  data-toggle="pill" href="#menu1">Zip file</a></li>
+          <li><a id="gitlab" data-toggle="pill" href="#menu2">GitLab private clone</a></li>
+        </ul>
 
       <div class="tab-content">
         <div id="home" class="tab-pane fade in active">

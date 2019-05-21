@@ -26,6 +26,7 @@
   <script type="text/javascript" src="objects/Grade.js"></script>
   <script type="text/javascript" src="objects/Grades.js"></script>
   <script type="text/javascript" src="util/Sanitize.js"></script>
+  <script type="text/javascript" src="util/Notif.js"></script>
 
   <!-- Import css. -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -33,10 +34,31 @@
   <link rel="stylesheet" href="style/snackbar.css">
   <link rel="stylesheet" href="style/style.css">
   <link rel="stylesheet" href="style/loading.css">
+  <link rel="stylesheet" href="style/notif.css">
 </head>
 
 <body>
-  <a class='fa fa-home' href="home.html" style="padding: 25px 25px; font-size: 25px;"></a>
+  <!-- The footer -->
+  <div>
+    <ul>
+      <li><a href="home.html">Home</a></li>
+      <li id="noti_Container">
+        <div id="noti_Counter"></div>
+        <!--SHOW NOTIFICATIONS COUNT.-->
+
+        <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
+        <div id="noti_Button"></div>
+
+        <!--THE NOTIFICAIONS DROPDOWN BOX.-->
+        <div id="notifications">
+          <h3>Notifications</h3>
+          <div id=addNotif></div>
+          <div style="height:300px;"></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
   <div id="loadingEx" class="loader" style="display:none;"></div>
   <div id="page">
     <div class="container">

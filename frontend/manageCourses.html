@@ -17,6 +17,7 @@
     <script type="text/javascript" src="util/SignOut.js"></script>
     <script type="text/javascript" src="util/Loading.js"></script>
     <script type="text/javascript" src="util/Sanitize.js"></script>
+    <script type="text/javascript" src="util/Notif.js"></script>
 
     <!-- Import css. -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -26,17 +27,38 @@
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/loading.css">
     <link rel="stylesheet" href="style/snackbar.css">
-
+    <link rel="stylesheet" href="style/notif.css">
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
 
 </head>
 
 <body>
-    <a class='fa fa-home' href="home.html" style="padding: 25px 25px; font-size: 25px;"></a>
+
+    <!-- The footer -->
+    <div>
+        <ul>
+            <li><a href="home.html">Home</a></li>
+            <li id="noti_Container">
+                <div id="noti_Counter"></div>
+                <!--SHOW NOTIFICATIONS COUNT.-->
+
+                <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
+                <div id="noti_Button"></div>
+
+                <!--THE NOTIFICAIONS DROPDOWN BOX.-->
+                <div id="notifications">
+                    <h3>Notifications</h3>
+                    <div id=addNotif></div>
+                    <div style="height:300px;"></div>
+                </div>
+            </li>
+        </ul>
+    </div>
     <h1>Manage Courses</h1>
     <div id="loading" class="loader"></div>
     <div class="panel-group" id="accordion">

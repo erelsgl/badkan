@@ -34,8 +34,15 @@ document.getElementById("confirm").addEventListener('click', e => {
     } else {
       checked = true;
     }
+    if (!homeUser.peerExerciseSolved) {
+      homeUser.peerExerciseSolved = [new PeerGrade("id", 90, 90, "urlTest", "urlSolution")];
+    }
+    if (!homeUser.notif) {
+      homeUser.notif = [new Notification("Welcome to the Badkan, this is your first notification.", false)];
+    }
     let newUser = new User(name, lastName, id, homeUser.email, homeUser.createdEx,
-      homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved, homeUser.peerExerciseSolved, checked);
+      homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved,
+      homeUser.peerExerciseSolved, checked, homeUser.notif);
     writeUserData(newUser, user.uid);
     document.location.href = "home.html";
   }
