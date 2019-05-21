@@ -13,7 +13,16 @@ function addItemToList(functionName, numOfReclamation) {
     let txtHtml = "<pre>";
     txtHtml += "Name of the test function: " + functionName + ". <br />";
     txtHtml += "Number of reclamation(s): " + numOfReclamation + ".  <br />";
-    txtHtml += "<input type=\"checkbox\" name=\"wrong\" id=\"" + functionName + "\" value=\"Wrong\">Wrong reclamation"
+    txtHtml += "<input type=\"checkbox\" name=\"good\" id=\"" + functionName + "\" value=\"Wrong\">Good reclamation"
     txtHtml += "</pre>";
     $("div#list").append(txtHtml)
 }
+
+$("button#confirm").click(() => {
+    var checkedBoxes = getCheckedBoxes("good");
+    for (var i = 0; i < checkedBoxes.length; i++) {
+        // Get the name of the test function that we should flag as "wrong"
+        functionName = checkedBoxes[i].id;
+        changeReclamation(uid, exerciseId, functionName);
+    }
+});

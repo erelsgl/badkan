@@ -369,10 +369,8 @@ async def check_solution_peer_submission(websocket: object, submission: dict):
                     flag_test_division = False
             if "FAILED" in line and ">" in line:
                 function_name = line[line.find(">") + 2:len(line) - 6]
-                # write_test(owner_firebase_id, test_id, exercise_id, function_name)
                 await tee(websocket, "INDICATION FOR BACKEND FUNCTION:" + function_name)
             await tee(websocket, line)
-        write_conflict(owner_firebase_id, test_id, array_test, exercise_id)
         await proc.wait()
 
 

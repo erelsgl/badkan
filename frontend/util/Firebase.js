@@ -468,3 +468,7 @@ function getConflictsByUid(exerciseId, uid, addItemToList) {
     });
   });
 }
+
+function changeReclamation(uid, exerciseId, functionName) {
+
+}
