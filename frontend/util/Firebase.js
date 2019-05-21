@@ -459,16 +459,24 @@ function writeNewReclamationIds(id, peerSolutionExercise, testId, functionName) 
   });
 }
 
-function getConflictsByUid(exerciseId, uid, addItemToList) {
+function getConflictsByUid(exerciseId, uid, addItemToList, noConflicts) {
+  let flag = false;
   database.ref('/tests/' + exerciseId + "/" + uid).once('value').then(function (snapshot) {
     snapshot.forEach(function (child) {
-      let arr = Object.keys(child.val().ids);
-      console.log(arr)
-      addItemToList(child.key, arr.length)
+      if (child.val().ids) {
+        flag = true;
+        let arr = Object.keys(child.val().ids);
+        addItemToList(child.key, arr.length)
+      }
     });
+    if (!flag) {
+      noConflicts();
+    }
   });
 }
 
 function changeReclamation(uid, exerciseId, functionName) {
-
+  database.ref('/tests/' + exerciseId + "/" + uid + "/" + functionName).set({
+    "deprecated": "true"
+  }).then(document.location.href = "conflicts.html");
 }
