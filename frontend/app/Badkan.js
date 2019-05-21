@@ -375,6 +375,7 @@ function uploadHomeUserGrade(grade) {
 
 /** In link with peer to peer */
 $("button#reclamationTest").click(() => {
+  //  Next release: First we remove the last reclamation since only the last reclamation count.
   var checkedBoxes = getCheckedBoxes("wrong");
   for (var i = 0; i < checkedBoxes.length; i++) {
     array_info = checkedBoxes[i].id.split("_");

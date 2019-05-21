@@ -1,5 +1,5 @@
 # Use an official Ubuntu runtime as a parent image
-FROM ubuntu:16.04
+FROM ubuntu:latest
 
 # Install any needed packages specified in requirements.txt
 RUN apt-get update
