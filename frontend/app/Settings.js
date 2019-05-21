@@ -35,7 +35,7 @@ document.getElementById("confirm").addEventListener('click', e => {
       checked = true;
     }
     let newUser = new User(name, lastName, id, homeUser.email, homeUser.createdEx,
-      homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved, checked);
+      homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved, homeUser.peerExerciseSolved, checked);
     writeUserData(newUser, user.uid);
     document.location.href = "home.html";
   }

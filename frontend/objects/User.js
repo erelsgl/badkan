@@ -12,10 +12,11 @@ class User {
    * @param {int} createdEx  // Also courses.
    * @param {int} deletedEx 
    * @param {int} editedEx 
-   * @param {int} exerciseSolved 
+   * @param {array} exerciseSolved 
+   * @param {array} exerciseSolved 
    * @param {boolean} admin
    */
-  constructor(name, lastName, id, email, createdEx, deletedEx, editedEx, exerciseSolved, admin) {
+  constructor(name, lastName, id, email, createdEx, deletedEx, editedEx, exerciseSolved, peerExerciseSolved, admin) {
     this.name = name;
     this.lastName = lastName;
     this.id = id;
@@ -24,6 +25,7 @@ class User {
     this.deletedEx = deletedEx;
     this.editedEx = editedEx;
     this.exerciseSolved = exerciseSolved;
+    this.peerExerciseSolved = peerExerciseSolved;
     this.admin = admin;
   }
 }

@@ -31,6 +31,8 @@ if (homeUser) {
   }
 }
 
+// TODO: FINISH HERE
+$(".badge badge-notify").append(3);
 
 // We need to load all the exercise since it's possible that the owner of the course is not 
 // the owner of the exercise. 
@@ -176,9 +178,9 @@ function notRegistered(key, course) {
 
         if (peerExerciseObj) {
           text_html += "<div class='exercise'>"
-          text_html += "<h4>" + "<span class=\"glyphicon glyphicon-transfer\"></span>  "
-            + peerExerciseObj.name
-            + "  <span class=\"glyphicon glyphicon-transfer\"></span>" + "</h4>";
+          text_html += "<h4>" + "<span class=\"glyphicon glyphicon-transfer\"></span>  " +
+            peerExerciseObj.name +
+            "  <span class=\"glyphicon glyphicon-transfer\"></span>" + "</h4>";
           text_html += "<p>" + peerExerciseObj.description + "</p>";
           text_html += "Test deadline: " + peerExerciseObj.deadlineTest + "<br />";
           text_html += "Solution deadline: " + peerExerciseObj.deadlineSolution + "<br />";
@@ -264,9 +266,9 @@ function registered(key, course) {
          */
         if (peerExerciseObj) {
           text_html += "<div class='exercise'>"
-          text_html += "<h4>" + "<span class=\"glyphicon glyphicon-transfer\"></span>  "
-            + peerExerciseObj.name
-            + "  <span class=\"glyphicon glyphicon-transfer\"></span>" + "</h4>";
+          text_html += "<h4>" + "<span class=\"glyphicon glyphicon-transfer\"></span>  " +
+            peerExerciseObj.name +
+            "  <span class=\"glyphicon glyphicon-transfer\"></span>" + "</h4>";
 
           text_html += "<p>" + peerExerciseObj.description + "</p>";
           text_html += "<button name =\"" + exerciseId + "\" id=\"dl\" class=\"btn btn-link\"\">Download PDF</button>";
@@ -294,7 +296,7 @@ function registered(key, course) {
               conflictsPhase(exerciseId);
               break;
             default:
-              endGame(peerExerciseObj);
+              endGame(exerciseId);
           }
 
           text_html += "</p>";
@@ -339,9 +341,18 @@ function conflictsPhase(exerciseId) {
 }
 
 /* @param {Object} peerGrades // Object we created with the grades. */
-function endGame(peerExerciseObj) {
-  // TODO: See how to integrate the peer-to-peer grade (need to create a new object PeerExerciseSolved.js).
-  // Or use the object.
+// TODO: Check if this work.
+function endGame(exerciseId) {
+  if (homeUser.peerExerciseSolved) {
+    if (homeUser.peerExerciseSolved.includes(exerciseId)) {
+      // The user has been graded.
+      // The show the grades.
+    } else {
+      text_html += "You will receive a grade soon."
+    }
+  } else {
+    text_html += "You will receive a grade soon."
+  }
 }
 
 

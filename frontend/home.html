@@ -29,7 +29,15 @@
 </head>
 
 <body>
-  <a class='home'>Badkan</a>
+  <!-- Need to add to the user the field notification. -->
+  <div class="container">
+    <a class='fa fa-home' href="home.html" style="padding: 25px 25px; font-size: 25px;"></a>
+    <button class="btn btn-default btn-lg btn-link" style="font-size:25px;">
+      <span class="glyphicon glyphicon-comment"></span>
+    </button>
+    <span class="badge badge-notify"></span>
+  </div>
+
   <div id="loading" class="loader"></div>
   <div id="div1" class="container" style="display: none">
     <h1>Badkan Home Page</h1>
@@ -46,9 +54,11 @@
         </div>
         <div id="collapseThree" class="panel-collapse collapse">
           <div class="panel-body">
-            <p><b>Students</b> -- find your courses, register, solve exercises, submit your solutions and get graded in real time!</p>
+            <p><b>Students</b> -- find your courses, register, solve exercises, submit your solutions and get graded in
+              real time!</p>
 
-            <p><b>Teachers</b> -- create courses, fill them with existing programming exercises or create new ones, and enjoy the automatic grading!</p>
+            <p><b>Teachers</b> -- create courses, fill them with existing programming exercises or create new ones, and
+              enjoy the automatic grading!</p>
           </div>
         </div>
       </div>
@@ -68,7 +78,9 @@
   <script type="text/javascript" src="app/Home.js"></script>
   <p class="footer">
     Badkan 2.0 by <a href="https://github.com/SamuelBismuth">Samuel Bismuth</a>, samuelbismuth101@gmail.com.
-    <script>document.write("Last modified: " + document.lastModified)</script>
+    <script>
+      document.write("Last modified: " + document.lastModified)
+    </script>
   </p>
 </body>
 

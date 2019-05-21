@@ -10,6 +10,7 @@ document.getElementById("confirm").addEventListener('click', e => {
   if (checkEmptyFields(name, lastName, id)) {
     var user = firebase.auth().currentUser;
     let exerciseSolved = new ExerciseSolved(90, "id");
+    let peerExerciseSolved = new PeerExercise("id", 90, 90, "urlTest", "urlSolution");
     let checked = document.getElementById("admin").checked;
     if (checked) {
       var response = prompt("Please enter the password to get admin privilege:");
@@ -20,7 +21,7 @@ document.getElementById("confirm").addEventListener('click', e => {
         return;
       }
     }
-    let currentUser = new User(name, lastName, id, user.email, 0, 0, 0, [exerciseSolved], checked);
+    let currentUser = new User(name, lastName, id, user.email, 0, 0, 0, [exerciseSolved], [peerExerciseSolved], checked);
     writeUserData(currentUser, user.uid);
     document.location.href = "home.html";
   }

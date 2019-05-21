@@ -159,11 +159,8 @@ function uploadPeerExercise(name, descr, deadlineTest, deadlineSolution, deadlin
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     folderName = userId + "_" + homeUser.createdEx;
 
-    let peerGrades = new PeerGrade("id", 90, 90, "urlTest", "urlSolution"); // Dummy grade for firebase.
-
-
     let peerExercise = new PeerExercise(
-        name, descr, userId, peerGrades, deadlineTest,
+        name, descr, userId, deadlineTest,
         deadlineSolution, deadlineConflicts, compilerSolution, compilerTest, submission, minTest, signatureMap
     );
 

@@ -15,12 +15,11 @@ class PeerExercise {
      * @param {int} minTest 
      * @param {map} signatureMap 
      */
-    constructor(name, description, ownerId, peerGrades, deadlineTest,
+    constructor(name, description, ownerId, deadlineTest,
         deadlineSolution, deadlineConflicts, compilerSolution, compilerTest, submission, minTest, signatureMap) {
         this.name = name;
         this.description = description;
         this.ownerId = ownerId;
-        this.peerGrades = peerGrades;
         this.deadlineTest = deadlineTest;
         this.deadlineSolution = deadlineSolution;
         this.deadlineConflicts = deadlineConflicts;

@@ -30,7 +30,8 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
     }
     firebase.auth().createUserWithEmailAndPassword(email, pass).then(function () {
       let exerciseSolved = new ExerciseSolved(90, "id");
-      let homeUser = new User(name, lastName, id, email, 0, 0, 0, [exerciseSolved], checked);
+      let peerExerciseSolved = new PeerExercise("id", 90, 90, "urlTest", "urlSolution");
+      let homeUser = new User(name, lastName, id, email, 0, 0, 0, [exerciseSolved], [peerExerciseSolved], checked);
       var user = firebase.auth().currentUser;
       writeUserData(homeUser, user.uid);
     }).catch(function (error) {
@@ -116,7 +117,6 @@ function github() {
      * and then go to home, if the user is old need to go to home.
      */
     if (result.additionalUserInfo.isNewUser) {
-      console.log("new User")
       document.location.href = "completeInfo.html"
     } else {
       console.log("old user");

@@ -25,13 +25,14 @@
 
   <!-- Import css. -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="style/snackbar.css">
   <link rel="stylesheet" href="style/style.css">
   <link rel="stylesheet" href="style/loading.css">
 </head>
 
 <body>
-  <a class='home' href="home.html">Badkan Home</a>
+  <a class='fa fa-home' href="home.html" style="padding: 25px 25px; font-size: 25px;"></a>
   <div id="loading" class="loader"></div>
   <h1>View exercise <b><span id="exercise"></span></b> </h1>
   <br />
@@ -68,10 +69,13 @@
             <div class="form-group">
               <label for="usr">Choose the submission option (at least one required):</label>
               <ul>
-                <li><input id="githubGitHub" name="BoxSelect[]" type="checkbox" value="github" required><label>GitHub</label>
+                <li><input id="githubGitHub" name="BoxSelect[]" type="checkbox" value="github"
+                    required><label>GitHub</label>
                 </li>
-                <li><input id="zipGitHub" name="BoxSelect[]" type="checkbox" value="zip" required><label>Zip</label></li>
-                <li><input id="gitlabGitHub" name="BoxSelect[]" type="checkbox" value="gitlab" required><label>GitLab</label>
+                <li><input id="zipGitHub" name="BoxSelect[]" type="checkbox" value="zip" required><label>Zip</label>
+                </li>
+                <li><input id="gitlabGitHub" name="BoxSelect[]" type="checkbox" value="gitlab"
+                    required><label>GitLab</label>
                 </li>
               </ul>
             </div>
@@ -129,15 +133,17 @@
             </div>
 
             <div class="form-group">
-                <label for="usr">Choose the submission option (at least one required):</label>
-                <ul>
-                  <li><input id="githubZip" name="BoxSelect[]" type="checkbox" value="github" required><label>GitHub</label>
-                  </li>
-                  <li><input id="zipZip" name="BoxSelect[]" type="checkbox" value="zip" required><label>Zip</label></li>
-                  <li><input id="gitlabZip" name="BoxSelect[]" type="checkbox" value="gitlab" required><label>GitLab</label>
-                  </li>
-                </ul>
-              </div>
+              <label for="usr">Choose the submission option (at least one required):</label>
+              <ul>
+                <li><input id="githubZip" name="BoxSelect[]" type="checkbox" value="github"
+                    required><label>GitHub</label>
+                </li>
+                <li><input id="zipZip" name="BoxSelect[]" type="checkbox" value="zip" required><label>Zip</label></li>
+                <li><input id="gitlabZip" name="BoxSelect[]" type="checkbox" value="gitlab"
+                    required><label>GitLab</label>
+                </li>
+              </ul>
+            </div>
 
             <div class="form-group">
 

@@ -26,13 +26,14 @@
 
     <!-- Import css. -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="style/snackbar.css">
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/loading.css">
 </head>
 
 <body>
-    <a class='home' href="home.html">Badkan Home</a>
+    <a class='fa fa-home' href="home.html" style="padding: 25px 25px; font-size: 25px;"></a>
     <div id="loadingEx" class="loader" style="display:none;"></div>
     <div id="page">
         <div class="container">
@@ -78,12 +79,13 @@
                 <div class="form-group">
                     <label for="usr">Choose the submission option (at least one required):</label>
                     <ul>
-                        <li><input id="github" name="BoxSelect[]" type="checkbox" value="github"
-                                required readonly><label>GitHub</label> not available currently</li>
-                        <li><input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required checked><label>Zip</label>
+                        <li><input id="github" name="BoxSelect[]" type="checkbox" value="github" required
+                                readonly><label>GitHub</label> not available currently</li>
+                        <li><input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required
+                                checked><label>Zip</label>
                         </li>
-                        <li><input id="gitlab" name="BoxSelect[]" type="checkbox" value="gitlab"
-                                required readonly><label>GitLab</label> not available currently</li>
+                        <li><input id="gitlab" name="BoxSelect[]" type="checkbox" value="gitlab" required
+                                readonly><label>GitLab</label> not available currently</li>
                     </ul>
                 </div>
 
@@ -99,15 +101,15 @@
                     <input type="number" class="form-control" id="minTest" /> <br />
                 </div>
 
-                 <!-- text area. -->
-                 <div class="form-group">
-                        <label for="comment">Signatures:</label>
-                        <h5>Please respect the format:</h5>
-                        <h5>function signature; class where the function resides;</h5>
-                        <h5>e.g: public static int myFun(int num1, int num2); MyClass.java;</h5>
-                        <textarea class="form-control" rows="10" id="signatures"
-                            placeholder="Enter the signatures of the exercise"></textarea>
-                    </div>
+                <!-- text area. -->
+                <div class="form-group">
+                    <label for="comment">Signatures:</label>
+                    <h5>Please respect the format:</h5>
+                    <h5>function signature; class where the function resides;</h5>
+                    <h5>e.g: public static int myFun(int num1, int num2); MyClass.java;</h5>
+                    <textarea class="form-control" rows="10" id="signatures"
+                        placeholder="Enter the signatures of the exercise"></textarea>
+                </div>
 
                 <!-- button. -->
                 <button id="btnConfirm" type="button" class="btn btn-primary">Confirm</button>
