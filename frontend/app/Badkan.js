@@ -77,10 +77,9 @@ if (exercise.deadline) {
  * @param {File} file 
  */
 function dealWithFile(file) {
-  var uid = firebase.auth().currentUser.uid;
-  var reader = new FilexerciseIdeReader();
-  reader.readAsArrayBuexerciseIdffer(file);
-  var rawData = new ArexerciseIdrayBuffer();
+  var reader = new FileReader();
+  reader.readAsArrayBuffer(file);
+  var rawData = new ArrayBuffer();
   reader.loadend = function () {}
   reader.onload = function (e) {
     rawData = e.target.result;
@@ -91,7 +90,7 @@ function dealWithFile(file) {
       backendPort = BACKEND_FILE_PORTS[Math.floor(Math.random() * BACKEND_FILE_PORTS.length)];
     var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
     xhr.open('POST', httpurl, true);
-    xhr.setRequestHeader('Accept-Language', uid); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.setRequestHeader('Accept-Language', firebase.auth().currentUser.uid,); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
     xhr.onreadystatechange = function () {
       if (this.readyState == 4) {
         // Create the json for submission
@@ -100,7 +99,7 @@ function dealWithFile(file) {
         json = JSON.stringify({
           target: "check_submission",
           exercise: exerciseId,
-          solution: uid,
+          solution: firebase.auth().currentUser.uid,
           ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
           name: exercise.name,
           owner_firebase_id: firebase.auth().currentUser.uid,
