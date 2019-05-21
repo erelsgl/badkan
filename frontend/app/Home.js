@@ -32,7 +32,7 @@ if (homeUser) {
 }
 
 // TODO: FINISH HERE
-$(".badge badge-notify").append(3);
+$("#numNotif").append(2);
 
 // We need to load all the exercise since it's possible that the owner of the course is not 
 // the owner of the exercise. 
