@@ -1,26 +1,24 @@
 // TODO: Deal with assync pbs and read/not read notif.
-if (!homeUser) {
-    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
-}
-if (!uid) {
-    let uid = JSON.parse(localStorage.getItem("homeUserId"));
-}
+var notifHomeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+
+let notifUid = JSON.parse(localStorage.getItem("homeUserId"));
+
 
 $(document).ready(function () {
     let numNotif = 0;
-    if (homeUser.notif) {
-        for (let i = 0; i < homeUser.notif.length; i++) {
-            if (!homeUser.notif[i].notifRead) {
+    if (notifHomeUser.notif) {
+        for (let i = 0; i < notifHomeUser.notif.length; i++) {
+            if (!notifHomeUser.notif[i].notifRead) {
                 numNotif++;
-                addNonReadedNotif(homeUser.notif[i].notifMessage, i);
+                addNonReadedNotif(notifHomeUser.notif[i].notifMessage, i);
             } else {
-                addReadedNotif(homeUser.notif[i].notifMessage);
+                addReadedNotif(notifHomeUser.notif[i].notifMessage);
             }
         }
     } else {
-        homeUser.notif = new MyNotification("Welcome to the Badkan, this is your first notification.", false);
-        localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
-        writeUserData(homeUser, uid)
+        notifHomeUser.notif = new MyNotification("Welcome to the Badkan, this is your first notification.", false);
+        localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
+        writeUserData(notifHomeUser, notifUid)
     }
     if (numNotif === 0) {
         $('#noti_Counter').hide();
@@ -87,7 +85,7 @@ function addReadedNotif(message) {
 }
 
 function notifIsReaded(index) {
-    homeUser.notif[index].notifRead = true;
-    localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
-    writeUserData(homeUser, uid)
+    notifHomeUser.notif[index].notifRead = true;
+    localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
+    writeUserData(notifHomeUser, notifUid)
 }
