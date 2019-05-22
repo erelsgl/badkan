@@ -1,0 +1,6 @@
+SHELL=/bin/bash
+PATH=/bin:/usr/bin:/usr/local/bin
+
+# test each minute:
+
+* * * * * cd Desktop/badkan/notifications; python3 notify.py 

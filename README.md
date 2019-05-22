@@ -100,6 +100,12 @@ If you want to use a process-monitor to run the servers, you can use pm2:
 Please, install zip in the server by running the next command:
 
     sudo apt install zip
+
+Since we use contrab for the backup, please run:
+
+    crontab crontab-backup
+
+Please, check that in the files crontab-backup, the cd is sending you to the good place.
     
 ## Installing the Apache server
 
