@@ -6,19 +6,21 @@ let notifUid = JSON.parse(localStorage.getItem("homeUserId"));
 
 $(document).ready(function () {
     let numNotif = 0;
-    if (notifHomeUser.notif) {
-        for (let i = 0; i < notifHomeUser.notif.length; i++) {
-            if (!notifHomeUser.notif[i].notifRead) {
-                numNotif++;
-                addNonReadedNotif(notifHomeUser.notif[i].notifMessage, i);
-            } else {
-                addReadedNotif(notifHomeUser.notif[i].notifMessage);
+    if (notifHomeUser) {
+        if (notifHomeUser.notif) {
+            for (let i = 0; i < notifHomeUser.notif.length; i++) {
+                if (!notifHomeUser.notif[i].notifRead) {
+                    numNotif++;
+                    addNonReadedNotif(notifHomeUser.notif[i].notifMessage, i);
+                } else {
+                    addReadedNotif(notifHomeUser.notif[i].notifMessage);
+                }
             }
+        } else {
+            notifHomeUser.notif = new MyNotification("Welcome to the Badkan, this is your first notification.", false);
+            localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
+            writeUserData(notifHomeUser, notifUid)
         }
-    } else {
-        notifHomeUser.notif = new MyNotification("Welcome to the Badkan, this is your first notification.", false);
-        localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
-        writeUserData(notifHomeUser, notifUid)
     }
     if (numNotif === 0) {
         $('#noti_Counter').hide();
