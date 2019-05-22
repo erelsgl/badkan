@@ -20,12 +20,12 @@ $(document).ready(function () {
             else {
                 notifHomeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")];
                 localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
-                writeUserData(notifHomeUser, notifUid)
+                writeUserDataWithoutComingHome(notifHomeUser, notifUid)
             }
         } else {
             notifHomeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")];
             localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
-            writeUserData(notifHomeUser, notifUid)
+            writeUserDataWithoutComingHome(notifHomeUser, notifUid)
         }
     }
     if (numNotif === 0) {
