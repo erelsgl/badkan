@@ -1,6 +1,6 @@
 class Notification {
-    constructor(message, read) {
-        this.message = message;
-        this.read = read;
+    constructor(notifMessage, notifRead) {
+        this.notifMessage = notifMessage;
+        this.notifRead = notifRead;
     }
 }

@@ -6,11 +6,11 @@ $(document).ready(function () {
     let numNotif = 0;
     if (homeUser.notif) {
         for (let i = 0; i < homeUser.notif.length; i++) {
-            if (!homeUser.notif[i].read) {
+            if (!homeUser.notif[i].notifRead) {
                 numNotif++;
-                addNonReadedNotif(homeUser.notif[i].message, i);
+                addNonReadedNotif(homeUser.notif[i].notifMessage, i);
             } else {
-                addReadedNotif(homeUser.notif[i].message);
+                addReadedNotif(homeUser.notif[i].notifMessage);
             }
         }
     } else {
@@ -83,7 +83,7 @@ function addReadedNotif(message) {
 }
 
 function notifIsReaded(index) {
-    homeUser.notif[index].read = true;
+    homeUser.notif[index].notifRead = true;
     localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
     writeUserData(homeUser, uid)
 }
