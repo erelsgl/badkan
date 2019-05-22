@@ -1,6 +1,10 @@
 // TODO: Deal with assync pbs and read/not read notif.
-var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
-let uid = JSON.parse(localStorage.getItem("homeUserId"));
+if (!homeUser) {
+    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+}
+if (!uid) {
+    let uid = JSON.parse(localStorage.getItem("homeUserId"));
+}
 
 $(document).ready(function () {
     let numNotif = 0;
