@@ -13,6 +13,10 @@ $(document).ready(function () {
                 addReadedNotif(homeUser.notif[i].message);
             }
         }
+    } else {
+        homeUser.notif = new Notification("Welcome to the Badkan, this is your first notification.", false);
+        localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
+        writeUserData(homeUser, uid)
     }
     if (numNotif === 0) {
         $('#noti_Counter').hide();
@@ -70,15 +74,15 @@ $(document).ready(function () {
 });
 
 function addNonReadedNotif(message, index) {
-$('#addNotif').append("<h3> <button id=\"btnNotif\" type=\"button\" class=\"btn btn-link\" onclick=\"notifIsReaded(" + index + ")\">" 
-    + message + "</button></h3>");
+    $('#addNotif').append("<h3> <button id=\"btnNotif\" type=\"button\" class=\"btn btn-link\" onclick=\"notifIsReaded(" + index + ")\">" +
+        message + "</button></h3>");
 }
 
 function addReadedNotif(message) {
     $('#addNotif').append("<h3>" + message + "</h3>");
 }
 
-function notifIsReaded(index) {    
+function notifIsReaded(index) {
     homeUser.notif[index].read = true;
     localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
     writeUserData(homeUser, uid)
