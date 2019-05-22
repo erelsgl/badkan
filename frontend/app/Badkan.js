@@ -90,7 +90,7 @@ function dealWithFile(file) {
       backendPort = BACKEND_FILE_PORTS[Math.floor(Math.random() * BACKEND_FILE_PORTS.length)];
     var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
     xhr.open('POST', httpurl, true);
-    xhr.setRequestHeader('Accept-Language', firebase.auth().currentUser.uid,); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    xhr.setRequestHeader('Accept-Language', firebase.auth().currentUser.uid, ); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
     xhr.onreadystatechange = function () {
       if (this.readyState == 4) {
         // Create the json for submission
@@ -357,9 +357,11 @@ function uploadHomeUserGrade(grade) {
   exerciseSolved = new ExerciseSolved(grade, exerciseId);
   flag = true;
   for (i = 0; i < homeUser.exerciseSolved.length; i++) {
-    if (homeUser.exerciseSolved[i].exerciseId === exercise) {
-      homeUser.exerciseSolved[i] = exerciseSolved;
-      flag = false;
+    if (homeUser.exerciseSolved[i]) {
+      if (homeUser.exerciseSolved[i].exerciseId === selectedValue) {
+        homeUser.exerciseSolved[i] = exerciseSolved;
+        flag = false;
+      }
     }
   }
   if (flag) {
@@ -372,7 +374,7 @@ function uploadHomeUserGrade(grade) {
 /** In link with peer to peer */
 $("button#reclamationTest").click(() => {
   //  Next release: First we remove the last reclamation since only the last reclamation count.
-  var checkedBoxes = getCheckedBoxes("wrong");  // in util/utils.js
+  var checkedBoxes = getCheckedBoxes("wrong"); // in util/utils.js
   for (var i = 0; i < checkedBoxes.length; i++) {
     array_info = checkedBoxes[i].id.split("_");
     testId = array_info[0];
@@ -381,4 +383,3 @@ $("button#reclamationTest").click(() => {
     writeNewReclamationIds(firebase.auth().currentUser.uid, peerSolutionExercise, testId, functionName, functionContent)
   }
 })
-

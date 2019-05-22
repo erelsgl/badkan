@@ -264,8 +264,10 @@ function registered(key, course) {
           var homeUser = JSON.parse(localStorage.getItem('homeUserKey'));
           let grade = -1;
           for (var j = 0; j < homeUser.exerciseSolved.length; j++) {
-            if (homeUser.exerciseSolved[j].exerciseId === exerciseId) {
-              grade = homeUser.exerciseSolved[j].grade;
+            if (homeUser.exerciseSolved[j]) {
+              if (homeUser.exerciseSolved[j].exerciseId === exerciseId) {
+                grade = homeUser.exerciseSolved[j].grade;
+              }
             }
           }
           text_html += '<p>';
