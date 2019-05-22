@@ -12,11 +12,11 @@ $(document).ready(function () {
                     numNotif++;
                     addNonReadedNotif(notifHomeUser.notif[i].notifMessage, i);
                 } else {
-                    addReadedNotif(notifHomeUser.notif[i].notifMessage);
+                    addReadedNotif(notifHomeUser.notif[i].notifMessage, i);
                 }
             }
         } else {
-            notifHomeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false)];
+            notifHomeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")];
             localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
             writeUserData(notifHomeUser, notifUid)
         }
@@ -78,15 +78,21 @@ $(document).ready(function () {
 
 function addNonReadedNotif(message, index) {
     $('#addNotif').append("<h3> <button id=\"btnNotif\" type=\"button\" class=\"btn btn-link\" onclick=\"notifIsReaded(" + index + ")\">" +
-        message + "</button></h3>");
+        "<span class=\"glyphicon glyphicon-asterisk\" style=\"color:red\"></span>   " + message + "</button></h3>");
 }
 
-function addReadedNotif(message) {
-    $('#addNotif').append("<h3>" + message + "</h3>");
+function addReadedNotif(message, index) {
+    $('#addNotif').append("<h3> <button id=\"btnNotif\" type=\"button\" class=\"btn btn-link\" onclick=\"notifIsReaded(" + index + ")\">" +
+        message + "</button></h3>");
 }
 
 function notifIsReaded(index) {
     notifHomeUser.notif[index].notifRead = true;
     localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
-    writeUserData(notifHomeUser, notifUid)
+    writeUserDataWithoutComingHome(notifHomeUser, notifUid);
+    document.location.href = notifHomeUser.notif[index].action;
+}
+
+function notifIsClicked(index) {
+    document.location.href = notifHomeUser.notif[index].action;
 }
