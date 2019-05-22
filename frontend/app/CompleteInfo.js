@@ -11,7 +11,7 @@ document.getElementById("confirm").addEventListener('click', e => {
     var user = firebase.auth().currentUser;
     let exerciseSolved = new ExerciseSolved(90, "id");
     let peerExerciseSolved = new PeerGrade("id", 90, 90, "urlTest", "urlSolution");
-    let notif = new Notification("Welcome to the Badkan, this is your first notification.", false)
+    let notif = new MyNotification("Welcome to the Badkan, this is your first notification.", false)
     let checked = document.getElementById("admin").checked;
     if (checked) {
       var response = prompt("Please enter the password to get admin privilege:");

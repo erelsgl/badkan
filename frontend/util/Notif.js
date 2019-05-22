@@ -14,7 +14,7 @@ $(document).ready(function () {
             }
         }
     } else {
-        homeUser.notif = new Notification("Welcome to the Badkan, this is your first notification.", false);
+        homeUser.notif = new MyNotification("Welcome to the Badkan, this is your first notification.", false);
         localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
         writeUserData(homeUser, uid)
     }

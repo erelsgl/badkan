@@ -38,7 +38,7 @@ document.getElementById("confirm").addEventListener('click', e => {
       homeUser.peerExerciseSolved = [new PeerGrade("id", 90, 90, "urlTest", "urlSolution")];
     }
     if (!homeUser.notif) {
-      homeUser.notif = [new Notification("Welcome to the Badkan, this is your first notification.", false)];
+      homeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false)];
     }
     let newUser = new User(name, lastName, id, homeUser.email, homeUser.createdEx,
       homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved,
