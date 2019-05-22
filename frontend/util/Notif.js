@@ -3,6 +3,8 @@ var notifHomeUser = JSON.parse(localStorage.getItem("homeUserKey"));
 
 let notifUid = JSON.parse(localStorage.getItem("homeUserId"));
 
+console.log("here");
+console.log(notifHomeUser);
 
 $(document).ready(function () {
     let numNotif = 0;
