@@ -2,6 +2,7 @@ import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import db
 
+import datetime
 import re
 
 with open('../frontend/util/FirebaseConfig.js') as dataFile:
@@ -13,12 +14,23 @@ url = 'https://' + id.group(1) + '.firebaseio.com'
 cred = credentials.Certificate('../database_exports/private_key.json')
 firebase_admin.initialize_app(cred, {'databaseURL': url})
 
-# https://badkanlab.firebaseio.com/peerExercises/CGnS3FbQcVZaDMNMl4BZolViHWv1_24/peerExercise/deadlineConflicts
-def retreive_conflicts_deadline():
-    ref = db.reference('peerExercises/')
-    snapshot = ref.order_by_child('notworking').get()
-    for key, val in snapshot.items():
-        print('{0} was {1} meters tall'.format(key, val))
+def send_notif(user_id, exercise_id):
+    ref = db.reference('users/' + user_id + "/user/notif")
+    index = len(ref.get())
+    new_ref = db.reference('users/' + user_id + "/user/notif/" + str(index))
+    new_ref.set({
+        "action" : "viewPeerExercise.html?" + exercise_id,
+        "notifMessage" : "Your peer to peer exercise deadline is over.",
+        "notifRead": False
+    })
 
+def retreive_conflicts_deadline():
+    ref = db.reference('peerExercises/') 
+    for exercise in ref.get():
+        new_ref = db.reference('peerExercises/' + exercise + "/peerExercise/deadlineConflicts")
+        deadline = datetime.datetime.strptime(new_ref.get(), '%Y-%m-%d')
+        if datetime.datetime.now().date() == deadline.date():
+            user_ref = db.reference('peerExercises/' + exercise + "/peerExercise/ownerId")
+            send_notif(user_ref.get(), exercise)
 
 retreive_conflicts_deadline()

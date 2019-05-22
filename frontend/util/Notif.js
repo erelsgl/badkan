@@ -5,8 +5,11 @@ let notifUid = JSON.parse(localStorage.getItem("homeUserId"));
 
 $(document).ready(function () {
     let numNotif = 0;
+    console.log("here");
     if (notifHomeUser) {
+        console.log("here1");
         if (notifHomeUser.notif) {
+            console.log("here2");
             for (let i = 0; i < notifHomeUser.notif.length; i++) {
                 if (notifHomeUser.notif[i].action) {
                     if (!notifHomeUser.notif[i].notifRead) {
@@ -22,6 +25,11 @@ $(document).ready(function () {
                     writeUserDataWithoutComingHome(notifHomeUser, notifUid)
                 }
             }
+        }
+        else {
+            notifHomeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")];
+            localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
+            writeUserDataWithoutComingHome(notifHomeUser, notifUid)
         }
     } else {
         notifHomeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")];
