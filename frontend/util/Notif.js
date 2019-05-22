@@ -1,5 +1,6 @@
 // TODO: Deal with assync pbs and read/not read notif.
 var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+let uid = JSON.parse(localStorage.getItem("homeUserId"));
 
 $(document).ready(function () {
     let numNotif = 0;
@@ -7,11 +8,16 @@ $(document).ready(function () {
         for (let i = 0; i < homeUser.notif.length; i++) {
             if (!homeUser.notif[i].read) {
                 numNotif++;
-                addNonReadedNotif(homeUser.notif[i].message);
+                addNonReadedNotif(homeUser.notif[i].message, i);
             } else {
                 addReadedNotif(homeUser.notif[i].message);
             }
         }
+    }
+    if (numNotif === 0) {
+        $('#noti_Counter').hide();
+    } else {
+        $('#noti_Counter').show();
     }
     // ANIMATEDLY DISPLAY THE NOTIFICATION COUNTER.
     $('#noti_Counter')
@@ -63,10 +69,17 @@ $(document).ready(function () {
     });
 });
 
-function addNonReadedNotif(message) {
-    $('#addNotif').append("<h3>" + message + "</h3>");
+function addNonReadedNotif(message, index) {
+$('#addNotif').append("<h3> <button id=\"btnNotif\" type=\"button\" class=\"btn btn-link\" onclick=\"notifIsReaded(" + index + ")\">" 
+    + message + "</button></h3>");
 }
 
 function addReadedNotif(message) {
-    $('#addNotif').append("<div style='color:#666'>" + message);
+    $('#addNotif').append("<h3>" + message + "</h3>");
+}
+
+function notifIsReaded(index) {    
+    homeUser.notif[index].read = true;
+    localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
+    writeUserData(homeUser, uid)
 }
