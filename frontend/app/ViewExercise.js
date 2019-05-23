@@ -125,7 +125,7 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
         return;
     }
 
-    let submissionZip = new Submission(githubZip, zipZip, gitlabZip);
+    let submissionZip = new ViaSubmission(githubZip, zipZip, gitlabZip);
 
 
     if (checkEmptyFields(name, descr, compiler)) {
@@ -156,7 +156,7 @@ document.getElementById("btnEdit").addEventListener('click', e => {
         return;
     }
 
-    let submissionGitHub = new Submission(githubGitHub, zipGitHub, gitlabGitHub);
+    let submissionGitHub = new ViaSubmission(githubGitHub, zipGitHub, gitlabGitHub);
 
     if (checkEmptyFields(name, descr, compiler)) {
         var pdf = document.getElementById('instructionGIT').files[0];

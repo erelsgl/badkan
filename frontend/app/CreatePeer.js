@@ -79,7 +79,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
         alert("Please check at least one submission option.");
         return;
     }
-    let submission = new Submission(github, zip, gitlab);
+    let submission = new ViaSubmission(github, zip, gitlab);
 
     let minTest = escapeHtml(document.getElementById("minTest").value);
 

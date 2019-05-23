@@ -27,7 +27,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
     return;
   }
 
-  let submission = new Submission(github, zip, gitlab);
+  let submission = new ViaSubmission(github, zip, gitlab);
 
   const date = document.getElementById("deadline").value;
   let penalities = [];

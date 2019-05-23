@@ -273,9 +273,9 @@ $("button#clear_and_submit").click(() => {
  * @param {String} giturl 
  */
 function uploadGrade(grade, giturl) {
-  console.log(giturl)
   const collab1Id = document.getElementById("collab1").value;
   const collab2Id = document.getElementById("collab2").value;
+  
   if (collab1Id != "" && collab2Id != "") {
     loadCollabById(collab1Id, grade);
     loadCollabById(collab2Id, grade);
