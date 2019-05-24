@@ -6,7 +6,6 @@ AUTHOR: Erel Segal-Halevi
 SINCE: 2019-03
 """
 
-
 import websockets
 import asyncio
 import os
@@ -349,18 +348,18 @@ async def check_solution_peer_submission(websocket: object, submission: dict):
             if line == ":test" or flag_test_division:
                 flag_test_division = True
                 if next_line:
-                    
+
                     next_line = False
                     info = line[line.find("at") + 3:]
                     splited = info.split(":")
-                    proc = await docker_command(["exec", "-w", "/" + repository_folder 
-                    + "/src/test/java", "badkan", "bash", "-c", "cat < \"" + splited[0] + "\""])
+                    proc = await docker_command(["exec", "-w", "/" + repository_folder
+                                                 + "/src/test/java", "badkan", "bash", "-c", "cat < \"" + splited[0] + "\""])
                     new_file = ""
                     async for test_line in proc.stdout:
                         test_line = test_line.decode('utf-8').strip()
-                        new_file = new_file + "\n" +  test_line   
+                        new_file = new_file + "\n" + test_line
                     test_case = extract_test(new_file, splited[1])
-                    await tee(websocket, test_case)      
+                    await tee(websocket, test_case)
                     array_test.append(test_case)
                 if "FAILED" in line:
                     next_line = True
