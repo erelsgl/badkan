@@ -1,3 +1,5 @@
+""" This file includes algorithms thay we may want to use for the peer to peer grading. """ 
+
 def partition(lambda_param, num_student):
     """
     lambda_param: the number must be between 0 and 1.

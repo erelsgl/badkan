@@ -31,7 +31,7 @@ class MyHandler(BaseHTTPRequestHandler):
         if self.headers['Accept'] == 'create':
             shellscript = subprocess.Popen(['bash','create-ex.sh', filename], stdout=subprocess.PIPE)
         elif self.headers['Accept'] == 'create-template':
-            shellscript = subprocess.Popen(['bash','create-ex-template.sh', filename], stdout=subprocess.PIPE)
+            shellscript = subprocess.Popen(['bash','bash/create-ex-template.sh', filename], stdout=subprocess.PIPE)
         else:
             shellscript = subprocess.Popen(['bash','solve-ex.sh', filename], stdout=subprocess.PIPE)
         self.send_response(200)
