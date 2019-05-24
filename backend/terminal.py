@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 Utility functions: clone git repository, pull git repository, remove path
 """
@@ -7,7 +5,6 @@ Utility functions: clone git repository, pull git repository, remove path
 import subprocess
 from subprocess import call
 import os
-
 
 def git_clone(path, url, folder_name, username, password, exercise):
     """
@@ -30,7 +27,6 @@ def git_clone(path, url, folder_name, username, password, exercise):
         ['bash', 'bash/git-clean.sh', folder_name, exercise], stdout=subprocess.PIPE)
     shellscript.wait()
 
-
 def git_pull(path, folder_name, ex_folder):
     """
     :param path: the path to clone the repo.
@@ -45,7 +41,6 @@ def git_pull(path, folder_name, ex_folder):
         ['bash', 'bash/git-clean.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
     shellscript.wait()
 
-
 def rmv(path, folder_name):
     """
     :param path: the path to delete the repo.
@@ -55,32 +50,3 @@ def rmv(path, folder_name):
     os.chdir(path)
     os.system("rm -r " + folder_name)
     os.chdir(owd)
-
-
-def extract_test(str_file, line_num):
-    """
-    :param str_file: string of the test file with the failed test.
-    :param line_num: line number of the failed test.
-    """
-    index = int(line_num) - 2 #line_num to index
-    lines = str_file.splitlines(True)
-    brackets_stack = []
-    res = ""
-    while not brackets_stack and index+1 < len(lines):
-        res += lines[index]
-        if "{" in lines[index]:
-            brackets_stack.append("{")
-        else:
-            index+=1
-    if "}" in lines[index]:
-        return res
-    
-    while brackets_stack and index+1 < len(lines):
-        index+=1
-        res += lines[index]
-        if "{" in lines[index]:
-            brackets_stack.append("{")
-        if "}" in lines[index]:
-            brackets_stack.pop()
-
-    return res        

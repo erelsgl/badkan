@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 A server for submission and checking of exercises.
 AUTHOR: Erel Segal-Halevi
@@ -15,8 +13,7 @@ import sys
 import datetime
 
 from terminal import *
-from csv_trace import edit_csv
-from csv_summary import edit_csv_summary
+from util import *
 import datetime
 from multiprocessing import Process
 
@@ -146,7 +143,7 @@ async def check_private_submission(websocket: object, submission: dict):
     name = submission["name"]
     owner_firebase_id = submission["owner_firebase_id"]
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), solution, ids, "START", name)
+    edit_csv_trace(str(currentDT), solution, ids, "START", name)
 
     if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
@@ -178,7 +175,7 @@ async def check_private_submission(websocket: object, submission: dict):
 
     # Log the start of the submission:
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), solution, ids, "START", name)
+    edit_csv_trace(str(currentDT), solution, ids, "START", name)
 
     # Clone or pull the student's submission from github to the docker container "badkan":
     proc = await docker_command(["exec", "badkan", "bash", "get-private-submission.sh", username, repository, owner_firebase_id, exercise, tokenUsername, tokenPassword])
@@ -214,7 +211,7 @@ async def check_test_peer_submission(websocket: object, submission: dict):
     signature_map = submission["signature_map"]
 
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), "Zip", country_id, "START", exercise_name)
+    edit_csv_trace(str(currentDT), "Zip", country_id, "START", exercise_name)
 
     repository_folder = "/submissions/{}/{}".format(
         owner_firebase_id, exercise_id)
@@ -387,7 +384,7 @@ async def check_submission(websocket: object, submission: dict):
     name = submission["name"]
     owner_firebase_id = submission["owner_firebase_id"]
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), solution, ids, "START", name)
+    edit_csv_trace(str(currentDT), solution, ids, "START", name)
 
     if not os.path.isdir(EXERCISE_DIR + "/" + exercise):
         await tee(websocket, "exercise '{}' not found".format(EXERCISE_DIR + "/" + exercise))
@@ -465,9 +462,9 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
     # This line is read at app/Badkan.js, in websocket.onmessage.
 
     currentDT = datetime.datetime.now()
-    edit_csv(str(currentDT), solution, ids, grade, name)
+    edit_csv_trace(str(currentDT), solution, ids, grade, name)
     # name, last_name, student_id, output, exercice_name
-    edit_csv_summary(submission["student_name"],
+    edit_csv_trace(submission["student_name"],
                      submission["student_last_name"], ids, output, exercise)
 
 
