@@ -6,5 +6,5 @@ cd $DIR/..
 
 sudo chmod +x grade # Check what's happen here.
 
-mv grade $DIR/../exercises/$FOLDERNAME/
+mv grade $DIR/../../exercises/$FOLDERNAME/
 
