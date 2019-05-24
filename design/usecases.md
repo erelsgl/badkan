@@ -8,7 +8,7 @@ This document explains what happens in the system during simple and complex scen
 
 ## Team submission
 
-..
+...
 
 ## Team breaks during an exercise
 
