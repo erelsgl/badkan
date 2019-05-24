@@ -275,7 +275,7 @@ $("button#clear_and_submit").click(() => {
 function uploadGrade(grade, giturl) {
   const collab1Id = document.getElementById("collab1").value;
   const collab2Id = document.getElementById("collab2").value;
-  
+  console.log("here");
   if (collab1Id != "" && collab2Id != "") {
     loadCollabById(collab1Id, grade);
     loadCollabById(collab2Id, grade);
@@ -358,7 +358,7 @@ function uploadHomeUserGrade(grade) {
   flag = true;
   for (i = 0; i < homeUser.exerciseSolved.length; i++) {
     if (homeUser.exerciseSolved[i]) {
-      if (homeUser.exerciseSolved[i].exerciseId === selectedValue) {
+      if (homeUser.exerciseSolved[i].exerciseId === exerciseId) {
         homeUser.exerciseSolved[i] = exerciseSolved;
         flag = false;
       }
