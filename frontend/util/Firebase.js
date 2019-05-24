@@ -56,6 +56,7 @@ function writeUserDataWithoutComingHome(user, userId) {
   database.ref("users/" + userId).set({
     user
   });
+  localStorage.setItem("homeUserKey", JSON.stringify(user));
 }
 
 /**
@@ -73,8 +74,6 @@ function writeExercise(exercise, exerciseId) {
 }
 
 function writePeerExercise(peerExercise, peerExerciseId) {
-  console.log(peerExercise)
-  console.log(peerExerciseId)
   firebase.database().ref("peerExercises/" + peerExerciseId).set({
     peerExercise
   });
