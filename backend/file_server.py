@@ -29,11 +29,11 @@ class MyHandler(BaseHTTPRequestHandler):
         f.write(contents)   
         f.close()
         if self.headers['Accept'] == 'create':
-            shellscript = subprocess.Popen(['bash','create-ex.sh', filename], stdout=subprocess.PIPE)
+            shellscript = subprocess.Popen(['bash','bash/create-ex.sh', filename], stdout=subprocess.PIPE)
         elif self.headers['Accept'] == 'create-template':
             shellscript = subprocess.Popen(['bash','bash/create-ex-template.sh', filename], stdout=subprocess.PIPE)
         else:
-            shellscript = subprocess.Popen(['bash','solve-ex.sh', filename], stdout=subprocess.PIPE)
+            shellscript = subprocess.Popen(['bash','bash/solve-ex.sh', filename], stdout=subprocess.PIPE)
         self.send_response(200)
 
     def do_GET(self):
@@ -43,12 +43,12 @@ class MyHandler(BaseHTTPRequestHandler):
         if self.headers['Accept'] == 'dlProject':
             print("debug")
             x = path.split("/")
-            shellscript = subprocess.Popen(['bash','dl-project.sh', x[1], x[0]], stdout=subprocess.PIPE)
+            shellscript = subprocess.Popen(['bash','bash/dl-project.sh', x[1], x[0]], stdout=subprocess.PIPE)
             shellscript.wait()
             zip_file = open(x[0] + ".zip", 'rb')
             self.wfile.write(zip_file.read())
 
-            shellscript = subprocess.Popen(['bash','rm-file.sh', x[0]], stdout=subprocess.PIPE)
+            shellscript = subprocess.Popen(['bash','bash/rm-file.sh', x[0]], stdout=subprocess.PIPE)
 
         elif self.headers['Accept'] == 'dlSummary':
             exercice_name = self.headers['Accept-Language']
@@ -60,12 +60,12 @@ class MyHandler(BaseHTTPRequestHandler):
             x = path.split("@$@")
             exo = x[0]
             informations = x[1].replace("-", " ")
-            shellscript = subprocess.Popen(['bash','dl-all-projects.sh', exo, informations], stdout=subprocess.PIPE)
+            shellscript = subprocess.Popen(['bash','bash/dl-all-projects.sh', exo, informations], stdout=subprocess.PIPE)
             shellscript.wait()
             zip_file = open(exo + ".zip", 'rb')
             self.wfile.write(zip_file.read())
 
-            shellscript = subprocess.Popen(['bash','rm-file.sh', exo], stdout=subprocess.PIPE)
+            shellscript = subprocess.Popen(['bash','bash/rm-file.sh', exo], stdout=subprocess.PIPE)
 
     def _set_headers(self):
         self.send_response(200)

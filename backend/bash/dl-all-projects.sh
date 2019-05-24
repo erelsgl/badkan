@@ -3,7 +3,7 @@ export INFO=$2 # INFO is an array like "user_id/username"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-cd $DIR
+cd $DIR/..
 
 for val in $INFO; do
 
@@ -25,4 +25,3 @@ done
 zip -r $EXID.zip $EXID
 rm -r $EXID
 
-done

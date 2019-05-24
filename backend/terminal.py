@@ -27,7 +27,7 @@ def git_clone(path, url, folder_name, username, password, exercise):
     os.system("ls | grep -v " + exercise + " | xargs rm -r")
     os.chdir(owd)
     shellscript = subprocess.Popen(
-        ['bash', 'git-clean.sh', folder_name, exercise], stdout=subprocess.PIPE)
+        ['bash', 'bash/git-clean.sh', folder_name, exercise], stdout=subprocess.PIPE)
     shellscript.wait()
 
 
@@ -39,10 +39,10 @@ def git_pull(path, folder_name, ex_folder):
     :param ex_folder: the name of the folder of the solved exercise.
     """
     shellscript = subprocess.Popen(
-        ['bash', 'git-pull.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
+        ['bash', 'bash/git-pull.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
     shellscript.wait()
     shellscript = subprocess.Popen(
-        ['bash', 'git-clean.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
+        ['bash', 'bash/git-clean.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
     shellscript.wait()
 
 
