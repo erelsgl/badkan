@@ -279,7 +279,7 @@ $('body').on('click', '#download', function (e) {
     }
     let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
     var encodedUri = encodeURI(csvContent);
-    window.open(encodedUri);
+    window.open(encodedUri, 'grades.csv');
 });
 
 /**

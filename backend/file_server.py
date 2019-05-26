@@ -16,6 +16,8 @@ PORT_NUMBER = int(sys.argv[1]) if len(sys.argv)>=2 else 9000   # TODO: Where is 
 class MyHandler(BaseHTTPRequestHandler):
 
     def do_POST(self):
+        print(self.headers)
+        self._set_headers()
         filename = self.headers['Accept-Language']
         filesize = int(self.headers['Content-Length'])
         contents = self.rfile.read(filesize)
@@ -44,7 +46,64 @@ class MyHandler(BaseHTTPRequestHandler):
             shellscript = subprocess.Popen(['bash','bash/solve-ex.sh', filename], stdout=subprocess.PIPE)
         self.send_response(200)
 
+    def do_OPTIONS(self):   
+        print(self.headers)
+        self._set_headers()
+        if self.headers['Access-Control-Request-Method'] == 'GET':
+            path = self.headers['Accept-Language']
+            if self.headers['Accept'] == 'dlProject':
+                print("debug")
+                x = path.split("/")
+                shellscript = subprocess.Popen(['bash','bash/dl-project.sh', x[1], x[0]], stdout=subprocess.PIPE)
+                shellscript.wait()
+                zip_file = open(x[0] + ".zip", 'rb')
+                self.wfile.write(zip_file.read())
+                shellscript = subprocess.Popen(['bash','bash/rm-file.sh', x[0]], stdout=subprocess.PIPE)
+            elif self.headers['Accept'] == 'dlSummary':
+                exercice_name = self.headers['Accept-Language']
+                if os.path.exists('../statistics/' + exercice_name + '/summary.csv'):
+                    csv_file = open('../statistics/' + exercice_name + '/summary.csv', 'rb')
+                    self.wfile.write(csv_file.read())
+            else:
+                x = path.split("@$@")
+                exo = x[0]
+                informations = x[1].replace("-", " ")
+                shellscript = subprocess.Popen(['bash','bash/dl-all-projects.sh', exo, informations], stdout=subprocess.PIPE)
+                shellscript.wait()
+                zip_file = open(exo + ".zip", 'rb')
+                self.wfile.write(zip_file.read())
+                shellscript = subprocess.Popen(['bash','bash/rm-file.sh', exo], stdout=subprocess.PIPE) 
+        else:
+            filename = self.headers['Accept-Language']
+            filesize = int(self.headers['Content-Length'])
+            contents = self.rfile.read(filesize)
+            if self.headers['Accept'] == 'grade':
+                f = open("grade", 'w+b')
+                f.write(contents)   
+                f.close()
+                self.send_response(200)
+                return
+            elif self.headers['Accept'] == 'grade_cp':
+                print("DEBUG")
+                f = open("grade", 'w+b')
+                f.write(contents)   
+                f.close()
+                self.send_response(200)
+                shellscript = subprocess.Popen(['bash','bash/cp-grade.sh', filename], stdout=subprocess.PIPE)
+                return
+            f = open(filename, 'w+b')
+            f.write(contents)   
+            f.close()
+            if self.headers['Accept'] == 'create':
+                shellscript = subprocess.Popen(['bash','bash/create-ex.sh', filename], stdout=subprocess.PIPE)
+            elif self.headers['Accept'] == 'create-template':
+                shellscript = subprocess.Popen(['bash','bash/create-ex-template.sh', filename], stdout=subprocess.PIPE)
+            else:
+                shellscript = subprocess.Popen(['bash','bash/solve-ex.sh', filename], stdout=subprocess.PIPE)
+            self.send_response(200)
+
     def do_GET(self):
+        print(self.headers)
         self._set_headers()
         path = self.headers['Accept-Language']
 
@@ -82,6 +141,7 @@ class MyHandler(BaseHTTPRequestHandler):
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type,Authorization')
         self.send_header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE')
+        self.send_header('Access-Control-Allow-Headers', 'Accept-Language')
         self.end_headers()
 
     def do_HEAD(self):

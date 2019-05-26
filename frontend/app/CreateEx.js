@@ -156,7 +156,7 @@ function sendFileHTTP(file, folderName) {
   var reader = new FileReader();
   reader.readAsArrayBuffer(file);
   var rawData = new ArrayBuffer();
-  reader.loadend = function () {}
+  reader.loadend = function () { }
   reader.onload = function (e) {
     rawData = e.target.result;
     // create the request
@@ -175,7 +175,6 @@ function sendFileHTTP(file, folderName) {
     xhr.onreadystatechange = function () {
       if (this.readyState == 4) {
         onFinish();
-        console.log("success");
       }
     };
     xhr.send(rawData);
