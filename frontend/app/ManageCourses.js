@@ -277,9 +277,15 @@ $('body').on('click', '#download', function (e) {
             }
         }
     }
+    var link = document.createElement('a');
+    link.download = 'grades.csv';
     let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
     var encodedUri = encodeURI(csvContent);
-    window.open(encodedUri, 'grades.csv');
+    link.href = encodedUri
+    link.click();
+    if (!navigator.userAgent.includes("Chrome")) {
+        window.open(encodedUri, 'grades.csv');
+    }
 });
 
 /**
