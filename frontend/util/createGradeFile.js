@@ -119,7 +119,6 @@ function sendFile(file, exerciseFoldername) {
         xhr.setRequestHeader('Accept-Language', exerciseFoldername); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
         if (flagCp) {
             xhr.setRequestHeader('Accept', 'grade_cp'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
-            console.log("cp")
         } else {
             xhr.setRequestHeader('Accept', 'grade'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
         }

@@ -25,7 +25,7 @@ class MyHandler(BaseHTTPRequestHandler):
             f.close()
             self.send_response(200)
             return
-        elif self.headers['Accept'] == 'grade-cp':
+        elif self.headers['Accept'] == 'grade_cp':
             print("DEBUG")
             f = open("grade", 'w+b')
             f.write(contents)   
