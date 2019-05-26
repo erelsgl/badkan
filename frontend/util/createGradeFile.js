@@ -76,7 +76,7 @@ function makeGradeWithoutCoef(compiler, numTest, input, output, main, exerciseFo
                     grade += "EXPECTED=`cat " + "output-" + i + ".txt` \n"
                 }
                 grade += "echo output: $OUTPUT \n"
-                grade += "if [ \"$OUTPUT\" == \"$EXPECTED\" ]; then \n";
+                grade += "if [ \"$(echo \"$OUTPUT\" | tr -d '[:space:]')\" = \"$(echo \"$EXPECTED\" | tr -d '[:space:]')\" ]; then"
                 grade += "let sum++ \n"
                 grade += "fi \n \n"
                 break;
