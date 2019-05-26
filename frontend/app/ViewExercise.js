@@ -109,6 +109,9 @@ $('body').on('click', '#exercise', function (e) {
     document.location.href = "manageExercise.html?exerciseId=" + exerciseId;
 });
 
+/**
+ * BUTTON CNFIRM (SAVE CHANGES).
+ */
 document.getElementById("btnEditZip").addEventListener('click', e => {
     const name = escapeHtml(document.getElementById("exNameZip").value);
     const descr = escapeHtml(document.getElementById("exDescrZip").value);
@@ -139,7 +142,7 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
 });
 
 /**
- * BUTTON CONFIRM (SAVE CHANGES).
+ * BUTTON CNFIRM (SAVE CHANGES).
  */
 document.getElementById("btnEdit").addEventListener('click', e => {
     const name = escapeHtml(document.getElementById("exName").value);
