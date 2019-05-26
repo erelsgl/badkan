@@ -110,7 +110,7 @@ $('body').on('click', '#exercise', function (e) {
 });
 
 /**
- * BUTTON CNFIRM (SAVE CHANGES).
+ * BUTTON CONFIRM (SAVE CHANGES). ZIP
  */
 document.getElementById("btnEditZip").addEventListener('click', e => {
     const name = escapeHtml(document.getElementById("exNameZip").value);
@@ -142,7 +142,7 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
 });
 
 /**
- * BUTTON CNFIRM (SAVE CHANGES).
+ * BUTTON CONFIRM (SAVE CHANGES). GITHUB
  */
 document.getElementById("btnEdit").addEventListener('click', e => {
     const name = escapeHtml(document.getElementById("exName").value);
@@ -207,6 +207,9 @@ function uploadExerciseFile(name, descr, file, compiler, submissionZip) {
     let ex = new Exercise(name, descr, exercise.example, user.uid, 'zip', "", exercise.grades, exercise.deadline, compiler, submissionZip);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
+    if(isGrade() && !file) {
+        flagCp = true;
+    }
     checkGrade(exerciseId);
 }
 /**

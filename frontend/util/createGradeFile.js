@@ -2,6 +2,7 @@ var grade = ""
 
 var BACKEND_FILE_PORTS = [9000];
 
+var flagCp = false;
 
 function createGrade(exerciseFoldername) {
     grade = "#!/bin/bash \n"
@@ -36,11 +37,11 @@ function compiling(compiler) {
             grade += "echo \"javac *.java\" \n";
             grade += "javac *.java \n \n";
             break;
-            // case "c++":
-            //     grade += "echo \"make\" \n";
-            //     grade += "make \n \n";
-            //     break;
-            // Python...
+        // case "c++":
+        //     grade += "echo \"make\" \n";
+        //     grade += "make \n \n";
+        //     break;
+        // Python...
         default:
     }
 }
@@ -80,12 +81,12 @@ function makeGradeWithoutCoef(compiler, numTest, input, output, main, exerciseFo
                 grade += "fi \n \n"
                 break;
 
-                // case "c++":
-                //     grade += "echo \"./" + main + ".out \" \n";
-                //     grade += "./" + main + ".out \n";
-                //     break;
+            // case "c++":
+            //     grade += "echo \"./" + main + ".out \" \n";
+            //     grade += "./" + main + ".out \n";
+            //     break;
 
-                // Python...
+            // Python...
             default:
         }
     }
@@ -105,7 +106,7 @@ function sendFile(file, exerciseFoldername) {
     var reader = new FileReader();
     reader.readAsArrayBuffer(file);
     var rawData = new ArrayBuffer();
-    reader.loadend = function () {}
+    reader.loadend = function () { }
     reader.onload = function (e) {
         rawData = e.target.result;
         // create the request
@@ -116,7 +117,11 @@ function sendFile(file, exerciseFoldername) {
         var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
         xhr.open('POST', httpurl, true);
         xhr.setRequestHeader('Accept-Language', exerciseFoldername); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
-        xhr.setRequestHeader('Accept', 'grade'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+        if (flagCp) {
+            xhr.setRequestHeader('Accept', 'grade_cp'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+        } else {
+            xhr.setRequestHeader('Accept', 'grade'); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+        }
         xhr.onreadystatechange = function () {
             if (this.readyState == 4) {
                 // success

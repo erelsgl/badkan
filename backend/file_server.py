@@ -25,6 +25,13 @@ class MyHandler(BaseHTTPRequestHandler):
             f.close()
             self.send_response(200)
             return
+        elif  if self.headers['Accept'] == 'grade-cp':
+            f = open("grade", 'w+b')
+            f.write(contents)   
+            f.close()
+            self.send_response(200)
+            shellscript = subprocess.Popen(['bash','bash/cp-grade.sh', filename], stdout=subprocess.PIPE)
+            return
         f = open(filename, 'w+b')
         f.write(contents)   
         f.close()
