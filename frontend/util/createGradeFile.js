@@ -92,7 +92,7 @@ function makeGradeWithoutCoef(compiler, numTest, input, output, main, exerciseFo
     }
     grade += "let \"wrong = total - sum\" \n"
     grade += "echo \"Correct: $sum, Wrong: $wrong\" \n"
-    grade += "let \"grade = total / 100 * sum\" \n"
+    grade += "let \"grade = 100 / total * sum\" \n"
     grade += "echo \"*** Grade: $grade% ***\""
 
     //download(grade, "grade", "")
