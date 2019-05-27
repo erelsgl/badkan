@@ -11,19 +11,15 @@ class Deadline {
      * Return the number of fewer point.
      */
 function isPenalized(deadline) {
-    console.log(deadline)
     var currentTime = new Date();
     var finalDate = new Date(deadline.date);
     currentTime.setHours(0, 0, 0, 0)
     finalDate.setHours(0, 0, 0, 0)
-    console.log(currentTime)
-    console.log(finalDate)
     let sumPoint = 0;
     for (var i = 0; currentTime > finalDate && i < deadline.penalities.length; i++) {
         sumPoint += parseInt(deadline.penalities[i].point)
         finalDate.setDate(finalDate.getDate() + parseInt(deadline.penalities[i].late));
     }
-    console.log(sumPoint)
     return sumPoint;
 }
 

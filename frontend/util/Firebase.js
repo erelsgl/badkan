@@ -177,9 +177,9 @@ function loadCurrentUser(userId) {
         "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
         "ID number: " + homeUser.id + "<br />" +
         "Email: " + homeUser.email + "<br />";
-        if (homeUser.admin) {
-          document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
-        }
+      if (homeUser.admin) {
+        document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
+      }
       loading("div1");
       loading("loading");
       if (homeUser.admin) {
@@ -191,56 +191,40 @@ function loadCurrentUser(userId) {
   });
 }
 
-/**
- * This function load the collab.
- * @param {int} userId 342533064
- * @param {grade} grade
- */
-function loadCollabById(userId, grade) {
-  database.ref('/users/').orderByChild("/user/id").equalTo(userId).once('value').then(function (snapshot) {
-    snapshot.forEach(function (child) {
-      let uid = child.key;
-      database.ref('/users/' + uid).once('value').then(function (snapshot) {
-        let collab1 = snapshot.val().user;
-        uploadCollabGrade(grade, collab1, uid);
-      });
-    });
-  });
-}
-
-/**
- * This method download any user by is country id.
- * @param {int} id 
- * @param {String} giturl 
- */
-function loadUidById(id, giturl) {
-  database.ref('/users/').orderByChild("/user/id").equalTo(id).once('value').then(function (snapshot) {
-    snapshot.forEach(function (child) {
-      let uid = child.key;
-      uploadGradeWithOneCollab(grade, uid, giturl)
-    });
-  });
-}
-
-/**
- * This method download two users by their country ids.
- * @param {int} id1 
- * @param {int} id2 
- * @param {String} giturl 
- */
-function loadUidByIds(id1, id2, giturl) {
-  database.ref('/users/').orderByChild("/user/id").equalTo(id1).once('value').then(function (snapshot) {
-    snapshot.forEach(function (child) {
-      let uid1 = child.key;
-      database.ref('/users/').orderByChild("/user/id").equalTo(id2).once('value').then(function (snapshot) {
+function uploadGrade(homeUserId, collab1Id, collab2Id, createSubmission) {
+  let collaboratorsId = [homeUserId]
+  if (collab1Id != "") {
+    collaboratorsId.push(collab1Id)
+  }
+  if (collab2Id != "") {
+    collaboratorsId.push(collab2Id)
+  }
+  let collaboratorsUid = []
+  for (let i = 0; i < collaboratorsId.length; i++) {
+    let id = collaboratorsId[i];
+    if (id != "") {
+      database.ref('/users/').orderByChild("/user/id").equalTo(id).once('value').then(function (snapshot) {
+        if (snapshot.val() == null) {
+          alert("Please check the collaborator's ids");
+          return;
+        }
         snapshot.forEach(function (child) {
-          let uid2 = child.key;
-          uploadGradeWithTwoCollab(grade, uid1, uid2, giturl);
+          collaboratorsUid.push(child.key);
+          if (collaboratorsId.length == collaboratorsUid.length) {
+            createSubmission(collaboratorsId, collaboratorsUid);
+          }
         });
       });
-    });
-  });
+    }
+  }
 }
+
+function writeSubmission(submission, submissionId) {
+  database.ref("submissions/" + submissionId).set({
+    submission
+  })
+}
+
 
 /**
  * This function load all the exercise the current user create.
@@ -385,9 +369,6 @@ function loadUsersOfCourse(course, onUser, i, courses_length) {
     if (current_student != "dummyStudentId") {
       database.ref().child('users/' + current_student).once('value').then(
         function (snapshot) {
-          console.log("key=" + snapshot.key + " user=" + snapshot.val().user)
-          console.log("i" + i);
-          console.log("courses_length" + courses_length);
           onUser(snapshot.key, snapshot.val().user, i, courses_length)
         }
       )
@@ -457,7 +438,7 @@ function checkIfIdExist(exercise, id) {
 
 function writeNewReclamationIds(id, peerSolutionExercise, testId, functionName, functionContent) {
   database.ref('/conflicts/' + peerSolutionExercise + "/" + testId + "/" + functionName + "/" + "about").set({
-    "content": functionContent 
+    "content": functionContent
   })
   database.ref('/conflicts/' + peerSolutionExercise + "/" + testId + "/" + functionName + "/ids/" + id).set({
     "reclam": "true"
@@ -486,3 +467,4 @@ function changeReclamation(uid, exerciseId, functionName) {
     "deprecated": "true"
   }).then(document.location.href = "conflicts.html?exercise=" + exerciseId);
 }
+
