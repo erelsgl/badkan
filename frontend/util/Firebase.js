@@ -177,6 +177,9 @@ function loadCurrentUser(userId) {
         "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
         "ID number: " + homeUser.id + "<br />" +
         "Email: " + homeUser.email + "<br />";
+        if (homeUser.admin) {
+          document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
+        }
       loading("div1");
       loading("loading");
       if (homeUser.admin) {

@@ -66,6 +66,16 @@ document.getElementById("exFolder").defaultValue = exercise.exFolder
 document.getElementById("link").readOnly = true
 document.getElementById("exFolder").readOnly = true
 
+if (exercise.deadline) {
+    document.getElementById("deadline").defaultValue = exercise.deadline.date
+    if (exercise.deadline.penalities) {
+        for (let i = 0; i < exercise.deadline.penalities.length; i++) {
+            document.getElementById("penalityLate" + (i+1)).defaultValue = exercise.deadline.penalities[i].late
+            document.getElementById("penalityGrade" + (i+1)).defaultValue = exercise.deadline.penalities[i].point
+        }
+    }
+}
+
 if (exercise.link == 'zip') {
     document.getElementById("git").style.display = "none";
     document.getElementById("zip").style.display = "block";
@@ -122,6 +132,18 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
     let zipZip = document.getElementById("zipZip").checked;
     let gitlabZip = document.getElementById("gitlabZip").checked;
 
+    const date = document.getElementById("deadline").value;
+    let penalities = [];
+    for (var i = 1; i < 7; i++) {
+      if (document.getElementById("penalityLate" + i).value) {
+        let late = document.getElementById("penalityLate" + i).value;
+        let point = document.getElementById("penalityGrade" + i).value;
+        penalities.push(new Penality(late, point));
+      }
+    }
+  
+    let deadline = new Deadline(date, penalities);
+
     // Here we first check that the user at least check one of the parameter.
     if (!githubZip && !zipZip && !gitlabZip) {
         alert("Please check at least one submission option.");
@@ -136,7 +158,7 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
         if (pdf) {
             exercise.example = "PDF"
         }
-        uploadExerciseFile(name, descr, file, compiler, submissionZip);
+        uploadExerciseFile(name, descr, file, deadline, compiler, submissionZip);
         editPdf(pdf);
     }
 });
@@ -198,13 +220,13 @@ function uploadExercise(name, descr, compiler, submissionGitHub) {
     writeExercise(ex, exerciseId);
 }
 
-function uploadExerciseFile(name, descr, file, compiler, submissionZip) {
+function uploadExerciseFile(name, descr, file, deadline, compiler, submissionZip) {
     // The ref of the folder must be PK.
     var user = firebase.auth().currentUser;
     if (file) {
         sendFileHTTP(exerciseId, file);
     }
-    let ex = new Exercise(name, descr, exercise.example, user.uid, 'zip', "", exercise.grades, exercise.deadline, compiler, submissionZip);
+    let ex = new Exercise(name, descr, exercise.example, user.uid, 'zip', "", exercise.grades, deadline, compiler, submissionZip);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
     if(isGrade() && !file) {
@@ -519,3 +541,24 @@ function sendWebsocket(json) {
         logServer("color:red", "Error in websocket.");
     }
 }
+
+
+function showTemplateEdit() {
+    document.getElementById('accordion2').style.display = "block";
+  }
+  
+  
+  function hideTemplateEdit() {
+    document.getElementById('accordion2').style.display = "none";
+  }
+
+  document.getElementById("morePenalities").addEventListener('click', e => {
+    if (document.getElementById("3-4").style.display === 'block') {
+      document.getElementById("3-4").style.display = 'none';
+      document.getElementById("5-6").style.display = 'none';
+    } else {
+      document.getElementById("3-4").style.display = 'block';
+      document.getElementById("5-6").style.display = 'block';
+    }
+  });
+  

@@ -282,3 +282,16 @@ function isGrade() {
     return false;
   }
 }
+
+function showTemplate() {
+  document.getElementById('accordion').style.display = "block";
+}
+
+
+function hideTemplate() {
+  document.getElementById('accordion').style.display = "none";
+}
+
+function onZip() {
+  document.getElementById('use').checked = true;
+}

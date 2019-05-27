@@ -71,13 +71,13 @@
       <!-- input. -->
       <form id="form">
         <div class="form-group">
-          <label for="usr">Name:</label>
+          <label for="usr">Name:*</label>
           <input type="text" class="form-control" id="exName" placeholder="Enter a name for the exercise" /> <br />
         </div>
 
         <!-- text area. -->
         <div class="form-group">
-          <label for="comment">Description:</label>
+          <label for="comment">Description:*</label>
           <textarea class="form-control" rows="10" id="exDescr" name="comment"
             placeholder="Enter the description of the exercise"></textarea>
         </div>
@@ -89,29 +89,35 @@
         </div>
 
         <div class="form-group">
-          <label for="usr">Exercise Language:</label>
+          <label for="usr">Exercise Language:*</label>
           <input type="text" class="form-control" id="exCompiler" placeholder="Enter a name for the exercise" /> <br />
         </div>
 
         <div class="form-group">
           <label for="usr">Choose the submission option (at least one required):</label>
+          <h5>For each method checked, the student will be able to submit his exercise via the method. <br />
+            If you want the student only submit via GitHub, then check only the GitHub button.</h5>
           <ul>
-            <li><input id="github" name="BoxSelect[]" type="checkbox" value="github" required><label>GitHub</label></li>
-            <li><input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required><label>Zip</label></li>
-            <li><input id="gitlab" name="BoxSelect[]" type="checkbox" value="gitlab" required><label>GitLab</label></li>
+            <li><input id="github" name="BoxSelect[]" type="checkbox" value="github" required><label
+                style="color:gold">GitHub</label></li>
+            <li><input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required><label
+                style="color:gold">Zip</label></li>
+            <li><input id="gitlab" name="BoxSelect[]" type="checkbox" value="gitlab" required><label
+                style="color:gold">GitLab</label></li>
           </ul>
         </div>
-
+        <br />
+        <h5><strong> This the upload exercise part: do you want to use a GitLab repository or do you want to upload the exercise via zip file? </strong></h5>
         <ul class="nav nav-pills">
           <li class="active"><a data-toggle="pill" href="#home">GitLab clone</a></li>
-          <li><a data-toggle="pill" href="#menu1">Zip file</a></li>
+          <li><a data-toggle="pill" href="#menu1" onclick="onZip();">Zip file</a></li>
         </ul>
 
         <div class="tab-content">
           <div id="home" class="tab-pane fade in active">
-
+            <br />
             <div class="form-group">
-              <label for="usr">GitLab repository:</label>
+              <label for="usr">GitLab repository:*</label>
               <input type="text" class="form-control" id="link"
                 placeholder="Enter here a clone-link to a repository in GitLab. It must begin with https: and end with .git" />
               <br />
@@ -119,20 +125,20 @@
 
             <!-- input. -->
             <div class="form-group">
-              <label for="usr">Exercise folder:</label>
+              <label for="usr">Exercise folder:*</label>
               <input type="text" class="form-control" id="exFolder"
                 placeholder="Enter here a subfolder of the repository where the exercise files are located. Must be accurate." />
               <br />
             </div>
 
             <div class="form-group">
-              <label for="usr">Deploy-token username:</label>
+              <label for="usr">Deploy-token username:*</label>
               <input type="text" class="form-control" id="user"
                 placeholder="Enter the username of the deploy-token for this repository" /> <br />
             </div>
 
             <div class="form-group">
-              <label for="usr">Deploy-token password:</label>
+              <label for="usr">Deploy-token password:*</label>
               <input type="text" class="form-control" id="pass"
                 placeholder="Enter the password of the deploy-token for this repository" /> <br />
             </div>
@@ -143,13 +149,27 @@
             </div>
           </div>
 
+          <br />
+          
+
           <div id="menu1" class="tab-pane fade">
+              <div id="rates">
+                  <h5>
+                    <strong> The website provide a simple template for the grading system. </strong> <br />
+                    The only thing you have to do is to fill all the fields, and we will compute the
+                    grade of each submission according your rules. <br />
+                    Note: If you don't want to follow our template, you can make your own grading system. <br />
+                    To do this, please, browse all the files for the grading (compressed into a zip file) or use
+                    GitLab
+                    to
+                    send us your grading system. <br />
+                    Inside the folder, there should be an executable program called grade. <br /> <br />
+                  </h5>
+                  <input type="radio" id="use" name="grade" value="confirm" onclick="showTemplate();">Use I/O template.<br />
+                  <input type="radio" id="notuse" name="grade" value="dismiss" onclick="hideTemplate();">Use my own grade
+                  file.<br />
+                </div>
             <br />
-            <label for="usr">Select a zip file with the grading system:</label>
-            <input type="file" id="filename" />
-
-            <br />
-
             <div class="panel-group" id="accordion">
               <div class="panel panel-default template">
                 <div class="panel-heading">
@@ -161,28 +181,17 @@
                 </div>
                 <div id="collapseThree" class="panel-collapse collapse">
                   <div class="panel-body">
-                    <h5>
-                      <strong> The website provide a simple template for the grading system. </strong> <br />
-                      The only thing you have to do is to fill all the fields, and we will compute the
-                      grade of each submission according your rules. <br />
-                      Note: If you don't want to follow our template, you can make your own grading system. <br />
-                      To do this, please, browse all the files for the grading (compressed into a zip file) or use
-                      GitLab
-                      to
-                      send us your grading system. <br />
-                      Inside the folder, there should be an executable program called grade. <br /> <br />
-                    </h5>
 
                     <!-- input. -->
                     <div class="form-group">
-                      <label for="usr">Compiler: (required)</label>
+                      <label for="usr">Compiler:*</label>
                       <input type="text" class="form-control" id="compiler" placeholder="java, c++, python..." />
                       <br />
                     </div>
 
                     <!-- input. -->
                     <div class="form-group">
-                      <label for="usr">The main file: (required)</label>
+                      <label for="usr">The main file:*</label>
                       <input type="text" class="form-control" id="main" placeholder="Main, Ex01, a..." />
                       <br />
                     </div>
@@ -211,7 +220,7 @@
 
                     <!-- input. -->
                     <div class="form-group">
-                      <label for="usr">Number of test(s): </label>
+                      <label for="usr">Number of test(s):*</label>
                       <input type="number" class="form-control" id="tests" placeholder="1" />
                       <br />
                     </div>
@@ -230,16 +239,11 @@
                 </div>
               </div>
             </div>
-
-            <div id="rates">
-              <input type="radio" id="use" name="grade" value="confirm" checked>Use I/O template.<br />
-              <input type="radio" id="notuse" name="grade" value="dismiss">Use my own grade file.<br />
-            </div>
-
+            <label for="usr">Select a zip file with the grading system:*</label>
+            <input type="file" id="filename" />
+            <br />
           </div>
-
           <br />
-
           <div class="panel-group" id="accordion2">
             <div class="panel panel-default template">
               <div class="panel-heading">
@@ -251,7 +255,7 @@
               </div>
               <div id="collapseThree2" class="panel-collapse collapse">
                 <div class="panel-body">
-                  Deadline: <input type="date" name="dealine" id="deadline">
+                  Deadline:* <input type="date" name="dealine" id="deadline">
                   <div class="form-group row">
 
                     <div style="width: 100%; overflow: hidden;">
