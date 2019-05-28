@@ -79,9 +79,6 @@ function checkEmptyFieldsPrivate(name, ids) {
     return true;
 }
 
-
-
-
 /*
  * This code belongs to the "manage courses" tab.
  */
@@ -89,16 +86,16 @@ function checkEmptyFieldsPrivate(name, ids) {
 
 // We need to load all the exercise since it's possible that the owner of the course is not 
 // the owner of the exercise. 
-
+var submissionsArray = [];
 var exercisesMap = new Map();
-loadAllExercisesAndAddOptions(exercisesMap); // defined in frontend/util/Firebase.js.
+loadAllExercisesAndSubmissions(exercisesMap, submissionsArray); // defined in frontend/util/Firebase.js.
 
 var peerExercisesMap = new Map();
 loadAllPeerExercises(peerExercisesMap);
 
+
 var usersMap = new Map();
 var coursesMap = new Map();
-
 
 /**
  * Add a single course to the HTML and to the courses map.
@@ -133,10 +130,10 @@ function addCourseHTML(courseId, course) {
 
             if (peerExercisesMap.get(course.exercises[i])) {
                 text_html +=
-                    "<button name =\"peer" + course.exercises[i] + "$@$" + courseId + "\" id=\"exercise\" class=\"btn btn-link\">"
-                    + "<span class=\"glyphicon glyphicon-transfer\"></span>  " +
-                    peerExercisesMap.get(course.exercises[i]).name
-                    + "  <span class=\"glyphicon glyphicon-transfer\"></span>" +
+                    "<button name =\"peer" + course.exercises[i] + "$@$" + courseId + "\" id=\"exercise\" class=\"btn btn-link\">" +
+                    "<span class=\"glyphicon glyphicon-transfer\"></span>  " +
+                    peerExercisesMap.get(course.exercises[i]).name +
+                    "  <span class=\"glyphicon glyphicon-transfer\"></span>" +
                     "</button>";
 
                 if (i != course.exercises.length - 1) text_html += "<br />";
@@ -156,14 +153,12 @@ function addCourseHTML(courseId, course) {
 addCourseHTML.template = $(".template");
 addCourseHTML.hash = 2;
 
-function onUser(key, user, i, courses_length) {
+function onUser(key, user) {
     usersMap.set(key, user)
-    if (i === courses_length - 1) {
-        // TODO: This code should be called only after all courses are processed!
-        console.log("usersMap=" + JSON.stringify(usersMap))
-        localStorage.setItem("usersMap",
-            JSON.stringify(Array.from(usersMap.entries())));
-    }
+    // TODO: This code should be called only after all courses are processed!
+    localStorage.setItem("usersMap",
+        JSON.stringify(Array.from(usersMap.entries())));
+
 }
 
 function onLoadAllCourses() {
@@ -178,11 +173,8 @@ function onLoadAllCourses() {
     var courses = Array.from(coursesMap.entries())
     for (var i = 0; i < courses.length; ++i) {
         loadUsersOfCourse(courses[i][1],
-            onUser,
-            i,
-            courses.length
+            onUser
         ); // defined in frontend/util/Firebase.js
-        console.log("here");
     }
 
 }
@@ -257,21 +249,26 @@ $('body').on('click', '#download', function (e) {
     let rows = [];
     rows.push(["Exercise Name", "id", "name", "lastName", "grade", "url"]);
     for (var i = 0; i < course.exercises.length; i++) {
-        if (course.exercises[i] != 'dummyExerciseId') {
-            let exercise = exercisesMap.get(course.exercises[i]);
+        let exerciseId = course.exercises[i];
+        if (exerciseId != 'dummyExerciseId') {
+            let exercise = exercisesMap.get(exerciseId);
             if (exercise) {
-                for (var j = 1; j < exercise.grades.gradeObj.length; j++) {
-                    let submission = exercise.grades.gradeObj[j];
-                    let user = usersMap.get(submission.id);
-                    if (user) {
-                        let row = [];
-                        row.push(exercise.name);
-                        row.push(user.id);
-                        row.push(user.name);
-                        row.push(user.lastName);
-                        row.push(submission.grade);
-                        row.push(submission.url);
-                        rows.push(row);
+                for (var j = 1; j < submissionsArray.length; j++) {
+                    let currentSubmission = submissionsArray[j];
+                    console.log(currentSubmission)
+                    if (currentSubmission.exerciseId == exerciseId) {
+                        // Currently there will be double in the grades.
+                        for (userUid of currentSubmission.collaboratorsUid) {
+                            let user = usersMap.get(userUid);
+                            let row = [];
+                            row.push(exercise.name);
+                            row.push(user.id);
+                            row.push(user.name);
+                            row.push(user.lastName);
+                            row.push(currentSubmission.grade);
+                            row.push(currentSubmission.url);
+                            rows.push(row);
+                        }
                     }
                 }
             }

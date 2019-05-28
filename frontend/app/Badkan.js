@@ -114,7 +114,7 @@ function dealWithFile(file) {
   var reader = new FileReader();
   reader.readAsArrayBuffer(file);
   var rawData = new ArrayBuffer();
-  reader.loadend = function () { }
+  reader.loadend = function () {}
   reader.onload = function (e) {
     rawData = e.target.result;
     // create the request
@@ -197,7 +197,7 @@ function sendWebsocket(json) {
   }
   websocket.onclose = (event) => {
     if (event.code === 1000) {
-        uploadGrade(homeUser.id, collab1Id, collab2Id, createSubmission)
+      uploadGrade(homeUser.id, collab1Id, collab2Id, createSubmission)
       logServer("color:blue", "Submission completed!");
     } else if (event.code === 1006)
       logServer("color:red", "Connection closed abnormally!");
@@ -277,7 +277,6 @@ $("button#clear_and_submit").click(() => {
   return false;
 })
 
-
 function createSubmission(collaboratorsId, collaboratorsUid) {
   let currentTime = new Date()
   submission = new Submission(exerciseId, homeUser.id,
@@ -288,7 +287,12 @@ function createSubmission(collaboratorsId, collaboratorsUid) {
   }
   submissionId += exerciseId;
   writeSubmission(submission, submissionId);
-  // TODO: push the array submissionId
+  // Push the array submissionId
+  for (let j = 0; j < collaboratorsUid.length; j++) {
+    pushArraySubmissionIdUserSide(collaboratorsUid[j], submissionId, exerciseId);
+  }
+  pushArraySubmissionIdExerciseSide(exerciseId, submissionId, collaboratorsId, collaboratorsUid);
+
 }
 
 /** In link with peer to peer */

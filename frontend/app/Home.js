@@ -3,12 +3,6 @@
  * in the internal storage. Really important.
  */
 
-
-// var admin = getParameterByName("admin"); // in utils.js
-// if (admin == "1") {
-//   $("#btnManageCourses").show()
-// }
-
 /**
  * ON STATE CHANGE.
  * Every time the state of the user is changed, this function is called.
@@ -16,14 +10,15 @@
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
     var userId = firebase.auth().currentUser.uid;
-    loadCurrentUser(userId);  // Load current user data to localStorage. in file
-                              // util/Firebase.js
+    loadCurrentUser(userId); // Load current user data to localStorage. in file
+    // util/Firebase.js
     flag = true;
     localStorage.setItem('homeUserId', JSON.stringify(userId));
   }
 });
 
 var homeUser = JSON.parse(localStorage.getItem('homeUserKey'));
+
 if (homeUser) {
   if (homeUser.admin) {
     if (homeUser.admin === true) {
@@ -32,13 +27,18 @@ if (homeUser) {
   }
 }
 
+// TODO: Maybe an assynchronous probleme here: need to have everything done before to begin anything.
+
 // We need to load all the exercise since it's possible that the owner of the
 // course is not the owner of the exercise.
 var exercisesMap = new Map();
-loadAllExercisesAsync(exercisesMap);  // defined in Firebase.js.
+loadAllExercisesAsync(exercisesMap); // defined in Firebase.js.
 
 var peerExercisesMap = new Map();
-loadAllPeerExercisesAsync(peerExercisesMap);  // defined in Firebase.js.
+loadAllPeerExercisesAsync(peerExercisesMap); // defined in Firebase.js.
+
+var submissionsArray = [];
+loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId)
 
 
 function addCourseHTML(key, course) {
@@ -67,7 +67,8 @@ function addCourseHTML(key, course) {
   }
 }
 
-var numRegistered = 0, numUnregistered = 0
+var numRegistered = 0,
+  numUnregistered = 0
 
 function onAllCoursesLoaded() {
   if (numUnregistered == 0) {
@@ -75,24 +76,17 @@ function onAllCoursesLoaded() {
   }
   if (numRegistered == 0) {
     $('#accordion-registered')
-        .append('<p>You are not registered to any course yet!</p>');
+      .append('<p>You are not registered to any course yet!</p>');
   }
 }
 
 var coursesMap = new Map()
-loadAllCourses(addCourseHTML, onAllCoursesLoaded)  // in util/Firebase.js
-
-
-// var flag = JSON.parse(localStorage.getItem("flag"));
-
-// if (flag) {
-//   refresh();
-// }
+loadAllCourses(addCourseHTML, onAllCoursesLoaded) // in util/Firebase.js
 
 function refresh() {
   var userId = firebase.auth().currentUser.uid;
-  loadCurrentUser(userId);  // Load current user data to localStorage. in file
-                            // util/Firebase.js
+  loadCurrentUser(userId); // Load current user data to localStorage. in file
+  // util/Firebase.js
 }
 
 /**
@@ -141,19 +135,19 @@ function notRegistered(key, course) {
   var $newPanel = $template.clone();
   $newPanel.find('.collapse').removeClass('in');
   $newPanel.find('.accordion-toggle')
-      .attr('href', '#' + (hash))
-      .text(course.name);
+    .attr('href', '#' + (hash))
+    .text(course.name);
   $newPanel.find('.panel-collapse')
-      .attr('id', hash++)
-      .addClass('collapse')
-      .removeClass('in');
+    .attr('id', hash++)
+    .addClass('collapse')
+    .removeClass('in');
   $newPanel.find('.panel-body').text('')
   text_html = '';
   text_html += '<button name ="' + key +
-      '" id="register" class="btn btn-success"">Register to ' + course.name +
-      '</button>';
+    '" id="register" class="btn btn-success"">Register to ' + course.name +
+    '</button>';
   if (course.exercises.length === 1 &&
-      course.exercises[0] === 'dummyExerciseId') {
+    course.exercises[0] === 'dummyExerciseId') {
     text_html += '<p>There are no available exercises for this course!</p>'
   } else {
     text_html += '<h3>Exercises in ' + course.name + '</h3>'
@@ -168,15 +162,15 @@ function notRegistered(key, course) {
           if (exerciseObj.deadline && exerciseObj.deadline.date) {
             text_html += '<br />';
             text_html +=
-                'Exercise deadline: ' + exerciseObj.deadline.date + '<br />';
+              'Exercise deadline: ' + exerciseObj.deadline.date + '<br />';
             let penalities = exerciseObj.deadline.penalities;
             if (penalities) {
               text_html += '<strong> Penalties </strong>: <br />';
               for (var p = 0; p < penalities.length; p++) {
                 text_html += 'Submitted with ' + penalities[p].late +
-                    ' day(s) late is penalized with ' + penalities[p].point +
-                    ' point(s)' +
-                    '<br />';
+                  ' day(s) late is penalized with ' + penalities[p].point +
+                  ' point(s)' +
+                  '<br />';
               }
             }
           }
@@ -186,19 +180,19 @@ function notRegistered(key, course) {
         if (peerExerciseObj) {
           text_html += '<div class=\'exercise\'>'
           text_html += '<h4>' +
-              '<span class="glyphicon glyphicon-transfer"></span>  ' +
-              peerExerciseObj.name +
-              '  <span class="glyphicon glyphicon-transfer"></span>' +
-              '</h4>';
+            '<span class="glyphicon glyphicon-transfer"></span>  ' +
+            peerExerciseObj.name +
+            '  <span class="glyphicon glyphicon-transfer"></span>' +
+            '</h4>';
           text_html += '<p>' + peerExerciseObj.description + '</p>';
           text_html +=
-              'Test deadline: ' + peerExerciseObj.deadlineTest + '<br />';
+            'Test deadline: ' + peerExerciseObj.deadlineTest + '<br />';
           text_html +=
-              'Solution deadline: ' + peerExerciseObj.deadlineSolution +
-              '<br />';
+            'Solution deadline: ' + peerExerciseObj.deadlineSolution +
+            '<br />';
           text_html +=
-              'Conflicts deadline: ' + peerExerciseObj.deadlineConflicts +
-              '<br />';
+            'Conflicts deadline: ' + peerExerciseObj.deadlineConflicts +
+            '<br />';
           text_html += '</div><!--exercise-->'
         }
       }
@@ -214,17 +208,17 @@ function registered(key, course) {
   var $newPanel = $template.clone();
   $newPanel.find('.collapse').removeClass('in');
   $newPanel.find('.accordion-toggle')
-      .attr('href', '#' + (hash))
-      .text(course.name);
+    .attr('href', '#' + (hash))
+    .text(course.name);
   $newPanel.find('.panel-collapse')
-      .attr('id', hash++)
-      .addClass('collapse')
-      .removeClass('in');
+    .attr('id', hash++)
+    .addClass('collapse')
+    .removeClass('in');
   $newPanel.find('.panel-body').text('')
   text_html = '';
 
   if (course.exercises.length === 1 &&
-      course.exercises[0] === 'dummyExerciseId') {
+    course.exercises[0] === 'dummyExerciseId') {
     text_html += '<h5>There are no available exercise for this course!</h5>'
   } else {
     text_html += '<h3>Exercises in ' + course.name + '</h3>'
@@ -240,14 +234,14 @@ function registered(key, course) {
           text_html += '<p>' + exerciseObj.description + '</p>';
           if (exerciseObj.example === 'PDF') {
             text_html += '<button name ="' + exerciseId +
-                '" id="dl" class="btn btn-link"">Download PDF</button>';
+              '" id="dl" class="btn btn-link"">Download PDF</button>';
             text_html += '<br /> <br />'
           }
 
           if (exerciseObj.deadline && exerciseObj.deadline.date) {
             text_html += '<br />';
             text_html +=
-                'Exercise deadline: ' + exerciseObj.deadline.date + '<br />';
+              'Exercise deadline: ' + exerciseObj.deadline.date + '<br />';
 
             let penalities = exerciseObj.deadline.penalities;
 
@@ -255,69 +249,62 @@ function registered(key, course) {
               text_html += '<strong> Penalties </strong>: <br />';
               for (var p = 0; p < penalities.length; p++) {
                 text_html += 'Submitted with ' + penalities[p].late +
-                    ' day(s) late is penalized with ' + penalities[p].point +
-                    ' point(s)' +
-                    '<br />';
+                  ' day(s) late is penalized with ' + penalities[p].point +
+                  ' point(s)' +
+                  '<br />';
               }
             }
           }
-          var homeUser = JSON.parse(localStorage.getItem('homeUserKey'));
           let grade = -1;
-          for (var j = 0; j < homeUser.exerciseSolved.length; j++) {
-            if (homeUser.exerciseSolved[j]) {
-              if (homeUser.exerciseSolved[j].exerciseId === exerciseId) {
-                grade = homeUser.exerciseSolved[j].grade;
+          if (submissionsArray) {
+            for (value of submissionsArray) {
+              if (value.exerciseId === exerciseId) {
+                grade = value.grade;
+                text_html += '<pre>For the submission with the id(s): ' + value.collaboratorsId + '. <br />';
+                text_html += 'Your current grade is: ' + grade + '. <br />';
+                text_html += 'Submitted on: ' + value.timestamp + '. </pre>';
+
               }
             }
           }
           text_html += '<p>';
           if (grade === -1) {
             text_html += 'You have not solved this exercise yet. ';
-          } else {
-            text_html += 'Your current grade is: ' + grade + '. ';
-          }
+          } 
           text_html += '<button name ="' + exerciseId +
-              '" id="solve" class="btn btn-success"">Solve</button>';
+            '" id="solve" class="btn btn-success"">Solve</button>';
           text_html += '</p>';
           text_html += '</div><!--exercise-->'
         }
 
-        /* @param {string} name
-         * @param {string} description
-         * @param {date} deadlineTest
-         * @param {date} deadlineSolution
-         * @param {date} deadlineConflicts
-         * @param {string} compilerSolution // java by default (on the frontend readonly).
-         * @param {string} compilerTest // junit by default (on the frontend readonly).
-         */
         if (peerExerciseObj) {
           text_html += '<div class=\'exercise\'>'
           text_html += '<h4>' +
-              '<span class="glyphicon glyphicon-transfer"></span>  ' +
-              peerExerciseObj.name +
-              '  <span class="glyphicon glyphicon-transfer"></span>' +
-              '</h4>';
+            '<span class="glyphicon glyphicon-transfer"></span>  ' +
+            peerExerciseObj.name +
+            '  <span class="glyphicon glyphicon-transfer"></span>' +
+            '</h4>';
 
           text_html += '<p>' + peerExerciseObj.description + '</p>';
           text_html += '<button name ="' + exerciseId +
-              '" id="dl" class="btn btn-link"">Download PDF</button>';
+            '" id="dl" class="btn btn-link"">Download PDF</button>';
           text_html += '<br /> <br />'
 
 
           text_html +=
-              'Test deadline: ' + peerExerciseObj.deadlineTest + '<br />';
+            'Test deadline: ' + peerExerciseObj.deadlineTest + '<br />';
           text_html +=
-              'Solution deadline: ' + peerExerciseObj.deadlineSolution +
-              '<br />';
+            'Solution deadline: ' + peerExerciseObj.deadlineSolution +
+            '<br />';
           text_html +=
-              'Conflicts deadline: ' + peerExerciseObj.deadlineConflicts +
-              '<br />';
+            'Conflicts deadline: ' + peerExerciseObj.deadlineConflicts +
+            '<br />';
 
           text_html +=
-              'Test language: ' + peerExerciseObj.compilerTest + '<br />';
+            'Test language: ' + peerExerciseObj.compilerTest + '<br />';
           text_html +=
-              'Solution language: ' + peerExerciseObj.compilerSolution +
-              '<br />';
+            'Solution language: ' + peerExerciseObj.compilerSolution +
+            '<br />';
 
           let phase = whichPhase(peerExerciseObj);
           text_html += '<h5><strong>' + phase + ':</strong></h5>'
@@ -352,16 +339,16 @@ function registered(key, course) {
  */
 function testPhase(peerExerciseObj, exerciseId) {
   text_html += 'You need to implement at least : ' + peerExerciseObj.minTest +
-      ' tests.' +
-      '<br />';
+    ' tests.' +
+    '<br />';
   text_html += 'Here is the list of the function you have to test: <br />';
   for (let sign of peerExerciseObj.signatureMap) {
     text_html += 'The function signature is: <strong>' + sign.func +
-        '</strong> -> The class where the function reside is: <strong>' +
-        sign.cla + '</strong> <br />';
+      '</strong> -> The class where the function reside is: <strong>' +
+      sign.cla + '</strong> <br />';
   }
   text_html += '<button name ="' + exerciseId +
-      '" id="btnTestPhase" class="btn btn-primary"">Submit test</button>';
+    '" id="btnTestPhase" class="btn btn-primary"">Submit test</button>';
 }
 
 /*
@@ -369,20 +356,20 @@ function testPhase(peerExerciseObj, exerciseId) {
  */
 function solutionPhase(peerExerciseObj, exerciseId) {
   text_html +=
-      'Here is the list of the function you have to implements: <br />';
+    'Here is the list of the function you have to implements: <br />';
   for (let sign of peerExerciseObj.signatureMap) {
     text_html += 'The function signature is: <strong>' + sign.func +
-        '</strong> -> The class where the function reside is: <strong>' +
-        sign.cla + '</strong> <br />';
+      '</strong> -> The class where the function reside is: <strong>' +
+      sign.cla + '</strong> <br />';
   }
 
   text_html += '<button name ="' + exerciseId +
-      '" id="btnSolutionPhase" class="btn btn-success"">Submit Solution</button>';
+    '" id="btnSolutionPhase" class="btn btn-success"">Submit Solution</button>';
 }
 
 function conflictsPhase(exerciseId) {
   text_html += '<button name ="' + exerciseId +
-      '" id="btnConflictsPhase" class="btn btn-danger"">Check for conflicts</button>';
+    '" id="btnConflictsPhase" class="btn btn-danger"">Check for conflicts</button>';
 }
 
 /* @param {Object} peerGrades // Object we created with the grades. */
@@ -401,7 +388,7 @@ function endGame(exerciseId) {
 }
 
 
-$('body').on('click', '#btnTestPhase', function(e) {
+$('body').on('click', '#btnTestPhase', function (e) {
   let exerciseId = e.target.name;
   let exercise = peerExercisesMap.get(exerciseId);
   localStorage.setItem('exercise', JSON.stringify(exercise));
@@ -409,7 +396,7 @@ $('body').on('click', '#btnTestPhase', function(e) {
 });
 
 
-$('body').on('click', '#btnSolutionPhase', function(e) {
+$('body').on('click', '#btnSolutionPhase', function (e) {
   let exerciseId = e.target.name;
   let exercise = peerExercisesMap.get(exerciseId);
   localStorage.setItem('exercise', JSON.stringify(exercise));
@@ -417,24 +404,24 @@ $('body').on('click', '#btnSolutionPhase', function(e) {
 });
 
 
-$('body').on('click', '#btnConflictsPhase', function(e) {
+$('body').on('click', '#btnConflictsPhase', function (e) {
   let exerciseId = e.target.name;
   document.location.href = 'conflicts.html?exercise=' + exerciseId;
 });
 
-$('body').on('click', '#dl', function(e) {
+$('body').on('click', '#dl', function (e) {
   let exerciseId = e.target.name;
   const file = firebase.storage().ref().child(exerciseId);
   file.getDownloadURL()
-      .then((url) => {
-        window.open(url);
-      })
-      .catch(function(error) {
-        alert('There is no PDF for this exercise!')
-      })
+    .then((url) => {
+      window.open(url);
+    })
+    .catch(function (error) {
+      alert('There is no PDF for this exercise!')
+    })
 });
 
-$('body').on('click', '#solve', function(e) {
+$('body').on('click', '#solve', function (e) {
   let exerciseId = e.target.name;
   let exercise = exercisesMap.get(exerciseId);
   if (exercise.deadline && exercise.deadline.date) {
@@ -450,7 +437,7 @@ $('body').on('click', '#solve', function(e) {
   }
 });
 
-$('body').on('click', '#register', function(e) {
+$('body').on('click', '#register', function (e) {
   let courseId = e.target.name;
   let course = coursesMap.get(courseId);
   registerSuccess(course, courseId);

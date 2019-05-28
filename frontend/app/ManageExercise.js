@@ -109,17 +109,10 @@ document.getElementById("btnGrade").addEventListener('click', e => {
 });
 
 function uploadGradeManually(grade) {
-    for (let i = 0; i < user.exerciseSolved.length; i++) {
-        if (user.exerciseSolved[i].exerciseId == exerciseId) {
-            user.exerciseSolved[i].grade = grade;
+    console.log(user)   
+    for (let i = 0; i < Object.keys(user.submissionsId).length; i++) {
+        if (Object.values(user.submissionsId)[i].exerciseId == exerciseId) {
+            changeSubmissionGrade(Object.keys(user.submissionsId)[i], grade)
         }
     }
-
-    for (let j = 0; j < exercise.grades.gradeObj.length; j++) {
-        if (exercise.grades.gradeObj[j].id == userId) {
-            exercise.grades.gradeObj[j].grade = grade;
-        }
-    }
-    writeUserDataWithoutComingHome(user, userId);
-    writeExercise(exercise, exerciseId)
 }

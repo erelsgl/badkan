@@ -225,6 +225,18 @@ function writeSubmission(submission, submissionId) {
   })
 }
 
+function pushArraySubmissionIdUserSide(collaboratorUid, submissionId, exerciseId) {
+  database.ref("users/" + collaboratorUid + "/user/submissionsId/" + submissionId).set({
+    exerciseId
+  })
+}
+
+function pushArraySubmissionIdExerciseSide(exerciseId, submissionId, collaboratorsId, collaboratorsUid) {
+  database.ref("exercises/" + exerciseId + "/exercise/submissionsId/" + submissionId).set({
+    collaboratorsId,
+    collaboratorsUid
+  })
+}
 
 /**
  * This function load all the exercise the current user create.
@@ -246,6 +258,16 @@ function loadExerciseByOwner(ownExercises) {
       window.location.href = 'home.html';
     }
   });
+}
+
+function loadAllSubmissionsByUserAsync(submissionsArray, submissionsId) {
+  if (submissionsId) {
+    for (let i = 0; i < Object.keys(submissionsId).length; i++) {
+      database.ref('/submissions/' + Object.keys(submissionsId)[i]).once('value').then(function (snapshot) {
+        submissionsArray.push(snapshot.val().submission);
+      })
+    }
+  }
 }
 
 /**
@@ -332,12 +354,24 @@ function loadAllExercises(onFinish) {
   });
 }
 
+function loadAllSubmissionsByExerciseAsync(submissionsArray, submissionsId) {
+  if (submissionsId) {
+    for (let i = 0; i < Object.keys(submissionsId).length; i++) {
+      database.ref('/submissions/' + Object.keys(submissionsId)[i]).once('value').then(function (snapshot) {
+        submissionsArray.push(snapshot.val().submission);
+      })
+    }
+  }
+}
+
 /**
  * This function load all the exercises of the database.
  */
-function loadAllExercisesAndAddOptions(exercisesMap) {
+
+function loadAllExercisesAndSubmissions(exercisesMap, submissionsArray) {
   database.ref().child('exercises/').on("value", function (snapshot) {
     snapshot.forEach(function (data) {
+      loadAllSubmissionsByExerciseAsync(submissionsArray, data.val().exercise.submissionsId)
       exercisesMap.set(data.key, data.val().exercise);
     });
     loading("div3");
@@ -363,13 +397,13 @@ function loadAllPeerExercises(peerExercisesMap) {
  *     and for each user, call:
  *         onUser(key, user)
  */
-function loadUsersOfCourse(course, onUser, i, courses_length) {
+function loadUsersOfCourse(course, onUser) {
   for (var j = 0; j < course.students.length; j++) {
     let current_student = course.students[j]
     if (current_student != "dummyStudentId") {
       database.ref().child('users/' + current_student).once('value').then(
         function (snapshot) {
-          onUser(snapshot.key, snapshot.val().user, i, courses_length)
+          onUser(snapshot.key, snapshot.val().user)
         }
       )
     }
@@ -400,49 +434,13 @@ function deleteCourseById(courseId) {
   database.ref().child('courses/' + courseId).remove();
 }
 
-/**
- * This function refresh the historic of the user.
- * @param {int} selectedValue
- * @param {grade} grade
- */
-function writeExerciseHistoric(selectedValue, grade) {
-  database.ref('exercises/' + selectedValue).once('value').then(function (snapshot) {
-    var exercise = snapshot.val().exercise;
-    for (var i = 0; i < grade.length; i++) {
-      let index = checkIfIdExist(exercise, grade[i].id);
-      if (index != -1) {
-        exercise.grades.gradeObj[index] = grade[i];
-      } else {
-        exercise.grades.gradeObj.push(grade[i]);
-      }
-    }
-    firebase.database().ref("exercises/" + selectedValue).set({
-      exercise
-    });
-  });
-}
-
-/**
- * This function check if the id country exist or not in the database.
- * @param {exercise} exercise 
- * @param {int} id 
- */
-function checkIfIdExist(exercise, id) {
-  for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
-    if (exercise.grades.gradeObj[i].id === id) {
-      return i;
-    }
-  }
-  return -1;
-}
-
 function writeNewReclamationIds(id, peerSolutionExercise, testId, functionName, functionContent) {
   database.ref('/conflicts/' + peerSolutionExercise + "/" + testId + "/" + functionName + "/" + "about").set({
     "content": functionContent
   })
   database.ref('/conflicts/' + peerSolutionExercise + "/" + testId + "/" + functionName + "/ids/" + id).set({
     "reclam": "true"
-  }).then(/*document.location.href = "home.html"*/);
+  }).then( /*document.location.href = "home.html"*/ );
 }
 
 function getConflictsByUid(exerciseId, uid, addItemToList, noConflicts) {
@@ -468,3 +466,9 @@ function changeReclamation(uid, exerciseId, functionName) {
   }).then(document.location.href = "conflicts.html?exercise=" + exerciseId);
 }
 
+function changeSubmissionGrade(submissionId, newGrade) {
+  console.log("connected")
+  database.ref("submissions/" + submissionId + "/submission").update({
+    grade: newGrade
+  });
+}
