@@ -253,10 +253,10 @@ $('body').on('click', '#download', function (e) {
         if (exerciseId != 'dummyExerciseId') {
             let exercise = exercisesMap.get(exerciseId);
             if (exercise) {
-                console.log(submissionsArray)
                 for (var j = 1; j < submissionsArray.length; j++) {
                     let currentSubmission = submissionsArray[j];
                     if (currentSubmission.exerciseId == exerciseId) {
+                        console.log(currentSubmission)
                         // Currently there will be double in the grades.
                         for (userUid of currentSubmission.collaboratorsUid) {
                             let user = usersMap.get(userUid);
