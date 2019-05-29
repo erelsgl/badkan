@@ -1,6 +1,8 @@
-""" This file includes algorithms thay we may want to use for the peer to peer grading. """ 
+""" This file includes algorithms thay we may want to use for the peer to peer grading. """
 
-import csv, random
+import csv
+import random
+
 
 def partition(lambda_param, num_student):
     """
@@ -17,12 +19,14 @@ def partition(lambda_param, num_student):
     partition_array.append(circular)
     return partition_array
 
+
 def colnum_string(n):
     string = ""
     while n > 0:
         n, remainder = divmod(n - 1, 26)
         string = chr(65 + remainder) + string
     return string
+
 
 def fill_csv(num_student):
     result_array = ["FAILED", "PASSED", "PASSED"]
@@ -32,7 +36,7 @@ def fill_csv(num_student):
         sum_tests = 0
         writer = csv.writer(writeFile)
         for student in range(num_student):
-            num_tests = random.randint(4,20)
+            num_tests = random.randint(4, 20)
             sum_tests = sum_tests + num_tests
             for test in range(num_tests):
                 first_line.append(str(student) + "_" + str(test))
@@ -46,13 +50,16 @@ def fill_csv(num_student):
             to_line = colnum_string(sum_tests + 1) + str(student + 3)
             result_line.append("")
             result_line.append("TOTAL FAILED")
-            result_line.append("=COUNTIF(" + from_line + ":" + to_line + ",\"FAILED\")")
+            result_line.append(
+                "=COUNTIF(" + from_line + ":" + to_line + ",\"FAILED\")")
             result_line.append("TOTAL PASSED")
-            result_line.append("=COUNTIF(" + from_line + ":" + to_line + ",\"PASSED\")")
+            result_line.append(
+                "=COUNTIF(" + from_line + ":" + to_line + ",\"PASSED\")")
 
-            content.append(result_line) 
+            content.append(result_line)
         writer.writerows(content)
-       
+
+
 fill_csv(20)
 
 # print("test1")
