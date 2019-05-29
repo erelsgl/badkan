@@ -56,7 +56,6 @@ def sendSubmissions(exerciseId, submitterId, submitterUid, grade, url):
 
 
 def pushSubmissionsIdUserSide(collaboratorUid, submissionId, exerciseId):
-    print(str(exerciseId))
     ref = db.reference('users/' + collaboratorUid +
                        "/user/submissionsId/" + submissionId)
     ref.set({
