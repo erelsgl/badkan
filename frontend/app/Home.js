@@ -261,7 +261,7 @@ function registered(key, course) {
               if (value.exerciseId === exerciseId) {
                 grade = value.grade;
                 text_html += '<pre>For the submission with the id(s): ' + value.collaboratorsId + '. <br />';
-                text_html += 'Your current grade is: ' + grade + '. <br />';
+                text_html += 'Your current grade is: <strong> <font color="dc2f0a">' + grade + '</font></strong>. <br />';
                 text_html += 'Submitted on: ' + value.timestamp + '. </pre>';
 
               }
