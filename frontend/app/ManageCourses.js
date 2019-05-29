@@ -253,16 +253,14 @@ $('body').on('click', '#download', function (e) {
         if (exerciseId != 'dummyExerciseId') {
             let exercise = exercisesMap.get(exerciseId);
             if (exercise) {
-                console.log(submissionsArray)
                 for (var j = 0; j < submissionsArray.length; j++) {
                     let currentSubmission = submissionsArray[j];
                     if (currentSubmission.exerciseId == exerciseId) {
-                        console.log(currentSubmission)
                         // Currently there will be double in the grades.
                         for (userUid of currentSubmission.collaboratorsUid) {
                             let user = usersMap.get(userUid);
                             if (!user) {
-                                alert("We detected a student that solved the exercise without be part of the course (maybe by collaboration). \n" +
+                                console.log("We detected a student that solved the exercise without be part of the course (maybe by collaboration). \n" +
                                     "His grade will not be stored in the csv. \n" +
                                     "This student has the uid: " + userUid);
                             } else {
