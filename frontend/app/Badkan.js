@@ -278,6 +278,8 @@ $("button#clear_and_submit").click(() => {
 })
 
 function createSubmission(collaboratorsId, collaboratorsUid) {
+  // We sort the array by alphabetical.
+  collaboratorsUid.sort();
   let currentTime = new Date()
   submission = new Submission(exerciseId, homeUser.id,
     uid, grade, -1, url, currentTime.toString(), collaboratorsId, collaboratorsUid, "TODO");

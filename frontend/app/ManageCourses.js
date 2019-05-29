@@ -255,19 +255,24 @@ $('body').on('click', '#download', function (e) {
             if (exercise) {
                 for (var j = 1; j < submissionsArray.length; j++) {
                     let currentSubmission = submissionsArray[j];
-                    console.log(currentSubmission)
                     if (currentSubmission.exerciseId == exerciseId) {
                         // Currently there will be double in the grades.
                         for (userUid of currentSubmission.collaboratorsUid) {
                             let user = usersMap.get(userUid);
-                            let row = [];
-                            row.push(exercise.name);
-                            row.push(user.id);
-                            row.push(user.name);
-                            row.push(user.lastName);
-                            row.push(currentSubmission.grade);
-                            row.push(currentSubmission.url);
-                            rows.push(row);
+                            if (!user) {
+                                alert("We detected a student that solved the exercise without be part of the course (maybe by collaboration). \n" +
+                                    "His grade will not be stored in the csv. \n" +
+                                    "This student has the uid: " + userUid);
+                            } else {
+                                let row = [];
+                                row.push(exercise.name);
+                                row.push(user.id);
+                                row.push(user.name);
+                                row.push(user.lastName);
+                                row.push(currentSubmission.grade);
+                                row.push(currentSubmission.url);
+                                rows.push(row);
+                            }   
                         }
                     }
                 }

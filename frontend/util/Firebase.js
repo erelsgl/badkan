@@ -4,7 +4,7 @@
 
 // Get a reference to the database service
 var database = firebase.database();
-var storage = firebase.storage();
+// var storage = firebase.storage();
 
 /**
  * This method upload the user in firebase.
@@ -440,7 +440,7 @@ function writeNewReclamationIds(id, peerSolutionExercise, testId, functionName, 
   })
   database.ref('/conflicts/' + peerSolutionExercise + "/" + testId + "/" + functionName + "/ids/" + id).set({
     "reclam": "true"
-  }).then( /*document.location.href = "home.html"*/ );
+  }).then( /*document.location.href = "home.html"*/);
 }
 
 function getConflictsByUid(exerciseId, uid, addItemToList, noConflicts) {
