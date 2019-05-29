@@ -31,9 +31,10 @@ def createSubmissions():
                         url = grade["url"]
 
         for exercise in new_ref.get():
-            if exercise["exerciseId"] != "id":
-                sendSubmissions(exercise["exerciseId"],
-                                userId, user, exercise["grade"], url)
+            if exercise:
+                if exercise["exerciseId"] != "id":
+                    sendSubmissions(exercise["exerciseId"],
+                                    userId, user, exercise["grade"], url)
 
 
 def sendSubmissions(exerciseId, submitterId, submitterUid, grade, url):
@@ -52,7 +53,8 @@ def sendSubmissions(exerciseId, submitterId, submitterUid, grade, url):
         "url": url
     })
     pushSubmissionsIdUserSide(submitterUid, submissionId, exerciseId)
-    pushSubmissionsIdExerciseSide(exerciseId, submissionId, [submitterId], [submitterUid])
+    pushSubmissionsIdExerciseSide(exerciseId, submissionId, [
+                                  submitterId], [submitterUid])
 
 
 def pushSubmissionsIdUserSide(collaboratorUid, submissionId, exerciseId):
