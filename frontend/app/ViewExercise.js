@@ -275,7 +275,7 @@ function sendFileHTTP(folderName, file) {
     var reader = new FileReader();
     reader.readAsArrayBuffer(file);
     var rawData = new ArrayBuffer();
-    reader.loadend = function () {}
+    reader.loadend = function () { }
     reader.onload = function (e) {
         rawData = e.target.result;
         // create the request
@@ -323,6 +323,12 @@ document.getElementById("btnRunAll").addEventListener('click', e => {
     if (!backendPort)
         backendPort = BACKEND_PORTS[Math.floor(Math.random() * BACKEND_PORTS.length)];
     var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
+    let keys = []
+    for ([key, value] of usersMap) {
+        if (course.students.includes(key)) {
+            keys.push(key)
+        }
+    }
     let keys = Array.from(usersMap.keys());
     var submission_json = JSON.stringify({
         target: "run_all",
