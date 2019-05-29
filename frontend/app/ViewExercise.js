@@ -375,12 +375,14 @@ document.getElementById("btnRunAll").addEventListener('click', e => {
 document.getElementById("btnDlProjects").addEventListener('click', e => {
     var parts = exerciseId + "@$@";
     for (var [key, value] of usersMap) {
-        var position = value.name.search(/[\u0590-\u05FF]/);
-        if (position >= 0) {
-            value.name = "unknown";
-            value.lastName = "unknown";
+        if (course.students.includes(key)) {
+            var position = value.name.search(/[\u0590-\u05FF]/);
+            if (position >= 0) {
+                value.name = "unknown";
+                value.lastName = "unknown";
+            }
+            parts += key + "/" + value.name + "_" + value.lastName + "-";
         }
-        parts += key + "/" + value.name + "_" + value.lastName + "-";
     }
     console.log(parts)
     downloadProject(parts);
@@ -487,7 +489,9 @@ document.getElementById("btnMoss").addEventListener('click', e => {
     }
     let information = "";
     for (var [key, value] of usersMap) {
-        information += key + "/" + value.name + "_" + value.lastName + "-";
+        if (course.students.includes(key)) {
+            information += key + "/" + value.name + "_" + value.lastName + "-";
+        }
     }
     json = JSON.stringify({
         target: "moss_command",
