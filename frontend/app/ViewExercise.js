@@ -329,7 +329,6 @@ document.getElementById("btnRunAll").addEventListener('click', e => {
             keys.push(key)
         }
     }
-    let keys = Array.from(usersMap.keys());
     var submission_json = JSON.stringify({
         target: "run_all",
         users_map: keys,
