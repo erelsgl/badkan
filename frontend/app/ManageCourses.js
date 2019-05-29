@@ -254,7 +254,7 @@ $('body').on('click', '#download', function (e) {
             let exercise = exercisesMap.get(exerciseId);
             if (exercise) {
                 console.log(submissionsArray)
-                for (var j = 1; j < submissionsArray.length; j++) {
+                for (var j = 0; j < submissionsArray.length; j++) {
                     let currentSubmission = submissionsArray[j];
                     if (currentSubmission.exerciseId == exerciseId) {
                         console.log(currentSubmission)
