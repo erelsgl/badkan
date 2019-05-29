@@ -4,13 +4,13 @@ from firebase_admin import db
 
 import re
 
-with open('../frontend/util/FirebaseConfig.js') as dataFile:
+with open('../../frontend/util/FirebaseConfig.js') as dataFile:
     data = dataFile.read()
 
 id = re.search('projectId: "(.+?)",', data)
 
 url = 'https://' + id.group(1) + '.firebaseio.com'
-cred = credentials.Certificate('../database_exports/private_key.json')
+cred = credentials.Certificate('../../database_exports/private_key.json')
 firebase_admin.initialize_app(cred, {'databaseURL': url})
 
 
