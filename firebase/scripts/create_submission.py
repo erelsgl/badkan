@@ -38,26 +38,23 @@ def createSubmissions():
 
 
 def createSubmissionForUser(userId):
-    ref = db.reference('users/' + userId)
-    for user in ref.get():
-        url = "Unfortunately, we didn't recorded the url."
-        new_ref = db.reference('users/' + user + '/user/exerciseSolved')
-        user_ref = db.reference('users/' + user + '/user/id')
-        userId = user_ref.get()
-        exercise_ref = db.reference('exercises/')
-        for exercise_obj in exercise_ref.get():
-            new_exercise_ref = db.reference(
-                'exercises/' + exercise_obj + '/exercise/grades/gradeObj/')
-            if new_exercise_ref.get():
-                for grade in new_exercise_ref.get():
-                    if (grade["id"] == userId or grade["id"] == user) and "url" in grade:
-                        url = grade["url"]
+    url = "Unfortunately, we didn't recorded the url."
+    new_ref = db.reference('users/' + userId + '/user/exerciseSolved')
+    user_ref = db.reference('users/' + userId + '/user/id')
+    exercise_ref = db.reference('exercises/')
+    for exercise_obj in exercise_ref.get():
+        new_exercise_ref = db.reference(
+            'exercises/' + exercise_obj + '/exercise/grades/gradeObj/')
+        if new_exercise_ref.get():
+            for grade in new_exercise_ref.get():
+                if (grade["id"] == userId or grade["id"] == userId) and "url" in grade:
+                    url = grade["url"]
 
-        for exercise in new_ref.get():
-            if exercise:
-                if exercise["exerciseId"] != "id":
-                    sendSubmissions(exercise["exerciseId"],
-                                    userId, user, exercise["grade"], url)
+    for exercise in new_ref.get():
+        if exercise:
+            if exercise["exerciseId"] != "id":
+                sendSubmissions(exercise["exerciseId"],
+                                userId, userId, exercise["grade"], url)
 
 
 def sendSubmissions(exerciseId, submitterId, submitterUid, grade, url):
