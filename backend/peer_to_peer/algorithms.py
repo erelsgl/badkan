@@ -2,6 +2,7 @@
 
 import csv
 import random
+import pandas as pd
 
 
 def partition(lambda_param, num_student):
@@ -28,7 +29,7 @@ def colnum_string(n):
     return string
 
 
-def fill_csv(num_student):
+def write_csv(num_student):
     result_array = ["FAILED", "PASSED", "PASSED"]
     with open('testcase.csv', 'w') as writeFile:
         content = [[]]
@@ -46,28 +47,25 @@ def fill_csv(num_student):
             result_line.append(str(student))
             for result_test in range(sum_tests):
                 result_line.append(result_array[random.randint(0, 2)])
-            from_line = "B" + str(student + 3)
-            to_line = colnum_string(sum_tests + 1) + str(student + 3)
-            result_line.append("")
-            result_line.append("TOTAL FAILED")
-            result_line.append(
-                "=COUNTIF(" + from_line + ":" + to_line + ",\"FAILED\")")
-            result_line.append("TOTAL PASSED")
-            result_line.append(
-                "=COUNTIF(" + from_line + ":" + to_line + ",\"PASSED\")")
-
             content.append(result_line)
         writer.writerows(content)
 
 
-fill_csv(20)
+def read_csv(path):
+    table = pd.read_csv(path)
+    
+
+
+read_csv("testcase.csv")
+
+# write_csv(20)
 
 # print("test1")
 # partition_array1 = partition(0.7, 3)
 # print(partition_array1)
-# print(sum(partition_array1), "\n")
+# print(sum(partmad max furry  ion_array1), "\n")
 
-# print("test2")
+# print("test2")mad max furry
 # partition_array2 = partition(0.5, 3)
 # print(partition_array2)
 # print(sum(partition_array2), "\n")
