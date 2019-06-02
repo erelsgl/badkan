@@ -3,6 +3,8 @@
 import csv
 import random
 import pandas as pd
+import operator
+import collections
 
 
 def partition(lambda_param, num_student):
@@ -29,20 +31,20 @@ def colnum_string(n):
     return string
 
 
-def write_csv(num_student):
+def write_csv(number_of_student):
     result_array = ["FAILED", "PASSED", "PASSED"]
-    with open('testcase.csv', 'w') as writeFile:
+    with open('solution-table.csv', 'w') as writeFile:
         content = [[]]
         first_line = [""]
         sum_tests = 0
         writer = csv.writer(writeFile)
-        for student in range(num_student):
+        for student in range(number_of_student):
             num_tests = random.randint(4, 20)
             sum_tests = sum_tests + num_tests
             for test in range(num_tests):
                 first_line.append(str(student) + "_" + str(test))
         content.append(first_line)
-        for student in range(num_student):
+        for student in range(number_of_student):
             result_line = []
             result_line.append(str(student))
             for result_test in range(sum_tests):
@@ -51,14 +53,32 @@ def write_csv(num_student):
         writer.writerows(content)
 
 
-def read_csv(path):
-    table = pd.read_csv(path)
-    
+def create_summary(solution_table_path):
+    table = pd.read_csv(solution_table_path)
+    totals = {}
+    for row in range(0, len(table)):
+        totals[str(table.iloc[row][0])] = int(
+            table.iloc[row].str.count('PASSED').sum())
+    sorted_x = sorted(totals.items(), key=operator.itemgetter(1), reverse=True)
+    totals = collections.OrderedDict(sorted_x)
+    serie = pd.Series(list(totals.values()), index=list(totals.keys()))
+    with open("better-coder.csv", 'w') as f:
+        serie.to_csv(f, header=['PASSED TESTS'])
 
+def create_grade(better_coder_path, number_of_test):
+    table = pd.read_csv(better_coder_path)
+    table["PASSED TESTS"] = table["PASSED TESTS"] / number_of_test * 100
+    table.to_csv('grade-coder.csv', header=['ID', 'PASSED TESTS'])
 
-read_csv("testcase.csv")
+number_of_test = 200
+better_coder_path = "better-coder.csv"
+create_grade(better_coder_path, number_of_test)
 
-# write_csv(20)
+# solution_table_path = "solution-table.csv" 
+# create_summary(solution_table_path)
+
+# number_of_student = 20
+# write_csv(number_of_student)
 
 # print("test1")
 # partition_array1 = partition(0.7, 3)
