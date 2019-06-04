@@ -1,6 +1,6 @@
 """
 A server for submission and checking of exercises.
-AUTHOR: Erel Segal-Halevi
+AUTHOR:  Shmouel Yossef Haim Avraham ben Shlomo, Erel Segal-Halevi
 SINCE: 2019-03
 """
 
@@ -262,6 +262,8 @@ async def check_test_peer_submission(websocket: object, submission: dict):
             else:
                 info = info + "         return null;"
             info = info + "\n   }"
+        print(signature["cla"])
+        print(info)
         proc = await docker_command(["exec", "badkan", "bash", "create-signature.sh", signature["cla"], info, owner_firebase_id, exercise_id])
         async for line in proc.stdout:
             line = line.decode('utf-8').strip()
@@ -325,7 +327,6 @@ async def check_solution_peer_submission(websocket: object, submission: dict):
     await proc.wait()
 
     # Then, run the gradle test command to all the folder and send result to the user.
-    # TODO: See what to send to the user... Need to make filter.
     # Send the index.html produced by Gradle corp.
     projects = line.split(" ")
     it = 1

@@ -163,8 +163,6 @@ function uploadPeerExercise(name, descr, deadlineTest, deadlineSolution, deadlin
         name, descr, userId, deadlineTest,
         deadlineSolution, deadlineConflicts, compilerSolution, compilerTest, submission, minTest, signatureMap
     );
-
-    console.log(peerExercise)
     incrementCreatedExAndSubmitCourse(userId, homeUser);
     writePeerExercise(peerExercise, folderName);
     editCourseCreatePeer(folderName);
