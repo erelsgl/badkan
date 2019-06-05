@@ -3,42 +3,91 @@
  * in the internal storage. Really important.
  */
 
+
+var $template = $('.template');
+let hash = 2;
+
+var numRegistered = 0,
+    numUnregistered = 0
+
+var coursesMap = new Map()
+var exercisesMap = new Map();
+var peerExercisesMap = new Map();
+var submissionsArray = []
+
 /**
  * ON STATE CHANGE.
  * Every time the state of the user is changed, this function is called.
  */
-firebase.auth().onAuthStateChanged(user => {
-  if (user) {
-    var userId = firebase.auth().currentUser.uid;
-    loadCurrentUser(userId); // Load current user data to localStorage. in file
-    // util/Firebase.js
-    flag = true;
-    localStorage.setItem('homeUserId', JSON.stringify(userId));
-  }
-});
+firebase.auth().onAuthStateChanged(authUser => {
 
-var homeUser = JSON.parse(localStorage.getItem('homeUserKey'));
 
-if (homeUser) {
-  if (homeUser.admin) {
-    if (homeUser.admin === true) {
-      $('#btnManageCourses').show()
-    }
+  /*** This code runs if there is a logged-in user. ***/
+  if (authUser) {
+    var userId = authUser.uid
+    localStorage.setItem('homeUserId', JSON.stringify(userId))
+    loadCurrentUser(userId, (homeUser) => {
+        if (homeUser.admin) {
+            if (homeUser.admin === true) {
+              $('#btnManageCourses').show()
+            }
+        }
+
+        if (exercisesObject) {  // defined in file data/exercises.js
+            // synchronous
+            console.log("exercisesObject is defined")
+            for (key in exercisesObject) {
+                exercisesMap.set(key, exercisesObject[key].exercise)
+            }
+        } else {
+            alert("Exercises object not found - please try again or contact the programmer")
+            // asynchronous - TO DELETE
+            loadAllExercisesAsync(exercisesMap); // defined in util/Firebase.js.
+        }
+
+        loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
+
+        loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
+            if (coursesObject) {  // defined in file data/courses.js
+                console.log("coursesObject "+coursesObject)
+                console.log("coursesMap "+coursesMap)
+                    // synchronous
+                    for (key in coursesObject) {
+                        course = coursesObject[key].course
+                        // coursesMap.set(key, course)
+                        addCourseHTML(key, course)
+                    }
+                    onAllCoursesLoaded()
+            } else {
+                alert("Courses object not found - please try again or contact the programmer")
+                // asynchronous - TO DELETE
+                loadAllCourses(            // in util/Firebase.js
+                    /*onCourse=*/addCourseHTML,
+                    /*onFinish=*/onAllCoursesLoaded)
+            }
+        })
+    })
   }
-}
+
+
+  /*** This code runs if there is NO logged-in user. ***/
+  else {
+    alert("You're not connected, try to sign in again!")
+    document.location.href = "index.html"
+  }
+})
+
+
+//var homeUser = JSON.parse(localStorage.getItem('homeUserKey'));
+
 
 // TODO: Maybe an assynchronous probleme here: need to have everything done before to begin anything.
 
 // We need to load all the exercise since it's possible that the owner of the
 // course is not the owner of the exercise.
-var exercisesMap = new Map();
-loadAllExercisesAsync(exercisesMap); // defined in Firebase.js.
 
-var peerExercisesMap = new Map();
-loadAllPeerExercisesAsync(peerExercisesMap); // defined in Firebase.js.
 
-var submissionsArray = [];
-loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId)
+
 
 
 function addCourseHTML(key, course) {
@@ -52,7 +101,7 @@ function addCourseHTML(key, course) {
     let arrayIds = course.ids.split(' ')
     if (arrayIds.includes(homeUser.id)) {
       if (isRegistered(course)) {
-        registered(key, course);
+        showRegisteredCourse(key, course);
       } else {
         let courseId = key;
         registerSuccess(course, courseId);
@@ -60,15 +109,12 @@ function addCourseHTML(key, course) {
     }
   } else {
     if (isRegistered(course)) {
-      registered(key, course);
+      showRegisteredCourse(key, course);
     } else {
-      notRegistered(key, course);
+      showUnregisteredCourse(key, course);
     }
   }
 }
-
-var numRegistered = 0,
-  numUnregistered = 0
 
 function onAllCoursesLoaded() {
   if (numUnregistered == 0) {
@@ -80,8 +126,7 @@ function onAllCoursesLoaded() {
   }
 }
 
-var coursesMap = new Map()
-loadAllCourses(addCourseHTML, onAllCoursesLoaded) // in util/Firebase.js
+
 
 function refresh() {
   var userId = firebase.auth().currentUser.uid;
@@ -111,8 +156,14 @@ document.getElementById('btnSettings').addEventListener('click', e => {
  */
 document.getElementById('btnLogOut').addEventListener('click', e => {
   document.getElementById('btnManageCourses').style.display = 'none'
-  firebase.auth().signOut();
-  document.location.href = 'index.html';
+  firebase.auth().signOut().then(
+    () => {
+        alert("Good bye!")
+        document.location.href = 'index.html'
+    },
+    (error) => {
+        alert("There was an error in sign out. Please try again. If the problem persists, please contact the programmer.")
+    });
 });
 
 
@@ -125,12 +176,10 @@ function isRegistered(course) {
   }
 }
 
-var $template = $('.template');
-let hash = 2;
 
 
 // Show a course to which the current user is not registered.
-function notRegistered(key, course) {
+function showUnregisteredCourse(key, course) {
   numUnregistered++;
   var $newPanel = $template.clone();
   $newPanel.find('.collapse').removeClass('in');
@@ -203,7 +252,7 @@ function notRegistered(key, course) {
 }
 
 // Show a course to which the current user is registered.
-function registered(key, course) {
+function showRegisteredCourse(key, course) {
   numRegistered++;
   var $newPanel = $template.clone();
   $newPanel.find('.collapse').removeClass('in');
@@ -226,105 +275,12 @@ function registered(key, course) {
       if (course.exercises[i] != 'dummyExerciseId') {
         let exerciseId = course.exercises[i];
         let exerciseObj = exercisesMap.get(exerciseId);
-        let peerExerciseObj = peerExercisesMap.get(exerciseId);
-
         if (exerciseObj) {
-          text_html += '<div class=\'exercise\'>'
-          text_html += '<h4>' + exerciseObj.name + '</h4>';
-          text_html += '<p>' + exerciseObj.description + '</p>';
-          if (exerciseObj.example === 'PDF') {
-            text_html += '<button name ="' + exerciseId +
-              '" id="dl" class="btn btn-link"">Download PDF</button>';
-            text_html += '<br /> <br />'
-          }
-
-          if (exerciseObj.deadline && exerciseObj.deadline.date) {
-            text_html += '<br />';
-            text_html +=
-              'Exercise deadline: ' + exerciseObj.deadline.date + '<br />';
-
-            let penalities = exerciseObj.deadline.penalities;
-
-            if (penalities) {
-              text_html += '<strong> Penalties </strong>: <br />';
-              for (var p = 0; p < penalities.length; p++) {
-                text_html += 'Submitted with ' + penalities[p].late +
-                  ' day(s) late is penalized with ' + penalities[p].point +
-                  ' point(s)' +
-                  '<br />';
-              }
-            }
-          }
-          let grade = -1;
-          if (submissionsArray) {
-            for (value of submissionsArray) {
-              if (value.exerciseId === exerciseId) {
-                grade = value.grade;
-                text_html += '<pre>For the submission with the id(s): ' + value.collaboratorsId + '. <br />';
-                text_html += 'Your current grade is: <strong> <font color="dc2f0a">' + grade + '</font></strong>. <br />';
-                text_html += 'Submitted on: ' + value.timestamp + '. </pre>';
-
-              }
-            }
-          }
-          text_html += '<p>';
-          if (grade === -1) {
-            text_html += 'You have not solved this exercise yet. ';
-          } 
-          text_html += '<button name ="' + exerciseId +
-            '" id="solve" class="btn btn-success"">Solve</button>';
-          text_html += '</p>';
-          text_html += '</div><!--exercise-->'
+          text_html += htmlOfExerciseInRegisteredCourse(exerciseId,exerciseObj)
         }
-
+        let peerExerciseObj = peerExercisesMap.get(exerciseId);
         if (peerExerciseObj) {
-          text_html += '<div class=\'exercise\'>'
-          text_html += '<h4>' +
-            '<span class="glyphicon glyphicon-transfer"></span>  ' +
-            peerExerciseObj.name +
-            '  <span class="glyphicon glyphicon-transfer"></span>' +
-            '</h4>';
-
-          text_html += '<p>' + peerExerciseObj.description + '</p>';
-          text_html += '<button name ="' + exerciseId +
-            '" id="dl" class="btn btn-link"">Download PDF</button>';
-          text_html += '<br /> <br />'
-
-
-          text_html +=
-            'Test deadline: ' + peerExerciseObj.deadlineTest + '<br />';
-          text_html +=
-            'Solution deadline: ' + peerExerciseObj.deadlineSolution +
-            '<br />';
-          text_html +=
-            'Conflicts deadline: ' + peerExerciseObj.deadlineConflicts +
-            '<br />';
-
-          text_html +=
-            'Test language: ' + peerExerciseObj.compilerTest + '<br />';
-          text_html +=
-            'Solution language: ' + peerExerciseObj.compilerSolution +
-            '<br />';
-
-          let phase = whichPhase(peerExerciseObj);
-          text_html += '<h5><strong>' + phase + ':</strong></h5>'
-
-          switch (phase) {
-            case 'Test Phase':
-              testPhase(peerExerciseObj, exerciseId);
-              break;
-            case 'Solution Phase':
-              solutionPhase(peerExerciseObj, exerciseId);
-              break;
-            case 'Conflicts Phase':
-              conflictsPhase(exerciseId);
-              break;
-            default:
-              endGame(exerciseId);
-          }
-
-          text_html += '</p>';
-          text_html += '</div><!--exercise-->'
+          text_html += htmlOfPeerExerciseInRegisteredCourse(exerciseId, peerExerciseObj)
         }
       }
     }
@@ -332,6 +288,113 @@ function registered(key, course) {
   $newPanel.find('.panel-body').append(text_html);
   $('#accordion-registered').append($newPanel.fadeIn());
 }
+
+
+function htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj) {
+  text_html = ''
+  text_html += '<div class=\'exercise\'>'
+  text_html += '<h4>' + exerciseObj.name + '</h4>';
+  text_html += '<p>' + exerciseObj.description + '</p>';
+  if (exerciseObj.example === 'PDF') {
+    text_html += '<button name ="' + exerciseId +
+      '" id="dl" class="btn btn-link"">Download PDF</button>';
+    text_html += '<br /> <br />'
+  }
+
+  if (exerciseObj.deadline && exerciseObj.deadline.date) {
+    text_html += '<br />';
+    text_html +=
+      'Exercise deadline: ' + exerciseObj.deadline.date + '<br />';
+
+    let penalities = exerciseObj.deadline.penalities;
+
+    if (penalities) {
+      text_html += '<strong> Penalties </strong>: <br />';
+      for (var p = 0; p < penalities.length; p++) {
+        text_html += 'Submitted with ' + penalities[p].late +
+          ' day(s) late is penalized with ' + penalities[p].point +
+          ' point(s)' +
+          '<br />';
+      }
+    }
+  }
+  let grade = -1;
+  if (submissionsArray) {
+    for (value of submissionsArray) {
+      if (value.exerciseId === exerciseId) {
+        grade = parseInt(value.grade)
+        text_html += '<pre>For the submission with the id(s): ' + value.collaboratorsId + '. <br />';
+        text_html += 'Your current grade is: <strong> <font color="dc2f0a">' + grade + '</font></strong>. <br />';
+        text_html += 'Submitted on: ' + value.timestamp + '. </pre>';
+      }
+    }
+  }
+  text_html += '<p>';
+  if (grade === -1) {
+    text_html += 'You have not solved this exercise yet. ';
+  }
+  text_html += '<button name ="' + exerciseId +
+    '" id="solve" class="btn btn-success"">Solve</button>';
+  text_html += '</p>';
+  text_html += '</div><!--exercise-->'
+  return text_html
+}
+
+
+function htmlOfPeerExerciseInRegisteredCourse(exerciseId, peerExerciseObj) {
+  text_html = ''
+  text_html += '<div class=\'exercise\'>'
+  text_html += '<h4>' +
+    '<span class="glyphicon glyphicon-transfer"></span>  ' +
+    peerExerciseObj.name +
+    '  <span class="glyphicon glyphicon-transfer"></span>' +
+    '</h4>';
+
+  text_html += '<p>' + peerExerciseObj.description + '</p>';
+  text_html += '<button name ="' + exerciseId +
+    '" id="dl" class="btn btn-link"">Download PDF</button>';
+  text_html += '<br /> <br />'
+
+
+  text_html +=
+    'Test deadline: ' + peerExerciseObj.deadlineTest + '<br />';
+  text_html +=
+    'Solution deadline: ' + peerExerciseObj.deadlineSolution +
+    '<br />';
+  text_html +=
+    'Conflicts deadline: ' + peerExerciseObj.deadlineConflicts +
+    '<br />';
+
+  text_html +=
+    'Test language: ' + peerExerciseObj.compilerTest + '<br />';
+  text_html +=
+    'Solution language: ' + peerExerciseObj.compilerSolution +
+    '<br />';
+
+  let phase = whichPhase(peerExerciseObj);
+  text_html += '<h5><strong>' + phase + ':</strong></h5>'
+
+  switch (phase) {
+    case 'Test Phase':
+      testPhase(peerExerciseObj, exerciseId);
+      break;
+    case 'Solution Phase':
+      solutionPhase(peerExerciseObj, exerciseId);
+      break;
+    case 'Conflicts Phase':
+      conflictsPhase(exerciseId);
+      break;
+    default:
+      endGame(exerciseId);
+  }
+
+  text_html += '</p>';
+  text_html += '</div><!--exercise-->'
+  return text_html
+}
+
+
+
 
 /*
  * @param {int} minTest
@@ -448,3 +511,5 @@ function registerSuccess(course, courseId) {
   editCourse(course, courseId)
   document.location.href = 'home.html';
 }
+
+//}

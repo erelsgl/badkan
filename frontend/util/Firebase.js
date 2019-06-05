@@ -163,7 +163,7 @@ function incrementEditExWithoutCommingHome(userId, homeUser) {
  * This function downloads the user from the firebase given his id.
  * @param {String} userId 
  */
-function loadCurrentUser(userId) {
+function loadCurrentUser(userId, onLoaded) {
   database.ref('/users/' + userId).once('value').then(function (snapshot) {
     var data = snapshot.val();
     if (!data || (typeof data === 'undefined')) {
@@ -187,6 +187,7 @@ function loadCurrentUser(userId) {
           $("#btnManageCourses").show()
         }
       }
+      onLoaded(homeUser)
     }
   });
 }
@@ -260,15 +261,21 @@ function loadExerciseByOwner(ownExercises) {
   });
 }
 
-function loadAllSubmissionsByUserAsync(submissionsArray, submissionsId) {
+
+function loadAllSubmissionsByUserAsync(submissionsArray, submissionsId, onUserSubmissionsLoaded) {
   if (submissionsId) {
-    for (let i = 0; i < Object.keys(submissionsId).length; i++) {
+    var len = Object.keys(submissionsId).length
+    for (let i = 0; i < len; i++) {
       database.ref('/submissions/' + Object.keys(submissionsId)[i]).once('value').then(function (snapshot) {
         submissionsArray.push(snapshot.val().submission);
+        if (submissionsArray.length==len) {
+            onUserSubmissionsLoaded()
+        }
       })
     }
   }
 }
+
 
 /**
  * Load all the courses from Firebase,
@@ -292,7 +299,7 @@ function loadCoursesOwnedByCurrentUser(onCourse, onFinish, homeUserForAdmin) {
         firebase.auth().currentUser.uid == "l54uXZrXdrZDTcDb2zMwObhXbxm1") {
         onCourse(course_data.key, course_data.val().course)
       }
-      numToProcess--;
+      --numToProcess
       if (numToProcess <= 0) { // done all courses
         document.getElementById("loading").style.display = "none"; // TODO: is it needed?
         onFinish();
@@ -322,10 +329,10 @@ function loadAllCourses(onCourse, onFinish) {
 /**
  * This function load all the exercises of the database.
  */
-function loadAllExercisesAsync(exercises) {
+function loadAllExercisesAsync(exercisesMap) {
   database.ref().child('exercises/').on("value", function (snapshot) {
     snapshot.forEach(function (data) {
-      exercises.set(data.key, data.val().exercise);
+      exercisesMap.set(data.key, data.val().exercise);
     });
   });
 }
