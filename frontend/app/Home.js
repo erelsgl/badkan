@@ -93,7 +93,6 @@ firebase.auth().onAuthStateChanged(authUser => {
 
 function addCourseHTML(key, course) {
   coursesMap.set(key, course);
-  alert(JSON.stringify(course))
   // SEE IF REGISTER OR NOT: HERE ASSUMING NOT.         // If the user click
   // here check if he registered if yes dl the pdf or something like this. First
   // see if course if private or not:

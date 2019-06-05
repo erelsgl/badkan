@@ -32,12 +32,16 @@ def update_courses():
     exercisesObject = r.json()
 
     for courseKey, courseData in coursesObject.items():
-        print("sorting course ", courseKey, flush=True)
-        exercises = courseData["course"]["exercises"]
-        exercises[:] = [exId for exId in exercises if exId in exercisesObject]
-        print(type(exercisesObject))
-        exercises.sort(
-            key=lambda exerciseKey: exercisesObject[exerciseKey]["exercise" or "peerExercise"]["name"])
+        course = courseData["course"]
+        if "exercises" in course:
+            print("sorting course ", courseKey, flush=True)
+            exercises = course["exercises"]
+            exercises[:] = [
+                exId for exId in exercises if exId in exercisesObject]
+            exercises.sort(
+                key=lambda exerciseKey: exercisesObject[exerciseKey]["exercise"]["name"])
+        else:
+            print("course ", courseKey, " has no exercises object", flush=True)
 
     with open(DIR+"/../frontend/data/courses.js", "w") as file:
         file.write("coursesObject=")
