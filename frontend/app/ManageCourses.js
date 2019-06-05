@@ -34,6 +34,7 @@ $('input[type=radio][name=privacy]').change(function () {
 });
 
 document.getElementById("btnCreateCourse").addEventListener('click', e => {
+    onLoading()
     var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
     const name = escapeHtml(document.getElementById("courseName").value);
     const grader = escapeHtml(document.getElementById("grader_id").value);
@@ -113,35 +114,32 @@ function addCourseHTML(courseId, course) {
     $newPanel.find(".panel-collapse").attr("id", addCourseHTML.hash++).addClass("collapse").removeClass("in");
     $newPanel.find(".panel-body").text('')
     text_html = "";
-    if (course.exercises.length === 1 && course.exercises[0] === "dummyExerciseId") {
+    if (!course.exercises) {
         text_html += "<h5>You didn't create any exercise for this course yet!</h5>"
-    }
-    for (var i = 0; i < course.exercises.length; i++) {
-        if (course.exercises[i] != "dummyExerciseId") {
+    } else {
+        for (var i = 0; i < course.exercises.length; i++) {
+            if (course.exercises[i] != "dummyExerciseId") {
+                if (exercisesMap.get(course.exercises[i])) {
+                    text_html +=
+                        "<button name =\"" + course.exercises[i] + "$@$" + courseId + "\" id=\"exercise\" class=\"btn btn-link\">" +
+                        exercisesMap.get(course.exercises[i]).name +
+                        "</button>";
+
+                    if (i != course.exercises.length - 1) text_html += "<br />";
+                }
 
 
-            if (exercisesMap.get(course.exercises[i])) {
-                text_html +=
-                    "<button name =\"" + course.exercises[i] + "$@$" + courseId + "\" id=\"exercise\" class=\"btn btn-link\">" +
-                    exercisesMap.get(course.exercises[i]).name +
-                    "</button>";
+                if (peerExercisesMap.get(course.exercises[i])) {
+                    text_html +=
+                        "<button name =\"peer" + course.exercises[i] + "$@$" + courseId + "\" id=\"exercise\" class=\"btn btn-link\">" +
+                        "<span class=\"glyphicon glyphicon-transfer\"></span>  " +
+                        peerExercisesMap.get(course.exercises[i]).name +
+                        "  <span class=\"glyphicon glyphicon-transfer\"></span>" +
+                        "</button>";
 
-                if (i != course.exercises.length - 1) text_html += "<br />";
+                    if (i != course.exercises.length - 1) text_html += "<br />";
+                }
             }
-
-
-            if (peerExercisesMap.get(course.exercises[i])) {
-                text_html +=
-                    "<button name =\"peer" + course.exercises[i] + "$@$" + courseId + "\" id=\"exercise\" class=\"btn btn-link\">" +
-                    "<span class=\"glyphicon glyphicon-transfer\"></span>  " +
-                    peerExercisesMap.get(course.exercises[i]).name +
-                    "  <span class=\"glyphicon glyphicon-transfer\"></span>" +
-                    "</button>";
-
-                if (i != course.exercises.length - 1) text_html += "<br />";
-            }
-
-
         }
     }
     text_html += "<br /> <br />";
@@ -156,7 +154,6 @@ addCourseHTML.template = $(".template");
 addCourseHTML.hash = 2;
 
 function onUser(key, user) {
-    finishLoading()
     usersMap.set(key, user)
     // TODO: This code should be called only after all courses are processed!
     localStorage.setItem("usersMap",
@@ -213,7 +210,6 @@ $('body').on('click', '#exercise', function (e) {
 });
 
 $('body').on('click', '#create', function (e) {
-
     $(function () {
         $("#dialog-confirm").dialog({
             resizable: false,

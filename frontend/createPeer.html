@@ -59,86 +59,89 @@
             </li>
         </ul>
     </div>
-    <div id="loadingEx" class="loader" style="display:none;"></div>
-    <div id="page">
-        <div class="container">
-            <h1>Create a Peer-to-Peer exercise.</h1>
+    <div id=loading class="loader"></div>
+    <div id="show">
+        <div id="page">
+            <div class="container">
+                <h1>Create a Peer-to-Peer exercise.</h1>
 
-            <h3>First time?
-                <button id="btnHelp" type="button" class="btn btn-link">help</button></h3>
+                <h3>First time?
+                    <button id="btnHelp" type="button" class="btn btn-link">help</button></h3>
 
-            <h5>*All the fields are required.*</h5>
+                <h5>*All the fields are required.*</h5>
 
-            <!-- input. -->
-            <form id="form">
-                <div class="form-group">
-                    <label for="usr">Name:</label>
-                    <input type="text" class="form-control" id="exName" placeholder="Enter a name for the exercise" />
-                </div>
-
-                <!-- text area. -->
-                <div class="form-group">
-                    <label for="comment">Description:</label>
-                    <textarea class="form-control" rows="10" id="exDescr" name="comment"
-                        placeholder="Enter the description of the exercise"></textarea>
-                </div>
                 <!-- input. -->
-                <div class="form-group">
-                    <label for="usr">Exercise Instructions:</label>
-                    <input type="file" id="instruction" />
-                </div>
+                <form id="form">
+                    <div class="form-group">
+                        <label for="usr">Name:</label>
+                        <input type="text" class="form-control" id="exName"
+                            placeholder="Enter a name for the exercise" />
+                    </div>
 
-                <div class="form-group">
-                    <label for="usr">Test Language:</label>
-                    <input type="text" class="form-control" id="testLanguage"
-                        placeholder="Enter a name for the exercise" value="Junit" readonly />
-                </div>
+                    <!-- text area. -->
+                    <div class="form-group">
+                        <label for="comment">Description:</label>
+                        <textarea class="form-control" rows="10" id="exDescr" name="comment"
+                            placeholder="Enter the description of the exercise"></textarea>
+                    </div>
+                    <!-- input. -->
+                    <div class="form-group">
+                        <label for="usr">Exercise Instructions:</label>
+                        <input type="file" id="instruction" />
+                    </div>
 
-                <div class="form-group">
-                    <label for="usr">Solution Language:</label>
-                    <input type="text" class="form-control" id="solLanguage" placeholder="Enter a name for the exercise"
-                        value="java" readonly /> <br />
-                </div>
+                    <div class="form-group">
+                        <label for="usr">Test Language:</label>
+                        <input type="text" class="form-control" id="testLanguage"
+                            placeholder="Enter a name for the exercise" value="Junit" readonly />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="usr">Solution Language:</label>
+                        <input type="text" class="form-control" id="solLanguage"
+                            placeholder="Enter a name for the exercise" value="java" readonly /> <br />
+                    </div>
 
 
-                <div class="form-group">
-                    <label for="usr">Choose the submission option (at least one required):</label>
-                    <ul>
-                        <li><input id="github" name="BoxSelect[]" type="checkbox" value="github" required
-                                readonly><label>GitHub</label> not available currently</li>
-                        <li><input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required
-                                checked><label>Zip</label>
-                        </li>
-                        <li><input id="gitlab" name="BoxSelect[]" type="checkbox" value="gitlab" required
-                                readonly><label>GitLab</label> not available currently</li>
-                    </ul>
-                </div>
+                    <div class="form-group">
+                        <label for="usr">Choose the submission option (at least one required):</label>
+                        <ul>
+                            <li><input id="github" name="BoxSelect[]" type="checkbox" value="github" required
+                                    readonly><label>GitHub</label> not available currently</li>
+                            <li><input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required
+                                    checked><label>Zip</label>
+                            </li>
+                            <li><input id="gitlab" name="BoxSelect[]" type="checkbox" value="gitlab" required
+                                    readonly><label>GitLab</label> not available currently</li>
+                        </ul>
+                    </div>
 
-                <div class="form-group">
-                    <label for="usr">Be careful, the date must be chronological:</label> <br />
-                    Deadline for the test: <input type="date" name="dealineTest" id="dealineTest"> <br />
-                    Deadline for the solution: <input type="date" name="dealineSol" id="dealineSol"> <br />
-                    Deadline for the conflicts: <input type="date" name="dealineCon" id="dealineCon"> <br />
-                </div>
+                    <div class="form-group">
+                        <label for="usr">Be careful, the date must be chronological:</label> <br />
+                        Deadline for the test: <input type="date" name="dealineTest" id="dealineTest"> <br />
+                        Deadline for the solution: <input type="date" name="dealineSol" id="dealineSol"> <br />
+                        Deadline for the conflicts: <input type="date" name="dealineCon" id="dealineCon"> <br />
+                    </div>
 
-                <div class="form-group">
-                    <label for="usr">Minimum test required:</label>
-                    <input type="number" class="form-control" id="minTest" /> <br />
-                </div>
+                    <div class="form-group">
+                        <label for="usr">Minimum test required:</label>
+                        <input type="number" class="form-control" id="minTest" /> <br />
+                    </div>
 
-                <!-- text area. -->
-                <div class="form-group">
-                    <label for="comment">Signatures:</label>
-                    <h5>Please respect the format:</h5>
-                    <h5>function signature; class where the function resides;</h5>
-                    <h5>e.g: public static int myFun(int num1, int num2); MyClass.java;</h5>
-                    <textarea class="form-control" rows="10" id="signatures"
-                        placeholder="Enter the signatures of the exercise"></textarea>
-                </div>
+                    <!-- text area. -->
+                    <div class="form-group">
+                        <label for="comment">Signatures:</label>
+                        <h5>Please respect the format:</h5>
+                        <h5>function signature; class where the function resides;</h5>
+                        <h5>e.g: public static int myFun(int num1, int num2); MyClass.java;</h5>
+                        <textarea class="form-control" rows="10" id="signatures"
+                            placeholder="Enter the signatures of the exercise"></textarea>
+                    </div>
 
-                <!-- button. -->
-                <button id="btnConfirm" type="button" class="btn btn-primary">Confirm</button>
-            </form>
+                    <!-- button. -->
+                    <button id="btnConfirm" type="button" class="btn btn-primary">Confirm</button>
+                </form>
+            </div>
         </div>
     </div>
 

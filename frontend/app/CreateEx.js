@@ -1,3 +1,5 @@
+finishLoading()
+
 // This line should be the same as in myExercises.js.
 
 var BACKEND_PORTS = [5670, 5671, 5672, 5673, 5674, 5675, 5676, 5677, 5678, 5679];
@@ -9,8 +11,7 @@ var BACKEND_FILE_PORTS = [9000];
  * BUTTON CONFIRM.
  */
 document.getElementById("btnConfirm").addEventListener('click', e => {
-  document.getElementById("page").style.display = "none";
-  document.getElementById("loadingEx").style.display = "block";
+  onLoading()
   const name = escapeHtml(document.getElementById("exName").value);
   const descr = escapeHtml(document.getElementById("exDescr").value);
   const compiler = escapeHtml(document.getElementById("exCompiler").value);
@@ -21,8 +22,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
 
   // Here we first check that the user at least check one of the parameter.
   if (!github && !zip && !gitlab) {
-    document.getElementById("page").style.display = "block";
-    document.getElementById("loadingEx").style.display = "none";
+    finishLoading()
     alert("Please check at least one submission option.");
     return;
   }
@@ -60,8 +60,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
 function checkEmptyFieldsGit(name, descr, exFolder, user, pass, link, compiler) {
   var emptyField = document.getElementById("emptyField");
   if (name === "" || descr === "" || exFolder == "" || user == "" || pass == "" || compiler === "" || link == "") {
-    document.getElementById("page").style.display = "block";
-    document.getElementById("loadingEx").style.display = "none";
+    finishLoading()
     emptyField.className = "show";
     setTimeout(function () {
       emptyField.className = emptyField.className.replace("show", "");
@@ -88,7 +87,12 @@ function checkEmptyFieldsFile(name, descr, file, compiler) {
 function editCourseCreate(exerciseId) {
   let courseId = JSON.parse(localStorage.getItem("courseId"));
   let course = JSON.parse(localStorage.getItem("course"));
-  course.exercises.push(exerciseId);
+  if (course.exercise) {
+    course.exercises.push(exerciseId);
+  }
+  else {
+    course.exercises = [exerciseId]
+  }
   editCourse(course, courseId);
 }
 
@@ -254,7 +258,6 @@ function uploadPdf(exerciseId) {
 var count = 0;
 
 function onFinish() {
-  console.log(count);
   count++;
   if (count == 2) {
     document.getElementById("form").submit();

@@ -2,6 +2,8 @@
  * This file is used when the student clicks "Submit".
  */
 
+ finishLoading()
+ 
 // This line should be the same as in myExercises.js.
 
 var BACKEND_PORTS = [5670, 5671, 5672, 5673, 5674, 5675, 5676, 5677, 5678, 5679];

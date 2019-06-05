@@ -267,9 +267,7 @@ function showRegisteredCourse(key, course) {
     .removeClass('in');
   $newPanel.find('.panel-body').text('')
   text_html = '';
-
-  if (course.exercises.length === 1 &&
-    course.exercises[0] === 'dummyExerciseId') {
+  if (!course.exercises) {
     text_html += '<h5>There are no available exercise for this course!</h5>'
   } else {
     text_html += '<h3>Exercises in ' + course.name + '</h3>'

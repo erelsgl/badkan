@@ -68,6 +68,9 @@ function writeExercise(exercise, exerciseId) {
   if (!exercise.deadline) {
     exercise.deadline = null;
   }
+  if (!exercise.submissionsId) {
+    exercise.submissionsId = null;
+  }
   firebase.database().ref("exercises/" + exerciseId).set({
     exercise
   });
@@ -269,8 +272,6 @@ function loadExerciseByOwner(ownExercises) {
         flag = true;
       }
     });
-    loading("div2");
-    loading("loading2");
     if (!flag) {
       alert("You didn't create any exercise yet!");
       window.location.href = 'home.html';

@@ -8,8 +8,7 @@ let exerciseId = getParameterByName("exercise"); // in utils.js
 getConflictsByUid(exerciseId, uid, addItemToList, noConflicts);
 
 function addItemToList(functionName, numOfReclamation, functionContent) {
-    $("div#loading").hide();
-    $("div#conflicts").show();
+    finishLoading()
     // TODO: add the test itself then remove conflicts object and rename tests to conflict.
     let txtHtml = "<pre>";
     txtHtml += "Name of the test function: " + functionName + ". <br />";
@@ -21,8 +20,7 @@ function addItemToList(functionName, numOfReclamation, functionContent) {
 }
 
 function noConflicts() {
-    $("div#loading").hide();
-    $("div#noConflict").show();
+    finishLoading()
 }
 
 $("button#confirm").click(() => {

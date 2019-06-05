@@ -32,6 +32,8 @@
  * All the field are required.
  */
 
+finishLoading()
+
 /**
  * BUTTON HELP.
  * TODO: Complete the info. (send link to paper).
@@ -42,13 +44,11 @@ document.getElementById("btnHelp").addEventListener('click', e => {
 
 
 
-
 /**
  * BUTTON CONFIRM.
  */
 document.getElementById("btnConfirm").addEventListener('click', e => {
-    document.getElementById("page").style.display = "none";
-    document.getElementById("loadingEx").style.display = "block";
+    onLoading()
 
     const name = escapeHtml(document.getElementById("exName").value);
     const descr = escapeHtml(document.getElementById("exDescr").value);
@@ -60,8 +60,7 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
     const dealineCon = document.getElementById("dealineCon").value;
 
     if (!logicalTime(dealineTest, dealineSol, dealineCon)) {
-        document.getElementById("page").style.display = "block";
-        document.getElementById("loadingEx").style.display = "none";
+        finishLoading()
         alert("Please check the deadline.");
         return;
     }
@@ -134,8 +133,7 @@ function checkEmptyFieldsPeer(name, descr, file, deadlineTest, deadlineSolution,
     var emptyField = document.getElementById("emptyField");
     if (!name || !descr || !file || !deadlineTest || !deadlineSolution || !deadlineConflicts ||
         !compilerSolution || !compilerTest || !submission || !minTest || !signatureMap || signatureMap.size == 0) {
-        document.getElementById("page").style.display = "block";
-        document.getElementById("loadingEx").style.display = "none";
+        finishLoading()
         emptyField.className = "show";
         setTimeout(function () {
             emptyField.className = emptyField.className.replace("show", "");

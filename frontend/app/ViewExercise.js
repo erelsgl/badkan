@@ -105,8 +105,7 @@ if (html_text) {
     $("#submissions").append("There is no submission yet.");
 }
 
-document.getElementById("loading").style.display = "none";
-
+finishLoading()
 
 $('body').on('click', '#exercise', function (e) {
     let userId = e.target.name;
