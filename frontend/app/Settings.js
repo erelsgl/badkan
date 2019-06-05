@@ -41,7 +41,7 @@ document.getElementById("confirm").addEventListener('click', e => {
       homeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")];
     }
     let newUser = new User(name, lastName, id, homeUser.email, homeUser.createdEx,
-      homeUser.deletedEx, homeUser.editedEx, homeUser.exerciseSolved,
+      homeUser.deletedEx, homeUser.editedEx, homeUser.submissionsId,
       homeUser.peerExerciseSolved, checked, homeUser.notif);
     writeUserData(newUser, user.uid);
     document.location.href = "home.html";

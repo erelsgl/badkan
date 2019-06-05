@@ -117,14 +117,12 @@ function uploadExerciseGit(name, descr, link, username, pass, exFolder, deadline
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   folderName = user.uid + "_" + homeUser.createdEx;
   sendLinkWEBSOCKET(link, folderName, username, pass, exFolder);
-  let grade = new Grade("id", 90, "url");
-  let grades = new Grades([grade]);
   let example = "deprecated"
   var pdf = document.getElementById('instruction').files[0];
   if (pdf) {
     example = "PDF"
   }
-  let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, grades, deadline, compiler, submission);
+  let exercise = new Exercise(name, descr, example, user.uid, link, exFolder, [], deadline, compiler, submission);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName);
@@ -137,14 +135,12 @@ function uploadExerciseFile(name, descr, file, deadline, compiler, submission) {
   var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
   folderName = user.uid + "_" + homeUser.createdEx;
   sendFileHTTP(file, folderName)
-  let grade = new Grade("id", 90, "url");
-  let grades = new Grades([grade]);
   let example = "deprecated"
   var pdf = document.getElementById('instruction').files[0];
   if (pdf) {
     example = "PDF"
   }
-  let exercise = new Exercise(name, descr, example, user.uid, "zip", "", grades, deadline, compiler, submission);
+  let exercise = new Exercise(name, descr, example, user.uid, "zip", "", [], deadline, compiler, submission);
   incrementCreatedExAndSubmitCourse(user.uid, homeUser);
   writeExercise(exercise, folderName);
   editCourseCreate(folderName);

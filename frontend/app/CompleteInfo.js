@@ -9,7 +9,6 @@ document.getElementById("confirm").addEventListener('click', e => {
   const id = document.getElementById("txtId").value;
   if (checkEmptyFields(name, lastName, id)) {
     var user = firebase.auth().currentUser;
-    let exerciseSolved = new ExerciseSolved(90, "id");
     let peerExerciseSolved = new PeerGrade("id", 90, 90, "urlTest", "urlSolution");
     let notif = new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")
     let checked = document.getElementById("admin").checked;
@@ -22,7 +21,7 @@ document.getElementById("confirm").addEventListener('click', e => {
         return;
       }
     }
-    let currentUser = new User(name, lastName, id, user.email, 0, 0, 0, [exerciseSolved], 
+    let currentUser = new User(name, lastName, id, user.email, 0, 0, 0, [], 
       [peerExerciseSolved], checked, [notif]);
     writeUserData(currentUser, user.uid);
     document.location.href = "home.html";

@@ -70,8 +70,8 @@ if (exercise.deadline) {
     document.getElementById("deadline").defaultValue = exercise.deadline.date
     if (exercise.deadline.penalities) {
         for (let i = 0; i < exercise.deadline.penalities.length; i++) {
-            document.getElementById("penalityLate" + (i+1)).defaultValue = exercise.deadline.penalities[i].late
-            document.getElementById("penalityGrade" + (i+1)).defaultValue = exercise.deadline.penalities[i].point
+            document.getElementById("penalityLate" + (i + 1)).defaultValue = exercise.deadline.penalities[i].late
+            document.getElementById("penalityGrade" + (i + 1)).defaultValue = exercise.deadline.penalities[i].point
         }
     }
 }
@@ -87,16 +87,13 @@ if (exercise.link == 'zip') {
 let html_text = "";
 // usersMap.get is undefined iff there are no users registered to the course.
 // TODO: Handle this case more precisely
-console.log(usersMap);
-for (var i = 1; i < exercise.grades.gradeObj.length; i++) {
-    var currentUser = usersMap.get(exercise.grades.gradeObj[i].id)
-    //console.log(currentUser)
-    if (currentUser) {
+for ([key, value] of usersMap) {
+    if (course.students.includes(key)) {
         html_text +=
-            "<button name =\"" + exercise.grades.gradeObj[i].id + "\" id=\"exercise\" class=\"btn btn-link\">" +
-            currentUser.name + " " +
-            currentUser.lastName + " " +
-            currentUser.id +
+            "<button name =\"" + key + "\" id=\"exercise\" class=\"btn btn-link\">" +
+            value.name + " " +
+            value.lastName + " " +
+            value.id +
             "</button>";
         html_text += "<br />";
     }
@@ -135,13 +132,13 @@ document.getElementById("btnEditZip").addEventListener('click', e => {
     const date = document.getElementById("deadline").value;
     let penalities = [];
     for (var i = 1; i < 7; i++) {
-      if (document.getElementById("penalityLate" + i).value) {
-        let late = document.getElementById("penalityLate" + i).value;
-        let point = document.getElementById("penalityGrade" + i).value;
-        penalities.push(new Penality(late, point));
-      }
+        if (document.getElementById("penalityLate" + i).value) {
+            let late = document.getElementById("penalityLate" + i).value;
+            let point = document.getElementById("penalityGrade" + i).value;
+            penalities.push(new Penality(late, point));
+        }
     }
-  
+
     let deadline = new Deadline(date, penalities);
 
     // Here we first check that the user at least check one of the parameter.
@@ -215,7 +212,7 @@ function uploadExercise(name, descr, compiler, submissionGitHub) {
     // The ref of the folder must be PK.
     var user = firebase.auth().currentUser;
     sendLinkHTTP(exerciseId, exercise.exFolder);
-    let ex = new Exercise(name, descr, exercise.example, user.uid, exercise.link, exercise.exFolder, exercise.grades, exercise.deadline, compiler, submissionGitHub);
+    let ex = new Exercise(name, descr, exercise.example, user.uid, exercise.link, exercise.exFolder, exercise.submissionsId, exercise.deadline, compiler, submissionGitHub);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
 }
@@ -226,10 +223,10 @@ function uploadExerciseFile(name, descr, file, deadline, compiler, submissionZip
     if (file) {
         sendFileHTTP(exerciseId, file);
     }
-    let ex = new Exercise(name, descr, exercise.example, user.uid, 'zip', "", exercise.grades, deadline, compiler, submissionZip);
+    let ex = new Exercise(name, descr, exercise.example, user.uid, 'zip', "", exercise.submissionsId, deadline, compiler, submissionZip);
     incrementEditExWithoutCommingHome(user.uid, homeUser);
     writeExercise(ex, exerciseId);
-    if(isGrade() && !file) {
+    if (isGrade() && !file) {
         flagCp = true;
     }
     checkGrade(exerciseId);
@@ -278,7 +275,7 @@ function sendFileHTTP(folderName, file) {
     var reader = new FileReader();
     reader.readAsArrayBuffer(file);
     var rawData = new ArrayBuffer();
-    reader.loadend = function () {}
+    reader.loadend = function () { }
     reader.onload = function (e) {
         rawData = e.target.result;
         // create the request
@@ -326,7 +323,12 @@ document.getElementById("btnRunAll").addEventListener('click', e => {
     if (!backendPort)
         backendPort = BACKEND_PORTS[Math.floor(Math.random() * BACKEND_PORTS.length)];
     var websocketurl = "ws://" + location.hostname + ":" + backendPort + "/"
-    let keys = Array.from(usersMap.keys());
+    let keys = []
+    for ([key, value] of usersMap) {
+        if (course.students.includes(key)) {
+            keys.push(key)
+        }
+    }
     var submission_json = JSON.stringify({
         target: "run_all",
         users_map: keys,
@@ -373,12 +375,14 @@ document.getElementById("btnRunAll").addEventListener('click', e => {
 document.getElementById("btnDlProjects").addEventListener('click', e => {
     var parts = exerciseId + "@$@";
     for (var [key, value] of usersMap) {
-        var position = value.name.search(/[\u0590-\u05FF]/);
-        if (position >= 0) {
-            value.name = "unknown";
-            value.lastName = "unknown";
+        if (course.students.includes(key)) {
+            var position = value.name.search(/[\u0590-\u05FF]/);
+            if (position >= 0) {
+                value.name = "unknown";
+                value.lastName = "unknown";
+            }
+            parts += key + "/" + value.name + "_" + value.lastName + "-";
         }
-        parts += key + "/" + value.name + "_" + value.lastName + "-";
     }
     console.log(parts)
     downloadProject(parts);
@@ -485,7 +489,9 @@ document.getElementById("btnMoss").addEventListener('click', e => {
     }
     let information = "";
     for (var [key, value] of usersMap) {
-        information += key + "/" + value.name + "_" + value.lastName + "-";
+        if (course.students.includes(key)) {
+            information += key + "/" + value.name + "_" + value.lastName + "-";
+        }
     }
     json = JSON.stringify({
         target: "moss_command",
@@ -545,20 +551,19 @@ function sendWebsocket(json) {
 
 function showTemplateEdit() {
     document.getElementById('accordion2').style.display = "block";
-  }
-  
-  
-  function hideTemplateEdit() {
-    document.getElementById('accordion2').style.display = "none";
-  }
+}
 
-  document.getElementById("morePenalities").addEventListener('click', e => {
+
+function hideTemplateEdit() {
+    document.getElementById('accordion2').style.display = "none";
+}
+
+document.getElementById("morePenalities").addEventListener('click', e => {
     if (document.getElementById("3-4").style.display === 'block') {
-      document.getElementById("3-4").style.display = 'none';
-      document.getElementById("5-6").style.display = 'none';
+        document.getElementById("3-4").style.display = 'none';
+        document.getElementById("5-6").style.display = 'none';
     } else {
-      document.getElementById("3-4").style.display = 'block';
-      document.getElementById("5-6").style.display = 'block';
+        document.getElementById("3-4").style.display = 'block';
+        document.getElementById("5-6").style.display = 'block';
     }
-  });
-  
+});

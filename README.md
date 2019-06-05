@@ -101,6 +101,10 @@ Please, install zip in the server by running the next command:
 
     sudo apt install zip
 
+Please, install pandas in the server by running the next command:
+
+    pip3 install pandas
+
 Since we use contrab for the backup, from the database_exports folder please run:
 
     crontab crontab-backup

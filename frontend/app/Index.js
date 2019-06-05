@@ -29,10 +29,9 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
       }
     }
     firebase.auth().createUserWithEmailAndPassword(email, pass).then(function () {
-      let exerciseSolved = new ExerciseSolved(90, "id");
       let peerExerciseSolved = new PeerGrade("id", 90, 90, "urlTest", "urlSolution");
       let notif = new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")
-      let homeUser = new User(name, lastName, id, email, 0, 0, 0, [exerciseSolved],
+      let homeUser = new User(name, lastName, id, email, 0, 0, 0, [],
         [peerExerciseSolved], checked, [notif]);
       var user = firebase.auth().currentUser;
       writeUserData(homeUser, user.uid);

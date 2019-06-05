@@ -39,8 +39,9 @@ Badkan stores all information in a Firebase DB. The objects in the DB are:
 * userIds - array of the collabs;
 * grade - the automatic grade;
 * manualGrade - a number fed by the instructor;
+* url - the url of the submission (can be ZIP);
+* timestamp - the time the solution is submitted; 
 * instructorComments - text fed by the instructor;
-...
 
 ## peerSubmissions
 

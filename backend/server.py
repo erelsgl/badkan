@@ -465,7 +465,7 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
     edit_csv_trace(str(currentDT), solution, ids, grade, name)
     # name, last_name, student_id, output, exercice_name
     edit_csv_trace(submission["student_name"],
-                     submission["student_last_name"], ids, output, exercise)
+                   submission["student_last_name"], ids, output, exercise)
 
 
 async def load_ex(url, folder_name, username, password, exercise):
