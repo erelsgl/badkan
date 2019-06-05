@@ -15,6 +15,7 @@ import datetime
 from terminal import *
 from util import *
 import datetime
+from update_courses import update_courses
 from multiprocessing import Process
 
 from concurrent.futures import ProcessPoolExecutor
@@ -543,8 +544,15 @@ async def run(websocket, path):
         await check_test_peer_submission(websocket, submission)
     elif target == "check_solution_peer_submission":
         await check_solution_peer_submission(websocket, submission)
-    else:
+    elif target == "create_course":
+        pass
+    elif target == "edit_course":
+        pass
+    elif target == "check_submission":
         await check_submission(websocket, submission)
+    else:
+        print("Illegal target {}".format(target))
+    update_courses()      # TODO: verify that Firebase has finished updating.
     print("> Closing connection")
 
 
