@@ -14,8 +14,12 @@ firebase.auth().onAuthStateChanged(user => {
     // util/Firebase.js
     flag = true;
     localStorage.setItem('homeUserId', JSON.stringify(userId));
+//    onCurrentUserLoaded()
   }
 });
+
+
+//function onCurrentUserLoaded() {
 
 var homeUser = JSON.parse(localStorage.getItem('homeUserKey'));
 
@@ -31,14 +35,24 @@ if (homeUser) {
 
 // We need to load all the exercise since it's possible that the owner of the
 // course is not the owner of the exercise.
+
+
 var exercisesMap = new Map();
-loadAllExercisesAsync(exercisesMap); // defined in Firebase.js.
+if (exercisesObject) {  // defined in file data/exercises.js
+    for (key in exercisesObject) {
+        exercisesMap.set(key, exercisesObject[key].exercise)
+    }
+} else {
+    loadAllExercisesAsync(exercisesMap); // defined in Firebase.js.
+}
+
 
 var peerExercisesMap = new Map();
 loadAllPeerExercisesAsync(peerExercisesMap); // defined in Firebase.js.
 
 var submissionsArray = [];
 loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId)
+
 
 
 function addCourseHTML(key, course) {
@@ -81,10 +95,20 @@ function onAllCoursesLoaded() {
 }
 
 var coursesMap = new Map()
-loadAllCourses(            // in util/Firebase.js
-    /*onCourse=*/addCourseHTML,
-    /*onFinish=*/onAllCoursesLoaded)
-
+if (coursesObject) {  // defined in file data/courses.js
+    setTimeout(() => {
+        for (key in coursesObject) {
+            course = coursesObject[key].course
+            // coursesMap.set(key, course)
+            addCourseHTML(key, course)
+        }
+        onAllCoursesLoaded()
+    }, 3000)
+} else {
+    loadAllCourses(            // in util/Firebase.js
+        /*onCourse=*/addCourseHTML,
+        /*onFinish=*/onAllCoursesLoaded)
+}
 
 
 function refresh() {
@@ -277,7 +301,7 @@ function htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj) {
   if (submissionsArray) {
     for (value of submissionsArray) {
       if (value.exerciseId === exerciseId) {
-        grade = value.grade;
+        grade = parseInt(value.grade)
         text_html += '<pre>For the submission with the id(s): ' + value.collaboratorsId + '. <br />';
         text_html += 'Your current grade is: <strong> <font color="dc2f0a">' + grade + '</font></strong>. <br />';
         text_html += 'Submitted on: ' + value.timestamp + '. </pre>';
@@ -466,3 +490,5 @@ function registerSuccess(course, courseId) {
   editCourse(course, courseId)
   document.location.href = 'home.html';
 }
+
+//}
