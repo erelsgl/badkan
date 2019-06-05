@@ -146,6 +146,7 @@ def create_complex_grade_coder(better_tester_path, summary_coder_path, number_of
             for success in column:
                 tester_id = str(indexes[index])
                 accuracy = success/my_dict[tester_id]
+                print(accuracy)
                 weight = partition_array[rating[tester_id]]
                 grade += accuracy * weight
                 index += 1
