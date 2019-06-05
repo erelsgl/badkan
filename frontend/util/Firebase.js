@@ -4,7 +4,7 @@
 
 // Get a reference to the database service
 var database = firebase.database();
-// var storage = firebase.storage();
+var storage = firebase.storage();
 
 /**
  * This method upload the user in firebase.
