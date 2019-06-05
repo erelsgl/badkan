@@ -526,6 +526,8 @@ async def run(websocket, path):
     # The target fields is mandatory for all websocket protocol we use.
     target = submission["target"]
 
+    redirect = None
+
     if target == 'load_ex':
         await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
     elif target == 'edit_ex':
@@ -545,14 +547,18 @@ async def run(websocket, path):
     elif target == "check_solution_peer_submission":
         await check_solution_peer_submission(websocket, submission)
     elif target == "create_course":
-        pass
+        redirect = 'manageCourses.html'
     elif target == "edit_course":
-        pass
+        redirect = 'home.html'
+    elif target == "delete_course":
+        redirect = 'manageCourses.html'
     elif target == "check_submission":
         await check_submission(websocket, submission)
     else:
         print("Illegal target {}".format(target))
     update_courses()      # TODO: verify that Firebase has finished updating.
+    if redirect:
+        await tee(websocket, redirect)
     print("> Closing connection")
 
 

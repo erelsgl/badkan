@@ -14,10 +14,12 @@
     <script src='util/FirebaseConfig.js'></script>
     <script type="text/javascript" src="objects/Course.js"></script>
     <script type="text/javascript" src="util/Firebase.js"></script>
+    <script type="text/javascript" src="util/Protocol.js"></script>
     <script type="text/javascript" src="util/SignOut.js"></script>
     <script type="text/javascript" src="util/Loading.js"></script>
     <script type="text/javascript" src="util/Sanitize.js"></script>
     <script type="text/javascript" src="util/Notif.js"></script>
+    <script type="text/javascript" src="util/utils.js"></script>
     <script type="text/javascript" src="objects/MyNotification.js"></script>
 
 
@@ -35,7 +37,6 @@
     <link rel="stylesheet" href="/resources/demos/style.css">
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    
 
 </head>
 
@@ -61,59 +62,62 @@
             </li>
         </ul>
     </div>
-    <h1>Manage Courses</h1>
-    <div id="loading" class="loader"></div>
-    <div class="panel-group" id="accordion">
-        <div class="panel panel-default template">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                        CREATE A COURSE +
-                    </a>
-                </h4>
-            </div>
-            <div id="collapseThree" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <form id="form">
-                        <div class="form-group">
-                            <label for="usr">Course name (required):</label>
-                            <input type="text" class="form-control" id="courseName"
-                                placeholder="Enter a name for the course." />
-                            <br />
-                        </div>
-                        <div class="form-group">
-                            <label for="usr">Course exercises:</label>
-                            <h5>You can choice to add exercises to the course or you can add/create exercises later
-                                (ctrl+click for
-                                multiple line).</h5>
-                            <select multiple="multiple" class="form-control" id="exercises"
-                                onchange="onOptionChange();"></select> <br />
-                        </div>
-                        <div id="graderPrivilege" class="form-group">
-                            <label for="usr">Enter the id of the grader to get him an access to the "manage course" page
-                                (grader privilege):</label>
-                            <h5>Notice: The user must be admin to get the grader privilege</h5>
-                            <input type="text" class="form-control" id="grader_id" placeholder="000000000" />
-                            <br />
-                        </div>
-                        <input type="radio" name="privacy" value="public" checked> Public<br>
-                        <input type="radio" name="privacy" value="private"> Private<br>
-                        <div id="pass" class="form-group" style="display: none;">
-                            <label for="usr">Enter the id's of the students of the course to give them an access to
-                                the course:</label>
-                            <h5>Please, respect the format 000000000 000000000 ....</h5>
-                            <input type="text" class="form-control" id="students_ids"
-                                placeholder="000000000 000000000" />
-                            <br />
-                        </div>
-                        <button id="btnCreateCourse" type="button" class="btn btn-primary">Create</button>
-                    </form>
+
+    <div id=loading class="loader"></div>
+    <div id="show">
+        <h1>Manage Courses</h1>
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default template">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion"
+                            href="#collapseThree">
+                            CREATE A COURSE +
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <form id="form">
+                            <div class="form-group">
+                                <label for="usr">Course name (required):</label>
+                                <input type="text" class="form-control" id="courseName"
+                                    placeholder="Enter a name for the course." />
+                                <br />
+                            </div>
+                            <div class="form-group">
+                                <label for="usr">Course exercises:</label>
+                                <h5>You can choice to add exercises to the course or you can add/create exercises later
+                                    (ctrl+click for
+                                    multiple line).</h5>
+                                <select multiple="multiple" class="form-control" id="exercises"
+                                    onchange="onOptionChange();"></select> <br />
+                            </div>
+                            <div id="graderPrivilege" class="form-group">
+                                <label for="usr">Enter the id of the grader to get him an access to the "manage course"
+                                    page
+                                    (grader privilege):</label>
+                                <h5>Notice: The user must be admin to get the grader privilege</h5>
+                                <input type="text" class="form-control" id="grader_id" placeholder="000000000" />
+                                <br />
+                            </div>
+                            <input type="radio" name="privacy" value="public" checked> Public<br>
+                            <input type="radio" name="privacy" value="private"> Private<br>
+                            <div id="pass" class="form-group" style="display: none;">
+                                <label for="usr">Enter the id's of the students of the course to give them an access to
+                                    the course:</label>
+                                <h5>Please, respect the format 000000000 000000000 ....</h5>
+                                <input type="text" class="form-control" id="students_ids"
+                                    placeholder="000000000 000000000" />
+                                <br />
+                            </div>
+                            <button id="btnCreateCourse" type="button" class="btn btn-primary">Create</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- <div id="created"></div> -->
-
     <div id="dialog-confirm" title="Which type of exercise do you want to create?">
     </div>
 

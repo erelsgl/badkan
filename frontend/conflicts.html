@@ -50,28 +50,31 @@
         </ul>
     </div>
 
-    <h1>Conflicts</h1>
+    <div id=loading class="loader"></div>
+    <div id="show">
+        <h1>Conflicts</h1>
 
-    <div id=loading class="loader">
-    </div>
-
-    <div id="conflicts" style="display: none">
-
-        <h3>Above is the list of all the conflicts you receive. <br />
-            You can either agreed with the conflict and then the test will be remove, or you can disagreed. <br />
-            In case you disagreed, the test will be checked by our system and we will decide if the test is good or
-            wrong.
-        </h3>
-
-        <div id="list">
-
+        <div id=loading class="loader">
         </div>
 
-        <!-- button. -->
-        <button id="confirm" type="button" class="btn btn-primary"> Confirm</button>
-    </div>
-    <div id="noConflict" style="display: none">
-        <h3>You have no conflict.</h3>
+        <div id="conflicts" style="display: none">
+
+            <h3>Above is the list of all the conflicts you receive. <br />
+                You can either agreed with the conflict and then the test will be remove, or you can disagreed. <br />
+                In case you disagreed, the test will be checked by our system and we will decide if the test is good or
+                wrong.
+            </h3>
+
+            <div id="list">
+
+            </div>
+
+            <!-- button. -->
+            <button id="confirm" type="button" class="btn btn-primary"> Confirm</button>
+        </div>
+        <div id="noConflict" style="display: none">
+            <h3>You have no conflict.</h3>
+        </div>
     </div>
     <script type="module" type="text/javascript" src="app/Conflicts.js"></script>
 </body>

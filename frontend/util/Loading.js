@@ -2,13 +2,12 @@
  * This function active or not the loading.
  * @param {int} id 
  */
-function loading(id) {
-    var x = document.getElementById(id);
-    if (!x) return;
-    if (x.style.display === "none") {
-      x.style.display = "block";
-    } else {
-      x.style.display = "none";
-    }
-  } 
-  
+function onLoading() {
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("show").style.display = "none";
+}
+
+function finishLoading() {
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("show").style.display = "block";
+}

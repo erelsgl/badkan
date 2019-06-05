@@ -82,6 +82,11 @@ function writePeerExercise(peerExercise, peerExerciseId) {
 function editCourse(course, courseId) {
   firebase.database().ref("courses/" + courseId).set({
     course
+  }).then(() => {
+    json = JSON.stringify({
+      target: "edit_course",
+    }); // the variable "submission_json" is read in server.py
+    simpleWebsocket(json)
   });
 }
 
@@ -89,9 +94,23 @@ function writeCourse(course, courseId) {
   firebase.database().ref("courses/" + courseId).set({
     course
   }).then(function () {
-    document.getElementById("form").submit();
-    document.location.href = "manageCourses.html";
+    json = JSON.stringify({
+      target: "create_course",
+    }); // the variable "submission_json" is read in server.py
+    simpleWebsocket(json)
   });
+}
+
+/**
+ * This function remove a course from the database.
+ * @param {string} courseId 
+ */
+function deleteCourseById(courseId) {
+  database.ref().child('courses/' + courseId).remove();
+  json = JSON.stringify({
+    target: "delete_course",
+  }); // the variable "submission_json" is read in server.py
+  simpleWebsocket(json)
 }
 
 /**
@@ -180,8 +199,6 @@ function loadCurrentUser(userId, onLoaded) {
       if (homeUser.admin) {
         document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
       }
-      loading("div1");
-      loading("loading");
       if (homeUser.admin) {
         if (homeUser.admin === true) {
           $("#btnManageCourses").show()
@@ -268,8 +285,8 @@ function loadAllSubmissionsByUserAsync(submissionsArray, submissionsId, onUserSu
     for (let i = 0; i < len; i++) {
       database.ref('/submissions/' + Object.keys(submissionsId)[i]).once('value').then(function (snapshot) {
         submissionsArray.push(snapshot.val().submission);
-        if (submissionsArray.length==len) {
-            onUserSubmissionsLoaded()
+        if (submissionsArray.length == len) {
+          onUserSubmissionsLoaded()
         }
       })
     }
@@ -286,10 +303,9 @@ function loadAllSubmissionsByUserAsync(submissionsArray, submissionsId, onUserSu
  */
 function loadCoursesOwnedByCurrentUser(onCourse, onFinish, homeUserForAdmin) {
   database.ref().child('courses/').on("value", function (snapshot) {
-    if (!snapshot.val()) { // TODO: is it needed?
-      document.getElementById("loading").style.display = "none";
+    if(!snapshot) {
+      finishLoading()
     }
-
     var numToProcess = snapshot.numChildren()
     //console.log("num courses to process="+numToProcess)
     snapshot.forEach(function (course_data) { // for each course do
@@ -301,8 +317,8 @@ function loadCoursesOwnedByCurrentUser(onCourse, onFinish, homeUserForAdmin) {
       }
       --numToProcess
       if (numToProcess <= 0) { // done all courses
-        document.getElementById("loading").style.display = "none"; // TODO: is it needed?
         onFinish();
+        finishLoading()
       }
     })
   });
@@ -380,9 +396,7 @@ function loadAllExercisesAndSubmissions(exercisesMap, submissionsArray) {
     snapshot.forEach(function (data) {
       loadAllSubmissionsByExerciseAsync(submissionsArray, data.val().exercise.submissionsId)
       exercisesMap.set(data.key, data.val().exercise);
-    });
-    loading("div3");
-    loading("loading3");
+    })
   });
 }
 
@@ -394,8 +408,6 @@ function loadAllPeerExercises(peerExercisesMap) {
     snapshot.forEach(function (data) {
       peerExercisesMap.set(data.key, data.val().peerExercise);
     });
-    loading("div3");
-    loading("loading3");
   });
 }
 
@@ -433,13 +445,6 @@ function deleteUserById(userId) {
   database.ref().child('users/' + userId).remove();
 }
 
-/**
- * This function remove a course from the database.
- * @param {string} courseId 
- */
-function deleteCourseById(courseId) {
-  database.ref().child('courses/' + courseId).remove();
-}
 
 function writeNewReclamationIds(id, peerSolutionExercise, testId, functionName, functionContent) {
   database.ref('/conflicts/' + peerSolutionExercise + "/" + testId + "/" + functionName + "/" + "about").set({

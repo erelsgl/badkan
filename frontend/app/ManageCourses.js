@@ -1,3 +1,5 @@
+onLoading()
+
 var select = document.getElementById("exercises");
 
 function addOption(exercise, key) {
@@ -154,6 +156,7 @@ addCourseHTML.template = $(".template");
 addCourseHTML.hash = 2;
 
 function onUser(key, user) {
+    finishLoading()
     usersMap.set(key, user)
     // TODO: This code should be called only after all courses are processed!
     localStorage.setItem("usersMap",
@@ -162,7 +165,6 @@ function onUser(key, user) {
 }
 
 function onLoadAllCourses() {
-    document.getElementById("loading").style.display = "none";
     localStorage.setItem("coursesMap",
         JSON.stringify(Array.from(coursesMap.entries())));
     localStorage.setItem("exercisesMap",
@@ -272,7 +274,7 @@ $('body').on('click', '#download', function (e) {
                                 row.push(currentSubmission.grade);
                                 row.push(currentSubmission.url);
                                 rows.push(row);
-                            }   
+                            }
                         }
                     }
                 }

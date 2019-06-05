@@ -12,6 +12,7 @@
   <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
   <script src='util/FirebaseConfig.js'></script>
   <script type="text/javascript" src="util/Firebase.js"></script>
+  <script type="text/javascript" src="util/Protocol.js"></script>
   <script type="text/javascript" src="util/SignOut.js"></script>
   <script type="text/javascript" src="objects/Exercise.js"></script>
   <script type="text/javascript" src="objects/ViaSubmission.js"></script>
@@ -23,9 +24,6 @@
 
   <script type="text/javascript" src="objects/Penality.js"></script>
   <script type="text/javascript" src="objects/Deadline.js"></script>
-
-  <script type="text/javascript" src="objects/Grade.js"></script>
-  <script type="text/javascript" src="objects/Grades.js"></script>
   <script type="text/javascript" src="util/Sanitize.js"></script>
   <script type="text/javascript" src="util/Notif.js"></script>
 
@@ -60,282 +58,290 @@
     </ul>
   </div>
 
-  <div id="loadingEx" class="loader" style="display:none;"></div>
-  <div id="page">
-    <div class="container">
-      <h1>Create an exercise.</h1>
+  <div id=loading class="loader"></div>
+  <div id="show">
+    <div id="loadingEx" class="loader" style="display:none;"></div>
+    <div id="page">
+      <div class="container">
+        <h1>Create an exercise.</h1>
 
-      <h3>First time?
-        <button id="btnHelp" type="button" class="btn btn-link">help</button></h3>
+        <h3>First time?
+          <button id="btnHelp" type="button" class="btn btn-link">help</button></h3>
 
-      <!-- input. -->
-      <form id="form">
-        <div class="form-group">
-          <label for="usr">Name:*</label>
-          <input type="text" class="form-control" id="exName" placeholder="Enter a name for the exercise" /> <br />
-        </div>
-
-        <!-- text area. -->
-        <div class="form-group">
-          <label for="comment">Description:*</label>
-          <textarea class="form-control" rows="10" id="exDescr" name="comment"
-            placeholder="Enter the description of the exercise"></textarea>
-        </div>
         <!-- input. -->
-        <div class="form-group">
-          <br />
-          <label for="usr">Exercise Instructions:</label>
-          <input type="file" id="instruction" />
-        </div>
-
-        <div class="form-group">
-          <label for="usr">Exercise Language:*</label>
-          <input type="text" class="form-control" id="exCompiler" placeholder="Enter a name for the exercise" /> <br />
-        </div>
-
-        <div class="form-group">
-          <label for="usr">Choose the submission option (at least one required):</label>
-          <h5>For each method checked, the student will be able to submit his exercise via the method. <br />
-            If you want the student only submit via GitHub, then check only the GitHub button.</h5>
-          <ul>
-            <li><input id="github" name="BoxSelect[]" type="checkbox" value="github" required><label
-                style="color:gold">GitHub</label></li>
-            <li><input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required><label
-                style="color:gold">Zip</label></li>
-            <li><input id="gitlab" name="BoxSelect[]" type="checkbox" value="gitlab" required><label
-                style="color:gold">GitLab</label></li>
-          </ul>
-        </div>
-        <br />
-        <h5><strong> This the upload exercise part: do you want to use a GitLab repository or do you want to upload the exercise via zip file? </strong></h5>
-        <ul class="nav nav-pills">
-          <li class="active"><a data-toggle="pill" href="#home">GitLab clone</a></li>
-          <li><a data-toggle="pill" href="#menu1" onclick="onZip();">Zip file</a></li>
-        </ul>
-
-        <div class="tab-content">
-          <div id="home" class="tab-pane fade in active">
-            <br />
-            <div class="form-group">
-              <label for="usr">GitLab repository:*</label>
-              <input type="text" class="form-control" id="link"
-                placeholder="Enter here a clone-link to a repository in GitLab. It must begin with https: and end with .git" />
-              <br />
-            </div>
-
-            <!-- input. -->
-            <div class="form-group">
-              <label for="usr">Exercise folder:*</label>
-              <input type="text" class="form-control" id="exFolder"
-                placeholder="Enter here a subfolder of the repository where the exercise files are located. Must be accurate." />
-              <br />
-            </div>
-
-            <div class="form-group">
-              <label for="usr">Deploy-token username:*</label>
-              <input type="text" class="form-control" id="user"
-                placeholder="Enter the username of the deploy-token for this repository" /> <br />
-            </div>
-
-            <div class="form-group">
-              <label for="usr">Deploy-token password:*</label>
-              <input type="text" class="form-control" id="pass"
-                placeholder="Enter the password of the deploy-token for this repository" /> <br />
-            </div>
-
-            <div class="form-group">
-              NOTE: To get a deploy-token, go to GitLab -> Settings -> Repository -> Deploy Tokens -> Expand,
-              choose a name for the new token, and click "Create deploy token".
-            </div>
+        <form id="form">
+          <div class="form-group">
+            <label for="usr">Name:*</label>
+            <input type="text" class="form-control" id="exName" placeholder="Enter a name for the exercise" /> <br />
           </div>
 
-          <br />
-          
-
-          <div id="menu1" class="tab-pane fade">
-              <div id="rates">
-                  <h5>
-                    <strong> The website provide a simple template for the grading system. </strong> <br />
-                    The only thing you have to do is to fill all the fields, and we will compute the
-                    grade of each submission according your rules. <br />
-                    Note: If you don't want to follow our template, you can make your own grading system. <br />
-                    To do this, please, browse all the files for the grading (compressed into a zip file) or use
-                    GitLab
-                    to
-                    send us your grading system. <br />
-                    Inside the folder, there should be an executable program called grade. <br /> <br />
-                  </h5>
-                  <input type="radio" id="use" name="grade" value="confirm" onclick="showTemplate();">Use I/O template.<br />
-                  <input type="radio" id="notuse" name="grade" value="dismiss" onclick="hideTemplate();">Use my own grade
-                  file.<br />
-                </div>
+          <!-- text area. -->
+          <div class="form-group">
+            <label for="comment">Description:*</label>
+            <textarea class="form-control" rows="10" id="exDescr" name="comment"
+              placeholder="Enter the description of the exercise"></textarea>
+          </div>
+          <!-- input. -->
+          <div class="form-group">
             <br />
-            <div class="panel-group" id="accordion">
+            <label for="usr">Exercise Instructions:</label>
+            <input type="file" id="instruction" />
+          </div>
+
+          <div class="form-group">
+            <label for="usr">Exercise Language:*</label>
+            <input type="text" class="form-control" id="exCompiler" placeholder="Enter a name for the exercise" />
+            <br />
+          </div>
+
+          <div class="form-group">
+            <label for="usr">Choose the submission option (at least one required):</label>
+            <h5>For each method checked, the student will be able to submit his exercise via the method. <br />
+              If you want the student only submit via GitHub, then check only the GitHub button.</h5>
+            <ul>
+              <li><input id="github" name="BoxSelect[]" type="checkbox" value="github" required><label
+                  style="color:gold">GitHub</label></li>
+              <li><input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required><label
+                  style="color:gold">Zip</label></li>
+              <li><input id="gitlab" name="BoxSelect[]" type="checkbox" value="gitlab" required><label
+                  style="color:gold">GitLab</label></li>
+            </ul>
+          </div>
+          <br />
+          <h5><strong> This the upload exercise part: do you want to use a GitLab repository or do you want to upload
+              the
+              exercise via zip file? </strong></h5>
+          <ul class="nav nav-pills">
+            <li class="active"><a data-toggle="pill" href="#home">GitLab clone</a></li>
+            <li><a data-toggle="pill" href="#menu1" onclick="onZip();">Zip file</a></li>
+          </ul>
+
+          <div class="tab-content">
+            <div id="home" class="tab-pane fade in active">
+              <br />
+              <div class="form-group">
+                <label for="usr">GitLab repository:*</label>
+                <input type="text" class="form-control" id="link"
+                  placeholder="Enter here a clone-link to a repository in GitLab. It must begin with https: and end with .git" />
+                <br />
+              </div>
+
+              <!-- input. -->
+              <div class="form-group">
+                <label for="usr">Exercise folder:*</label>
+                <input type="text" class="form-control" id="exFolder"
+                  placeholder="Enter here a subfolder of the repository where the exercise files are located. Must be accurate." />
+                <br />
+              </div>
+
+              <div class="form-group">
+                <label for="usr">Deploy-token username:*</label>
+                <input type="text" class="form-control" id="user"
+                  placeholder="Enter the username of the deploy-token for this repository" /> <br />
+              </div>
+
+              <div class="form-group">
+                <label for="usr">Deploy-token password:*</label>
+                <input type="text" class="form-control" id="pass"
+                  placeholder="Enter the password of the deploy-token for this repository" /> <br />
+              </div>
+
+              <div class="form-group">
+                NOTE: To get a deploy-token, go to GitLab -> Settings -> Repository -> Deploy Tokens -> Expand,
+                choose a name for the new token, and click "Create deploy token".
+              </div>
+            </div>
+
+            <br />
+
+
+            <div id="menu1" class="tab-pane fade">
+              <div id="rates">
+                <h5>
+                  <strong> The website provide a simple template for the grading system. </strong> <br />
+                  The only thing you have to do is to fill all the fields, and we will compute the
+                  grade of each submission according your rules. <br />
+                  Note: If you don't want to follow our template, you can make your own grading system. <br />
+                  To do this, please, browse all the files for the grading (compressed into a zip file) or use
+                  GitLab
+                  to
+                  send us your grading system. <br />
+                  Inside the folder, there should be an executable program called grade. <br /> <br />
+                </h5>
+                <input type="radio" id="use" name="grade" value="confirm" onclick="showTemplate();">Use I/O
+                template.<br />
+                <input type="radio" id="notuse" name="grade" value="dismiss" onclick="hideTemplate();">Use my own grade
+                file.<br />
+              </div>
+              <br />
+              <div class="panel-group" id="accordion">
+                <div class="panel panel-default template">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                        Input/Output <strong> Template</strong>
+                      </a>
+                    </h4>
+                  </div>
+                  <div id="collapseThree" class="panel-collapse collapse">
+                    <div class="panel-body">
+
+                      <!-- input. -->
+                      <div class="form-group">
+                        <label for="usr">Compiler:*</label>
+                        <input type="text" class="form-control" id="compiler" placeholder="java, c++, python..." />
+                        <br />
+                      </div>
+
+                      <!-- input. -->
+                      <div class="form-group">
+                        <label for="usr">The main file:*</label>
+                        <input type="text" class="form-control" id="main" placeholder="Main, Ex01, a..." />
+                        <br />
+                      </div>
+
+                      <h5>
+                        By default, on this template, the program should read its input from standard input.
+                        But you can choose a file as input e.g: input.txt, input.csv...
+                      </h5>
+
+                      <!-- input. -->
+                      <div class="form-group">
+                        <label for="usr">Input: </label>
+                        <input type="text" class="form-control" id="input" placeholder="input.txt, input.csv..." />
+                        <br />
+                      </div>
+                      <h5>
+                        Same for the output:
+                      </h5>
+
+                      <!-- input. -->
+                      <div class="form-group">
+                        <label for="usr">Output: </label>
+                        <input type="text" class="form-control" id="output" placeholder="output.txt, output.csv..." />
+                        <br />
+                      </div>
+
+                      <!-- input. -->
+                      <div class="form-group">
+                        <label for="usr">Number of test(s):*</label>
+                        <input type="number" class="form-control" id="tests" placeholder="1" />
+                        <br />
+                      </div>
+
+                      <div class="form-group">
+                        <h5>
+                          <strong>
+                            Once you finish to fill all the field, we will compute for you the "grade" file. <br />
+                            For each test a input-1.txt and output-1.txt file is required. When -"1" is the number of
+                            the
+                            test.
+                            (from 1 to :number of test:)<br /> <br />
+                          </strong>
+                        </h5>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <label for="usr">Select a zip file with the grading system:*</label>
+              <input type="file" id="filename" />
+              <br />
+            </div>
+            <br />
+            <div class="panel-group" id="accordion2">
               <div class="panel panel-default template">
                 <div class="panel-heading">
                   <h4 class="panel-title">
-                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                      Input/Output <strong> Template</strong>
+                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree2">
+                      ADD DEADLINE.
                     </a>
                   </h4>
                 </div>
-                <div id="collapseThree" class="panel-collapse collapse">
+                <div id="collapseThree2" class="panel-collapse collapse">
                   <div class="panel-body">
+                    Deadline:* <input type="date" name="dealine" id="deadline">
+                    <div class="form-group row">
 
-                    <!-- input. -->
-                    <div class="form-group">
-                      <label for="usr">Compiler:*</label>
-                      <input type="text" class="form-control" id="compiler" placeholder="java, c++, python..." />
+                      <div style="width: 100%; overflow: hidden;">
+
+                        <div class="col-xs-3" style="width: 300px; float: left;">
+                          <label for="ex1">Penality 1:</label> <br />
+                          Days late: <input type="number" class="form-control" id="penalityLate1"
+                            placeholder="Enter the number of days late" />
+                          Fewer point: <input type="number" class="form-control" id="penalityGrade1"
+                            placeholder="Enter the number of fewer point" />
+                        </div>
+
+                        <div class="col-xs-3" style="margin-left: 320px;">
+                          <label for="ex1">Penality 2:</label> <br />
+                          Days late: <input type="number" class="form-control" id="penalityLate2"
+                            placeholder="Enter the number of days late" />
+                          Fewer point: <input type="number" class="form-control" id="penalityGrade2"
+                            placeholder="Enter the number of fewer point" />
+
+                        </div>
+                      </div>
+
                       <br />
-                    </div>
 
-                    <!-- input. -->
-                    <div class="form-group">
-                      <label for="usr">The main file:*</label>
-                      <input type="text" class="form-control" id="main" placeholder="Main, Ex01, a..." />
+                      <div id="3-4" style="width: 100%; overflow: hidden; display: none;">
+
+                        <div class="col-xs-3" style="width: 300px; float: left;">
+                          <label for="ex1">Penality 3:</label> <br />
+                          Days late: <input type="number" class="form-control" id="penalityLate3"
+                            placeholder="Enter the number of days late" />
+                          Fewer point: <input type="number" class="form-control" id="penalityGrade3"
+                            placeholder="Enter the number of fewer point" />
+                        </div>
+
+                        <div class="col-xs-3" style="margin-left: 320px;">
+                          <label for="ex1">Penality 4:</label> <br />
+                          Days late: <input type="number" class="form-control" id="penalityLate4"
+                            placeholder="Enter the number of days late" />
+                          Fewer point: <input type="number" class="form-control" id="penalityGrade4"
+                            placeholder="Enter the number of fewer point" />
+                        </div>
+                      </div>
                       <br />
-                    </div>
 
-                    <h5>
-                      By default, on this template, the program should read its input from standard input.
-                      But you can choose a file as input e.g: input.txt, input.csv...
-                    </h5>
+                      <div id="5-6" style="width: 100%; overflow: hidden; display: none;">
 
-                    <!-- input. -->
-                    <div class="form-group">
-                      <label for="usr">Input: </label>
-                      <input type="text" class="form-control" id="input" placeholder="input.txt, input.csv..." />
+                        <div class="col-xs-3" style="width: 300px; float: left;">
+                          <label for="ex1">Penality 5:</label> <br />
+                          Days late: <input type="number" class="form-control" id="penalityLate5"
+                            placeholder="Enter the number of days late" />
+                          Fewer point: <input type="number" class="form-control" id="penalityGrade5"
+                            placeholder="Enter the number of fewer point" />
+                        </div>
+
+                        <div class="col-xs-3" style="margin-left: 320px;">
+                          <label for="ex1">Penality 6:</label> <br />
+                          Days late: <input type="number" class="form-control" id="penalityLate6"
+                            placeholder="Enter the number of days late" />
+                          Fewer point: <input type="number" class="form-control" id="penalityGrade6"
+                            placeholder="Enter the number of fewer point" />
+                        </div>
+                      </div>
+
                       <br />
-                    </div>
-                    <h5>
-                      Same for the output:
-                    </h5>
-
-                    <!-- input. -->
-                    <div class="form-group">
-                      <label for="usr">Output: </label>
-                      <input type="text" class="form-control" id="output" placeholder="output.txt, output.csv..." />
-                      <br />
-                    </div>
-
-                    <!-- input. -->
-                    <div class="form-group">
-                      <label for="usr">Number of test(s):*</label>
-                      <input type="number" class="form-control" id="tests" placeholder="1" />
-                      <br />
-                    </div>
-
-                    <div class="form-group">
-                      <h5>
-                        <strong>
-                          Once you finish to fill all the field, we will compute for you the "grade" file. <br />
-                          For each test a input-1.txt and output-1.txt file is required. When -"1" is the number of the
-                          test.
-                          (from 1 to :number of test:)<br /> <br />
-                        </strong>
-                      </h5>
+                      <div style="width: 100%; overflow: hidden;">
+                        <button id="morePenalities" type="button" class="btn btn-primary"
+                          style="width: 100%; float: left;">More penalities</button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <label for="usr">Select a zip file with the grading system:*</label>
-            <input type="file" id="filename" />
-            <br />
-          </div>
-          <br />
-          <div class="panel-group" id="accordion2">
-            <div class="panel panel-default template">
-              <div class="panel-heading">
-                <h4 class="panel-title">
-                  <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree2">
-                    ADD DEADLINE.
-                  </a>
-                </h4>
-              </div>
-              <div id="collapseThree2" class="panel-collapse collapse">
-                <div class="panel-body">
-                  Deadline:* <input type="date" name="dealine" id="deadline">
-                  <div class="form-group row">
-
-                    <div style="width: 100%; overflow: hidden;">
-
-                      <div class="col-xs-3" style="width: 300px; float: left;">
-                        <label for="ex1">Penality 1:</label> <br />
-                        Days late: <input type="number" class="form-control" id="penalityLate1"
-                          placeholder="Enter the number of days late" />
-                        Fewer point: <input type="number" class="form-control" id="penalityGrade1"
-                          placeholder="Enter the number of fewer point" />
-                      </div>
-
-                      <div class="col-xs-3" style="margin-left: 320px;">
-                        <label for="ex1">Penality 2:</label> <br />
-                        Days late: <input type="number" class="form-control" id="penalityLate2"
-                          placeholder="Enter the number of days late" />
-                        Fewer point: <input type="number" class="form-control" id="penalityGrade2"
-                          placeholder="Enter the number of fewer point" />
-
-                      </div>
-                    </div>
-
-                    <br />
-
-                    <div id="3-4" style="width: 100%; overflow: hidden; display: none;">
-
-                      <div class="col-xs-3" style="width: 300px; float: left;">
-                        <label for="ex1">Penality 3:</label> <br />
-                        Days late: <input type="number" class="form-control" id="penalityLate3"
-                          placeholder="Enter the number of days late" />
-                        Fewer point: <input type="number" class="form-control" id="penalityGrade3"
-                          placeholder="Enter the number of fewer point" />
-                      </div>
-
-                      <div class="col-xs-3" style="margin-left: 320px;">
-                        <label for="ex1">Penality 4:</label> <br />
-                        Days late: <input type="number" class="form-control" id="penalityLate4"
-                          placeholder="Enter the number of days late" />
-                        Fewer point: <input type="number" class="form-control" id="penalityGrade4"
-                          placeholder="Enter the number of fewer point" />
-                      </div>
-                    </div>
-                    <br />
-
-                    <div id="5-6" style="width: 100%; overflow: hidden; display: none;">
-
-                      <div class="col-xs-3" style="width: 300px; float: left;">
-                        <label for="ex1">Penality 5:</label> <br />
-                        Days late: <input type="number" class="form-control" id="penalityLate5"
-                          placeholder="Enter the number of days late" />
-                        Fewer point: <input type="number" class="form-control" id="penalityGrade5"
-                          placeholder="Enter the number of fewer point" />
-                      </div>
-
-                      <div class="col-xs-3" style="margin-left: 320px;">
-                        <label for="ex1">Penality 6:</label> <br />
-                        Days late: <input type="number" class="form-control" id="penalityLate6"
-                          placeholder="Enter the number of days late" />
-                        Fewer point: <input type="number" class="form-control" id="penalityGrade6"
-                          placeholder="Enter the number of fewer point" />
-                      </div>
-                    </div>
-
-                    <br />
-                    <div style="width: 100%; overflow: hidden;">
-                      <button id="morePenalities" type="button" class="btn btn-primary"
-                        style="width: 100%; float: left;">More penalities</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
 
-            <br />
+              <br />
 
-            <!-- button. -->
-            <button id="btnConfirm" type="button" class="btn btn-primary">Confirm</button>
+              <!-- button. -->
+              <button id="btnConfirm" type="button" class="btn btn-primary">Confirm</button>
 
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 

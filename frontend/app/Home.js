@@ -3,6 +3,9 @@
  * in the internal storage. Really important.
  */
 
+ // Here the page always begin with the loading
+onLoading()
+
 
 var $template = $('.template');
 let hash = 2;
@@ -32,7 +35,6 @@ firebase.auth().onAuthStateChanged(authUser => {
               $('#btnManageCourses').show()
             }
         }
-
         if (exercisesObject) {  // defined in file data/exercises.js
             // synchronous
             console.log("exercisesObject is defined")
@@ -44,7 +46,6 @@ firebase.auth().onAuthStateChanged(authUser => {
             // asynchronous - TO DELETE
             loadAllExercisesAsync(exercisesMap); // defined in util/Firebase.js.
         }
-
         loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
 
         loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
@@ -58,6 +59,8 @@ firebase.auth().onAuthStateChanged(authUser => {
                         addCourseHTML(key, course)
                     }
                     onAllCoursesLoaded()
+                    // Finally, stop the loading
+                    finishLoading()
             } else {
                 alert("Courses object not found - please try again or contact the programmer")
                 // asynchronous - TO DELETE
@@ -88,10 +91,9 @@ firebase.auth().onAuthStateChanged(authUser => {
 
 
 
-
-
 function addCourseHTML(key, course) {
   coursesMap.set(key, course);
+  alert(JSON.stringify(course))
   // SEE IF REGISTER OR NOT: HERE ASSUMING NOT.         // If the user click
   // here check if he registered if yes dl the pdf or something like this. First
   // see if course if private or not:
@@ -100,12 +102,13 @@ function addCourseHTML(key, course) {
     var homeUser = JSON.parse(localStorage.getItem('homeUserKey'));
     let arrayIds = course.ids.split(' ')
     if (arrayIds.includes(homeUser.id)) {
-      if (isRegistered(course)) {
+      if (isRegistered(course)) {        
         showRegisteredCourse(key, course);
       } else {
         let courseId = key;
         registerSuccess(course, courseId);
       }
+
     }
   } else {
     if (isRegistered(course)) {
@@ -501,6 +504,7 @@ $('body').on('click', '#solve', function (e) {
 });
 
 $('body').on('click', '#register', function (e) {
+  onLoading();
   let courseId = e.target.name;
   let course = coursesMap.get(courseId);
   registerSuccess(course, courseId);
@@ -509,7 +513,4 @@ $('body').on('click', '#register', function (e) {
 function registerSuccess(course, courseId) {
   course.students.push(firebase.auth().currentUser.uid);
   editCourse(course, courseId)
-  document.location.href = 'home.html';
 }
-
-//}
