@@ -322,10 +322,10 @@ function loadAllCourses(onCourse, onFinish) {
 /**
  * This function load all the exercises of the database.
  */
-function loadAllExercisesAsync(exercises) {
+function loadAllExercisesAsync(exercisesMap) {
   database.ref().child('exercises/').on("value", function (snapshot) {
     snapshot.forEach(function (data) {
-      exercises.set(data.key, data.val().exercise);
+      exercisesMap.set(data.key, data.val().exercise);
     });
   });
 }

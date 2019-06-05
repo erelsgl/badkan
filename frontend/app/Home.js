@@ -52,7 +52,7 @@ function addCourseHTML(key, course) {
     let arrayIds = course.ids.split(' ')
     if (arrayIds.includes(homeUser.id)) {
       if (isRegistered(course)) {
-        registered(key, course);
+        showRegisteredCourse(key, course);
       } else {
         let courseId = key;
         registerSuccess(course, courseId);
@@ -60,9 +60,9 @@ function addCourseHTML(key, course) {
     }
   } else {
     if (isRegistered(course)) {
-      registered(key, course);
+      showRegisteredCourse(key, course);
     } else {
-      notRegistered(key, course);
+      showUnregisteredCourse(key, course);
     }
   }
 }
@@ -81,7 +81,11 @@ function onAllCoursesLoaded() {
 }
 
 var coursesMap = new Map()
-loadAllCourses(addCourseHTML, onAllCoursesLoaded) // in util/Firebase.js
+loadAllCourses(            // in util/Firebase.js
+    /*onCourse=*/addCourseHTML,
+    /*onFinish=*/onAllCoursesLoaded)
+
+
 
 function refresh() {
   var userId = firebase.auth().currentUser.uid;
@@ -130,7 +134,7 @@ let hash = 2;
 
 
 // Show a course to which the current user is not registered.
-function notRegistered(key, course) {
+function showUnregisteredCourse(key, course) {
   numUnregistered++;
   var $newPanel = $template.clone();
   $newPanel.find('.collapse').removeClass('in');
@@ -203,7 +207,7 @@ function notRegistered(key, course) {
 }
 
 // Show a course to which the current user is registered.
-function registered(key, course) {
+function showRegisteredCourse(key, course) {
   numRegistered++;
   var $newPanel = $template.clone();
   $newPanel.find('.collapse').removeClass('in');
@@ -226,105 +230,12 @@ function registered(key, course) {
       if (course.exercises[i] != 'dummyExerciseId') {
         let exerciseId = course.exercises[i];
         let exerciseObj = exercisesMap.get(exerciseId);
-        let peerExerciseObj = peerExercisesMap.get(exerciseId);
-
         if (exerciseObj) {
-          text_html += '<div class=\'exercise\'>'
-          text_html += '<h4>' + exerciseObj.name + '</h4>';
-          text_html += '<p>' + exerciseObj.description + '</p>';
-          if (exerciseObj.example === 'PDF') {
-            text_html += '<button name ="' + exerciseId +
-              '" id="dl" class="btn btn-link"">Download PDF</button>';
-            text_html += '<br /> <br />'
-          }
-
-          if (exerciseObj.deadline && exerciseObj.deadline.date) {
-            text_html += '<br />';
-            text_html +=
-              'Exercise deadline: ' + exerciseObj.deadline.date + '<br />';
-
-            let penalities = exerciseObj.deadline.penalities;
-
-            if (penalities) {
-              text_html += '<strong> Penalties </strong>: <br />';
-              for (var p = 0; p < penalities.length; p++) {
-                text_html += 'Submitted with ' + penalities[p].late +
-                  ' day(s) late is penalized with ' + penalities[p].point +
-                  ' point(s)' +
-                  '<br />';
-              }
-            }
-          }
-          let grade = -1;
-          if (submissionsArray) {
-            for (value of submissionsArray) {
-              if (value.exerciseId === exerciseId) {
-                grade = value.grade;
-                text_html += '<pre>For the submission with the id(s): ' + value.collaboratorsId + '. <br />';
-                text_html += 'Your current grade is: <strong> <font color="dc2f0a">' + grade + '</font></strong>. <br />';
-                text_html += 'Submitted on: ' + value.timestamp + '. </pre>';
-
-              }
-            }
-          }
-          text_html += '<p>';
-          if (grade === -1) {
-            text_html += 'You have not solved this exercise yet. ';
-          } 
-          text_html += '<button name ="' + exerciseId +
-            '" id="solve" class="btn btn-success"">Solve</button>';
-          text_html += '</p>';
-          text_html += '</div><!--exercise-->'
+          text_html += htmlOfExerciseInRegisteredCourse(exerciseId,exerciseObj)
         }
-
+        let peerExerciseObj = peerExercisesMap.get(exerciseId);
         if (peerExerciseObj) {
-          text_html += '<div class=\'exercise\'>'
-          text_html += '<h4>' +
-            '<span class="glyphicon glyphicon-transfer"></span>  ' +
-            peerExerciseObj.name +
-            '  <span class="glyphicon glyphicon-transfer"></span>' +
-            '</h4>';
-
-          text_html += '<p>' + peerExerciseObj.description + '</p>';
-          text_html += '<button name ="' + exerciseId +
-            '" id="dl" class="btn btn-link"">Download PDF</button>';
-          text_html += '<br /> <br />'
-
-
-          text_html +=
-            'Test deadline: ' + peerExerciseObj.deadlineTest + '<br />';
-          text_html +=
-            'Solution deadline: ' + peerExerciseObj.deadlineSolution +
-            '<br />';
-          text_html +=
-            'Conflicts deadline: ' + peerExerciseObj.deadlineConflicts +
-            '<br />';
-
-          text_html +=
-            'Test language: ' + peerExerciseObj.compilerTest + '<br />';
-          text_html +=
-            'Solution language: ' + peerExerciseObj.compilerSolution +
-            '<br />';
-
-          let phase = whichPhase(peerExerciseObj);
-          text_html += '<h5><strong>' + phase + ':</strong></h5>'
-
-          switch (phase) {
-            case 'Test Phase':
-              testPhase(peerExerciseObj, exerciseId);
-              break;
-            case 'Solution Phase':
-              solutionPhase(peerExerciseObj, exerciseId);
-              break;
-            case 'Conflicts Phase':
-              conflictsPhase(exerciseId);
-              break;
-            default:
-              endGame(exerciseId);
-          }
-
-          text_html += '</p>';
-          text_html += '</div><!--exercise-->'
+          text_html += htmlOfPeerExerciseInRegisteredCourse(exerciseId, peerExerciseObj)
         }
       }
     }
@@ -332,6 +243,113 @@ function registered(key, course) {
   $newPanel.find('.panel-body').append(text_html);
   $('#accordion-registered').append($newPanel.fadeIn());
 }
+
+
+function htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj) {
+  text_html = ''
+  text_html += '<div class=\'exercise\'>'
+  text_html += '<h4>' + exerciseObj.name + '</h4>';
+  text_html += '<p>' + exerciseObj.description + '</p>';
+  if (exerciseObj.example === 'PDF') {
+    text_html += '<button name ="' + exerciseId +
+      '" id="dl" class="btn btn-link"">Download PDF</button>';
+    text_html += '<br /> <br />'
+  }
+
+  if (exerciseObj.deadline && exerciseObj.deadline.date) {
+    text_html += '<br />';
+    text_html +=
+      'Exercise deadline: ' + exerciseObj.deadline.date + '<br />';
+
+    let penalities = exerciseObj.deadline.penalities;
+
+    if (penalities) {
+      text_html += '<strong> Penalties </strong>: <br />';
+      for (var p = 0; p < penalities.length; p++) {
+        text_html += 'Submitted with ' + penalities[p].late +
+          ' day(s) late is penalized with ' + penalities[p].point +
+          ' point(s)' +
+          '<br />';
+      }
+    }
+  }
+  let grade = -1;
+  if (submissionsArray) {
+    for (value of submissionsArray) {
+      if (value.exerciseId === exerciseId) {
+        grade = value.grade;
+        text_html += '<pre>For the submission with the id(s): ' + value.collaboratorsId + '. <br />';
+        text_html += 'Your current grade is: <strong> <font color="dc2f0a">' + grade + '</font></strong>. <br />';
+        text_html += 'Submitted on: ' + value.timestamp + '. </pre>';
+      }
+    }
+  }
+  text_html += '<p>';
+  if (grade === -1) {
+    text_html += 'You have not solved this exercise yet. ';
+  }
+  text_html += '<button name ="' + exerciseId +
+    '" id="solve" class="btn btn-success"">Solve</button>';
+  text_html += '</p>';
+  text_html += '</div><!--exercise-->'
+  return text_html
+}
+
+
+function htmlOfPeerExerciseInRegisteredCourse(exerciseId, peerExerciseObj) {
+  text_html = ''
+  text_html += '<div class=\'exercise\'>'
+  text_html += '<h4>' +
+    '<span class="glyphicon glyphicon-transfer"></span>  ' +
+    peerExerciseObj.name +
+    '  <span class="glyphicon glyphicon-transfer"></span>' +
+    '</h4>';
+
+  text_html += '<p>' + peerExerciseObj.description + '</p>';
+  text_html += '<button name ="' + exerciseId +
+    '" id="dl" class="btn btn-link"">Download PDF</button>';
+  text_html += '<br /> <br />'
+
+
+  text_html +=
+    'Test deadline: ' + peerExerciseObj.deadlineTest + '<br />';
+  text_html +=
+    'Solution deadline: ' + peerExerciseObj.deadlineSolution +
+    '<br />';
+  text_html +=
+    'Conflicts deadline: ' + peerExerciseObj.deadlineConflicts +
+    '<br />';
+
+  text_html +=
+    'Test language: ' + peerExerciseObj.compilerTest + '<br />';
+  text_html +=
+    'Solution language: ' + peerExerciseObj.compilerSolution +
+    '<br />';
+
+  let phase = whichPhase(peerExerciseObj);
+  text_html += '<h5><strong>' + phase + ':</strong></h5>'
+
+  switch (phase) {
+    case 'Test Phase':
+      testPhase(peerExerciseObj, exerciseId);
+      break;
+    case 'Solution Phase':
+      solutionPhase(peerExerciseObj, exerciseId);
+      break;
+    case 'Conflicts Phase':
+      conflictsPhase(exerciseId);
+      break;
+    default:
+      endGame(exerciseId);
+  }
+
+  text_html += '</p>';
+  text_html += '</div><!--exercise-->'
+  return text_html
+}
+
+
+
 
 /*
  * @param {int} minTest
