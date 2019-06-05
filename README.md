@@ -406,6 +406,16 @@ Note: A trace table (csv format) can be found in the folder backend.
 In this table, there are for each submission the following information:  
 time, url, ids, and grade.  
 
+At the end, you need to manually run a script from the server by typing:
+
+    cd backend
+    python3 update_courses.py
+
+To update the new change, please from your local computer run:
+
+    bash start/remote_update_frontend.sh 
+
+
 # Badkan 2.0
 
 ## Goals
