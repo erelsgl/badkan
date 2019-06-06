@@ -45,10 +45,12 @@ def update_courses():
                 print("course ", courseKey, " has no exercises object", flush=True)
 
     with open(DIR+"/../../frontend/data/courses.js", "w") as file:
+        file.write("// Updated at "+str(currentDT)+"\n")
         file.write("coursesObject=")
         file.write(json.dumps(coursesObject))
 
     with open(DIR+"/../../frontend/data/exercises.js", "w") as file:
+        file.write("// Updated at "+str(currentDT)+"\n")
         file.write("exercisesObject=")
         file.write(json.dumps(exercisesObject))
 
