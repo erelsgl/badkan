@@ -18,7 +18,7 @@ def update_courses():
 
     DIR = os.path.dirname(os.path.realpath(__file__))
 
-    with open('../frontend/util/FirebaseConfig.js') as dataFile:
+    with open('../../frontend/util/FirebaseConfig.js') as dataFile:
         data = dataFile.read()
     id = re.search('projectId: "(.+?)",', data)
     FIREBASE_APP = id.group(1)
@@ -31,23 +31,24 @@ def update_courses():
                      '.firebaseio.com/exercises.json?format=export')
     exercisesObject = r.json()
 
-    for courseKey, courseData in coursesObject.items():
-        course = courseData["course"]
-        if "exercises" in course:
-            print("sorting course ", courseKey, flush=True)
-            exercises = course["exercises"]
-            exercises[:] = [
-                exId for exId in exercises if exId in exercisesObject]
-            exercises.sort(
-                key=lambda exerciseKey: exercisesObject[exerciseKey]["exercise"]["name"])
-        else:
-            print("course ", courseKey, " has no exercises object", flush=True)
+    if coursesObject:
+        for courseKey, courseData in coursesObject.items():
+            course = courseData["course"]
+            if "exercises" in course:
+                print("sorting course ", courseKey, flush=True)
+                exercises = course["exercises"]
+                exercises[:] = [
+                    exId for exId in exercises if exId in exercisesObject]
+                exercises.sort(
+                    key=lambda exerciseKey: exercisesObject[exerciseKey]["exercise"]["name"])
+            else:
+                print("course ", courseKey, " has no exercises object", flush=True)
 
-    with open(DIR+"/../frontend/data/courses.js", "w") as file:
+    with open(DIR+"/../../frontend/data/courses.js", "w") as file:
         file.write("coursesObject=")
         file.write(json.dumps(coursesObject))
 
-    with open(DIR+"/../frontend/data/exercises.js", "w") as file:
+    with open(DIR+"/../../frontend/data/exercises.js", "w") as file:
         file.write("exercisesObject=")
         file.write(json.dumps(exercisesObject))
 

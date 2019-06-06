@@ -28,15 +28,15 @@ RUN mkdir www
 WORKDIR /
 
 # Copy required files into the container:
-COPY get-submission.sh   /
-COPY get-submission-file.sh   /
-COPY get-private-submission.sh   /
-COPY get-test-submission-file.sh   /
-COPY get-solution-submission-file.sh   /
-COPY create-template-gradle.sh   /
-COPY create-signature.sh   /
-COPY clean-folder.sh   /
-COPY build.gradle   /
+COPY files/get-submission.sh   /
+COPY files/get-submission-file.sh   /
+COPY files/get-private-submission.sh   /
+COPY files/get-test-submission-file.sh   /
+COPY files/get-solution-submission-file.sh   /
+COPY files/create-template-gradle.sh   /
+COPY files/create-signature.sh   /
+COPY files/clean-folder.sh   /
+COPY files/build.gradle   /
 COPY www-readme.md       /www/README.md
 
 # Run bash when the container launches

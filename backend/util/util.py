@@ -15,12 +15,12 @@ def edit_csv_summary(name, last_name, student_id, output, exercice_name):
     output: The output for the submission.
     exercice_name: The exercise name.
     """
-    if not os.path.exists('../statistics/' + exercice_name):
-        os.mkdir('../statistics/' + exercice_name)
+    if not os.path.exists('../../statistics/' + exercice_name):
+        os.mkdir('../../statistics/' + exercice_name)
     newLine = [name, last_name, student_id, output]
     line_list = []
-    if os.path.exists('../statistics/' + exercice_name + '/summary.csv'):
-        with open('../statistics/' + exercice_name + '/summary.csv', 'r+') as csvFile:
+    if os.path.exists('../../statistics/' + exercice_name + '/summary.csv'):
+        with open('../../statistics/' + exercice_name + '/summary.csv', 'r+') as csvFile:
             lines = csv.reader(csvFile)
             line_list.extend(lines)
         csvFile.close()
@@ -31,7 +31,7 @@ def edit_csv_summary(name, last_name, student_id, output, exercice_name):
             flag = False
     if flag:
         line_list.append(newLine)
-    with open('../statistics/' + exercice_name + '/summary.csv', 'w+') as csvFile:
+    with open('../../statistics/' + exercice_name + '/summary.csv', 'w+') as csvFile:
         writer = csv.writer(csvFile)
         for row in line_list:
             writer.writerow(row)

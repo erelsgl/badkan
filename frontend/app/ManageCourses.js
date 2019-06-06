@@ -299,7 +299,7 @@ $('body').on('click', '#edit', function (e) {
     var newIds = prompt("New ids here:", course.ids);
     course.name = newName;
     course.ids = newIds;
-    editCourse(course, courseId)
+    editCourse(course, courseId, "None")
     document.location.href = "manageCourses.html";
 
 });

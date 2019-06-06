@@ -172,7 +172,7 @@ function editCourseCreatePeer(peerExerciseId) {
     let courseId = JSON.parse(localStorage.getItem("courseId"));
     let course = JSON.parse(localStorage.getItem("course"));
     course.exercises.push(peerExerciseId);
-    editCourse(course, courseId);
+    editCourse(course, courseId, "None");
 }
 
 function uploadPdf(peerExerciseId) {

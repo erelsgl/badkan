@@ -3,7 +3,7 @@
  * in the internal storage. Really important.
  */
 
- // Here the page always begin with the loading
+// Here the page always begin with the loading
 onLoading()
 
 
@@ -11,7 +11,7 @@ var $template = $('.template');
 let hash = 2;
 
 var numRegistered = 0,
-    numUnregistered = 0
+  numUnregistered = 0
 
 var coursesMap = new Map()
 var exercisesMap = new Map();
@@ -30,45 +30,40 @@ firebase.auth().onAuthStateChanged(authUser => {
     var userId = authUser.uid
     localStorage.setItem('homeUserId', JSON.stringify(userId))
     loadCurrentUser(userId, (homeUser) => {
-        if (homeUser.admin) {
-            if (homeUser.admin === true) {
-              $('#btnManageCourses').show()
-            }
+      if (homeUser.admin) {
+        if (homeUser.admin === true) {
+          $('#btnManageCourses').show()
         }
-        if (exercisesObject) {  // defined in file data/exercises.js
-            // synchronous
-            console.log("exercisesObject is defined")
-            for (key in exercisesObject) {
-                exercisesMap.set(key, exercisesObject[key].exercise)
-            }
+      }
+      if (exercisesObject) {  // defined in file data/exercises.js
+        // synchronous
+        console.log("exercisesObject is defined")
+        for (key in exercisesObject) {
+          exercisesMap.set(key, exercisesObject[key].exercise)
+        }
+      } else {
+        alert("Exercises object not found - please try again or contact the programmer")
+        finishLoading()
+      }
+      loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
+      loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
+        if (coursesObject) {  // defined in file data/courses.js
+          console.log("coursesObject " + coursesObject)
+          console.log("coursesMap " + coursesMap)
+          // synchronous
+          for (key in coursesObject) {
+            course = coursesObject[key].course
+            // coursesMap.set(key, course)
+            addCourseHTML(key, course)
+          }
+          onAllCoursesLoaded()
+          // Finally, stop the loading
+          finishLoading()
         } else {
-            alert("Exercises object not found - please try again or contact the programmer")
-            // asynchronous - TO DELETE
-            loadAllExercisesAsync(exercisesMap); // defined in util/Firebase.js.
+          alert("Courses object not found - please try again or contact the programmer")
+          finishLoading()
         }
-        loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
-
-        loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
-            if (coursesObject) {  // defined in file data/courses.js
-                console.log("coursesObject "+coursesObject)
-                console.log("coursesMap "+coursesMap)
-                    // synchronous
-                    for (key in coursesObject) {
-                        course = coursesObject[key].course
-                        // coursesMap.set(key, course)
-                        addCourseHTML(key, course)
-                    }
-                    onAllCoursesLoaded()
-                    // Finally, stop the loading
-                    finishLoading()
-            } else {
-                alert("Courses object not found - please try again or contact the programmer")
-                // asynchronous - TO DELETE
-                loadAllCourses(            // in util/Firebase.js
-                    /*onCourse=*/addCourseHTML,
-                    /*onFinish=*/onAllCoursesLoaded)
-            }
-        })
+      })
     })
   }
 
@@ -101,7 +96,7 @@ function addCourseHTML(key, course) {
     var homeUser = JSON.parse(localStorage.getItem('homeUserKey'));
     let arrayIds = course.ids.split(' ')
     if (arrayIds.includes(homeUser.id)) {
-      if (isRegistered(course)) {        
+      if (isRegistered(course)) {
         showRegisteredCourse(key, course);
       } else {
         let courseId = key;
@@ -160,11 +155,11 @@ document.getElementById('btnLogOut').addEventListener('click', e => {
   document.getElementById('btnManageCourses').style.display = 'none'
   firebase.auth().signOut().then(
     () => {
-        alert("Good bye!")
-        document.location.href = 'index.html'
+      alert("Good bye!")
+      document.location.href = 'index.html'
     },
     (error) => {
-        alert("There was an error in sign out. Please try again. If the problem persists, please contact the programmer.")
+      alert("There was an error in sign out. Please try again. If the problem persists, please contact the programmer.")
     });
 });
 
@@ -276,7 +271,7 @@ function showRegisteredCourse(key, course) {
         let exerciseId = course.exercises[i];
         let exerciseObj = exercisesMap.get(exerciseId);
         if (exerciseObj) {
-          text_html += htmlOfExerciseInRegisteredCourse(exerciseId,exerciseObj)
+          text_html += htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj)
         }
         let peerExerciseObj = peerExercisesMap.get(exerciseId);
         if (peerExerciseObj) {
@@ -509,5 +504,5 @@ $('body').on('click', '#register', function (e) {
 
 function registerSuccess(course, courseId) {
   course.students.push(firebase.auth().currentUser.uid);
-  editCourse(course, courseId)
+  editCourse(course, courseId, "home.html")
 }

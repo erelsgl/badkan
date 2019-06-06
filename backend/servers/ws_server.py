@@ -4,6 +4,14 @@ AUTHOR:  Shmouel Yossef Haim Avraham ben Shlomo, Erel Segal-Halevi
 SINCE: 2019-03
 """
 
+import sys
+sys.path.append("../util")
+
+from concurrent.futures import ProcessPoolExecutor
+from multiprocessing import Process
+from update_courses import update_courses
+from util import *
+from terminal import *
 import websockets
 import asyncio
 import os
@@ -12,19 +20,12 @@ import re
 import sys
 import datetime
 
-from terminal import *
-from util import *
-import datetime
-from update_courses import update_courses
-from multiprocessing import Process
-
-from concurrent.futures import ProcessPoolExecutor
 
 # same port as in frontend/index.html
 PORT_NUMBER = int(sys.argv[1]) if len(sys.argv) >= 2 else 5670
 
 EXERCISE_DIR = os.path.realpath(os.path.dirname(
-    os.path.abspath(__file__))+"/../exercises")
+    os.path.abspath(__file__))+"/../../exercises")
 
 
 # Example https: https://github.com/SamuelBismuth/badkan.git
@@ -479,7 +480,7 @@ async def load_ex(url, folder_name, username, password, exercise):
     :param password: the password of the deploy token to clone the private repo.
     :param exercise: the name of the solved exercise.
     """
-    git_clone("../exercises", url, folder_name, username, password, exercise)
+    git_clone("../../exercises", url, folder_name, username, password, exercise)
     print("your exercise is loaded.")
 
 
@@ -489,7 +490,7 @@ async def edit_ex(folder_name, ex_folder):
     (it's composed of the uid of the owner + "_" + nb of exercise he created).
     :param exercise: the name of the folder of the solved exercise.
     """
-    git_pull("../exercises", folder_name, ex_folder)
+    git_pull("../../exercises", folder_name, ex_folder)
     print("your exercise is edited.")
 
 
@@ -497,7 +498,7 @@ async def delete_ex(delete_ex):
     """
     :param delete_ex: the name of the folder of the exercise to delete.
     """
-    rmv("../exercises", delete_ex)
+    rmv("../../exercises", delete_ex)
     print("your exercise is deleted.")
 
 
@@ -507,7 +508,7 @@ async def moss_command(websocket, submission):
     info = submission["info"]
     informations = info.replace("-", " ")
     shellscript = subprocess.Popen(
-        ['bash', '../moss/exec-moss.sh', compiler, exercise_id, informations], stdout=subprocess.PIPE)
+        ['bash', '../../moss/exec-moss.sh', compiler, exercise_id, informations], stdout=subprocess.PIPE)
     shellscript.wait()
     for line in shellscript.communicate():
         if line is not None:
@@ -518,6 +519,7 @@ async def run(websocket, path):
     """
     Run a websocket server that receives submissions and grades them.
     """
+    print(websocket.recv())
     submission_json = await websocket.recv()   # returns a string
     print("< {} ".format(submission_json))
     # converts the string to a python dict
@@ -527,6 +529,8 @@ async def run(websocket, path):
     target = submission["target"]
 
     redirect = None
+    if "redirect" in submission and submission["redirect"] != "None":
+        redirect = submission["redirect"]
 
     if target == 'load_ex':
         await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
@@ -547,18 +551,24 @@ async def run(websocket, path):
     elif target == "check_solution_peer_submission":
         await check_solution_peer_submission(websocket, submission)
     elif target == "create_course":
-        redirect = 'manageCourses.html'
+        pass
+        # redirect = 'manageCourses.html'
     elif target == "edit_course":
-        redirect = 'home.html'
+        pass
+        # redirect = 'home.html'
     elif target == "delete_course":
-        redirect = 'manageCourses.html'
+        pass
+        # redirect = 'manageCourses.html'
     elif target == "check_submission":
         await check_submission(websocket, submission)
     else:
         print("Illegal target {}".format(target))
+
     update_courses()      # TODO: verify that Firebase has finished updating.
+
     if redirect:
-        await tee(websocket, redirect)
+        await tee(websocket, "@$@redirect@$@" + redirect)
+
     print("> Closing connection")
 
 

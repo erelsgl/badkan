@@ -82,14 +82,15 @@ function writePeerExercise(peerExercise, peerExerciseId) {
   });
 }
 
-function editCourse(course, courseId) {
+function editCourse(course, courseId, redirect) {
   firebase.database().ref("courses/" + courseId).set({
     course
   }).then(() => {
     json = JSON.stringify({
       target: "edit_course",
+      redirect: redirect
     }); // the variable "submission_json" is read in server.py
-    simpleWebsocket(json)
+    sendWebsocket(json, undefined, onMessageCourseChange, undefined, onErrorCourseChange)
   });
 }
 
@@ -100,7 +101,7 @@ function writeCourse(course, courseId) {
     json = JSON.stringify({
       target: "create_course",
     }); // the variable "submission_json" is read in server.py
-    simpleWebsocket(json)
+    sendWebsocket(json, undefined, onMessageCourseChange, undefined, onErrorCourseChange)
   });
 }
 
@@ -113,7 +114,7 @@ function deleteCourseById(courseId) {
   json = JSON.stringify({
     target: "delete_course",
   }); // the variable "submission_json" is read in server.py
-  simpleWebsocket(json)
+  sendWebsocket(json, undefined, onMessageCourseChange, undefined, onErrorCourseChange)
 }
 
 /**
@@ -291,6 +292,8 @@ function loadAllSubmissionsByUserAsync(submissionsArray, submissionsId, onUserSu
         }
       })
     }
+  } else {
+    onUserSubmissionsLoaded()
   }
 }
 
@@ -304,7 +307,7 @@ function loadAllSubmissionsByUserAsync(submissionsArray, submissionsId, onUserSu
  */
 function loadCoursesOwnedByCurrentUser(onCourse, onFinish, homeUserForAdmin) {
   database.ref().child('courses/').on("value", function (snapshot) {
-    if(!snapshot) {
+    if (!snapshot || JSON.stringify(snapshot) == "null") {
       finishLoading()
     }
     var numToProcess = snapshot.numChildren()

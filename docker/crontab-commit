@@ -1,7 +1,0 @@
-SHELL=/bin/bash
-PATH=/bin:/usr/bin:/usr/local/bin
-
-# Backup each two hours: 
-#TODO
-
-1 */2 * * * cd badkan/docker; sudo docker commit -m="daily commmit" badkan; sudo docker push erelsgl/badkan:latest

@@ -93,7 +93,7 @@ function editCourseCreate(exerciseId) {
   else {
     course.exercises = [exerciseId]
   }
-  editCourse(course, courseId);
+  editCourse(course, courseId, "None");
 }
 
 /**
