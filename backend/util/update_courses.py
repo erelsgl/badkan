@@ -23,12 +23,16 @@ def update_courses():
     id = re.search('projectId: "(.+?)",', data)
     FIREBASE_APP = id.group(1)
 
-    r = requests.get('https://'+FIREBASE_APP +
-                     '.firebaseio.com/courses.json?format=export')
+    url = 'https://'+FIREBASE_APP +'.firebaseio.com/courses.json?format=export'
+    r = requests.get(url)
+    if r.status_code!=200:
+        raise(RuntimeError("Error in reading {}: code is {}".format(url,r.status_code)))
     coursesObject = r.json()
 
-    r = requests.get('https://'+FIREBASE_APP +
-                     '.firebaseio.com/exercises.json?format=export')
+    url = 'https://'+FIREBASE_APP +'.firebaseio.com/exercises.json?format=export'
+    r = requests.get(url)
+    if r.status_code!=200:
+        raise(RuntimeError("Error in reading {}: code is {}".format(url,r.status_code)))
     exercisesObject = r.json()
 
     if coursesObject:
