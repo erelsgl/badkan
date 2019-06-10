@@ -18,7 +18,8 @@ class MyHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         print(self.headers)
         self._set_headers()
-        filename = "../" + self.headers['Accept-Language']
+        path_filename = "../" + self.headers['Accept-Language']
+        filename = self.headers['Accept-Language']
         filesize = int(self.headers['Content-Length'])
         contents = self.rfile.read(filesize)
         if self.headers['Accept'] == 'grade':
@@ -34,7 +35,7 @@ class MyHandler(BaseHTTPRequestHandler):
             self.send_response(200)
             shellscript = subprocess.Popen(['bash','../bash/cp-grade.sh', filename], stdout=subprocess.PIPE)
             return
-        f = open(filename, 'w+b')
+        f = open(path_filename, 'w+b')
         f.write(contents)   
         f.close()
         if self.headers['Accept'] == 'create':

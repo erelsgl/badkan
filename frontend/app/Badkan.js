@@ -102,12 +102,12 @@ function submitNormal() {
       alert("Please attach a zip file");
       return;
     }
-    doPost(file, ['Accept-Language', uid], onSuccessHttpNormalSubmission);
+    doPost(file, ['Accept-Language', uid], dealWithFile);
   } else if ($('.nav-pills .active').text() === 'GitLab private clone') {
     url = escapeHtmlWithRespectGit(document.getElementById("link").value);
     var tokenUsername = escapeHtmlWithRespectGit(document.getElementById("user").value);
     var tokenPassword = escapeHtmlWithRespectGit(document.getElementById("pass").value);
-    dealWithPrivate(tokenUsername, tokenPassword);
+    dealWithPrivate(tokenUsername, tokenPassword, url);
   } else {
     url = escapeHtmlWithRespectGit(document.getElementById("giturl").value);
     dealWithUrl();
@@ -146,12 +146,12 @@ function createSubmission(collaboratorsId, collaboratorsUid) {
   pushArraySubmissionIdExerciseSide(exerciseId, submissionId, collaboratorsId, collaboratorsUid);
 }
 
-function dealWithPrivate(tokenUsername, tokenPassword) {
+function dealWithPrivate(tokenUsername, tokenPassword, url) {
   // Create the json for submission
   json = JSON.stringify({
     target: "check_private_submission",
     exercise: exerciseId,
-    solution: urlSubmission,
+    solution: url,
     tokenUsername: tokenUsername,
     tokenPassword: tokenPassword,
     ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
@@ -166,7 +166,7 @@ function dealWithPrivate(tokenUsername, tokenPassword) {
 function dealWithUrl() {
   // Create the json for submission
   json = JSON.stringify({
-    target: "check_submission",
+    target: "check_url_submission",
     exercise: exerciseId,
     solution: url,
     ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
@@ -178,10 +178,10 @@ function dealWithUrl() {
   sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionNormal, onCloseWebsocketSubmissionNormal, onCloseTemplate);
 }
 
-function onSuccessHttpNormalSubmission() {
+function dealWithFile() {
   // Create the json for submission
   json = JSON.stringify({
-    target: "check_submission",
+    target: "check_file_submission",
     exercise: exerciseId,
     solution: uid,
     ids: homeUser.id + "-" + collab1Id + "-" + collab2Id,
