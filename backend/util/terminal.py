@@ -37,9 +37,15 @@ def git_pull(path, folder_name, ex_folder):
     shellscript = subprocess.Popen(
         ['bash', '../bash/git-pull.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
     shellscript.wait()
+    for line in shellscript.stdout:
+        line = line.decode('utf-8').strip()
+        print(line)
     shellscript = subprocess.Popen(
         ['bash', '../bash/git-clean.sh', folder_name, ex_folder], stdout=subprocess.PIPE)
     shellscript.wait()
+    for line in shellscript.stdout:
+        line = line.decode('utf-8').strip()
+        print(line)
 
 def rmv(path, folder_name):
     """

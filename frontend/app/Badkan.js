@@ -85,7 +85,7 @@ function reload() {
   }
 }
 
-function submit() {
+function submitSubmission() {
   if (exerciseId) {
     submitNormal();
   } else {
@@ -175,9 +175,7 @@ function dealWithUrl() {
     student_name: homeUser.name,
     student_last_name: homeUser.lastName
   }); // the variable "submission_json" is read in server.py:run
-  // sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionNormal, onCloseWebsocketSubmissionNormal, onCloseTemplate);\
-  alert("url")
-  sendWebsocket(json, undefined, undefined, undefined, undefined)
+  sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionNormal, onCloseWebsocketSubmissionNormal, onCloseTemplate);
 }
 
 function onSuccessHttpNormalSubmission() {
@@ -233,14 +231,15 @@ function onSuccessHttpPeerTest() {
  */
 $("button#clear").click(() => {
   $("div#output").html("")
-  return false;
+  return false;  // This is MANDATORY: just lost two days for that sh*t!!!!!! https://stackoverflow.com/questions/11184276/return-false-from-jquery-click-event
 })
 
 /**
  * The button to submit the exercise.
  */
 $("button#submit").click(() => {
-  submit()
+  submitSubmission()
+  return false;  // This is MANDATORY: just lost two days for that sh*t!!!!!! https://stackoverflow.com/questions/11184276/return-false-from-jquery-click-event
 })
 
 /**
@@ -248,7 +247,8 @@ $("button#submit").click(() => {
  */
 $("button#clear_and_submit").click(() => {
   $("div#output").html("")
-  submit()
+  submitSubmission() 
+  return false;  // This is MANDATORY: just lost two days for that sh*t!!!!!! https://stackoverflow.com/questions/11184276/return-false-from-jquery-click-event
 })
 
 /** In link with peer to peer */

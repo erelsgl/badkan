@@ -519,7 +519,6 @@ async def run(websocket, path):
     """
     Run a websocket server that receives submissions and grades them.
     """
-    print(websocket.recv())
     submission_json = await websocket.recv()   # returns a string
     print("< {} ".format(submission_json))
     # converts the string to a python dict

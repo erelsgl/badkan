@@ -21,8 +21,14 @@ function doPost(file, args, onSuccess) {
     xhr.setRequestHeader(args[0], args[1]); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
     xhr.onreadystatechange = function () {
       if (this.readyState == 4) {
-        onSuccess();
-      }
+        switch (this.status) {
+          case 200:
+            onSuccess();
+            break;
+          // Error handling here
+          default: alert("Unexpected error:  " + this.statusText + " - " + this.status + ".\nPlease try again"); break;
+        }
+      } 
     };
     xhr.send(rawData);
   }

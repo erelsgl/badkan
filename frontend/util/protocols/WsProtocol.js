@@ -9,28 +9,24 @@ function sendWebsocket(submission_json, onOpen, onMessage, onClose, onError) {
   var websocket = new WebSocket(websocketurl);
   websocket.onopen = (event) => {
     websocket.send(submission_json)
-    // alert("open")
-    // if (onOpen) {
-    //   onOpen(event)
-    // }
+    if (onOpen) {
+      onOpen(event)
+    }
   }
   websocket.onmessage = (event) => {
-    // alert("message")
-    // if (onMessage) {
-    //   onMessage(event)
-    // }
+    if (onMessage) {
+      onMessage(event)
+    }
   }
   websocket.onclose = (event) => {
-    // alert("close")
-    // if (onClose) {
-    //   onClose(event)
-    // }
+    if (onClose) {
+      onClose(event)
+    }
   }
   websocket.onerror = (event) => {
-    // alert("error")
-    // if (onError) {
-    //   onError(event)
-    // }
+    if (onError) {
+      onError(event)
+    }
   }
 }
 
