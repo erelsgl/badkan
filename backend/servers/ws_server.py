@@ -4,21 +4,18 @@ AUTHOR:  Shmouel Yossef Haim Avraham ben Shlomo, Erel Segal-Halevi
 SINCE: 2019-03
 """
 
-import sys
-sys.path.append("../util")
-
-from concurrent.futures import ProcessPoolExecutor
-from multiprocessing import Process
-from update_courses import update_courses
-from util import *
-from terminal import *
-import websockets
-import asyncio
-import os
-import json
-import re
-import sys
+from import_util import *
 import datetime
+import re
+import json
+import os
+import asyncio
+import websockets
+from terminal import *
+from util import *
+from update_courses import update_courses
+from multiprocessing import Process
+from concurrent.futures import ProcessPoolExecutor
 
 
 # same port as in frontend/index.html
@@ -49,30 +46,8 @@ def get_grade_regexp(current_exercise_folder: str = ""):
     return result
 
 
-async def tee(websocket, message):
-    """
-    Send a message both to the backend screen and to the frontend client.
-    """
-    print("> {}".format(message))
-    await websocket.send(message)
-
-
-async def docker_command(command_words):
-    """
-    :param command_words: a list of words to be executed by docker.
-    :return: a stream that contains all output of the command (stdout and stderr together)
-    """
-    return await asyncio.subprocess.create_subprocess_exec(
-        *(["docker"] + command_words),
-        stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
-
-
 async def dealing_with_file(filename, websocket, owner_firebase_id, exercise):
-    proc = await docker_command(["exec", "badkan", "bash", "get-submission-file.sh", owner_firebase_id, exercise])
-    async for line in proc.stdout:
-        line = line.decode('utf-8').strip()
-        await tee(websocket, line)
-    await proc.wait()
+    await docker_command_tee(["exec", "badkan", "bash", "get-submission-file.sh", owner_firebase_id, exercise], websocket)
 
 
 async def dealing_with_url(git_url, websocket, owner_firebase_id, exercise):
@@ -80,11 +55,7 @@ async def dealing_with_url(git_url, websocket, owner_firebase_id, exercise):
     username = matches.group(1)
     repository = GIT_CLEAN.sub("", matches.group(2))
     # Clone or pull the student's submission from github to the docker container "badkan":
-    proc = await docker_command(["exec", "badkan", "bash", "get-submission.sh", username, repository, owner_firebase_id, exercise])
-    async for line in proc.stdout:
-        line = line.decode('utf-8').strip()
-        await tee(websocket, line)
-    await proc.wait()
+    await docker_command_tee(["exec", "badkan", "bash", "get-submission.sh", username, repository, owner_firebase_id, exercise], websocket)
 
 
 async def run_for_admin(owner_firebase_id, exercise_id, websocket):
@@ -409,10 +380,7 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
     # 1. Copy the files related to grading from the exercise folder outside docker to the submission folder inside docker:
     current_exercise_folder = os.path.realpath(EXERCISE_DIR + "/" + exercise)
     await tee(websocket, "copying from {}".format(current_exercise_folder))
-    proc = await docker_command(["cp", current_exercise_folder, "badkan:{}/grading_files".format(repository_folder)])
-    async for line in proc.stdout:
-        print(line)
-    await proc.wait()
+    await docker_command_log(["cp", current_exercise_folder, "badkan:{}/grading_files".format(repository_folder)])
 
     # 2. Grade the submission inside the docker container "badkan"
     grade = None
@@ -424,7 +392,7 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
     exitcode_command = "echo Exit code: $?"
     combined_command = "{} && {} ; {}".format(
         move_command, grade_command, exitcode_command)
-    proc = await docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
+    proc = await old_docker_command(["exec", "-w", repository_folder, "badkan", "bash", "-c", combined_command])
     output = ""
     count = 0
     grade_regexp = get_grade_regexp(current_exercise_folder)
@@ -436,9 +404,6 @@ async def grade(solution, exercise, ids, name, owner_firebase_id, repository_fol
                     output += str(count) + ":;" + \
                         line[line.find(":") + 2: len(line)] + ";"
                     count += 1
-                # else:
-                    # await tee(websocket, line)
-                # Print the line to nohup.out, for debugging
                 print("> {}".format(line))
                 matches = grade_regexp.search(line)
                 if matches is not None:     # This line represents the student's grade.
@@ -480,7 +445,7 @@ async def load_ex(url, folder_name, username, password, exercise):
     :param password: the password of the deploy token to clone the private repo.
     :param exercise: the name of the solved exercise.
     """
-    git_clone("../../exercises", url, folder_name, username, password, exercise)
+    git_clone(url, folder_name, username, password, exercise)
     print("your exercise is loaded.")
 
 
@@ -490,7 +455,7 @@ async def edit_ex(folder_name, ex_folder):
     (it's composed of the uid of the owner + "_" + nb of exercise he created).
     :param exercise: the name of the folder of the solved exercise.
     """
-    git_pull("../../exercises", folder_name, ex_folder)
+    git_pull(folder_name, ex_folder)
     print("your exercise is edited.")
 
 
