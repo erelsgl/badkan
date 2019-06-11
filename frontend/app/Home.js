@@ -23,8 +23,6 @@ var submissionsArray = []
  * Every time the state of the user is changed, this function is called.
  */
 firebase.auth().onAuthStateChanged(authUser => {
-
-
   /*** This code runs if there is a logged-in user. ***/
   if (authUser) {
     var userId = authUser.uid
@@ -74,16 +72,6 @@ firebase.auth().onAuthStateChanged(authUser => {
     document.location.href = "index.html"
   }
 })
-
-
-//var homeUser = JSON.parse(localStorage.getItem('homeUserKey'));
-
-
-// TODO: Maybe an assynchronous probleme here: need to have everything done before to begin anything.
-
-// We need to load all the exercise since it's possible that the owner of the
-// course is not the owner of the exercise.
-
 
 
 function addCourseHTML(key, course) {

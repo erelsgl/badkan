@@ -34,7 +34,7 @@ function onOpenTemplate(_event) {
   logServer("color:blue", "Submission starting!");
 }
 
-function onCloseTemplate(_event) {
+function onErrorTemplate(_event) {
   logServer("color:red", "Error in websocket.");
 }
 

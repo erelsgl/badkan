@@ -18,7 +18,9 @@ function doPost(file, args, onSuccess) {
       backendPort = BACKEND_FILE_PORTS[Math.floor(Math.random() * BACKEND_FILE_PORTS.length)];
     var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
     xhr.open('POST', httpurl, true);
-    xhr.setRequestHeader(args[0], args[1]); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    for (let i = 0; i < args.length; i++) {
+      xhr.setRequestHeader(args[i], args[++i]); // To keep the POST method, it has to be something already in the header see: https://stackoverflow.com/questions/9713058/send-post-data-using-xmlhttprequest
+    }
     xhr.onreadystatechange = function () {
       if (this.readyState == 4) {
         switch (this.status) {

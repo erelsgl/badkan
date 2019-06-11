@@ -70,6 +70,47 @@ if (exercise.deadline) {
 // to here we are in the normal=(!peer_to_peer) section.
 
 
+/** Handling button */
+
+/**
+ * The button to clear the submission terminal.
+ */
+$("button#clear").click(() => {
+  $("div#output").html("")
+  return false;  // This is MANDATORY: just lost two days for that sh*t!!!!!! https://stackoverflow.com/questions/11184276/return-false-from-jquery-click-event
+})
+
+/**
+ * The button to submit the exercise.
+ */
+$("button#submit").click(() => {
+  submitSubmission()
+  return false;  // This is MANDATORY: just lost two days for that sh*t!!!!!! https://stackoverflow.com/questions/11184276/return-false-from-jquery-click-event
+})
+
+/**
+ * The button to submit the exercise.
+ */
+$("button#clear_and_submit").click(() => {
+  $("div#output").html("")
+  submitSubmission() 
+  return false;  // This is MANDATORY: just lost two days for that sh*t!!!!!! https://stackoverflow.com/questions/11184276/return-false-from-jquery-click-event
+})
+
+/** In link with peer to peer */
+$("button#reclamationTest").click(() => {
+  //  Next release: First we remove the last reclamation since only the last reclamation count.
+  var checkedBoxes = getCheckedBoxes("wrong"); // in util/utils.js
+  for (var i = 0; i < checkedBoxes.length; i++) {
+    array_info = checkedBoxes[i].id.split("_");
+    testId = array_info[0];
+    functionName = array_info[1];
+    functionContent = tests.get(functionName)
+    writeNewReclamationIds(uid, peerSolutionExercise, testId, functionName, functionContent)
+  }
+})
+
+
 /*
  * From here only function are writed.
  */
@@ -148,7 +189,7 @@ function createSubmission(collaboratorsId, collaboratorsUid) {
 
 function dealWithPrivate(tokenUsername, tokenPassword, url) {
   // Create the json for submission
-  json = JSON.stringify({
+  let json = JSON.stringify({
     target: "check_private_submission",
     exercise: exerciseId,
     solution: url,
@@ -159,13 +200,13 @@ function dealWithPrivate(tokenUsername, tokenPassword, url) {
     owner_firebase_id: uid,
     student_name: homeUser.name,
     student_last_name: homeUser.lastName
-  }); // the variable "submission_json" is read in server.py:run
-  sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionNormal, onCloseWebsocketSubmissionNormal, onCloseTemplate);
+  }); 
+  sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionNormal, onCloseWebsocketSubmissionNormal, onErrorTemplate);
 }
 
 function dealWithUrl() {
   // Create the json for submission
-  json = JSON.stringify({
+  let json = JSON.stringify({
     target: "check_url_submission",
     exercise: exerciseId,
     solution: url,
@@ -174,13 +215,13 @@ function dealWithUrl() {
     owner_firebase_id: uid,
     student_name: homeUser.name,
     student_last_name: homeUser.lastName
-  }); // the variable "submission_json" is read in server.py:run
-  sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionNormal, onCloseWebsocketSubmissionNormal, onCloseTemplate);
+  }); 
+  sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionNormal, onCloseWebsocketSubmissionNormal, onErrorTemplate);
 }
 
 function dealWithFile() {
   // Create the json for submission
-  json = JSON.stringify({
+  let json = JSON.stringify({
     target: "check_file_submission",
     exercise: exerciseId,
     solution: uid,
@@ -189,13 +230,13 @@ function dealWithFile() {
     owner_firebase_id: uid,
     student_name: homeUser.name,
     student_last_name: homeUser.lastName
-  }); // the variable "submission_json" is read in server.py:run
-  sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionNormal, onCloseWebsocketSubmissionNormal, onCloseTemplate);
+  }); 
+  sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionNormal, onCloseWebsocketSubmissionNormal, onErrorTemplate);
 }
 
 function onSuccessHttpPeerSolution() {
   // Create the json for submission
-  json = JSON.stringify({
+  let json = JSON.stringify({
     target: "check_solution_peer_submission",
     exerciseId: peerSolutionExercise,
     name: exercise.name,
@@ -203,13 +244,13 @@ function onSuccessHttpPeerSolution() {
     student_name: homeUser.name,
     student_last_name: homeUser.lastName,
     country_id: homeUser.id,
-  }); // the variable "submission_json" is read in server.py:run
-  sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionPeer, onCloseWebsocketSubmissionPeer, onCloseTemplate);
+  }); 
+  sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionPeer, onCloseWebsocketSubmissionPeer, onErrorTemplate);
 }
 
 function onSuccessHttpPeerTest() {
   // Create the json for submission
-  json = JSON.stringify({
+  let json = JSON.stringify({
     target: "check_test_peer_submission",
     exerciseId: peerTestExercise,
     name: exercise.name,
@@ -219,47 +260,6 @@ function onSuccessHttpPeerTest() {
     country_id: homeUser.id,
     min_test: exercise.minTest,
     signature_map: exercise.signatureMap
-  }); // the variable "submission_json" is read in server.py:run
-  sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionPeer, onCloseWebsocketSubmissionPeer, onCloseTemplate);
+  }); 
+  sendWebsocket(json, onOpenTemplate, onMessageWebsocketSubmissionPeer, onCloseWebsocketSubmissionPeer, onErrorTemplate);
 }
-
-
-/** Handling button */
-
-/**
- * The button to clear the submission terminal.
- */
-$("button#clear").click(() => {
-  $("div#output").html("")
-  return false;  // This is MANDATORY: just lost two days for that sh*t!!!!!! https://stackoverflow.com/questions/11184276/return-false-from-jquery-click-event
-})
-
-/**
- * The button to submit the exercise.
- */
-$("button#submit").click(() => {
-  submitSubmission()
-  return false;  // This is MANDATORY: just lost two days for that sh*t!!!!!! https://stackoverflow.com/questions/11184276/return-false-from-jquery-click-event
-})
-
-/**
- * The button to submit the exercise.
- */
-$("button#clear_and_submit").click(() => {
-  $("div#output").html("")
-  submitSubmission() 
-  return false;  // This is MANDATORY: just lost two days for that sh*t!!!!!! https://stackoverflow.com/questions/11184276/return-false-from-jquery-click-event
-})
-
-/** In link with peer to peer */
-$("button#reclamationTest").click(() => {
-  //  Next release: First we remove the last reclamation since only the last reclamation count.
-  var checkedBoxes = getCheckedBoxes("wrong"); // in util/utils.js
-  for (var i = 0; i < checkedBoxes.length; i++) {
-    array_info = checkedBoxes[i].id.split("_");
-    testId = array_info[0];
-    functionName = array_info[1];
-    functionContent = tests.get(functionName)
-    writeNewReclamationIds(uid, peerSolutionExercise, testId, functionName, functionContent)
-  }
-})

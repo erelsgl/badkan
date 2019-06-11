@@ -120,7 +120,6 @@ function github() {
     if (result.additionalUserInfo.isNewUser) {
       document.location.href = "completeInfo.html"
     } else {
-      console.log("old user");
       document.location.href = "home.html";
     }
   }).catch(function (error) {

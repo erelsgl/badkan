@@ -10,6 +10,8 @@ import datetime
 import util
 import re
 
+from terminal import terminal_command_log
+
 
 def update_courses():
     currentDT = datetime.datetime.now()
@@ -58,6 +60,9 @@ def update_courses():
         file.write("// Updated at "+str(currentDT)+"\n")
         file.write("exercisesObject=")
         file.write(json.dumps(exercisesObject))
+
+    if os.path.exists('/var/www/html/'):
+        terminal_command_log(['bash', '../bash/cp-data.sh'])
 
 
 if __name__ == "__main__":
