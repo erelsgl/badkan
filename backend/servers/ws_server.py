@@ -10,7 +10,6 @@ from imports_servers import *
 PORT_NUMBER = int(sys.argv[1]) if len(sys.argv) >= 2 else 5670
 
 
-
 async def run(websocket, path):
     """
     Run a websocket server that receives submissions and grades them.

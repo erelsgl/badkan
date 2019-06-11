@@ -26,6 +26,8 @@
   <script type="text/javascript" src="objects/Deadline.js"></script>
   <script type="text/javascript" src="util/Sanitize.js"></script>
   <script type="text/javascript" src="util/Notif.js"></script>
+  <script type="text/javascript" src="third_party/CreateEditExercise.js"></script>
+
 
   <!-- Import css. -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -168,9 +170,9 @@
                   send us your grading system. <br />
                   Inside the folder, there should be an executable program called grade. <br /> <br />
                 </h5>
-                <input type="radio" id="use" name="grade" value="confirm" onclick="showTemplate();">Use I/O
+                <input type="radio" id="use" name="grade" value="confirm" onclick="displayBlockById('accordion');">Use I/O
                 template.<br />
-                <input type="radio" id="notuse" name="grade" value="dismiss" onclick="hideTemplate();">Use my own grade
+                <input type="radio" id="notuse" name="grade" value="dismiss" onclick="displayNoneById('accordion');">Use my own grade
                 file.<br />
               </div>
               <br />

@@ -5,8 +5,6 @@ finishLoading()
 var BACKEND_PORTS = [5670, 5671, 5672, 5673, 5674, 5675, 5676, 5677, 5678, 5679];
 var BACKEND_FILE_PORTS = [9000];
 
-//var BACKEND_PORTS = [5670];
-
 /**
  * BUTTON CONFIRM.
  */
@@ -15,20 +13,15 @@ document.getElementById("btnConfirm").addEventListener('click', e => {
   const name = escapeHtml(document.getElementById("exName").value);
   const descr = escapeHtml(document.getElementById("exDescr").value);
   const compiler = escapeHtml(document.getElementById("exCompiler").value);
-
   let github = document.getElementById("github").checked;
   let zip = document.getElementById("zip").checked;
   let gitlab = document.getElementById("gitlab").checked;
-
   // Here we first check that the user at least check one of the parameter.
-  if (!github && !zip && !gitlab) {
-    finishLoading()
-    alert("Please check at least one submission option.");
-    return;
+  if (!checkViaSubmission(github, zip, gitlab)) {
+    finishLoading();
+    return;    
   }
-
   let submission = new ViaSubmission(github, zip, gitlab);
-
   const date = document.getElementById("deadline").value;
   let penalities = [];
   for (var i = 1; i < 7; i++) {
@@ -280,15 +273,6 @@ function isGrade() {
   } else {
     return false;
   }
-}
-
-function showTemplate() {
-  document.getElementById('accordion').style.display = "block";
-}
-
-
-function hideTemplate() {
-  document.getElementById('accordion').style.display = "none";
 }
 
 function onZip() {
