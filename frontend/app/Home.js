@@ -6,14 +6,12 @@
 // Here the page always begin with the loading
 onLoading()
 
-
 var $template = $('.template');
 let hash = 2;
 
 var numRegistered = 0,
   numUnregistered = 0
 
-var coursesMap = new Map()
 var exercisesMap = new Map();
 var peerExercisesMap = new Map();
 var submissionsArray = []
@@ -23,11 +21,19 @@ var submissionsArray = []
  * Every time the state of the user is changed, this function is called.
  */
 firebase.auth().onAuthStateChanged(authUser => {
+  localStorage.clear()
   /*** This code runs if there is a logged-in user. ***/
   if (authUser) {
     var userId = authUser.uid
+    // For the next pages
     localStorage.setItem('homeUserId', JSON.stringify(userId))
+    // For the Home page.
+    window.uid = userId;
     loadCurrentUser(userId, (homeUser) => {
+      // For the next pages
+      localStorage.setItem('homeUser', JSON.stringify(homeUser))
+      // For the Home page.
+      window.homeUser = homeUser;
       if (homeUser.admin) {
         if (homeUser.admin === true) {
           $('#btnManageCourses').show()
@@ -35,7 +41,6 @@ firebase.auth().onAuthStateChanged(authUser => {
       }
       if (exercisesObject) {  // defined in file data/exercises.js
         // synchronous
-        console.log("exercisesObject is defined")
         for (key in exercisesObject) {
           exercisesMap.set(key, exercisesObject[key].exercise)
         }
@@ -46,12 +51,9 @@ firebase.auth().onAuthStateChanged(authUser => {
       loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
       loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
         if (coursesObject) {  // defined in file data/courses.js
-          console.log("coursesObject " + coursesObject)
-          console.log("coursesMap " + coursesMap)
           // synchronous
           for (key in coursesObject) {
             course = coursesObject[key].course
-            // coursesMap.set(key, course)
             addCourseHTML(key, course)
           }
           onAllCoursesLoaded()
@@ -64,8 +66,6 @@ firebase.auth().onAuthStateChanged(authUser => {
       })
     })
   }
-
-
   /*** This code runs if there is NO logged-in user. ***/
   else {
     alert("You're not connected, try to sign in again!")
@@ -73,24 +73,18 @@ firebase.auth().onAuthStateChanged(authUser => {
   }
 })
 
-
 function addCourseHTML(key, course) {
-  coursesMap.set(key, course);
-  // SEE IF REGISTER OR NOT: HERE ASSUMING NOT.         // If the user click
-  // here check if he registered if yes dl the pdf or something like this. First
-  // see if course if private or not:
+  //  First see if course if private or not:
   if (course.ids) {
     // private
-    var homeUser = JSON.parse(localStorage.getItem('homeUserKey'));
     let arrayIds = course.ids.split(' ')
-    if (arrayIds.includes(homeUser.id)) {
+    if (arrayIds.includes(window.homeUser.id)) {
       if (isRegistered(course)) {
         showRegisteredCourse(key, course);
       } else {
         let courseId = key;
         registerSuccess(course, courseId);
       }
-
     }
   } else {
     if (isRegistered(course)) {
@@ -111,57 +105,18 @@ function onAllCoursesLoaded() {
   }
 }
 
-
-
-function refresh() {
-  var userId = firebase.auth().currentUser.uid;
-  loadCurrentUser(userId); // Load current user data to localStorage. in file
-  // util/Firebase.js
-}
-
-/**
- * BUTTON MANAGE COURSE.
- * Send he user to the manage course page.
- */
-document.getElementById('btnManageCourses').addEventListener('click', e => {
-  document.location.href = 'manageCourses.html';
-});
-
-/**
- * BUTTON SETTINGS.
- * Send he user to the settings page.
- */
-document.getElementById('btnSettings').addEventListener('click', e => {
-  document.location.href = 'settings.html';
-});
-
-/**
- * BUTTON LOGOUT.
- * Log out the user and redirect him to the register page.
- */
-document.getElementById('btnLogOut').addEventListener('click', e => {
-  document.getElementById('btnManageCourses').style.display = 'none'
-  firebase.auth().signOut().then(
-    () => {
-      alert("Good bye!")
-      document.location.href = 'index.html'
-    },
-    (error) => {
-      alert("There was an error in sign out. Please try again. If the problem persists, please contact the programmer.")
-    });
-});
-
-
-
 function isRegistered(course) {
-  if (course.students.indexOf(firebase.auth().currentUser.uid) > -1) {
+  if (course.students.indexOf(window.uid) > -1) {
     return true;
   } else {
     return false;
   }
 }
 
-
+function registerSuccess(course, courseId) {
+  course.students.push(window.uid);
+  editCourse(course, courseId, "home.html")
+}
 
 // Show a course to which the current user is not registered.
 function showUnregisteredCourse(key, course) {
@@ -376,9 +331,6 @@ function htmlOfPeerExerciseInRegisteredCourse(exerciseId, peerExerciseObj) {
   return text_html
 }
 
-
-
-
 /*
  * @param {int} minTest
  * @param {map} signatureMap
@@ -418,8 +370,8 @@ function conflictsPhase(exerciseId) {
     '" id="btnConflictsPhase" class="btn btn-danger"">Check for conflicts</button>';
 }
 
-/* @param {Object} peerGrades // Object we created with the grades. */
-// TODO: Fix the bug includes not fun
+/* @param {Object} peerGrades // exerciseObject we created with the grades. */
+// TODO: Fix the bug includes notexercise fun
 function endGame(exerciseId) {
   // if (homeUser.peerExerciseSolved) {
   //   if (homeUser.peerExerciseSolved.includes(exerciseId)) {
@@ -433,6 +385,37 @@ function endGame(exerciseId) {
   // }
 }
 
+/**
+ * BUTTON MANAGE COURSE.
+ * Send he user to the manage course page.
+ */
+document.getElementById('btnManageCourses').addEventListener('click', e => {
+  document.location.href = 'manageCourses.html';
+});
+
+/**
+ * BUTTON SETTINGS.
+ * Send he user to the settings page.
+ */
+document.getElementById('btnSettings').addEventListener('click', e => {
+  document.location.href = 'settings.html';
+});
+
+/**
+ * BUTTON LOGOUT.
+ * Log out the user and redirect him to the register page.
+ */
+document.getElementById('btnLogOut').addEventListener('click', e => {
+  document.getElementById('btnManageCourses').style.display = 'none'
+  firebase.auth().signOut().then(
+    () => {
+      alert("Good bye!")
+      document.location.href = 'index.html'
+    },
+    (error) => {
+      alert("There was an error in sign out. Please try again. If the problem persists, please contact the programmer.")
+    });
+});
 
 $('body').on('click', '#btnTestPhase', function (e) {
   let exerciseId = e.target.name;
@@ -486,11 +469,6 @@ $('body').on('click', '#solve', function (e) {
 $('body').on('click', '#register', function (e) {
   onLoading();
   let courseId = e.target.name;
-  let course = coursesMap.get(courseId);
+  let course = coursesObject[courseId].course;
   registerSuccess(course, courseId);
 });
-
-function registerSuccess(course, courseId) {
-  course.students.push(firebase.auth().currentUser.uid);
-  editCourse(course, courseId, "home.html")
-}

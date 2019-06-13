@@ -6,7 +6,7 @@ function addOption(exercise, key) {
     select.options[select.options.length] = new Option(exercise.name, key);
 }
 
-var homeUserForAdmin = JSON.parse(localStorage.getItem("homeUserKey"));
+var homeUserForAdmin = JSON.parse(localStorage.getItem("homeUser"));
 
 if (!homeUserForAdmin.admin) {
     alert("You have no access to this page.");
@@ -35,7 +35,7 @@ $('input[type=radio][name=privacy]').change(function () {
 
 document.getElementById("btnCreateCourse").addEventListener('click', e => {
     onLoading()
-    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+    var homeUser = JSON.parse(localStorage.getItem("homeUser"));
     const name = escapeHtml(document.getElementById("courseName").value);
     const grader = escapeHtml(document.getElementById("grader_id").value);
     var values = $('#exercises').val();

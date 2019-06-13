@@ -14,65 +14,21 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
   const name = document.getElementById("txtName").value;
   const lastName = document.getElementById("txtLastName").value;
   const id = document.getElementById("txtId").value;
-  if (checkEmptyFields(email, pass, name, lastName, id)) {
-    var mailUsed = document.getElementById("mailUsed");
-    var passShort = document.getElementById("passShort");
-    var badMail = document.getElementById("badMail");
+  if (checkEmptyFields([email, pass, name, lastName, id])) {
     let checked = document.getElementById("admin").checked;
-    if (checked) {
-      var response = prompt("Please enter the password to get admin privilege:");
-      if (response === "3ubf2e9-cb") {
-        //success 
-      } else {
-        alert("wrong password");
-        return;
-      }
+    if (!adminPrivilege(checked)) {
+      return;
     }
     firebase.auth().createUserWithEmailAndPassword(email, pass).then(function () {
-      let peerExerciseSolved = new PeerGrade("id", 90, 90, "urlTest", "urlSolution");
       let notif = new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")
-      let homeUser = new User(name, lastName, id, email, 0, 0, 0, [],
-        [peerExerciseSolved], checked, [notif]);
-      var user = firebase.auth().currentUser;
-      writeUserData(homeUser, user.uid);
+      let homeUser = new User(name, lastName, id, email, 0, 0, 0, [], [], checked, [notif]);
+      var authUser = firebase.auth().currentUser;
+      writeUserData(homeUser, authUser.uid);
     }).catch(function (error) {
-      console.log(error.message);
-      if (error.message === "The email address is already in use by another account.") {
-        mailUsed.className = "show";
-        setTimeout(function () {
-          mailUsed.className = mailUsed.className.replace("show", "");
-        }, 2500);
-        return;
-      }
-      if (error.message === "Password should be at least 6 characters") {
-        passShort.className = "show";
-        setTimeout(function () {
-          passShort.className = passShort.className.replace("show", "");
-        }, 2500);
-        return;
-      }
-      if (error.message === "The email address is badly formatted.") {
-        badMail.className = "show";
-        setTimeout(function () {
-          badMail.className = badMail.className.replace("show", "");
-        }, 2500);
-        return;
-      }
+      errorHandling(error.message);
     });
   }
 });
-
-function checkEmptyFields(email, pass, name, lastName, id) {
-  var emptyField = document.getElementById("emptyField");
-  if (email === "" || pass === "" || name === "" || lastName === "" || id === "") {
-    emptyField.className = "show";
-    setTimeout(function () {
-      emptyField.className = emptyField.className.replace("show", "");
-    }, 2500);
-    return false;
-  }
-  return true;
-}
 
 /**
  * BUTTON LOGIN.
@@ -80,22 +36,13 @@ function checkEmptyFields(email, pass, name, lastName, id) {
  * and send he user to the home page.
  */
 document.getElementById("btnLogin").addEventListener('click', e => {
-  var wrongData = document.getElementById("wrongData");
   const email = document.getElementById("txtEmail").value;
   const pass = document.getElementById("txtPassword").value;
   firebase.auth().signInWithEmailAndPassword(email, pass).then(function () {
     document.location.href = "home.html";
-  }).catch(e => {
-    console.log(e.message)
-    wrongData.className = "show";
-    setTimeout(function () {
-      wrongData.className = wrongData.className.replace("show", "");
-    }, 2500);
-    return;
+  }).catch(error => {
+    errorHandling(error.message);
   })
-});
-document.getElementById('github').addEventListener('click', e => {
-  github();
 });
 
 /**
@@ -108,7 +55,7 @@ document.getElementById('github').addEventListener('click', e => {
  * Then, in the bowser, write: http://localhost/
  * and go to the html file and we're done.
  */
-function github() {
+document.getElementById('github').addEventListener('click', e => {
   const provider = new firebase.auth.GithubAuthProvider();
   const promise = firebase.auth().signInWithPopup(provider);
   var mailGihtub = document.getElementById("mailGithub");
@@ -123,13 +70,26 @@ function github() {
       document.location.href = "home.html";
     }
   }).catch(function (error) {
-    if (error.message === "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.") {
-      mailGihtub.className = "show";
-      setTimeout(function () {
-        mailGihtub.className = mailGihtub.className.replace("show", "");
-      }, 2500);
-      return;
-    }
-    console.log(error.message);
+    errorHandling(error.message);
   });
+});
+
+
+function errorHandling(errorLog) {
+  console.log(errorLog);
+  var mailUsed = document.getElementById("mailUsed");
+  var passShort = document.getElementById("passShort");
+  var badMail = document.getElementById("badMail");
+  var wrongData = document.getElementById("wrongData");
+  if (errorLog === "The email address is already in use by another account.") {
+    showSnackbar(mailUsed)
+  } else if (errorLog === "Password should be at least 6 characters") {
+    showSnackbar(passShort)
+  } else if (errorLog === "The email address is badly formatted.") {
+    showSnackbar(badMail)
+  } else if (errorLog === "An account already exists with the same email address but different sign-in credentials. Sign in using a provider associated with this email address.") {
+    showSnackbar(mailGihtub)
+  } else {
+    showSnackbar(wrongData)
+  }
 }

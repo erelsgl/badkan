@@ -154,7 +154,7 @@ function checkEmptyFieldsPeer(name, descr, file, deadlineTest, deadlineSolution,
 function uploadPeerExercise(name, descr, deadlineTest, deadlineSolution, deadlineConflicts,
     compilerSolution, compilerTest, submission, minTest, signatureMap) {
     var userId = firebase.auth().currentUser.uid;
-    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+    var homeUser = JSON.parse(localStorage.getItem("homeUser"));
     folderName = userId + "_" + homeUser.createdEx;
 
     let peerExercise = new PeerExercise(

@@ -9,7 +9,7 @@ let tests = new Map();
 let owner_test_id = ""
 let function_name = ""
 
-var homeUser = JSON.parse(localStorage.getItem("homeUserKey")); // The current user.
+var homeUser = JSON.parse(localStorage.getItem("homeUser")); // The current user.
 let uid = JSON.parse(localStorage.getItem("homeUserId"));
 
 document.getElementById("currentId").value = homeUser.id; // The country id of the current user.

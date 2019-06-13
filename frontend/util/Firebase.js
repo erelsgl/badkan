@@ -56,7 +56,7 @@ function writeUserDataWithoutComingHome(user, userId) {
   database.ref("users/" + userId).set({
     user
   });
-  localStorage.setItem("homeUserKey", JSON.stringify(user));
+  localStorage.setItem("homeUser", JSON.stringify(user));
 }
 
 /**
@@ -135,7 +135,7 @@ function incrementCreatedEx(userId, homeUser) {
 function incrementCreatedExWithoutCommingHome(userId, homeUser) {
   homeUser.createdEx++;
   writeUserDataWithoutComingHome(homeUser, userId);
-  localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
+  localStorage.setItem("homeUser", JSON.stringify(homeUser));
 }
 
 /**
@@ -146,7 +146,7 @@ function incrementCreatedExWithoutCommingHome(userId, homeUser) {
  */
 function incrementCreatedExAndSubmitCourse(userId, homeUser) {
   homeUser.createdEx++;
-  localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
+  localStorage.setItem("homeUser", JSON.stringify(homeUser));
   writeUserDataAndSubmitCourse(homeUser, userId);
 }
 
@@ -195,7 +195,7 @@ function loadCurrentUser(userId, onLoaded) {
     } else {
       // User object exists
       var homeUser = snapshot.val().user;
-      localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
+      localStorage.setItem("homeUser", JSON.stringify(homeUser));
       document.getElementById("name").innerHTML =
         "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
         "ID number: " + homeUser.id + "<br />" +
@@ -445,8 +445,10 @@ function deleteExerciseById(exerciseId) {
  * This function remove an user from the database.
  * @param {string} userId 
  */
-function deleteUserById(userId) {
-  database.ref().child('users/' + userId).remove();
+function deleteUserByIdAndGoIndex(userId) {
+  database.ref().child('users/' + userId).remove().then(() => {
+    document.location.href = "index.html";
+  });
 }
 
 

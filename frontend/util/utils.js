@@ -101,5 +101,13 @@ function displayNoneById(id) {
 
 
 function displayBlockById(id) {
-  document.getElementById(id).style.display = "block";    
+    document.getElementById(id).style.display = "block";
+}
+
+function showSnackbar(myClass) {
+    myClass.className = "show";
+    setTimeout(function () {
+        myClass.className = myClass.className.replace("show", "");
+    }, 2500);
+    return;
 }

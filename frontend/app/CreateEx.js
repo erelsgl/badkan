@@ -1,7 +1,7 @@
 finishLoading()
 
 let uid = JSON.parse(localStorage.getItem("homeUserId"));
-let homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+let homeUser = JSON.parse(localStorage.getItem("homeUser"));
 let folderName = uid + "_" + homeUser.createdEx;
 
 

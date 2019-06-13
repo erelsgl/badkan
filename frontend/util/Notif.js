@@ -1,6 +1,5 @@
 // TODO: Deal with assync pbs and read/not read notif.
-var notifHomeUser = JSON.parse(localStorage.getItem("homeUserKey"));
-
+var notifHomeUser = JSON.parse(localStorage.getItem("homeUser"));
 let notifUid = JSON.parse(localStorage.getItem("homeUserId"));
 
 $(document).ready(function () {
@@ -18,19 +17,19 @@ $(document).ready(function () {
                 } else {
                     // home.html by default.
                     notifHomeUser.notif.push(new MyNotification(notifHomeUser.notif[i].notifMessage, notifHomeUser.notif[i].notifRead, "home.html"));
-                    localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
+                    localStorage.setItem("homeUser", JSON.stringify(notifHomeUser));
                     writeUserDataWithoutComingHome(notifHomeUser, notifUid)
                 }
             }
         }
         else {
             notifHomeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")];
-            localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
+            localStorage.setItem("homeUser", JSON.stringify(notifHomeUser));
             writeUserDataWithoutComingHome(notifHomeUser, notifUid)
         }
     } else {
         notifHomeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")];
-        localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
+        localStorage.setItem("homeUser", JSON.stringify(notifHomeUser));
         writeUserDataWithoutComingHome(notifHomeUser, notifUid)
     }
     if (numNotif === 0) {
@@ -100,7 +99,7 @@ function addReadedNotif(message, index) {
 
 function notifIsReaded(index) {
     notifHomeUser.notif[index].notifRead = true;
-    localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
+    localStorage.setItem("homeUser", JSON.stringify(notifHomeUser));
     writeUserDataWithoutComingHome(notifHomeUser, notifUid);
     document.location.href = notifHomeUser.notif[index].action;
 }
