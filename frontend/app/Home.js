@@ -236,7 +236,7 @@ function showRegisteredCourse(course) {
 }
 
 function solveButton(exerciseId) {
-  return '<button name ="' + exerciseId + '" id="solve" class="btn btn-success"">Solve</button>';
+  return '<button name ="' + exerciseId + '" class="btn btn-success solve-btn"">Solve</button>';
 }
 
 function htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj) {
@@ -285,81 +285,6 @@ function htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj) {
   text_html += solveButton(exerciseId);
   text_html += '</p>';
   text_html += '</div><!--exercise-->'
-  return text_html
-}
-
-
-
-
-// Show grades in a course to which the current user is registered.
-function showGradesInRegisteredCourse(course) {
-  var $newPanel = $template.clone()
-  $newPanel.find('.collapse').removeClass('in')
-  $newPanel.find('.accordion-toggle')
-    .attr('href', '#' + (hash))
-    .text(course.name)
-  $newPanel.find('.panel-collapse')
-    .attr('id', hash++)
-    .addClass('collapse')
-    .removeClass('in')
-  $newPanel.find('.panel-body').text('')
-  text_html = '';
-  if (!course.exercises) {
-    text_html += '<h5>There are no available exercises for this course!</h5>'
-  } else {
-    text_html += '<table>\n'
-    text_html += '<tr>\n'
-    text_html += ' <th>Exercise</th>\n'
-    text_html += ' <th>Grade</th>\n'
-    text_html += ' <th>Collaborators</th>\n'
-    text_html += ' <th>URL</th>\n'
-    text_html += ' <th>Timestamp</th>\n'
-    for (var i = 0; i < course.exercises.length; i++) {
-        let exerciseId = course.exercises[i]
-        let exerciseObj = exercisesMap.get(exerciseId)
-        if (exerciseObj) {
-          text_html += tableRowOfExerciseInGradesTable(exerciseId, exerciseObj)
-        }
-        let peerExerciseObj = peerExercisesMap.get(exerciseId)
-        if (peerExerciseObj) {
-          text_html += tableRowOfExerciseInGradesTable(exerciseId, peerExerciseObj)
-        }
-    }
-    text_html += '</table>\n'
-  }
-  $newPanel.find('.panel-body').append(text_html)
-  $('#accordion-registered').append($newPanel.fadeIn())
-}
-
-
-function tableRowOfExerciseInGradesTable(exerciseId, exerciseObj) {
-  text_html = ''
-  subimissionCount=0
-  if (submissionsArray) {
-    for (value of submissionsArray) {
-      if (value.exerciseId === exerciseId) {
-        text_html += '<tr class=\'exercise\'>\n'
-        text_html += ' <td>' + exerciseObj.name + '</td>\n';
-        text_html += ' <td>'+value.grade+'</td>\n'
-        text_html += ' <td>'+value.collaboratorsId+'</td>\n'
-        text_html += ' <td>'+value.url+'</td>\n'
-        text_html += ' <td>'+value.timestamp+'</td>\n'
-        text_html += ' <td>'+solveButton(exerciseId)+'</td>\n'
-        text_html += '</tr><!--exercise-->\n'
-        ++subimissionCount
-      }
-    }
-  }
-  if (subimissionCount==0) {
-        text_html += '<tr class=\'exercise\'>\n'
-        text_html += ' <td>' + exerciseObj.name + '</td>\n';
-        text_html += ' <td>'+0+'</td>\n'
-        text_html += ' <td>-</td>\n'
-        text_html += ' <td>You did not submit yet</td>\n'
-        text_html += ' <td>-</td>\n'
-        text_html += ' <td>'+solveButton(exerciseId)+'</td>\n'
-        text_html += '</tr><!--exercise-->\n'
-  }
   return text_html
 }
 
@@ -543,7 +468,7 @@ $('body').on('click', '#dl', function (e) {
     })
 });
 
-$('body').on('click', '#solve', function (e) {
+$('body').on('click', '.solve-btn', function (e) {
   let exerciseId = e.target.name;
   let exercise = exercisesMap.get(exerciseId);
   if (exercise.deadline && exercise.deadline.date) {
