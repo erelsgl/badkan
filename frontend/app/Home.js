@@ -236,7 +236,7 @@ function showRegisteredCourse(course) {
 }
 
 function solveButton(exerciseId) {
-  return '<button name ="' + exerciseId + '" class="btn btn-success solve-btn"">Solve</button>';
+  return '<button name ="' + exerciseId + '" class="btn btn-success btn-solve">Solve</button>';
 }
 
 function htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj) {
@@ -468,7 +468,7 @@ $('body').on('click', '#dl', function (e) {
     })
 });
 
-$('body').on('click', '.solve-btn', function (e) {
+$('body').on('click', '.btn-solve', function (e) {
   let exerciseId = e.target.name;
   let exercise = exercisesMap.get(exerciseId);
   if (exercise.deadline && exercise.deadline.date) {

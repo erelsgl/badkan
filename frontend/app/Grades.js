@@ -156,9 +156,9 @@ function showGradesInRegisteredCourse(course) {
 }
 
 
-// TODO: There is code duplication with Home.js!
+
 function solveButton(exerciseId) {
-  return '<button name ="' + exerciseId + '" id="solve" class="btn btn-success"">Solve</button>';
+  return '<a name ="' + exerciseId + '" class="btn btn-success btn-solve">Solve</a>';
 }
 
 
@@ -195,3 +195,19 @@ function tableRowOfExerciseInGradesTable(exerciseId, exerciseObj) {
 }
 
 
+// TODO: Code duplication with Home.js!
+$('body').on('click', '.btn-solve', function (e) {
+  let exerciseId = e.target.name;
+  let exercise = exercisesMap.get(exerciseId);
+  if (exercise.deadline && exercise.deadline.date) {
+    if (isOpen(exercise.deadline)) {
+      localStorage.setItem('exercise', JSON.stringify(exercise));
+      document.location.href = 'badkan.html?exercise=' + exerciseId;
+    } else {
+      alert('The deadline for this exercise is over.')
+    }
+  } else {
+    localStorage.setItem('exercise', JSON.stringify(exercise));
+    document.location.href = 'badkan.html?exercise=' + exerciseId;
+  }
+});
