@@ -30,15 +30,23 @@ firebase.auth().onAuthStateChanged(authUser => {
     // For the Home page.
     window.uid = userId;
     loadCurrentUser(userId, (homeUser) => {   // in utils/Firebase.js
+
+      document.getElementById("name").innerHTML =
+        "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
+        "ID number: " + homeUser.id + "<br />" +
+        "Email: " + homeUser.email + "<br />";
+      if (homeUser.admin) {
+        if (homeUser.admin === true) {
+          document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
+          $("#btnManageCourses").show()
+        }
+      }
+
       // For the next pages
       localStorage.setItem('homeUser', JSON.stringify(homeUser))
       // For the Home page.
       window.homeUser = homeUser;
-      if (homeUser.admin) {
-        if (homeUser.admin === true) {
-          $('#btnManageCourses').show()
-        }
-      }
+
       if (exercisesObject) {  // defined in file data/exercises.js
         // synchronous
         for (key in exercisesObject) {

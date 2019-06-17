@@ -23,24 +23,21 @@ var submissionsArray = []
  * TODO: There is code duplication with Home.js!
  */
 firebase.auth().onAuthStateChanged(authUser => {
-  localStorage.clear()
   /*** This code runs if there is a logged-in user. ***/
   if (authUser) {
     var userId = authUser.uid
-    // For the next pages
-    localStorage.setItem('homeUserId', JSON.stringify(userId))
     // For the Home page.
     window.uid = userId;
     loadCurrentUser(userId, (homeUser) => {
-      // For the next pages
-      localStorage.setItem('homeUser', JSON.stringify(homeUser))
-      // For the Home page.
+
+      document.getElementById("user_details").innerHTML =
+        homeUser.name + " " + homeUser.lastName + ", " +
+        "ID " + homeUser.id + ", " +
+        homeUser.email;
+
+      // For the current page.
       window.homeUser = homeUser;
-      if (homeUser.admin) {
-        if (homeUser.admin === true) {
-          $('#btnManageCourses').show()
-        }
-      }
+
       if (exercisesObject) {  // defined in file data/exercises.js
         // synchronous
         for (key in exercisesObject) {
