@@ -29,7 +29,7 @@ firebase.auth().onAuthStateChanged(authUser => {
     localStorage.setItem('homeUserId', JSON.stringify(userId))
     // For the Home page.
     window.uid = userId;
-    loadCurrentUser(userId, (homeUser) => {
+    loadCurrentUser(userId, (homeUser) => {   // in utils/Firebase.js
       // For the next pages
       localStorage.setItem('homeUser', JSON.stringify(homeUser))
       // For the Home page.
@@ -46,7 +46,7 @@ firebase.auth().onAuthStateChanged(authUser => {
         }
       } else {
         alert("Exercises object not found - please try again or contact the programmer")
-        finishLoading()
+        finishLoading()  // defined in util/Loading.js
       }
       loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
       loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
@@ -56,7 +56,16 @@ firebase.auth().onAuthStateChanged(authUser => {
             course = coursesObject[key].course
             addCourseHTML(key, course)
           }
-          onAllCoursesLoaded()
+
+          // on all courses loaded:
+          if (numUnregistered == 0) {
+            $('#accordion-unregistered').append('<p>No other courses!</p>');
+          }
+          if (numRegistered == 0) {
+            $('#accordion-registered')
+              .append('<p>You are not registered to any course yet!</p>');
+          }
+
           // Finally, stop the loading
           finishLoading()
         } else {
@@ -76,34 +85,29 @@ firebase.auth().onAuthStateChanged(authUser => {
 function addCourseHTML(key, course) {
   //  First see if course if private or not:
   if (course.ids) {
-    // private
+    // The course is private
     let arrayIds = course.ids.split(' ')
     if (arrayIds.includes(window.homeUser.id)) {
       if (isRegistered(course)) {
-        showRegisteredCourse(key, course);
+        numRegistered++;
+        showRegisteredCourse(course);
       } else {
         let courseId = key;
         registerSuccess(course, courseId);
       }
     }
   } else {
+    // The course is public
     if (isRegistered(course)) {
-      showRegisteredCourse(key, course);
+      numRegistered++;
+      showRegisteredCourse(course)
     } else {
+      numUnregistered++;
       showUnregisteredCourse(key, course);
     }
   }
 }
 
-function onAllCoursesLoaded() {
-  if (numUnregistered == 0) {
-    $('#accordion-unregistered').append('<p>No other courses!</p>');
-  }
-  if (numRegistered == 0) {
-    $('#accordion-registered')
-      .append('<p>You are not registered to any course yet!</p>');
-  }
-}
 
 function isRegistered(course) {
   if (course.students.indexOf(window.uid) > -1) {
@@ -120,7 +124,6 @@ function registerSuccess(course, courseId) {
 
 // Show a course to which the current user is not registered.
 function showUnregisteredCourse(key, course) {
-  numUnregistered++;
   var $newPanel = $template.clone();
   $newPanel.find('.collapse').removeClass('in');
   $newPanel.find('.accordion-toggle')
@@ -192,8 +195,7 @@ function showUnregisteredCourse(key, course) {
 }
 
 // Show a course to which the current user is registered.
-function showRegisteredCourse(key, course) {
-  numRegistered++;
+function showRegisteredCourse(course) {
   var $newPanel = $template.clone();
   $newPanel.find('.collapse').removeClass('in');
   $newPanel.find('.accordion-toggle')
@@ -206,11 +208,10 @@ function showRegisteredCourse(key, course) {
   $newPanel.find('.panel-body').text('')
   text_html = '';
   if (!course.exercises) {
-    text_html += '<h5>There are no available exercise for this course!</h5>'
+    text_html += '<h5>There are no available exercises for this course!</h5>'
   } else {
     text_html += '<h3>Exercises in ' + course.name + '</h3>'
     for (var i = 0; i < course.exercises.length; i++) {
-      if (course.exercises[i] != 'dummyExerciseId') {
         let exerciseId = course.exercises[i];
         let exerciseObj = exercisesMap.get(exerciseId);
         if (exerciseObj) {
@@ -220,13 +221,15 @@ function showRegisteredCourse(key, course) {
         if (peerExerciseObj) {
           text_html += htmlOfPeerExerciseInRegisteredCourse(exerciseId, peerExerciseObj)
         }
-      }
     }
   }
   $newPanel.find('.panel-body').append(text_html);
   $('#accordion-registered').append($newPanel.fadeIn());
 }
 
+function solveButton(exerciseId) {
+  return '<button name ="' + exerciseId + '" id="solve" class="btn btn-success"">Solve</button>';
+}
 
 function htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj) {
   text_html = ''
@@ -271,10 +274,84 @@ function htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj) {
   if (grade === -1) {
     text_html += 'You have not solved this exercise yet. ';
   }
-  text_html += '<button name ="' + exerciseId +
-    '" id="solve" class="btn btn-success"">Solve</button>';
+  text_html += solveButton(exerciseId);
   text_html += '</p>';
   text_html += '</div><!--exercise-->'
+  return text_html
+}
+
+
+
+
+// Show grades in a course to which the current user is registered.
+function showGradesInRegisteredCourse(course) {
+  var $newPanel = $template.clone()
+  $newPanel.find('.collapse').removeClass('in')
+  $newPanel.find('.accordion-toggle')
+    .attr('href', '#' + (hash))
+    .text(course.name)
+  $newPanel.find('.panel-collapse')
+    .attr('id', hash++)
+    .addClass('collapse')
+    .removeClass('in')
+  $newPanel.find('.panel-body').text('')
+  text_html = '';
+  if (!course.exercises) {
+    text_html += '<h5>There are no available exercises for this course!</h5>'
+  } else {
+    text_html += '<table>\n'
+    text_html += '<tr>\n'
+    text_html += ' <th>Exercise</th>\n'
+    text_html += ' <th>Grade</th>\n'
+    text_html += ' <th>Collaborators</th>\n'
+    text_html += ' <th>URL</th>\n'
+    text_html += ' <th>Timestamp</th>\n'
+    for (var i = 0; i < course.exercises.length; i++) {
+        let exerciseId = course.exercises[i]
+        let exerciseObj = exercisesMap.get(exerciseId)
+        if (exerciseObj) {
+          text_html += tableRowOfExerciseInGradesTable(exerciseId, exerciseObj)
+        }
+        let peerExerciseObj = peerExercisesMap.get(exerciseId)
+        if (peerExerciseObj) {
+          text_html += tableRowOfExerciseInGradesTable(exerciseId, peerExerciseObj)
+        }
+    }
+    text_html += '</table>\n'
+  }
+  $newPanel.find('.panel-body').append(text_html)
+  $('#accordion-registered').append($newPanel.fadeIn())
+}
+
+
+function tableRowOfExerciseInGradesTable(exerciseId, exerciseObj) {
+  text_html = ''
+  subimissionCount=0
+  if (submissionsArray) {
+    for (value of submissionsArray) {
+      if (value.exerciseId === exerciseId) {
+        text_html += '<tr class=\'exercise\'>\n'
+        text_html += ' <td>' + exerciseObj.name + '</td>\n';
+        text_html += ' <td>'+value.grade+'</td>\n'
+        text_html += ' <td>'+value.collaboratorsId+'</td>\n'
+        text_html += ' <td>'+value.url+'</td>\n'
+        text_html += ' <td>'+value.timestamp+'</td>\n'
+        text_html += ' <td>'+solveButton(exerciseId)+'</td>\n'
+        text_html += '</tr><!--exercise-->\n'
+        ++subimissionCount
+      }
+    }
+  }
+  if (subimissionCount==0) {
+        text_html += '<tr class=\'exercise\'>\n'
+        text_html += ' <td>' + exerciseObj.name + '</td>\n';
+        text_html += ' <td>'+0+'</td>\n'
+        text_html += ' <td>-</td>\n'
+        text_html += ' <td>You did not submit yet</td>\n'
+        text_html += ' <td>-</td>\n'
+        text_html += ' <td>'+solveButton(exerciseId)+'</td>\n'
+        text_html += '</tr><!--exercise-->\n'
+  }
   return text_html
 }
 
@@ -395,10 +472,18 @@ document.getElementById('btnManageCourses').addEventListener('click', e => {
 
 /**
  * BUTTON SETTINGS.
- * Send he user to the settings page.
+ * Send the user to the settings page.
  */
 document.getElementById('btnSettings').addEventListener('click', e => {
   document.location.href = 'settings.html';
+});
+
+/**
+ * BUTTON GRADES.
+ * Send the user to the grades page.
+ */
+document.getElementById('btnGrades').addEventListener('click', e => {
+  document.location.href = 'grades.html';
 });
 
 /**

@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Badkan Home</title>
+  <title>Grades Table</title>
 
   <!-- Import js. -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -58,7 +58,7 @@
   <div id="show">
     <div class="container">
       <div id="div1" class="container">
-        <h1>Badkan Home Page</h1>
+        <h1>Grades Summary</h1>
         <pre><p id="name"> </p></pre>
 
         <div class="panel-group" id="accordion-registered">
@@ -66,39 +66,21 @@
             <div class="panel-heading">
               <h4 class="panel-title">
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                  <div>Welcome to the Badkan </div>
+                  <div>-</div>
                 </a>
               </h4>
             </div>
             <div id="collapseThree" class="panel-collapse collapse">
               <div class="panel-body">
-                <p><b>Students</b> -- find your courses, register, solve exercises, submit your solutions and get graded
-                  in
-                  real time!</p>
-
-                <p><b>Teachers</b> -- create courses, fill them with existing programming exercises or create new ones,
-                  and
-                  enjoy the automatic grading!</p>
+                -
               </div>
             </div>
           </div>
-          <h2>Your courses:</h2>
         </div>
-
-        <div class="panel-group" id="accordion-unregistered">
-          <h2>Other courses:</h2>
-        </div>
-
-        <!-- <button id="btnSolveEx" type="button" class="btn btn-success">Solve Exercise</button> -->
-        <!-- <button id="records" type="button" class="btn btn-info">Records</button> -->
-        <button style="display:none" id="btnManageCourses" type="button" class="btn btn-primary">Manage courses</button>
-        <button id="btnSettings" type="button" class="btn btn-warning">Settings</button>
-        <button id="btnGrades" type="button" class="btn btn-info">Grades</button>
-        <button id="btnLogOut" type="button" class="btn btn-danger">Log Out</button>
       </div>
       <script type="text/javascript" src="data/courses.js"></script><!-- loads object coursesObject -->
       <script type="text/javascript" src="data/exercises.js"></script><!-- loads object exercisesObject -->
-      <script type="text/javascript" src="app/Home.js"></script>
+      <script type="text/javascript" src="app/Grades.js"></script>
       <p class="footer">
         Badkan 2.0 by <a href="https://github.com/SamuelBismuth">Samuel Bismuth</a>, samuelbismuth101@gmail.com.
         <script>
