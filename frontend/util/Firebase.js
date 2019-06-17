@@ -195,19 +195,6 @@ function loadCurrentUser(userId, onLoaded) {
     } else {
       // User object exists
       var homeUser = snapshot.val().user;
-      localStorage.setItem("homeUser", JSON.stringify(homeUser));
-      document.getElementById("name").innerHTML =
-        "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
-        "ID number: " + homeUser.id + "<br />" +
-        "Email: " + homeUser.email + "<br />";
-      if (homeUser.admin) {
-        document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
-      }
-      if (homeUser.admin) {
-        if (homeUser.admin === true) {
-          $("#btnManageCourses").show()
-        }
-      }
       onLoaded(homeUser)
     }
   });

@@ -29,16 +29,24 @@ firebase.auth().onAuthStateChanged(authUser => {
     localStorage.setItem('homeUserId', JSON.stringify(userId))
     // For the Home page.
     window.uid = userId;
-    loadCurrentUser(userId, (homeUser) => {
+    loadCurrentUser(userId, (homeUser) => {   // in utils/Firebase.js
+
+      document.getElementById("name").innerHTML =
+        "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
+        "ID number: " + homeUser.id + "<br />" +
+        "Email: " + homeUser.email + "<br />";
+      if (homeUser.admin) {
+        if (homeUser.admin === true) {
+          document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
+          $("#btnManageCourses").show()
+        }
+      }
+
       // For the next pages
       localStorage.setItem('homeUser', JSON.stringify(homeUser))
       // For the Home page.
       window.homeUser = homeUser;
-      if (homeUser.admin) {
-        if (homeUser.admin === true) {
-          $('#btnManageCourses').show()
-        }
-      }
+
       if (exercisesObject) {  // defined in file data/exercises.js
         // synchronous
         for (key in exercisesObject) {
@@ -46,7 +54,7 @@ firebase.auth().onAuthStateChanged(authUser => {
         }
       } else {
         alert("Exercises object not found - please try again or contact the programmer")
-        finishLoading()
+        finishLoading()  // defined in util/Loading.js
       }
       loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
       loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
@@ -56,7 +64,16 @@ firebase.auth().onAuthStateChanged(authUser => {
             course = coursesObject[key].course
             addCourseHTML(key, course)
           }
-          onAllCoursesLoaded()
+
+          // on all courses loaded:
+          if (numUnregistered == 0) {
+            $('#accordion-unregistered').append('<p>No other courses!</p>');
+          }
+          if (numRegistered == 0) {
+            $('#accordion-registered')
+              .append('<p>You are not registered to any course yet!</p>');
+          }
+
           // Finally, stop the loading
           finishLoading()
         } else {
@@ -76,34 +93,29 @@ firebase.auth().onAuthStateChanged(authUser => {
 function addCourseHTML(key, course) {
   //  First see if course if private or not:
   if (course.ids) {
-    // private
+    // The course is private
     let arrayIds = course.ids.split(' ')
     if (arrayIds.includes(window.homeUser.id)) {
       if (isRegistered(course)) {
-        showRegisteredCourse(key, course);
+        numRegistered++;
+        showRegisteredCourse(course);
       } else {
         let courseId = key;
         registerSuccess(course, courseId);
       }
     }
   } else {
+    // The course is public
     if (isRegistered(course)) {
-      showRegisteredCourse(key, course);
+      numRegistered++;
+      showRegisteredCourse(course)
     } else {
+      numUnregistered++;
       showUnregisteredCourse(key, course);
     }
   }
 }
 
-function onAllCoursesLoaded() {
-  if (numUnregistered == 0) {
-    $('#accordion-unregistered').append('<p>No other courses!</p>');
-  }
-  if (numRegistered == 0) {
-    $('#accordion-registered')
-      .append('<p>You are not registered to any course yet!</p>');
-  }
-}
 
 function isRegistered(course) {
   if (course.students.indexOf(window.uid) > -1) {
@@ -120,7 +132,6 @@ function registerSuccess(course, courseId) {
 
 // Show a course to which the current user is not registered.
 function showUnregisteredCourse(key, course) {
-  numUnregistered++;
   var $newPanel = $template.clone();
   $newPanel.find('.collapse').removeClass('in');
   $newPanel.find('.accordion-toggle')
@@ -192,8 +203,7 @@ function showUnregisteredCourse(key, course) {
 }
 
 // Show a course to which the current user is registered.
-function showRegisteredCourse(key, course) {
-  numRegistered++;
+function showRegisteredCourse(course) {
   var $newPanel = $template.clone();
   $newPanel.find('.collapse').removeClass('in');
   $newPanel.find('.accordion-toggle')
@@ -206,11 +216,10 @@ function showRegisteredCourse(key, course) {
   $newPanel.find('.panel-body').text('')
   text_html = '';
   if (!course.exercises) {
-    text_html += '<h5>There are no available exercise for this course!</h5>'
+    text_html += '<h5>There are no available exercises for this course!</h5>'
   } else {
     text_html += '<h3>Exercises in ' + course.name + '</h3>'
     for (var i = 0; i < course.exercises.length; i++) {
-      if (course.exercises[i] != 'dummyExerciseId') {
         let exerciseId = course.exercises[i];
         let exerciseObj = exercisesMap.get(exerciseId);
         if (exerciseObj) {
@@ -220,13 +229,15 @@ function showRegisteredCourse(key, course) {
         if (peerExerciseObj) {
           text_html += htmlOfPeerExerciseInRegisteredCourse(exerciseId, peerExerciseObj)
         }
-      }
     }
   }
   $newPanel.find('.panel-body').append(text_html);
   $('#accordion-registered').append($newPanel.fadeIn());
 }
 
+function solveButton(exerciseId) {
+  return '<button name ="' + exerciseId + '" class="btn btn-success btn-solve">Solve</button>';
+}
 
 function htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj) {
   text_html = ''
@@ -271,8 +282,7 @@ function htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj) {
   if (grade === -1) {
     text_html += 'You have not solved this exercise yet. ';
   }
-  text_html += '<button name ="' + exerciseId +
-    '" id="solve" class="btn btn-success"">Solve</button>';
+  text_html += solveButton(exerciseId);
   text_html += '</p>';
   text_html += '</div><!--exercise-->'
   return text_html
@@ -395,10 +405,18 @@ document.getElementById('btnManageCourses').addEventListener('click', e => {
 
 /**
  * BUTTON SETTINGS.
- * Send he user to the settings page.
+ * Send the user to the settings page.
  */
 document.getElementById('btnSettings').addEventListener('click', e => {
   document.location.href = 'settings.html';
+});
+
+/**
+ * BUTTON GRADES.
+ * Send the user to the grades page.
+ */
+document.getElementById('btnGrades').addEventListener('click', e => {
+  document.location.href = 'grades.html';
 });
 
 /**
@@ -450,7 +468,7 @@ $('body').on('click', '#dl', function (e) {
     })
 });
 
-$('body').on('click', '#solve', function (e) {
+$('body').on('click', '.btn-solve', function (e) {
   let exerciseId = e.target.name;
   let exercise = exercisesMap.get(exerciseId);
   if (exercise.deadline && exercise.deadline.date) {
