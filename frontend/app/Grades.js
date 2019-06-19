@@ -86,7 +86,7 @@ function addCourseHTML(key, course) {
     if (arrayIds.includes(window.homeUser.id)) {
       if (isRegistered(course)) {
         numRegistered++;
-        showRegisteredCourse(course);
+        showGradesInRegisteredCourse(course);
       }
     }
   } else {
