@@ -112,3 +112,4 @@ statistics/*/
 database_exports/*
 moss/*/
 frontend/util/FirebaseConfig.js
+restore/*.csv
