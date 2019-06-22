@@ -29,16 +29,34 @@ def read_and_union_trace_tables(tables):
             ids = line.Ids.split("-")
             for id in ids:
                 if id != "" and line.Exercise != "Assignment 1" and line.Exercise != "assignment 1" and line.Exercise != "Ex5":
-                    lines.append([line.Exercise, id, "Anonymous",
+                    lines.append([rename_exercise(line.Exercise), id, "Anonymous",
                                   "Anonymous", line.Grade, line.Url])
         grades_table = pd.DataFrame(lines)
         write_table(grades_table, "temp_table.csv", [
             "Exercise Name", "id", "name", "lastName", "grade", "url"])
 
 
+def rename_exercise(exercise_name):
+    if exercise_name == "Matala 1: Bash compilation check" or str(exercise_name) == "nan":
+        return "1: Bash compilation check"
+    elif exercise_name == "Matala 2: binary tree - part B":
+        return "2 B: binary tree - full implementation"
+    elif exercise_name == "Physical numbers - part B":
+        return "3 B: Physical numbers - full implementation"
+    elif exercise_name == "Bull Pgia - Part B":
+        return "4 B: Bull Pgia - full implementation"
+    elif exercise_name == "itertools - part B":
+        return "5 B: itertools - full implementation"
+    else:
+        return exercise_name
+
+
 def create_grades_table():
     grades_table = pd.read_csv("temp_table.csv")
     grades_table.grade = pd.to_numeric(grades_table.grade, 'coerce')
+    grades_table.id = pd.to_numeric(grades_table.id, 'coerce')
+    grades_table = grades_table[grades_table.id > 99999999] 
+    grades_table = grades_table[grades_table.id < 1000000000] 
     grades_table = grades_table.sort_values(
         'grade').drop_duplicates(['id', 'Exercise Name'], keep='last')
     grades_table = grades_table.sort_values(['id'])
