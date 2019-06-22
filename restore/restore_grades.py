@@ -23,37 +23,27 @@ def read_and_union_trace_tables(tables):
         trace_table.Grade[trace_table.Grade == trace_table.Grade // 1]
         trace_table = trace_table[trace_table.Grade <= 100]
         trace_table = trace_table.iloc[:, 0:5]
-        write_table(trace_table, "temp_table.csv", ["Date", "Url", "Ids",
-                                                    "Grade", "Exercise"])
+        lines = [[]]
+        for index in trace_table.iterrows():
+            line = index[1]
+            ids = line.Ids.split("-")
+            for id in ids:
+                if id != "" and line.Exercise != "Assignment 1" and line.Exercise != "assignment 1" and line.Exercise != "Ex5":
+                    lines.append([line.Exercise, id, "Anonymous",
+                                  "Anonymous", line.Grade, line.Url])
+        grades_table = pd.DataFrame(lines)
+        write_table(grades_table, "temp_table.csv", [
+            "Exercise Name", "id", "name", "lastName", "grade", "url"])
 
 
-def create_last_submission_table():
-    table_to_clean = pd.read_csv("temp_table.csv")
-    table_to_clean.Grade = pd.to_numeric(table_to_clean.Grade, 'coerce')
-    clean_table = table_to_clean.sort_values(
-        'Grade').drop_duplicates(['Url'], keep='last')
-    write_table(clean_table, "clean_table.csv",  ["Date", "Url", "Ids",
-                                                  "Grade", "Exercise"])
-
-
-def create_grade_table():
-    """ Make the table with the header: Exercise Name id name lastName grade url """
-    lines = [[]]
-    table_to_clean = pd.read_csv("clean_table.csv")
-    for index in table_to_clean.iterrows():
-        line = index[1]
-        ids = line.Ids.split("-")
-        for id in ids:
-            if id != "":
-                lines.append([line.Exercise, id, "Anonymous",
-                              "Anonymous", line.Grade, line.Url])
-    write_table(pd.DataFrame(lines), "grades_table.csv", [
-                "Exercise Name", "id", "name", "lastName", "grade", "url"])
-
-
-def log_table(table):
-    for line in table:
-        print(line)
+def create_grades_table():
+    grades_table = pd.read_csv("temp_table.csv")
+    grades_table.grade = pd.to_numeric(grades_table.grade, 'coerce')
+    grades_table = grades_table.sort_values(
+        'grade').drop_duplicates(['id', 'Exercise Name'], keep='last')
+    grades_table = grades_table.sort_values(['id'])
+    write_table(grades_table, "grades_table.csv",  [
+        "Exercise Name", "id", "name", "lastName", "grade", "url"])
 
 
 def write_table(table, path, header):
@@ -63,11 +53,10 @@ def write_table(table, path, header):
 
 def routine():
     trace_tables = ["trace_table.190505.csv", "trace_table.csv"]
-    created_tables = ["temp_table.csv", "clean_table.csv", "grades_table.csv"]
+    created_tables = ["temp_table.csv", "grades_table.csv"]
     csv_rm(created_tables)
     read_and_union_trace_tables(trace_tables)
-    create_last_submission_table()
-    create_grade_table()
+    create_grades_table()
 
 
 routine()
