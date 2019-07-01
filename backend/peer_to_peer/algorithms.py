@@ -51,16 +51,17 @@ def smooth_grades(tests_dict, codes_dict, number_of_students, learning_rate):
         test_iter_plot = []
         code_iter_plot = []
         for test in tests_dict:
+            
             value = sum_and_divide(number_of_students, get_list(
                 codes_dict, tests_dict[test][1:]))
-            tests_dict[test][0] = value - learning_rate * value
+            tests_dict[test][0] = tests_dict[test][0] + learning_rate * (value - tests_dict[test][0])
             sum_of_all_weights += tests_dict[test][0]
             test_iter_plot.append(tests_dict[test][0])
             print(test, ": ", tests_dict[test][0])
         for code in codes_dict:
             value = sum_weigths_and_divide_weights(
                 sum_of_all_weights, get_list(tests_dict, codes_dict[code][1:]))
-            codes_dict[code][0] = value - learning_rate * value 
+            codes_dict[code][0] = codes_dict[code][0] + learning_rate * (value - codes_dict[code][0])
             code_iter_plot.append(codes_dict[code][0])
             print(code, ": ", codes_dict[code][0])
 
@@ -105,4 +106,4 @@ codes_dict = {"u_1": [50, "t_2", "t_3"],
               "u_3": [25, "t_1"]}
 
 
-smooth_grades(tests_dict, codes_dict, 3, 0.25)
+smooth_grades(tests_dict, codes_dict, 3, 0.1)
