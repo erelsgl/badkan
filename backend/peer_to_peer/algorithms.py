@@ -1,3 +1,7 @@
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+mpl.use('TkAgg')  # or whatever other backend that you want
+
 """ This file includes algorithms thay we may want to use for the peer to peer grading. """
 
 
@@ -37,3 +41,68 @@ def recalculate_grades_expected_average(grades, total_factor, number_of_students
         index = index + 1
         recalculate_grades_expected_average(
             grades, total_factor, number_of_students, index)
+
+
+def smooth_grades(tests_dict, codes_dict, number_of_students, learning_rate):
+    tests_plot = []
+    codes_plot = []
+    for i in range(0, 1000):
+        sum_of_all_weights = 0
+        test_iter_plot = []
+        code_iter_plot = []
+        for test in tests_dict:
+            value = sum_and_divide(number_of_students, get_list(
+                codes_dict, tests_dict[test][1:]))
+            tests_dict[test][0] = value - learning_rate * value
+            sum_of_all_weights += tests_dict[test][0]
+            test_iter_plot.append(tests_dict[test][0])
+            print(test, ": ", tests_dict[test][0])
+        for code in codes_dict:
+            value = sum_weigths_and_divide_weights(
+                sum_of_all_weights, get_list(tests_dict, codes_dict[code][1:]))
+            codes_dict[code][0] = value - learning_rate * value 
+            code_iter_plot.append(codes_dict[code][0])
+            print(code, ": ", codes_dict[code][0])
+
+        tests_plot.append(test_iter_plot)
+        codes_plot.append(code_iter_plot)
+
+    plt.plot([item[0] for item in tests_plot])
+    plt.plot([item[1] for item in tests_plot])
+    plt.plot([item[2] for item in tests_plot])
+    plt.plot([item[3] for item in tests_plot])
+    plt.show()
+
+    plt.plot([item[0] for item in codes_plot])
+    plt.plot([item[1] for item in codes_plot])
+    plt.plot([item[2] for item in codes_plot])
+    plt.show()
+
+
+def sum_and_divide(number_of_student, grades):
+    return sum(grades) / number_of_student
+
+
+def sum_weigths_and_divide_weights(sum_of_all_weights, grades):
+    return sum(grades) / sum_of_all_weights
+
+
+def get_list(my_dict, keys):
+    answer = []
+    for key in keys:
+        answer.append(my_dict[key][0])
+    return answer
+
+
+tests_dict = {"t_1": [1, "u_1"],
+              "t_2": [1, "u_3"],
+              "t_3": [1, "u_3"],
+              "t_4": [1, "u_1", "u_2", "u_3"]}
+
+
+codes_dict = {"u_1": [50, "t_2", "t_3"],
+              "u_2": [75, "t_1", "t_2", "t_3"],
+              "u_3": [25, "t_1"]}
+
+
+smooth_grades(tests_dict, codes_dict, 3, 0.25)
