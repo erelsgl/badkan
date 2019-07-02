@@ -28,12 +28,13 @@ def read_and_union_trace_tables(tables):
             line = index[1]
             ids = line.Ids.split("-")
             for id in ids:
-                if id != "" and line.Exercise != "Assignment 1" and line.Exercise != "assignment 1" and line.Exercise != "Ex5":
+                if id != "" and (line.Exercise == "Assignment 1" or line.Exercise == "assignment 1") and line.Exercise != "Ex5":
                     lines.append([rename_exercise(line.Exercise), id, "Anonymous",
                                   "Anonymous", line.Grade, line.Url])
-        grades_table = pd.DataFrame(lines)
-        write_table(grades_table, "temp_table.csv", [
-            "Exercise Name", "id", "name", "lastName", "grade", "url"])
+        if lines != [[]]:
+            grades_table = pd.DataFrame(lines)
+            write_table(grades_table, "temp_table.csv", [
+                "Exercise Name", "id", "name", "lastName", "grade", "url"])
 
 
 def rename_exercise(exercise_name):

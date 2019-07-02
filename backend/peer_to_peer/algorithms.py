@@ -44,24 +44,35 @@ def recalculate_grades_expected_average(grades, total_factor, number_of_students
 
 
 def smooth_grades(tests_dict, codes_dict, number_of_students, learning_rate):
+    """ 
+    tests_dict: python dict. The key is the name of the test, the value is a list 
+    with the first element being the weight and the rest being the user that failed at the test.
+    codes_dict: The key is the name of the user, the value is a list 
+    with the first element being the weight and the rest being the tests that the user passed.
+    number_of_students: Th number of student.
+    learning_rate: 0.1 usually.
+    """
     tests_plot = []
     codes_plot = []
-    for i in range(0, 1000):
+    for i in range(0, 10):
         sum_of_all_weights = 0
         test_iter_plot = []
         code_iter_plot = []
         for test in tests_dict:
-            
+
             value = sum_and_divide(number_of_students, get_list(
                 codes_dict, tests_dict[test][1:]))
-            tests_dict[test][0] = tests_dict[test][0] + learning_rate * (value - tests_dict[test][0])
+            print(value,tests_dict[test][0]  )
+            tests_dict[test][0] = tests_dict[test][0] + \
+                learning_rate * (value - tests_dict[test][0])
             sum_of_all_weights += tests_dict[test][0]
             test_iter_plot.append(tests_dict[test][0])
             print(test, ": ", tests_dict[test][0])
         for code in codes_dict:
-            value = sum_weigths_and_divide_weights(
+            value = sum_weights_and_divide_weights(
                 sum_of_all_weights, get_list(tests_dict, codes_dict[code][1:]))
-            codes_dict[code][0] = codes_dict[code][0] + learning_rate * (value - codes_dict[code][0])
+            codes_dict[code][0] = codes_dict[code][0] + \
+                learning_rate * (value - codes_dict[code][0])
             code_iter_plot.append(codes_dict[code][0])
             print(code, ": ", codes_dict[code][0])
 
@@ -84,7 +95,7 @@ def sum_and_divide(number_of_student, grades):
     return sum(grades) / number_of_student
 
 
-def sum_weigths_and_divide_weights(sum_of_all_weights, grades):
+def sum_weights_and_divide_weights(sum_of_all_weights, grades):
     return sum(grades) / sum_of_all_weights
 
 
