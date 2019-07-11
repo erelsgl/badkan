@@ -90,3 +90,10 @@ table, th, td {
 th, td {
   padding: 3px;
 }
+
+.byline {
+  color: #9799a7;
+  font-family: Georgia, Times, "Times New Roman", serif;
+  font-style: italic;
+  margin-bottom: 18px;
+}
