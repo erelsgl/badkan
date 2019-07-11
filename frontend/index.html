@@ -25,12 +25,26 @@
     integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
 
-
+  <style>
+    h1 {
+      font-family: 'Sofia';
+      font-size: 40px;
+    }
+    h4 {
+      font-family: 'Sofia';
+      color:rgb(161, 159, 159) ;
+      font-size: 20px;
+    }
+    body {
+      font-family: 'Sofia';
+      font-size: 20px;
+    }
+  </style>
 </head>
 
 <body style="background-color:rgb(211, 230, 241);">
-
   <div class="w3-bar w3-light-grey">
     <input class="w3-bar-item" type="image" name="logo_transparent" src="logo/logo_transparent.png" WIDTH=100 HEIGHT=100
       onclick=" location.reload();">
@@ -45,28 +59,35 @@
 
   <br />
 
-  <form class="w3-container w3-left w3-card-4 w3-light-grey w3-text-blue w3-margin">
-    <p class="byline">
-      Badkan is a server for automatic checking and grading of programming assignments.
-      There exist several ways to grade an assignment, on this paper, <br>
-      we will discuss the technologies used by the Badkan, and how it grades assignment.
-      There are two type user on the Badkan: the students and  <br>
-      the instructors. Given an exercise from any instructor, students must 
-      be able to submit an answer in the platform and get grade automatically. The simplest way <br>
-      to give a grade to any student is to run the code provided by the student
-      with a specific input and compare the output of the student with the expectation <br>
-      the instructor had for the output. If the expectation correspond to the output of
-      the student's code, then some point will be give to the student. <br>
-      Another interesting way to grade student is by using "peer to peer grading": on
-      this process, students grade them-self. Indeed, the first part of the process is<br>
-      to let student implement test-cases for the given exercise. Then, the second part
-      is to let them submit their answer for the exercise. At this point, the platform is <br>
-      able to grade the test-cases submission and also the solution of the exercise. On
-      this paper we will focus on how the process goes, and how the final grades are attributed. <br>
-    </p>
+  <div class= w3-center> 
+  <form class="w3-container w3-left w3-card-4 w3-light-grey w3-text-blue w3-margin" style="width:50%;">
+    <h4>
+        <a href=https://github.com/SamuelBismuth/badkan>Badkan </a> is a server for automatic checking and grading of
+          programming assignments. There exist several ways to grade an assignment, but the technologies used by the
+          Badkan, differ in the following ways. <br> <br>
+          There are two type user on the Badkan: the students and
+          the instructors. Given an exercise from any instructor, students must
+          be able to submit an answer in the platform (Badkan allows users
+          to submit entire programming projects (through github) rather than just single files)
+          and get grade automatically. The simplest way
+          to grade any student is to run the code provided by the student
+          with a specific input and compare the output of the student with the expectation
+          the instructor had for the output. If the expectation correspond
+          to the output of the student's code, then some point will be give to the student.
+          <br> <br>
+          Another interesting way to grade student is by using "peer to peer grading": on
+          this process, students grade them-self. Indeed, the first part
+          of the process is to let student implement test-cases for the given exercise.
+          Then, the second part is to let them submit their answer for the exercise.
+          At this point, the platform is able to grade the test-cases submission and
+          also the solution of the exercise.
+          <br> <br>
+          <a href=https://github.com/SamuelBismuth/badkan/blob/master/paper/Badkan_ICTAI.pdf>Here </a> is a link to the
+            paper that speak about the peer to peer grading system. <br>
+    </h4>
   </form>
 
-  <form class="w3-tag w3-right w3-card-4 w3-light-grey w3-text-blue w3-margin">
+  <form class="w3-tag w3-card-4 w3-light-grey w3-text-blue w3-margin">
 
     <ul class="nav nav-tabs">
       <li class="active"><a data-toggle="tab" href="#home">Sign In</a></li>
@@ -158,6 +179,11 @@
       </button>
     </div>
   </form>
+</div>
+
+  <div class="w3-bar w3-light-grey W3  w3-center">
+    <h1> Badkan </h1>
+  </div>
 
   <!-- snackbar. -->
   <div id="emptyField">Please fill all the fields.</div>
