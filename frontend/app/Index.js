@@ -93,3 +93,37 @@ function errorHandling(errorLog) {
     showSnackbar(wrongData)
   }
 }
+
+$('a[href="#githubSubmission"]').click(function () {
+  swal("Badkan allows users to submit both entire programming projects (through github)" +
+  " and than just single files. The instructor can choose the submission way.");
+});
+
+
+$('a[href="#grade"]').click(function () {
+  swal("To get the grade, the system run the code provided by the student with" +
+  " a specific input and compare the output of the student with the expectation" +
+  " the instructor provide for the output. If the expectation correspond to the output" +
+  " of the student's code, then some point will be give to the student.");
+});
+
+$('a[href="#instructor"]').click(function () {
+  swal("Badkan provide an easy graphical interface ot let the instructor customize the input/output system.");
+});
+
+$('a[href="#peer"]').click(function () {
+  swal("Another interesting way to grade student is by using peer to peer grading: on" +
+  "this process, students grade them-self. Indeed, the first part" +
+  "of the process is to let student implement test-cases for the given exercise." +
+  "Then, the second part is to let them submit their answer for the exercise." +
+  "At this point, the platform is able to grade the test-cases submission and" +
+  "also the solution of the exercise.");
+});
+
+$('a[href="#realtime"]').click(function () {
+  swal("The grade is displayed to the student's screen in real time. That is, at every submission, the student will be inform of his grade.");
+});
+
+$('a[href="#other"]').click(function () {
+  swal("The instructor is able to upload a pdf, to check plagarism, to download all the grades, to run or download a specific project or all the projects...");
+});

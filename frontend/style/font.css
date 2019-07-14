@@ -19,4 +19,10 @@ body {
     font-family: Georgia, Times, "Times New Roman", serif;
     font-style: italic;
     margin-bottom: 18px;
-  }
+}
+
+.enum {
+    color: #FFF;;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 30px;
+}
