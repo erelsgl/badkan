@@ -10,6 +10,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
   <script src='util/FirebaseConfig.js'></script>
   <script type="text/javascript" src="util/Firebase.js"></script>
   <script type="text/javascript" src="objects/User.js"></script>
@@ -27,17 +28,18 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
   <link rel="stylesheet" href="style/font.css">
+  <link rel="stylesheet" href="style/list.css">
+  <link rel="stylesheet" href="style/shape.css">
+
 
 </head>
 
 <body style="background-color:rgb(211, 230, 241);">
 
-  <div id="container">
-
-    <div id="header"></div>
+  <div id="header">
     <div class="w3-bar w3-light-grey">
       <input class="w3-bar-item" type="image" name="logo_transparent" src="logo/logo_transparent.png" WIDTH=100
-        HEIGHT=100 onclick=" location.reload();">
+        HEIGHT=100 onclick=" location.reload();" style="margin-left: 300px">
       <div class="w3-bar-item">
         <h1>
           <p class="byline"> Automatic checking and grading of programming assignments</p>
@@ -46,36 +48,36 @@
     </div>
   </div>
 
+  <br>
 
   <div id="body">
     <div class=w3-center>
       <div class="w3-container w3-left w3-margin" style="width:50%;">
         <h4>
-          <a href=https://github.com/SamuelBismuth/badkan>Badkan </a> is a server for automatic checking and grading of
-            programming assignments. There exist several ways to grade an assignment, but the technologies used by the
-            Badkan, differ in the following ways. <br> <br>
-            There are two type user on the Badkan: the students and
-            the instructors. Given an exercise from any instructor, students must
-            be able to submit an answer in the platform (Badkan allows users
-            to submit entire programming projects (through github) rather than just single files)
-            and get grade automatically. The simplest way
-            to grade any student is to run the code provided by the student
-            with a specific input and compare the output of the student with the expectation
-            the instructor had for the output. If the expectation correspond
-            to the output of the student's code, then some point will be give to the student.
-            <br> <br>
-            Another interesting way to grade student is by using "peer to peer grading": on
-            this process, students grade them-self. Indeed, the first part
-            of the process is to let student implement test-cases for the given exercise.
-            Then, the second part is to let them submit their answer for the exercise.
-            At this point, the platform is able to grade the test-cases submission and
-            also the solution of the exercise.
-            <br> <br>
-            <a href=https://github.com/SamuelBismuth/badkan/blob/master/paper/Badkan_ICTAI.pdf>Here </a> is a link to
-              the paper that speak about the peer to peer grading system. <br>
+          <div class="list-type1">
+            <ol>
+              <li><a href="#githubSubmission">
+                  <p class="enum">Efficient use of Github</p>
+                </a></li>
+              <li><a href="#grade">
+                  <p class="enum">Automatic Grade</p>
+                </a></li>
+              <li><a href="#instructor">
+                  <p class="enum">Save instructor time</p>
+                </a></li>
+              <li><a href="#peer">
+                  <p class="enum">Peer grading</p>
+                </a></li>
+              <li><a href="#realtime">
+                  <p class="enum">Real time grading</p>
+                </a></li>
+              <li><a href="#other">
+                  <p class="enum">And more features...</p>
+                </a></li>
+            </ol>
+          </div>
         </h4>
       </div>
-
 
       <div class="w3-tag w3-card-4 w3-light-grey w3-text-blue w3-margin">
         <ul class="nav nav-tabs">
@@ -154,18 +156,17 @@
             <font size="10"><i class="fab fa-github"></i></font>
           </button>
         </div>
-      </div> 
+      </div>
     </div>
   </div>
 
 
   <div id="footer">
-    <div class="w3-bar w3-light-grey W3  w3-center">
-      <div class="sofia"> Badkan </div>
+    <div class="w3-bar">
+      <div class="sofia w3-center"> Badkan</div>
     </div>
   </div>
 
-  </div>
   <!-- snackbar. -->
   <div id="emptyField">Please fill all the fields.</div>
   <div id="mailUsed">The email address is already in use by another account.</div>
@@ -175,6 +176,7 @@
   <div id="badMail">The mail is badly formated.</div>
 
   <script type="text/javascript" src="app/Index.js"></script>
+
 </body>
 
 </html>
