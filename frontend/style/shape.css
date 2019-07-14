@@ -1,21 +1,28 @@
-html,
-
-
-body {
-    padding: 0;
-    height: 100%;
+* {
+    box-sizing: border-box;
 }
 
-#container {
-    min-height: 100%;
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
     position: relative;
 }
 
-#body {
-    margin-top:50px;
-    margin-left: 100px;
-    margin-right: 200px;
 
+#body {
+    min-height: 50vh;
+    overflow: hidden;
+    display: block;
+    position: relative;
+    margin-top: 50px;
+    margin-left: 100px;
+    margin-right: 250px;
+    padding-bottom: 100px;
 }
 
 #enum {
@@ -28,8 +35,8 @@ body {
 
 #footer {
     background: #FFF;
-    position:absolute;
-    bottom:0;
-    width:100%;
-    height:100px;   /* Height of the footer */
+    position: sticky;
+    bottom: 0;
+    width: 100%;
+    height: 100px;
 }
