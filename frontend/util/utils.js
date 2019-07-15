@@ -69,8 +69,8 @@ function websocketCloseReason(code) {
 }
 
 /**
-* From https://stackoverflow.com/a/901144/827927
-*/
+ * From https://stackoverflow.com/a/901144/827927
+ */
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -104,9 +104,11 @@ function displayBlockById(id) {
     document.getElementById(id).style.display = "block";
 }
 
-function showSnackbar(myClass) {
+function showSnackbar(message) {
+    $('#snackbar').html(message);
+    myClass = $('#snackbar')[0]
     myClass.className = "show";
-    setTimeout(function () {
+    setTimeout(function() {
         myClass.className = myClass.className.replace("show", "");
     }, 2500);
     return;
