@@ -28,7 +28,7 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
             id: id,
             checked: checked
         });
-        sendWebsocket(json, () => { }, onMessageCreateAuth, () => { }, onErrorAlert);
+        sendWebsocket(json, () => {}, onMessageCreateAuth, () => {}, onErrorAlert);
     }
 });
 
@@ -49,10 +49,19 @@ document.getElementById('github').addEventListener('click', e => {
          * Two cases here: if the user is new need to register him in the realtime database
          * and then go to home, if the user is old need to go to home.
          */
-        console.log(result.additionalUserInfo)
         if (result.additionalUserInfo.isNewUser) {
-            console.log(result.additionalUserInfo)
-            // document.location.href = "completeInfo.html"
+            console.log(result)
+            var info = additionalInformation();
+            info.then((prom) => {
+                let json = JSON.stringify({
+                    target: "create_auth_github",
+                    email: result.user.email,
+                    display_name: result.additionalUserInfo.username,
+                    id: prom[0],
+                    checked: prom[1]
+                });
+                sendWebsocket(json, () => {}, onMessageCreateAuth, () => {}, onErrorAlert);
+            });
         } else {
             // document.location.href = "home.html";
         }
@@ -76,6 +85,29 @@ document.getElementById("btnLogin").addEventListener('click', e => {
         showSnackbar(error.message);
     })
 });
+
+
+async function additionalInformation() {
+    const {
+        value: formValues
+    } = await Swal.fire({
+        title: 'Additional information',
+        html: '<label for="user_country_id">Id</label>' +
+            '<input id="user_country_id" class="swal2-input">' +
+            '<label for="is_admin">Admin: </label>' +
+            '<input type="checkbox" id="is_admin" name="is_admin">',
+        focusConfirm: false,
+        preConfirm: () => {
+            return [
+                document.getElementById('user_country_id').value,
+                document.getElementById('is_admin').checked
+            ]
+        }
+    })
+    if (formValues) {
+        return formValues
+    }
+}
 
 
 $('a[href="#githubSubmission"]').click(function () {

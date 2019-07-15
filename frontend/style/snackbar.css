@@ -21,7 +21,7 @@
     /* Sit on top of the screen */
     z-index: 1;
     /* Add a z-index if needed */
-    left: 40%;
+    left: 50%;
     /* Center the snackbar */
     bottom: 30px;
     /* 30px from the bottom */
@@ -47,6 +47,7 @@
         bottom: 0;
         opacity: 0;
     }
+
     to {
         bottom: 30px;
         opacity: 1;
@@ -58,6 +59,7 @@
         bottom: 0;
         opacity: 0;
     }
+
     to {
         bottom: 30px;
         opacity: 1;
@@ -69,6 +71,7 @@
         bottom: 30px;
         opacity: 1;
     }
+
     to {
         bottom: 0;
         opacity: 0;
@@ -80,6 +83,7 @@
         bottom: 30px;
         opacity: 1;
     }
+
     to {
         bottom: 0;
         opacity: 0;
