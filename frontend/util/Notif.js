@@ -1,6 +1,5 @@
 // TODO: Deal with assync pbs and read/not read notif.
-var notifHomeUser = JSON.parse(localStorage.getItem("homeUserKey"));
-
+var notifHomeUser = JSON.parse(localStorage.getItem("homeUser"));
 let notifUid = JSON.parse(localStorage.getItem("homeUserId"));
 
 $(document).ready(function () {
@@ -15,23 +14,9 @@ $(document).ready(function () {
                     } else {
                         addReadedNotif(notifHomeUser.notif[i].notifMessage, i);
                     }
-                } else {
-                    // home.html by default.
-                    notifHomeUser.notif.push(new MyNotification(notifHomeUser.notif[i].notifMessage, notifHomeUser.notif[i].notifRead, "home.html"));
-                    localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
-                    writeUserDataWithoutComingHome(notifHomeUser, notifUid)
                 }
             }
         }
-        else {
-            notifHomeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")];
-            localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
-            writeUserDataWithoutComingHome(notifHomeUser, notifUid)
-        }
-    } else {
-        notifHomeUser.notif = [new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")];
-        localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
-        writeUserDataWithoutComingHome(notifHomeUser, notifUid)
     }
     if (numNotif === 0) {
         $('#noti_Counter').hide();
@@ -60,7 +45,7 @@ $(document).ready(function () {
         // TOGGLE (SHOW OR HIDE) NOTIFICATION WINDOW.
         $('#notifications').fadeToggle('fast', 'linear', function () {
             if ($('#notifications').is(':hidden')) {
-                $('#noti_Button').css('background-color', '#2E467C');
+                $('#noti_Button').css('background-color', '#9799a7');
             }
             // CHANGE BACKGROUND COLOR OF THE BUTTON.
             else
@@ -79,7 +64,7 @@ $(document).ready(function () {
         // CHECK IF NOTIFICATION COUNTER IS HIDDEN.
         if ($('#noti_Counter').is(':hidden')) {
             // CHANGE BACKGROUND COLOR OF THE BUTTON.
-            $('#noti_Button').css('background-color', '#2E467C');
+            $('#noti_Button').css('background-color', '#9799a7');
         }
     });
 
@@ -100,7 +85,7 @@ function addReadedNotif(message, index) {
 
 function notifIsReaded(index) {
     notifHomeUser.notif[index].notifRead = true;
-    localStorage.setItem("homeUserKey", JSON.stringify(notifHomeUser));
+    localStorage.setItem("homeUser", JSON.stringify(notifHomeUser));
     writeUserDataWithoutComingHome(notifHomeUser, notifUid);
     document.location.href = notifHomeUser.notif[index].action;
 }

@@ -154,7 +154,7 @@ function checkEmptyFieldsPeer(name, descr, file, deadlineTest, deadlineSolution,
 function uploadPeerExercise(name, descr, deadlineTest, deadlineSolution, deadlineConflicts,
     compilerSolution, compilerTest, submission, minTest, signatureMap) {
     var userId = firebase.auth().currentUser.uid;
-    var homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+    var homeUser = JSON.parse(localStorage.getItem("homeUser"));
     folderName = userId + "_" + homeUser.createdEx;
 
     let peerExercise = new PeerExercise(
@@ -172,7 +172,7 @@ function editCourseCreatePeer(peerExerciseId) {
     let courseId = JSON.parse(localStorage.getItem("courseId"));
     let course = JSON.parse(localStorage.getItem("course"));
     course.exercises.push(peerExerciseId);
-    editCourse(course, courseId);
+    editCourse(course, courseId, "None");
 }
 
 function uploadPdf(peerExerciseId) {

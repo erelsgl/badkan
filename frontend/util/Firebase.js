@@ -56,7 +56,7 @@ function writeUserDataWithoutComingHome(user, userId) {
   database.ref("users/" + userId).set({
     user
   });
-  localStorage.setItem("homeUserKey", JSON.stringify(user));
+  localStorage.setItem("homeUser", JSON.stringify(user));
 }
 
 /**
@@ -82,14 +82,15 @@ function writePeerExercise(peerExercise, peerExerciseId) {
   });
 }
 
-function editCourse(course, courseId) {
+function editCourse(course, courseId, redirect) {
   firebase.database().ref("courses/" + courseId).set({
     course
   }).then(() => {
     json = JSON.stringify({
       target: "edit_course",
+      redirect: redirect
     }); // the variable "submission_json" is read in server.py
-    simpleWebsocket(json)
+    sendWebsocket(json, undefined, onMessageCourseChange, undefined, onErrorCourseChange)
   });
 }
 
@@ -100,7 +101,7 @@ function writeCourse(course, courseId) {
     json = JSON.stringify({
       target: "create_course",
     }); // the variable "submission_json" is read in server.py
-    simpleWebsocket(json)
+    sendWebsocket(json, undefined, onMessageCourseChange, undefined, onErrorCourseChange)
   });
 }
 
@@ -113,7 +114,7 @@ function deleteCourseById(courseId) {
   json = JSON.stringify({
     target: "delete_course",
   }); // the variable "submission_json" is read in server.py
-  simpleWebsocket(json)
+  sendWebsocket(json, undefined, onMessageCourseChange, undefined, onErrorCourseChange)
 }
 
 /**
@@ -134,7 +135,7 @@ function incrementCreatedEx(userId, homeUser) {
 function incrementCreatedExWithoutCommingHome(userId, homeUser) {
   homeUser.createdEx++;
   writeUserDataWithoutComingHome(homeUser, userId);
-  localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
+  localStorage.setItem("homeUser", JSON.stringify(homeUser));
 }
 
 /**
@@ -145,7 +146,7 @@ function incrementCreatedExWithoutCommingHome(userId, homeUser) {
  */
 function incrementCreatedExAndSubmitCourse(userId, homeUser) {
   homeUser.createdEx++;
-  localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
+  localStorage.setItem("homeUser", JSON.stringify(homeUser));
   writeUserDataAndSubmitCourse(homeUser, userId);
 }
 
@@ -190,23 +191,10 @@ function loadCurrentUser(userId, onLoaded) {
     var data = snapshot.val();
     if (!data || (typeof data === 'undefined')) {
       // User object does not exist
-      document.location.href = "completeInfo.html";
+     // document.location.href = "completeInfo.html";
     } else {
       // User object exists
       var homeUser = snapshot.val().user;
-      localStorage.setItem("homeUserKey", JSON.stringify(homeUser));
-      document.getElementById("name").innerHTML =
-        "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
-        "ID number: " + homeUser.id + "<br />" +
-        "Email: " + homeUser.email + "<br />";
-      if (homeUser.admin) {
-        document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
-      }
-      if (homeUser.admin) {
-        if (homeUser.admin === true) {
-          $("#btnManageCourses").show()
-        }
-      }
       onLoaded(homeUser)
     }
   });
@@ -291,6 +279,8 @@ function loadAllSubmissionsByUserAsync(submissionsArray, submissionsId, onUserSu
         }
       })
     }
+  } else {
+    onUserSubmissionsLoaded()
   }
 }
 
@@ -304,7 +294,7 @@ function loadAllSubmissionsByUserAsync(submissionsArray, submissionsId, onUserSu
  */
 function loadCoursesOwnedByCurrentUser(onCourse, onFinish, homeUserForAdmin) {
   database.ref().child('courses/').on("value", function (snapshot) {
-    if(!snapshot) {
+    if (!snapshot || JSON.stringify(snapshot) == "null") {
       finishLoading()
     }
     var numToProcess = snapshot.numChildren()
@@ -442,8 +432,10 @@ function deleteExerciseById(exerciseId) {
  * This function remove an user from the database.
  * @param {string} userId 
  */
-function deleteUserById(userId) {
-  database.ref().child('users/' + userId).remove();
+function deleteUserByIdAndGoIndex(userId) {
+  database.ref().child('users/' + userId).remove().then(() => {
+    document.location.href = "index.html";
+  });
 }
 
 

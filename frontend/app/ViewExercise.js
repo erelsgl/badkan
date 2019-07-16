@@ -28,7 +28,7 @@ let usersMap = new Map(JSON.parse(localStorage.getItem("usersMap")));
 let course = JSON.parse(localStorage.getItem("courseForGrader"));
 
 let homeUserId = JSON.parse(localStorage.getItem("homeUserId"));
-let homeUser = JSON.parse(localStorage.getItem("homeUserKey"));
+let homeUser = JSON.parse(localStorage.getItem("homeUser"));
 
 
 if ((exercise.ownerId != homeUserId && homeUserId != "l54uXZrXdrZDTcDb2zMwObhXbxm1") &&
