@@ -13,33 +13,23 @@ body {
     position: relative;
 }
 
+#header {
+    position: absolute;
+    background: #C0C0C0;
+    width: 100%;
+    height: 100px;
+}
+
 #logo{
     float:left;
+    width: 100px;
+    height: 100px;
     margin-left: 300px;
-    margin-top: 10px;
 }
 
 #pagename{
     float:left;
     margin-left: 25%;
-    margin-top: 10px;
-}
-
-#profil{
-    float:left;
-    margin-left: 100px;
-    margin-top: 10px;
-}
-
-#home{
-    float:left;
-    margin-left: 100px;
-    margin-top: 10px;
-}
-
-#notif{
-    float:left;
-    margin-left: 100px;
     margin-top: 10px;
 }
 
