@@ -25,34 +25,67 @@
 
   <!-- Import css. -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="style/font.css">
   <link rel="stylesheet" href="style/notif.css">
+  <link rel="stylesheet" href="style/shape.css">
   <link rel="stylesheet" href="style/style.css">
   <link rel="stylesheet" href="style/loading.css">
 </head>
 
-<body>
+<body style="background-color:rgb(211, 230, 241);">
 
   <!-- The footer -->
-  <div>
+  <!-- <div>
     <ul>
       <li><a href="home.html">Home</a></li>
       <li id="noti_Container">
-        <div id="noti_Counter"></div>
-        <!--SHOW NOTIFICATIONS COUNT.-->
+        <div id="noti_Counter"></div> -->
+  <!--SHOW NOTIFICATIONS COUNT.-->
 
-        <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
-        <div id="noti_Button"></div>
+  <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
+  <!-- <div id="noti_Button"></div> -->
 
-        <!--THE NOTIFICAIONS DROPDOWN BOX.-->
-        <div id="notifications">
+  <!--THE NOTIFICAIONS DROPDOWN BOX.-->
+  <!-- <div id="notifications">
           <h3>Notifications</h3>
           <div id=addNotif></div>
           <div style="height:300px;"></div>
         </div>
       </li>
     </ul>
+  </div> -->
+
+
+  <div class="w3-bar w3-light-grey">
+
+    <div id="logo">
+      <input type="image" name="logo_transparent" src="logo/logo_transparent.png" WIDTH=50 HEIGHT=50
+        onclick=" location.reload();" style="margin-left: 300px; margin-top: 10px"></div>
+    <div id="pagename">
+      <p class="byline">Home</p>
+    </div>
+    <div id="profil"></div>
+    <div id="home"></div>
+    <div id="notif">
+      <ul>
+        <li id="noti_Container">
+          <div id="noti_Counter"></div>
+          <div id="noti_Button"></div>
+          <div id="notifications">
+            <h3>Notifications</h3>
+            <div id=addNotif></div>
+            <div style="height:300px;"></div>
+          </div>
+        </li>
+      </ul>
+
+    </div>
   </div>
+
+
+  <br>
 
   <div id=loading class="loader"></div>
   <div id="show">
@@ -72,11 +105,13 @@
             </div>
             <div id="collapseThree" class="panel-collapse collapse">
               <div class="panel-body">
-                <p><b>Students</b> -- find your courses, register, solve exercises, submit your solutions and get graded
+                <p><b>Students</b> -- find your courses, register, solve exercises, submit your solutions and get
+                  graded
                   in
                   real time!</p>
 
-                <p><b>Teachers</b> -- create courses, fill them with existing programming exercises or create new ones,
+                <p><b>Teachers</b> -- create courses, fill them with existing programming exercises or create new
+                  ones,
                   and
                   enjoy the automatic grading!</p>
               </div>
@@ -91,7 +126,8 @@
 
         <!-- <button id="btnSolveEx" type="button" class="btn btn-success">Solve Exercise</button> -->
         <!-- <button id="records" type="button" class="btn btn-info">Records</button> -->
-        <button style="display:none" id="btnManageCourses" type="button" class="btn btn-primary">Manage courses</button>
+        <button style="display:none" id="btnManageCourses" type="button" class="btn btn-primary">Manage
+          courses</button>
         <button id="btnSettings" type="button" class="btn btn-warning">Settings</button>
         <button id="btnGrades" type="button" class="btn btn-info">Grades</button>
         <button id="btnLogOut" type="button" class="btn btn-danger">Log Out</button>
@@ -105,7 +141,7 @@
           document.write("Last modified: " + document.lastModified)
         </script>
       </p>
-    </div>
+
 </body>
 
 </html>

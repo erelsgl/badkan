@@ -37,15 +37,6 @@ async def create_auth_github(websocket, submission):
     except Exception as e:
         await tee(websocket, str(e))
 
-    try:
-        user = auth.update_user(
-            uid=submission["id"],
-            email=submission["email"],
-            display_name=submission["display_name"])
-        edit_admin(submission["checked"], submission["id"])
-        await tee(websocket, "success")
-    except Exception as e:
-        await tee(websocket, str(e))
 
 
 async def edit_auth(user):

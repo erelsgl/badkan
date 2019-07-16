@@ -13,6 +13,32 @@ body {
     position: relative;
 }
 
+#logo{
+    float:left;
+    margin-left: 100px;
+}
+
+#pagename{
+    float:left;
+    margin-left: 100px;
+}
+
+#profil{
+    float:left;
+    margin-left: 100px;
+}
+
+#home{
+    float:left;
+    margin-left: 100px;
+}
+
+#notif{
+    float:left;
+    margin-left: 100px;
+}
+
+
 
 #body {
     min-height: 50vh;
