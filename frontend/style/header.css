@@ -1,0 +1,62 @@
+#logo{
+    width: 5%;
+    float:left;
+    width: 5%;
+    height: auto;
+}
+
+#pagename{
+    float:left;
+    width: 60%;
+    color: #9799a7;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-style: italic;
+    font-size: 35px;
+    text-align: center;
+}
+
+#profil{
+    float:right;
+    margin-top:0.8%; 
+    width: 10%;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    color: #FFF;
+    size: 200px;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 25px;
+    text-align: center;
+}
+
+#profil:hover{
+    background-color: #A9A9A9;
+}
+
+#home{
+    float:right;
+    margin-top:0.8%; 
+    width: 10%;
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+    color: #FFF;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 25px;
+    text-align: center;
+}
+
+#home:hover{
+    background-color: #A9A9A9;
+}
+
+#notif{
+    width: 5%;
+    float:right;
+}

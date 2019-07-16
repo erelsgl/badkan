@@ -29,61 +29,39 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="style/font.css">
   <link rel="stylesheet" href="style/notif.css">
-  <link rel="stylesheet" href="style/shape.css">
+  <link rel="stylesheet" href="style/header.css  ">
+  <link rel="stylesheet" href="style/shape.css  ">
+  <link rel="stylesheet" href="style/app/home.css">
   <link rel="stylesheet" href="style/style.css">
   <link rel="stylesheet" href="style/loading.css">
 </head>
 
 <body style="background-color:rgb(211, 230, 241);">
 
-  <!-- The footer -->
-  <!-- <div>
-    <ul>
-      <li><a href="home.html">Home</a></li>
-      <li id="noti_Container">
-        <div id="noti_Counter"></div> -->
-  <!--SHOW NOTIFICATIONS COUNT.-->
-
-  <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
-  <!-- <div id="noti_Button"></div> -->
-
-  <!--THE NOTIFICAIONS DROPDOWN BOX.-->
-  <!-- <div id="notifications">
-          <h3>Notifications</h3>
-          <div id=addNotif></div>
-          <div style="height:300px;"></div>
+  <div id="header">
+    <div class="container">
+      <input id="logo" type="image" src="logo/logo_transparent.png" onclick="location.reload();">
+      <div id="pagename">Home Page</div>
+      
+      <div id="notif">
+          <ul>
+            <li id="noti_Container">
+              <div id="noti_Counter"></div>
+              <div id="noti_Button"></div>
+              <div id="notifications">
+                <div class="notif">Notifications</div>
+                <div id=addNotif></div>
+                <div style="height:300px;"></div>
+              </div>
+            </li>
+          </ul>
         </div>
-      </li>
-    </ul>
-  </div> -->
-
-
-  <div class="w3-bar w3-light-grey">
-
-    <div id="logo">
-      <input type="image" name="logo_transparent" src="logo/logo_transparent.png" WIDTH=50 HEIGHT=50
-        onclick=" location.reload();"></div>
-    <div id="pagename">
-      <h1><p class="byline">Home</p></h1>
-    </div>
-    <div id="profil"></div>
-    <div id="home"></div>
-    <div id="notif">
-      <ul>
-        <li id="noti_Container">
-          <div id="noti_Counter"></div>
-          <div id="noti_Button"></div>
-          <div id="notifications">
-            <h3>Notifications</h3>
-            <div id=addNotif></div>
-            <div style="height:300px;"></div>
-          </div>
-        </li>
-      </ul>
-
+      <div id="home">Home</div>
+      <div id="profil">Samuel</div>
+      
+      
     </div>
   </div>
-
 
   <br>
 
