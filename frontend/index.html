@@ -29,7 +29,7 @@
     <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
     <link rel="stylesheet" href="style/font.css">
     <link rel="stylesheet" href="style/list.css">
-    <link rel="stylesheet" href="style/shape.css">
+    <link rel="stylesheet" href="style/index.css">
     <link rel="stylesheet" href="style/snackbar.css">
     <link rel="stylesheet" href="style/style.css">
 
@@ -38,17 +38,12 @@
 
 <body style="background-color:rgb(211, 230, 241);">
 
-
-    <div class="w3-bar w3-light-grey">
-        <input class="w3-bar-item" type="image" name="logo_transparent" src="logo/logo_transparent.png" WIDTH=100
-            HEIGHT=100 onclick=" location.reload();" style="margin-left: 300px">
-        <div class="w3-bar-item">
-            <h1>
-                <p class="byline"> Automatic checking and grading of programming assignments</p>
-            </h1>
-        </div>
+    <div id="header">
+        <input id="logo" type="image" src="logo/logo_transparent.png" onclick="location.reload();">
+        <h1 id="pagename">
+            <p class="byline"> Automatic checking and grading of programming assignments</p>
+        </h1>
     </div>
-
 
     <br>
 
@@ -56,7 +51,7 @@
         <div class=w3-center>
             <div class="w3-container w3-left w3-margin" style="width:50%;">
                 <h4>
-                    <div class="list-type1">
+                    <div class="list-type1" style="text-align:left;">
                         <ol>
                             <li>
                                 <a href="#githubSubmission">
@@ -95,12 +90,12 @@
 
             <div class="w3-tag w3-card-4 w3-light-grey w3-text-blue w3-margin">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a data-toggle="tab" href="#home">Sign In</a></li>
+                    <li class="active"><a data-toggle="tab" href="#signin">Sign In</a></li>
                     <li><a data-toggle="tab" href="#menu1">Register</a></li>
                 </ul>
                 <div class="tab-content">
                     <br />
-                    <div id="home" class="tab-pane fade in active" style="background-color:rgb(211, 230, 241);">
+                    <div id="signin" class="tab-pane fade in active" style="background-color:rgb(211, 230, 241);">
                         <p>
                             <div class="w3-row w3-section">
                                 <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i></div>
