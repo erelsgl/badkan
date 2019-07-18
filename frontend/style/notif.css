@@ -78,6 +78,11 @@ ul li a:hover {
     cursor: pointer;
 }
 
+#noti_Button:hover {
+    background: #A9A9A9;
+
+}
+
 /* THE POPULAR RED NOTIFICATIONS COUNTER. */
 #noti_Counter {
     display: block;

@@ -12,7 +12,7 @@ document.getElementById("confirm").addEventListener('click', e => {
     let peerExerciseSolved = new PeerGrade("id", 90, 90, "urlTest", "urlSolution");
     let notif = new MyNotification("Welcome to the Badkan, this is your first notification.", false, "home.html")
     let checked = document.getElementById("admin").checked;
-    if (!adminPrivilege(checked)) {
+    if (!instructorPrivilege(checked)) {
       return;
     }
     let currentUser = new User(name, lastName, id, user.email, 0, 0, 0, [],

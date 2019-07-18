@@ -22,7 +22,7 @@ document.getElementById("confirm").addEventListener('click', e => {
   if (checkEmptyFields([name, lastName, id])) {
     if (!checked) {
       const checked = document.getElementById("admin").checked;
-      if (!adminPrivilege(checked)) {
+      if (!instructorPrivilege(checked)) {
         return;
       }
     }

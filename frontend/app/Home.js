@@ -401,10 +401,6 @@ function endGame(exerciseId) {
 // });
 
 
-
-
-
-
 $('body').on('click', '#btnTestPhase', function (e) {
   let exerciseId = e.target.name;
   let exercise = peerExercisesMap.get(exerciseId);
@@ -460,65 +456,6 @@ $('body').on('click', '#register', function (e) {
   let course = coursesObject[courseId].course;
   registerSuccess(course, courseId);
 });
-
-$('a[href="#settings"]').click(function () {
-  var info = settings();
-  info.then((prom) => {
-    console.log(prom)
-  });
-
-});
-
-async function settings() {
-  const {
-    value: formValues
-  } = await Swal.fire({
-    title: 'Settings',
-    html:
-      '<label for="name">Name: </label>' +
-      '<input id="name" class="swal2-input" value="Samuel">' +  // Retreive here the data.
-      '<label for="lastname">Last name: </label>' +
-      '<input id="lastname" class="swal2-input" value="Bismuth">' +  // Retreive here the data.
-      '<label for="user_country_id">Id</label>' +
-      '<input id="user_country_id" class="swal2-input" value="342533064">' +  // Retreive here the data.
-      '<a href=#delete class="btn btn-danger">Delete account</a>',
-    focusConfirm: false,
-    preConfirm: () => {
-      return [
-        document.getElementById('name').value,
-        document.getElementById('lastname').value,
-        document.getElementById('user_country_id').value
-      ]
-    }
-  })
-  if (formValues) {
-    return formValues
-  }
-}
-
-$('a[href="#delete"]').click(function () {
-  Swal.fire(
-    'Error',
-    'There was an error in sign out. Please try again. If the problem persists, please contact the programmer.',
-    'error'
-  )
-});
-
-$('a[href="#logout"]').click(function () {
-  // document.getElementById('btnManageCourses').style.display = 'none'
-  firebase.auth().signOut().then(
-    () => {
-      document.location.href = 'index.html'
-    },
-    (error) => {
-      Swal.fire(
-        'Error',
-        'There was an error in sign out. Please try again. If the problem persists, please contact the programmer.',
-        'error'
-      )
-    });
-});
-
 
 
 

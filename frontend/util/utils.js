@@ -81,15 +81,10 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function adminPrivilege(checked) {
+function instructorPrivilege(checked) {
     if (checked) {
-        var response = prompt("Please enter the password to get admin privilege:");
-        if (response === "3ubf2e9-cb") {
-            return true;
-        } else {
-            alert("wrong password");
-            return false;
-        }
+        alert("Currently everyone can be instructor, we'll change this by redirecting the user to a payment page.")
+        return true;
     } else {
         return true;
     }
@@ -108,7 +103,7 @@ function showSnackbar(message) {
     $('#snackbar').html(message);
     myClass = $('#snackbar')[0]
     myClass.className = "show";
-    setTimeout(function() {
+    setTimeout(function () {
         myClass.className = myClass.className.replace("show", "");
     }, 2500);
     return;
