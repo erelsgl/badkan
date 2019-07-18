@@ -7,18 +7,7 @@ $('a[href="#settings"]').click(function () {
 });
 
 $('a[href="#logout"]').click(function () {
-    firebase.auth().signOut().then(
-        () => {
-            document.location.href = 'index.html'
-        },
-        (error) => {
-            console.log(error)
-            Swal.fire(
-                'Error',
-                'There was an error in sign out. Please try again. If the problem persists, please contact the programmer.',
-                'error'
-            )
-        });
+    signOut();
 });
 
 async function settings() {
@@ -57,9 +46,27 @@ function deleteConfirmation() {
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
-        console.log(result)
         if (result.value) {
-            sendWebsocket(json, () => {}, onMessageCreateAuth, () => {}, onErrorAlert);            
+            let json = JSON.stringify({
+                target: "delete_account",
+                uid: userUid,
+            });
+            sendWebsocket(json, () => { }, () => { }, signOut, onErrorAlert);
         }
     })
+}
+
+function signOut() {
+    firebase.auth().signOut().then(
+        () => {
+            document.location.href = 'index.html'
+        },
+        (error) => {
+            console.log(error)
+            Swal.fire(
+                'Error',
+                'There was an error in sign out. Please try again. If the problem persists, please contact the programmer.',
+                'error'
+            )
+        });
 }

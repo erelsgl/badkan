@@ -65,7 +65,7 @@ document.getElementById('github').addEventListener('click', e => {
                 sendWebsocket(json, () => {}, onMessageCreateAuth, () => {}, onErrorAlert);
             });
         } else {
-            document.location.href = "home.html";
+            signInSuccess();
         }
     }).catch(function (error) {
         showSnackbar(error.message);
@@ -82,7 +82,7 @@ document.getElementById("btnLogin").addEventListener('click', e => {
     const email = document.getElementById("txtEmail").value;
     const pass = document.getElementById("txtPassword").value;
     firebase.auth().signInWithEmailAndPassword(email, pass).then(function () {
-        document.location.href = "home.html";
+        signInSuccess();
     }).catch(error => {
         showSnackbar(error.message);
     })
@@ -169,3 +169,7 @@ $('a[href="#other"]').click(function () {
             "to run or download a specific project or all the projects..."
     });
 });
+
+function signInSuccess() {
+    document.location.href = "home.html";
+}

@@ -44,7 +44,7 @@ function onErrorAlert(_event) {
 
 function onMessageCreateAuth(_event) {
     if (_event.data == "success") {
-        document.location.href = "home.html";
+        signInSuccess();
     } else if (_event.data.includes("Failed to create new user.")) {
         showSnackbar("Failed to create new user, please check that your email or id are unique.")
     } else {

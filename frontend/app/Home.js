@@ -3,6 +3,34 @@
  * in the internal storage. Really important.
  */
 
+let userUid;
+let userDetails;
+
+firebase.auth().onAuthStateChanged(function (user) {
+  if (user) {
+    userUid = user.uid;
+    retreiveDataForHomePage();
+  } else {
+    alert("No user is signed in.")
+  }
+});
+
+function retreiveDataForHomePage() {
+  let json = JSON.stringify({
+    target: "get_data_user",
+    uid: userUid,
+  });
+  sendWebsocket(json, () => { }, onFinishRetreiveUser, loadHTML, onErrorAlert);
+}
+
+function onFinishRetreiveUser(message) {
+  alert(message.data)
+}
+
+function loadHTML() {
+
+}
+
 var $template = $('.template');
 let hash = 2;
 
@@ -13,79 +41,79 @@ var exercisesMap = new Map();
 var peerExercisesMap = new Map();
 var submissionsArray = []
 
-/**
- * ON STATE CHANGE.
- * Every time the state of the user is changed, this function is called.
- */
-firebase.auth().onAuthStateChanged(authUser => {
-  localStorage.clear()
-  /*** This code runs if there is a logged-in user. ***/
-  if (authUser) {
-    var userId = authUser.uid
-    // For the next pages
-    localStorage.setItem('homeUserId', JSON.stringify(userId))
-    // For the Home page.
-    window.uid = userId;
-    loadCurrentUser(userId, (homeUser) => {   // in utils/Firebase.js
+// /**
+//  * ON STATE CHANGE.
+//  * Every time the state of the user is changed, this function is called.
+//  */
+// firebase.auth().onAuthStateChanged(authUser => {
+//   localStorage.clear()
+//   /*** This code runs if there is a logged-in user. ***/
+//   if (authUser) {
+//     var userId = authUser.uid
+//     // For the next pages
+//     localStorage.setItem('homeUserId', JSON.stringify(userId))
+//     // For the Home page.
+//     window.uid = userId;
+//     loadCurrentUser(userId, (homeUser) => {   // in utils/Firebase.js
 
-      document.getElementById("name").innerHTML =
-        "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
-        "ID number: " + homeUser.id + "<br />" +
-        "Email: " + homeUser.email + "<br />";
-      if (homeUser.admin) {
-        if (homeUser.admin === true) {
-          document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
-          $("#btnManageCourses").show()
-        }
-      }
+//       document.getElementById("name").innerHTML =
+//         "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
+//         "ID number: " + homeUser.id + "<br />" +
+//         "Email: " + homeUser.email + "<br />";
+//       if (homeUser.admin) {
+//         if (homeUser.admin === true) {
+//           document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
+//           $("#btnManageCourses").show()
+//         }
+//       }
 
-      // For the next pages
-      localStorage.setItem('homeUser', JSON.stringify(homeUser))
-      // For the Home page.
-      window.homeUser = homeUser;
+//       // For the next pages
+//       localStorage.setItem('homeUser', JSON.stringify(homeUser))
+//       // For the Home page.
+//       window.homeUser = homeUser;
 
-      if (exercisesObject) {  // defined in file data/exercises.js
-        // synchronous
-        for (key in exercisesObject) {
-          exercisesMap.set(key, exercisesObject[key].exercise)
-        }
-      } else {
-        alert("Exercises object not found - please try again or contact the programmer")
-        finishLoading()  // defined in util/Loading.js
-      }
-      loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
-      loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
-        if (coursesObject) {  // defined in file data/courses.js
-          // synchronous
-          for (key in coursesObject) {
-            course = coursesObject[key].course
-            addCourseHTML(key, course)
-          }
+//       if (exercisesObject) {  // defined in file data/exercises.js
+//         // synchronous
+//         for (key in exercisesObject) {
+//           exercisesMap.set(key, exercisesObject[key].exercise)
+//         }
+//       } else {
+//         alert("Exercises object not found - please try again or contact the programmer")
+//         finishLoading()  // defined in util/Loading.js
+//       }
+//       loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
+//       loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
+//         if (coursesObject) {  // defined in file data/courses.js
+//           // synchronous
+//           for (key in coursesObject) {
+//             course = coursesObject[key].course
+//             addCourseHTML(key, course)
+//           }
 
-          // on all courses loaded:
-          if (numUnregistered == 0) {
-            $('#accordion-unregistered').append('<p>No other courses!</p>');
-          }
-          if (numRegistered == 0) {
-            $('#accordion-registered')
-              .append('<p>You are not registered to any course yet!</p>');
-          }
+//           // on all courses loaded:
+//           if (numUnregistered == 0) {
+//             $('#accordion-unregistered').append('<p>No other courses!</p>');
+//           }
+//           if (numRegistered == 0) {
+//             $('#accordion-registered')
+//               .append('<p>You are not registered to any course yet!</p>');
+//           }
 
-          // Finally, stop the loading
-          finishLoading()
-        } else {
-          alert("Courses object not found - please try again or contact the programmer")
-          finishLoading()
-        }
-      })
-    })
-  }
-  /*** This code runs if there is NO logged-in user. ***/
-  else {
-    alert("You're not connected, try to sign in again!")
-    document.location.href = "index.html"
-  }
-})
+//           // Finally, stop the loading
+//           finishLoading()
+//    try to sign in again!
+//    try to sign in again!found - please try again or contact the programmer")
+//    try to sign in again!
+//    try to sign in again!
+//    try to sign in again!
+//    try to sign in again!
+//   }try to sign in again!
+//   /*** This code runs if there is NO logged-in user. ***/
+//   else {
+//     alert("You're not connected, try to sign in again!")
+//     document.location.href = "index.html"
+//   }
+// })
 
 function addCourseHTML(key, course) {
   //  First see if course if private or not:

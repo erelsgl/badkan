@@ -34,11 +34,6 @@ async def edit_auth(user):
     print('Sucessfully updated user: {0}'.format(user.uid))
 
 
-async def delete_auth(uid):
-    auth.delete_user(uid)
-    print('Successfully deleted user')
-
-
 def retreive_auth(uid):
     user = auth.get_user(uid)
     print('Successfully fetched user data: {0}'.format(user.uid))
