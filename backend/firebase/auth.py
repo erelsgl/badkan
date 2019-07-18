@@ -5,34 +5,18 @@ from realtime import *
 async def create_auth(websocket, submission):
     try:
         user = auth.create_user(
-            uid=submission["id"],
             email=submission["email"],
             password=submission["pass"],
             display_name=submission["name"] + " " + submission["lastName"])
-        edit_admin(submission["checked"], submission["id"])
+        edit_admin(submission["checked"], submission["id"], user.uid)
         await tee(websocket, "success")
     except Exception as e:
         await tee(websocket, str(e))
 
 
 async def create_auth_github(websocket, submission):
-    users = [
-        auth.ImportUserRecord(
-            uid=submission["id"],
-            display_name=submission["display_name"],
-            email=submission["email"],
-            provider_data=[  # user with Google provider
-                auth.UserProvider(
-                    uid=submission["display_name"],
-                    email=submission["email"],
-                    provider_id='github.com'
-                )
-            ],
-        ),
-    ]
     try:
-        result = auth.import_users(users)
-        edit_admin(submission["checked"], submission["id"])
+        edit_admin(submission["checked"], submission["country_id"], submission["uid"])
         await tee(websocket, "success")
     except Exception as e:
         await tee(websocket, str(e))

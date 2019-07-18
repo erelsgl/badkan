@@ -1,0 +1,45 @@
+#menunav {
+    float: left;
+    width: 17%;
+}
+
+#courses {
+    float: left;
+    width: 83%;
+}
+
+.ul {
+    list-style-type: none;
+    overflow: hidden;
+    width: 200px;
+}
+  
+.li {
+    float: left;
+    border-bottom:1px solid #bbb;
+}
+
+.li:last-child {
+    border-bottom: none;
+}
+
+.li a {
+    display: block;
+    color: white;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 20px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.li a:hover:not(.active) {
+    background-color: #C0C0C0;
+}
+
+.current {
+    background-color: rgb(171, 190, 201);
+}
+
+.current a {
+    color: black;
+}

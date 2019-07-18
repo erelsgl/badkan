@@ -1,28 +1,18 @@
-.sofia {
-    font-family: 'Sofia';
-    font-size: 40px;
-}
-
-h4 {
-    font-family: Georgia, Times, "Times New Roman", serif;
-    color: rgb(161, 159, 159);
-    font-size: 20px;
-}
-
-body {
-    font-family: Georgia, Times, "Times New Roman", serif;
-    font-size: 20px;
-}
-
 .byline {
     color: #9799a7;
     font-family: Georgia, Times, "Times New Roman", serif;
     font-style: italic;
-    margin-bottom: 18px;
 }
 
 .enum {
     color: #FFF;;
     font-family: Georgia, Times, "Times New Roman", serif;
     font-size: 30px;
+}
+
+.sofia {
+    padding-top: 1%;
+    font-family: 'Sofia';
+    font-size: 40px;
+    text-align: center;
 }

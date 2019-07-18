@@ -3,9 +3,6 @@
  * in the internal storage. Really important.
  */
 
-// Here the page always begin with the loading
-onLoading()
-
 var $template = $('.template');
 let hash = 2;
 
@@ -220,15 +217,15 @@ function showRegisteredCourse(course) {
   } else {
     text_html += '<h3>Exercises in ' + course.name + '</h3>'
     for (var i = 0; i < course.exercises.length; i++) {
-        let exerciseId = course.exercises[i];
-        let exerciseObj = exercisesMap.get(exerciseId);
-        if (exerciseObj) {
-          text_html += htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj)
-        }
-        let peerExerciseObj = peerExercisesMap.get(exerciseId);
-        if (peerExerciseObj) {
-          text_html += htmlOfPeerExerciseInRegisteredCourse(exerciseId, peerExerciseObj)
-        }
+      let exerciseId = course.exercises[i];
+      let exerciseObj = exercisesMap.get(exerciseId);
+      if (exerciseObj) {
+        text_html += htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj)
+      }
+      let peerExerciseObj = peerExercisesMap.get(exerciseId);
+      if (peerExerciseObj) {
+        text_html += htmlOfPeerExerciseInRegisteredCourse(exerciseId, peerExerciseObj)
+      }
     }
   }
   $newPanel.find('.panel-body').append(text_html);
@@ -395,45 +392,14 @@ function endGame(exerciseId) {
   // }
 }
 
-/**
- * BUTTON MANAGE COURSE.
- * Send he user to the manage course page.
- */
-document.getElementById('btnManageCourses').addEventListener('click', e => {
-  document.location.href = 'manageCourses.html';
-});
+// /**
+//  * BUTTON MANAGE COURSE.
+//  * Send he user to the manage course page.
+//  */
+// document.getElementById('btnManageCourses').addEventListener('click', e => {
+//   document.location.href = 'manageCourses.html';
+// });
 
-/**
- * BUTTON SETTINGS.
- * Send the user to the settings page.
- */
-document.getElementById('btnSettings').addEventListener('click', e => {
-  document.location.href = 'settings.html';
-});
-
-/**
- * BUTTON GRADES.
- * Send the user to the grades page.
- */
-document.getElementById('btnGrades').addEventListener('click', e => {
-  document.location.href = 'grades.html';
-});
-
-/**
- * BUTTON LOGOUT.
- * Log out the user and redirect him to the register page.
- */
-document.getElementById('btnLogOut').addEventListener('click', e => {
-  document.getElementById('btnManageCourses').style.display = 'none'
-  firebase.auth().signOut().then(
-    () => {
-      alert("Good bye!")
-      document.location.href = 'index.html'
-    },
-    (error) => {
-      alert("There was an error in sign out. Please try again. If the problem persists, please contact the programmer.")
-    });
-});
 
 $('body').on('click', '#btnTestPhase', function (e) {
   let exerciseId = e.target.name;
@@ -489,4 +455,16 @@ $('body').on('click', '#register', function (e) {
   let courseId = e.target.name;
   let course = coursesObject[courseId].course;
   registerSuccess(course, courseId);
+});
+
+
+
+$('a[href="#mycourses"]').click(function () {
+  $('a[href="#public"]').removeClass("current");
+  $('a[href="#mycourses"]').addClass("current");
+});
+
+$('a[href="#public"]').click(function () {
+  $('a[href="#mycourses"]').removeClass("current");
+  $('a[href="#public"]').addClass("current");
 });
