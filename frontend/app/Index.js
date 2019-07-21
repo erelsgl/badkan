@@ -27,21 +27,10 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
             id: id,
             checked: checked
         });
-        doPostJSON(json, "create_auth", onMessageCreateAuth)
-
-        // sendWebsocket(json, () => {}, onMessageCreateAuth, () => {}, onErrorAlert);
+        let onSuccess = () => {signIn(email, pass)}
+        doPostJSON(json, "create_auth", "text", (data) => {onMessageCreateAuth(data, onSuccess)})
     }
 });
-
-function onMessageCreateAuth(data) {
-    if (data == "success") {
-        signInSuccess();
-    } else if (data.includes("Failed to create new user.")) {
-        showSnackbar("Failed to create new user, please check that your email or id are unique.")
-    } else {
-        showSnackbar(data)
-    }
-}
 
 /**
  * BUTTON GITHUB.
@@ -73,7 +62,7 @@ document.getElementById('github').addEventListener('click', e => {
                     country_id: prom[0],
                     checked: checked
                 });
-                sendWebsocket(json, () => {}, onMessageCreateAuth, () => {}, onErrorAlert);
+                doPostJSON(json, "create_auth_github", "text", (data) => {onMessageCreateAuth(data, signInSuccess)})
             });
         } else {
             signInSuccess();
@@ -83,6 +72,15 @@ document.getElementById('github').addEventListener('click', e => {
     });
 });
 
+function onMessageCreateAuth(data, onSuccess) {
+    if (data == "success") {
+        onSuccess();
+    } else if (data.includes("Failed to create new user.")) {
+        showSnackbar("Failed to create new user, please check that your email or id are unique.")
+    } else {
+        showSnackbar(data)
+    }
+}
 
 /**
  * BUTTON LOGIN.
@@ -92,13 +90,20 @@ document.getElementById('github').addEventListener('click', e => {
 document.getElementById("btnLogin").addEventListener('click', e => {
     const email = document.getElementById("txtEmail").value;
     const pass = document.getElementById("txtPassword").value;
+    signIn(email, pass);
+});
+
+function signIn(email, pass) {
     firebase.auth().signInWithEmailAndPassword(email, pass).then(function () {
         signInSuccess();
     }).catch(error => {
         showSnackbar(error.message);
     })
-});
+}
 
+function signInSuccess() {
+    document.location.href = "home.html";
+}
 
 async function additionalInformation() {
     const {
@@ -180,7 +185,3 @@ $('a[href="#other"]').click(function () {
             "to run or download a specific project or all the projects..."
     });
 });
-
-function signInSuccess() {
-    document.location.href = "home.html";
-}

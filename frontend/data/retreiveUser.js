@@ -16,7 +16,7 @@ firebase.auth().onAuthStateChanged(function (user) {
 function retreiveDataForHomePage() {
     doPostJSON(JSON.stringify({
         uid: userUid,
-    }), "get_data_user", onFinishRetreiveUser)
+    }), "get_data_user", "json", onFinishRetreiveUser)
 }
 
 function onFinishRetreiveUser(data) {

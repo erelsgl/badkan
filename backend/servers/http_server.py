@@ -24,6 +24,18 @@ def create_auth():
     return create_new_auth(response)
 
 
+@app.route('/create_auth_github/', methods=["POST"])
+def create_auth_github():
+    response = request.get_json()
+    return create_new_auth_github(response)
+
+
+@app.route('/edit_user/', methods=["POST"])
+def edit_user():
+    response = request.get_json()
+    return edit_user_routine(response)
+
+
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')

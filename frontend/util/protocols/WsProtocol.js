@@ -38,10 +38,6 @@ function onErrorTemplate(_event) {
     logServer("color:red", "Error in websocket.");
 }
 
-function onErrorAlert(_event) {
-    swal(_event.data)
-}
-
 function onMessageWebsocketSubmissionNormal(event) {
     logServer("color:black; margin:0 1em 0 1em", event.data);
     // The line "Final Grade:<grade>" is written in server.py:check_submission

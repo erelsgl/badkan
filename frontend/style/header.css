@@ -1,7 +1,6 @@
 #logo {
-    width: 5%;
     float:left;
-    width: 5%;
+    width:5%;
     height: auto;
 }
 
@@ -25,6 +24,7 @@
 }
 
 .dropbtn {
+    width: 100%;
     background-color: Transparent;
     background-repeat:no-repeat;
     color: #FFF;

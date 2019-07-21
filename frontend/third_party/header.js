@@ -1,11 +1,22 @@
 $('a[href="#settings"]').click(function () {
     var info = settings();
     info.then((prom) => {
-        // Handle here the changes.
-        console.log(prom)
+        let json = JSON.stringify({
+            uid: userUid,
+            display_name: prom[0] + " " + prom[1],
+            country_id: prom[2]
+        });
+        doPostJSON(json, "edit_user", "text", onEditSuccess)
     });
-
 });
+
+function onEditSuccess(data) {
+    if (data == "success") {
+        location.reload()
+    } else {
+        showSnackbar(data)
+    }
+}
 
 $('a[href="#logout"]').click(function () {
     signOut();
@@ -48,9 +59,9 @@ function deleteConfirmation() {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.value) {
-            doPostJSONWithoutReturn(JSON.stringify({
+            doPostJSON(JSON.stringify({
                 uid: userUid,
-            }), "delete_account", signOut)
+            }), "delete_account", "text", signOut)
         }
     })
 }
