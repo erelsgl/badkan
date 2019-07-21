@@ -14,16 +14,14 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 function retreiveDataForHomePage() {
-    let json = JSON.stringify({
-        target: "get_data_user",
+    doPostJSON(JSON.stringify({
         uid: userUid,
-    });
-    sendWebsocket(json, () => { }, onFinishRetreiveUser, () => { }, onErrorAlert);
+    }), "get_data_user", onFinishRetreiveUser)
 }
 
-function onFinishRetreiveUser(message) {
-    userDetails = JSON.parse(message.data.replace(/'/g, "\""))
-    let display_name = userDetails["display_name"].split(" ");
+function onFinishRetreiveUser(data) {
+    userDetails = data
+    let display_name = data["display_name"].split(" ");
     userDetails["name"] = display_name[0];
     userDetails["last_name"] = display_name[1];
     $("#button_profile").html(userDetails["name"]);

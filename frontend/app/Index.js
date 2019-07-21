@@ -20,7 +20,6 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
             return;
         }
         let json = JSON.stringify({
-            target: "create_auth",
             email: email,
             pass: pass,
             name: name,
@@ -28,9 +27,21 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
             id: id,
             checked: checked
         });
-        sendWebsocket(json, () => {}, onMessageCreateAuth, () => {}, onErrorAlert);
+        doPostJSON(json, "create_auth", onMessageCreateAuth)
+
+        // sendWebsocket(json, () => {}, onMessageCreateAuth, () => {}, onErrorAlert);
     }
 });
+
+function onMessageCreateAuth(data) {
+    if (data == "success") {
+        signInSuccess();
+    } else if (data.includes("Failed to create new user.")) {
+        showSnackbar("Failed to create new user, please check that your email or id are unique.")
+    } else {
+        showSnackbar(data)
+    }
+}
 
 /**
  * BUTTON GITHUB.

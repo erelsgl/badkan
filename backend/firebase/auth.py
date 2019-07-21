@@ -2,16 +2,16 @@ from import_firebase import *
 from realtime import *
 
 
-async def create_auth(websocket, submission):
+def create_new_auth(submission):
     try:
         user = auth.create_user(
             email=submission["email"],
             password=submission["pass"],
             display_name=submission["name"] + " " + submission["lastName"])
         edit_admin(submission["checked"], submission["id"], user.uid)
-        await tee(websocket, "success")
+        return "success"
     except Exception as e:
-        await tee(websocket, str(e))
+        return str(e)
 
 
 async def create_auth_github(websocket, submission):
@@ -29,12 +29,11 @@ def get_user_auth_data(uid):
     return user
 
 
-async def delete_account(uid):
+def disable_account(uid):
     user = auth.update_user(
         uid,
         disabled=True)
-    print('Sucessfully updated user: {0}'.format(user.uid))
-   
+    return "success"
 
 
 async def edit_auth(user):

@@ -48,11 +48,9 @@ function deleteConfirmation() {
         confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.value) {
-            let json = JSON.stringify({
-                target: "delete_account",
+            doPostJSONWithoutReturn(JSON.stringify({
                 uid: userUid,
-            });
-            sendWebsocket(json, () => { }, () => { }, signOut, onErrorAlert);
+            }), "delete_account", signOut)
         }
     })
 }
