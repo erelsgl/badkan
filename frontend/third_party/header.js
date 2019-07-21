@@ -1,6 +1,7 @@
 $('a[href="#settings"]').click(function () {
     var info = settings();
     info.then((prom) => {
+        // Handle here the changes.
         console.log(prom)
     });
 
@@ -16,11 +17,11 @@ async function settings() {
     } = await Swal.fire({
         title: 'Settings',
         html: '<label for="name">Name: </label>' +
-            '<input id="name" class="swal2-input" value="Samuel">' + // Retreive here the data.
+            '<input id="name" class="swal2-input" value=' + userDetails["name"] + '>' + // Retreive here the data.
             '<label for="lastname">Last name: </label>' +
-            '<input id="lastname" class="swal2-input" value="Bismuth">' + // Retreive here the data.
+            '<input id="lastname" class="swal2-input" value=' + userDetails["last_name"] + '>' + // Retreive here the data.
             '<label for="user_country_id">Id</label>' +
-            '<input id="user_country_id" class="swal2-input" value="342533064">' + // Retreive here the data.
+            '<input id="user_country_id" class="swal2-input" value=' + userDetails["country_id"] + '>' + // Retreive here the data.
             '<a class="btn btn-danger" onclick="deleteConfirmation();">Delete account</a>',
         focusConfirm: false,
         preConfirm: () => {
@@ -57,16 +58,14 @@ function deleteConfirmation() {
 }
 
 function signOut() {
-    firebase.auth().signOut().then(
-        () => {
-            document.location.href = 'index.html'
-        },
-        (error) => {
-            console.log(error)
-            Swal.fire(
-                'Error',
-                'There was an error in sign out. Please try again. If the problem persists, please contact the programmer.',
-                'error'
-            )
-        });
+    firebase.auth().signOut().then(function () {
+        console.log('Signed Out');
+    }, function (error) {
+        console.log(error)
+        Swal.fire(
+            'Error',
+            'There was an error in sign out. Please try again. If the problem persists, please contact the programmer.',
+            'error'
+        )
+    });
 }

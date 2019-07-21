@@ -3,29 +3,6 @@
  * in the internal storage. Really important.
  */
 
-let userUid;
-let userDetails;
-
-firebase.auth().onAuthStateChanged(function (user) {
-  if (user) {
-    userUid = user.uid;
-    retreiveDataForHomePage();
-  } else {
-    alert("No user is signed in.")
-  }
-});
-
-function retreiveDataForHomePage() {
-  let json = JSON.stringify({
-    target: "get_data_user",
-    uid: userUid,
-  });
-  sendWebsocket(json, () => { }, onFinishRetreiveUser, loadHTML, onErrorAlert);
-}
-
-function onFinishRetreiveUser(message) {
-  alert(message.data)
-}
 
 function loadHTML() {
 

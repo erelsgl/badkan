@@ -16,11 +16,25 @@ async def create_auth(websocket, submission):
 
 async def create_auth_github(websocket, submission):
     try:
-        edit_admin(submission["checked"], submission["country_id"], submission["uid"])
+        edit_admin(submission["checked"],
+                   submission["country_id"], submission["uid"])
         await tee(websocket, "success")
     except Exception as e:
         await tee(websocket, str(e))
 
+
+def get_user_auth_data(uid):
+    user = auth.get_user(uid)
+    # print('Successfully fetched user data: {0}'.format(user.uid))
+    return user
+
+
+async def delete_account(uid):
+    user = auth.update_user(
+        uid,
+        disabled=True)
+    print('Sucessfully updated user: {0}'.format(user.uid))
+   
 
 
 async def edit_auth(user):
@@ -32,9 +46,3 @@ async def edit_auth(user):
         photo_url='http://www.example.com/12345678/photo.png',
         disabled=True)
     print('Sucessfully updated user: {0}'.format(user.uid))
-
-
-def retreive_auth(uid):
-    user = auth.get_user(uid)
-    print('Successfully fetched user data: {0}'.format(user.uid))
-    print(user)
