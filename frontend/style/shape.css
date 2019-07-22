@@ -15,12 +15,14 @@ html, body {
 
 
 #header {
+    display: none;
     background: #C0C0C0;
     width: 100%;
     position: relative;
 }
 
 #main {
+    display: none;
     background: rgb(211, 230, 241);
     width: 100%;
     position: relative;

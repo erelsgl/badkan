@@ -3,20 +3,19 @@
  * in the internal storage. Really important.
  */
 
-
-function loadHTML() {
-
+function onLoadMain() {
+  $('#main').show();
 }
 
-var $template = $('.template');
-let hash = 2;
+// var $template = $('.template');
+// let hash = 2;
 
-var numRegistered = 0,
-  numUnregistered = 0
+// var numRegistered = 0,
+//   numUnregistered = 0
 
-var exercisesMap = new Map();
-var peerExercisesMap = new Map();
-var submissionsArray = []
+// var exercisesMap = new Map();
+// var peerExercisesMap = new Map();
+// var submissionsArray = []
 
 // /**
 //  * ON STATE CHANGE.

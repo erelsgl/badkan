@@ -3,6 +3,12 @@
  */
 
 /**
+ * There is nothing to wait for, then we show the main and the header within the beginning of the load.
+ */
+$('#header').show();
+$('#main').show();
+
+/**
  * BUTTON SIGNUP.
  * Here we first authenticate the user,
  * then we register the user in the realtime database,
