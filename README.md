@@ -121,6 +121,7 @@ We also use crontab to send notification, then from the notifications folder ple
 
 Please, check that in the files crontab-notifications, the cd is sending you to the good place.
 
+
 ## Installing the Apache server
 
 ## 1 — Installing Apache

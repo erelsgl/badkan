@@ -2,8 +2,8 @@
  * Here the current user must be loaded and all the data needed must be loaded
  * in the internal storage. Really important.
  */
-
 function onLoadMain() {
+
   $('#main').show();
 }
 
