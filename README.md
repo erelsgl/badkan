@@ -30,7 +30,7 @@ Go to Authentication, in the "Sign-in method" enable GitHub.
 
 You also need to initialize the storage database by clicking on it and clicking on the confirmation button.
 
-Enable the admin privilege (for the backup):
+Enable the admin privilege (for the backup): 
 
 First download the package with:
 
