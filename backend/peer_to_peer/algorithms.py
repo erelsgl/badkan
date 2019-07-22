@@ -54,7 +54,7 @@ def smooth_grades(tests_dict, codes_dict, number_of_students, learning_rate):
     """
     tests_plot = []
     codes_plot = []
-    for i in range(0, 10):
+    for i in range(0, 90):
         sum_of_all_weights = 0
         test_iter_plot = []
         code_iter_plot = []
@@ -108,7 +108,7 @@ def get_list(my_dict, keys):
 
 tests_dict = {"t_1": [1, "u_1"],
               "t_2": [1, "u_3"],
-              "t_3": [1, "u_3"],
+              "t_3": [1, "u_2"],
               "t_4": [1, "u_1", "u_2", "u_3"]}
 
 

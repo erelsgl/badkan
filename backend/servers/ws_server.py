@@ -51,10 +51,6 @@ async def run(websocket, path):
         pass
     elif target == "delete_course":
         pass
-    elif target == "create_auth":
-        await create_auth(websocket, submission)
-    elif target == "create_auth_github":
-        await create_auth_github(websocket, submission)
     else:
         print("Illegal target {}".format(target))
     update_courses()      # TODO: verify that Firebase has finished updating.

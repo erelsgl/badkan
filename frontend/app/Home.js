@@ -3,89 +3,93 @@
  * in the internal storage. Really important.
  */
 
-var $template = $('.template');
-let hash = 2;
+function onLoadMain() {
+  $('#main').show();
+}
 
-var numRegistered = 0,
-  numUnregistered = 0
+// var $template = $('.template');
+// let hash = 2;
 
-var exercisesMap = new Map();
-var peerExercisesMap = new Map();
-var submissionsArray = []
+// var numRegistered = 0,
+//   numUnregistered = 0
 
-/**
- * ON STATE CHANGE.
- * Every time the state of the user is changed, this function is called.
- */
-firebase.auth().onAuthStateChanged(authUser => {
-  localStorage.clear()
-  /*** This code runs if there is a logged-in user. ***/
-  if (authUser) {
-    var userId = authUser.uid
-    // For the next pages
-    localStorage.setItem('homeUserId', JSON.stringify(userId))
-    // For the Home page.
-    window.uid = userId;
-    loadCurrentUser(userId, (homeUser) => {   // in utils/Firebase.js
+// var exercisesMap = new Map();
+// var peerExercisesMap = new Map();
+// var submissionsArray = []
 
-      document.getElementById("name").innerHTML =
-        "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
-        "ID number: " + homeUser.id + "<br />" +
-        "Email: " + homeUser.email + "<br />";
-      if (homeUser.admin) {
-        if (homeUser.admin === true) {
-          document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
-          $("#btnManageCourses").show()
-        }
-      }
+// /**
+//  * ON STATE CHANGE.
+//  * Every time the state of the user is changed, this function is called.
+//  */
+// firebase.auth().onAuthStateChanged(authUser => {
+//   localStorage.clear()
+//   /*** This code runs if there is a logged-in user. ***/
+//   if (authUser) {
+//     var userId = authUser.uid
+//     // For the next pages
+//     localStorage.setItem('homeUserId', JSON.stringify(userId))
+//     // For the Home page.
+//     window.uid = userId;
+//     loadCurrentUser(userId, (homeUser) => {   // in utils/Firebase.js
 
-      // For the next pages
-      localStorage.setItem('homeUser', JSON.stringify(homeUser))
-      // For the Home page.
-      window.homeUser = homeUser;
+//       document.getElementById("name").innerHTML =
+//         "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
+//         "ID number: " + homeUser.id + "<br />" +
+//         "Email: " + homeUser.email + "<br />";
+//       if (homeUser.admin) {
+//         if (homeUser.admin === true) {
+//           document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
+//           $("#btnManageCourses").show()
+//         }
+//       }
 
-      if (exercisesObject) {  // defined in file data/exercises.js
-        // synchronous
-        for (key in exercisesObject) {
-          exercisesMap.set(key, exercisesObject[key].exercise)
-        }
-      } else {
-        alert("Exercises object not found - please try again or contact the programmer")
-        finishLoading()  // defined in util/Loading.js
-      }
-      loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
-      loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
-        if (coursesObject) {  // defined in file data/courses.js
-          // synchronous
-          for (key in coursesObject) {
-            course = coursesObject[key].course
-            addCourseHTML(key, course)
-          }
+//       // For the next pages
+//       localStorage.setItem('homeUser', JSON.stringify(homeUser))
+//       // For the Home page.
+//       window.homeUser = homeUser;
 
-          // on all courses loaded:
-          if (numUnregistered == 0) {
-            $('#accordion-unregistered').append('<p>No other courses!</p>');
-          }
-          if (numRegistered == 0) {
-            $('#accordion-registered')
-              .append('<p>You are not registered to any course yet!</p>');
-          }
+//       if (exercisesObject) {  // defined in file data/exercises.js
+//         // synchronous
+//         for (key in exercisesObject) {
+//           exercisesMap.set(key, exercisesObject[key].exercise)
+//         }
+//       } else {
+//         alert("Exercises object not found - please try again or contact the programmer")
+//         finishLoading()  // defined in util/Loading.js
+//       }
+//       loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
+//       loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
+//         if (coursesObject) {  // defined in file data/courses.js
+//           // synchronous
+//           for (key in coursesObject) {
+//             course = coursesObject[key].course
+//             addCourseHTML(key, course)
+//           }
 
-          // Finally, stop the loading
-          finishLoading()
-        } else {
-          alert("Courses object not found - please try again or contact the programmer")
-          finishLoading()
-        }
-      })
-    })
-  }
-  /*** This code runs if there is NO logged-in user. ***/
-  else {
-    alert("You're not connected, try to sign in again!")
-    document.location.href = "index.html"
-  }
-})
+//           // on all courses loaded:
+//           if (numUnregistered == 0) {
+//             $('#accordion-unregistered').append('<p>No other courses!</p>');
+//           }
+//           if (numRegistered == 0) {
+//             $('#accordion-registered')
+//               .append('<p>You are not registered to any course yet!</p>');
+//           }
+
+//           // Finally, stop the loading
+//           finishLoading()
+//    try to sign in again!
+//    try to sign in again!found - please try again or contact the programmer")
+//    try to sign in again!
+//    try to sign in again!
+//    try to sign in again!
+//    try to sign in again!
+//   }try to sign in again!
+//   /*** This code runs if there is NO logged-in user. ***/
+//   else {
+//     alert("You're not connected, try to sign in again!")
+//     document.location.href = "index.html"
+//   }
+// })
 
 function addCourseHTML(key, course) {
   //  First see if course if private or not:

@@ -105,6 +105,10 @@ Please, install pandas in the server by running the next command:
 
     pip3 install pandas
 
+Please, install flask in the server by running the next command:
+
+    sudo pip3 install flask
+
 Since we use contrab for the backup, from the database_exports folder please run:
 
     crontab crontab-backup

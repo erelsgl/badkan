@@ -10,7 +10,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <script src='util/FirebaseConfig.js'></script>
     <script type="text/javascript" src="util/Firebase.js"></script>
@@ -18,6 +17,10 @@
     <script type="text/javascript" src="objects/MyNotification.js"></script>
     <script type="text/javascript" src="util/EmptyFields.js"></script>
     <script type="text/javascript" src="util/utils.js"></script>
+    <script type="text/javascript" src="util/protocols/httpProtocol.js"></script>
+
+
+
     <script type="text/javascript" src="util/protocols/WsProtocol.js"></script>
 
     <!-- Import css. -->
@@ -38,7 +41,7 @@
 <body>
     <div id="header">
         <div class="container">
-            <input id="logo" type="image" src="logo/logo_transparent.png" onclick="location.reload();">
+            <input id="logo" type="image" src="logo/banner.png" onclick="location.reload();">
             <div id="pagename">Automatic checking and grading of programming assignments...</div>
         </div>
     </div>
@@ -152,7 +155,8 @@
                                             placeholder="Id">
                                     </div>
                                 </div>
-                                <input id="instructor" type="checkbox" name="instructor" value="instructor"> Register as instructor<br>
+                                <input id="instructor" type="checkbox" name="instructor" value="instructor"> Register as
+                                instructor<br>
                                 <button id="btnSignUp" type="button"
                                     class="w3-button w3-block w3-section w3-blue w3-ripple">Register</button>
                             </p>

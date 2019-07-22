@@ -15,13 +15,20 @@
   <script src='util/FirebaseConfig.js'></script>
   <script src='util/utils.js'></script>
 
-  <script type="text/javascript" src="objects/Deadline.js"></script>
-  <script type="text/javascript" src="objects/PeerExercise.js"></script>
+
+  <script type="text/javascript" src="util/protocols/WsProtocol.js"></script>
+  <script type="text/javascript" src="util/protocols/httpProtocol.js"></script>
+
+  <script type="text/javascript" src="data/retreiveUser.js"></script>
+
+  <script type="text/javascript" src="util/Notif.js"></script>
   <script type="text/javascript" src="objects/MyNotification.js"></script>
 
+
+
+  <script type="text/javascript" src="objects/Deadline.js"></script>
+  <script type="text/javascript" src="objects/PeerExercise.js"></script>
   <script type="text/javascript" src="util/Firebase.js"></script>
-  <script type="text/javascript" src="util/protocols/WsProtocol.js"></script>
-  <script type="text/javascript" src="util/Notif.js"></script>
 
   <!-- Import css. -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
@@ -38,7 +45,7 @@
 <body>
   <div id="header">
     <div class="container">
-      <input id="logo" type="image" src="logo/logo_transparent.png" onclick="location.reload();">
+      <input id="logo" type="image" src="logo/logo.png" onclick="location.reload();">
       <div id="pagename">Home Page</div>
       <div id="notif">
         <ul>
@@ -53,10 +60,10 @@
           </li>
         </ul>
       </div>
-      <div id="home">Home</div>
+      <div id="home" onclick="document.location.href='home.html'">Home</div>
 
       <div class="dropdown">
-        <button class="dropbtn">Samuel</button>
+        <button id=button_profile class="dropbtn"></button>
         <div class="dropdown-content">
           <a href="grades.html"><i class="glyphicon glyphicon-user"></i> Profile</a>
           <a href="#settings"><i class="glyphicon glyphicon-cog"></i> Settings</a>

@@ -3,6 +3,12 @@
  */
 
 /**
+ * There is nothing to wait for, then we show the main and the header within the beginning of the load.
+ */
+$('#header').show();
+$('#main').show();
+
+/**
  * BUTTON SIGNUP.
  * Here we first authenticate the user,
  * then we register the user in the realtime database,
@@ -20,7 +26,6 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
             return;
         }
         let json = JSON.stringify({
-            target: "create_auth",
             email: email,
             pass: pass,
             name: name,
@@ -28,7 +33,8 @@ document.getElementById("btnSignUp").addEventListener('click', e => {
             id: id,
             checked: checked
         });
-        sendWebsocket(json, () => {}, onMessageCreateAuth, () => {}, onErrorAlert);
+        let onSuccess = () => {signIn(email, pass)}
+        doPostJSON(json, "create_auth", "text", (data) => {onMessageCreateAuth(data, onSuccess)})
     }
 });
 
@@ -62,16 +68,25 @@ document.getElementById('github').addEventListener('click', e => {
                     country_id: prom[0],
                     checked: checked
                 });
-                sendWebsocket(json, () => {}, onMessageCreateAuth, () => {}, onErrorAlert);
+                doPostJSON(json, "create_auth_github", "text", (data) => {onMessageCreateAuth(data, signInSuccess)})
             });
         } else {
-            document.location.href = "home.html";
+            signInSuccess();
         }
     }).catch(function (error) {
         showSnackbar(error.message);
     });
 });
 
+function onMessageCreateAuth(data, onSuccess) {
+    if (data == "success") {
+        onSuccess();
+    } else if (data.includes("Failed to create new user.")) {
+        showSnackbar("Failed to create new user, please check that your email or id are unique.")
+    } else {
+        showSnackbar(data)
+    }
+}
 
 /**
  * BUTTON LOGIN.
@@ -81,13 +96,20 @@ document.getElementById('github').addEventListener('click', e => {
 document.getElementById("btnLogin").addEventListener('click', e => {
     const email = document.getElementById("txtEmail").value;
     const pass = document.getElementById("txtPassword").value;
+    signIn(email, pass);
+});
+
+function signIn(email, pass) {
     firebase.auth().signInWithEmailAndPassword(email, pass).then(function () {
-        document.location.href = "home.html";
+        signInSuccess();
     }).catch(error => {
         showSnackbar(error.message);
     })
-});
+}
 
+function signInSuccess() {
+    document.location.href = "home.html";
+}
 
 async function additionalInformation() {
     const {

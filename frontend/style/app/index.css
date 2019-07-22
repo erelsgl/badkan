@@ -1,6 +1,7 @@
 #logo{
+    padding-top: 1%;
     float:left;
-    width: 10%;
+    width: 20%;
     height: auto;
 }
 
@@ -8,7 +9,7 @@
     float:left;
     padding-left: 2%;
     padding-top: 1%;
-    width: 90%;
+    width: 80%;
     color: #9799a7;
     font-family: Georgia, Times, "Times New Roman", serif;
     font-style: italic;
