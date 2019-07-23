@@ -17,6 +17,8 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="style/app/home.css">
+  <link rel="stylesheet" href="util/accordion_style.css">
+
 </head>
 
 <body>
@@ -39,14 +41,17 @@
         <div id=becomeInstructor><button onclick="becomeInstructor.html">Become Instructor</button></div>
         <div id=instructorZone><button id="btnManageCourses" type="button">Manage courses</button></div>
       </div>
+      <div class="container">
       <div id="courses">
-        <div class="container">
+        <div class="container" id="accordion">
         </div>
+      </div>
       </div>
     </div>
   </div>
 
   <script type="text/javascript" src="app/home.js"></script>
+  <script type="text/javascript" src="util/html/accordion.js"></script>
   <script type="text/javascript" src="third_party/header.js"></script>
 
 </body>

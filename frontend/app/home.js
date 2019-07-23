@@ -9,6 +9,11 @@ $('a[href="#public"]').click(function () {
 });
 
 function onLoadMain() {
+
+  var div = $("#accordion");
+  createAccordion(div,"courseName", "exercises");
+  createAccordion(div,"courseName", "exercises");
+  accordion_listener("accordion");
   $('#main').show();
 }
 
