@@ -11,6 +11,7 @@ firebase.auth().onAuthStateChanged(function (user) {
     } else {
         document.location.href = "index.html"
     };
+
 });
 
 function retreiveDataForHeader() {
@@ -25,6 +26,9 @@ function retreiveDataForHeader() {
  */
 function onFinishRetreiveUser(data) {
     userDetails = data
+    if(!data["display_name"]) {
+        data["display_name"]= "anonymous anonymous"
+    }
     let display_name = data["display_name"].split(" ");
     userDetails["name"] = display_name[0];
     userDetails["last_name"] = display_name[1];
