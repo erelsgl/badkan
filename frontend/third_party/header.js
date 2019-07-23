@@ -1,3 +1,63 @@
+// Here are all the script needed by the header
+var scripts = ["util/firebaseConfig.js", "util/utils.js", "data/retreiveUser.js", "util/notif.js", "util/protocols/httpProtocol.js"];
+for (index = 0; index < scripts.length; ++index) {
+    var script = document.createElement('script');
+    script.src = scripts[index];
+    script.type = 'text/javascript';
+    var done = false;
+    script.onload = script.onreadystatechange = function () {
+        if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
+            done = true;
+        }
+    };
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
+
+// Here are all the links needed by the header
+var links = ["style/header.css", "style/notif.css", "style/shape.css"];
+for (index = 0; index < links.length; ++index) {
+    var link = document.createElement('link');
+    link.href = links[index];
+    link.rel = 'stylesheet';
+    var done = false;
+    link.onload = link.onreadystatechange = function () {
+        if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
+            done = true;
+        }
+    };
+    document.getElementsByTagName("head")[0].appendChild(link);
+}
+
+// Here is the html code needed in the body.
+let div = '<div class="container">' +
+    '<input id = "logo" type = "image" src = "logo/logo.png" onclick = "document.location.href=\'home.html\'">' +
+    '<div id="pagename">Home Page</div>' +
+    '<div id="notif">' +
+    '<ul>' +
+    '<li id="noti_Container">' +
+    '<div id="noti_Counter"></div>' +
+    '<div id="noti_Button"></div>' +
+    '<div id="notifications">' +
+    '<div class="notif">Notifications</div>' +
+    '<div id=addNotif></div>' +
+    '<div style="height:300px;"></div>' +
+    '</div>' +
+    '</li>' +
+    '</ul>' +
+    '</div>' +
+    '<div id="home" onclick="document.location.href=\'home.html\'">Home</div>' +
+
+    '<div class="dropdown">' +
+    '<button id=button_profile class="dropbtn"></button>' +
+    '<div class="dropdown-content">' +
+    '<a href="grades.html"><i class="glyphicon glyphicon-user"></i> Profile</a>' +
+    '<a href="#settings"><i class="glyphicon glyphicon-cog"></i> Settings</a>' +
+    '<a href="#logout"><i class="glyphicon glyphicon-off"></i> Log Out</a>' +
+    '</div>' +
+    '</div>' +
+    '</div >'
+$("#header").append(div);
+
 $('a[href="#settings"]').click(function () {
     var info = settings();
     info.then((prom) => {
@@ -10,6 +70,10 @@ $('a[href="#settings"]').click(function () {
     });
 });
 
+$('a[href="#logout"]').click(function () {
+    signOut();
+});
+
 function onEditSuccess(data) {
     if (data == "success") {
         location.reload()
@@ -17,10 +81,6 @@ function onEditSuccess(data) {
         showSnackbar(data)
     }
 }
-
-$('a[href="#logout"]').click(function () {
-    signOut();
-});
 
 async function settings() {
     const {
@@ -37,9 +97,9 @@ async function settings() {
         focusConfirm: false,
         preConfirm: () => {
             return [
-                document.getElementById('name').value,
-                document.getElementById('lastname').value,
-                document.getElementById('user_country_id').value
+                escapeHtml(document.getElementById('name').value),
+                escapeHtml(document.getElementById('lastname').value),
+                escapeHtml(document.getElementById('user_country_id').value)
             ]
         }
     })

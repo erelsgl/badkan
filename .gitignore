@@ -111,5 +111,5 @@ exercises/*/
 statistics/*/
 database_exports/*
 moss/*/
-frontend/util/FirebaseConfig.js
+frontend/util/firebaseConfig.js
 restore/*.csv

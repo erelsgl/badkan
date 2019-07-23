@@ -30,7 +30,7 @@ Go to Authentication, in the "Sign-in method" enable GitHub.
 
 You also need to initialize the storage database by clicking on it and clicking on the confirmation button.
 
-Enable the admin privilege (for the backup):
+Enable the admin privilege (for the backup): 
 
 First download the package with:
 
@@ -120,6 +120,7 @@ We also use crontab to send notification, then from the notifications folder ple
     crontab crontab-notifications
 
 Please, check that in the files crontab-notifications, the cd is sending you to the good place.
+
 
 ## Installing the Apache server
 

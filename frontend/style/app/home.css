@@ -4,8 +4,9 @@
 }
 
 #courses {
+    padding-left: 2%; 
     float: left;
-    width: 83%;
+    width: 82%;
 }
 
 .ul {
