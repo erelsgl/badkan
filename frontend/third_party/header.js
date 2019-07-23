@@ -53,9 +53,9 @@ let div = '<div class="container">' +
     '<div class="dropdown">' +
     '<button id=button_profile class="dropbtn"></button>' +
     '<div class="dropdown-content">' +
-    '<a href="grades.html"><i class="glyphicon glyphicon-user"></i> Profile</a>' +
-    '<a href="#settings"><i class="glyphicon glyphicon-cog"></i> Settings</a>' +
-    '<a href="#logout"><i class="glyphicon glyphicon-off"></i> Log Out</a>' +
+    '<a href="grades.html" style="text-decoration: none;"><i class="glyphicon glyphicon-user"></i> Profile</a>' +
+    '<a href="#settings" style="text-decoration: none;"><i class="glyphicon glyphicon-cog"></i> Settings</a>' +
+    '<a href="#logout" style="text-decoration: none;"><i class="glyphicon glyphicon-off"></i> Log Out</a>' +
     '</div>' +
     '</div>' +
     '</div >'

@@ -1,0 +1,29 @@
+ /* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+  padding: 1%;
+  background-color: #C0C0C0;
+  color: white;
+  cursor: pointer;
+  font-family: Georgia, Times, "Times New Roman", serif;
+  font-size: 20px;
+  text-align: center;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+  width: 100%;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .accordion:hover {
+  background-color: rgb(171, 190, 201);
+  font-weight: bold;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  border-left: 2px solid  #4885a8;
+  display: none;
+  overflow: hidden;
+} 
