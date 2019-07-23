@@ -7,16 +7,16 @@
   <title>Badkan Home</title>
 
   <!-- Import js. -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <!-- <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script> -->
-  <!-- <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script> -->
   <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="util/firebaseConfig.js"></script>
 
   <!-- Import css. -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link async href="http://fonts.googleapis.com/css?family=Advent%20Pro" data-generated="http://enjoycss.com"
+    rel="stylesheet" type="text/css" />
   <link rel="stylesheet" href="style/app/home.css">
+  <link rel="stylesheet" href="style/button.css">
+
 </head>
 
 <body>
@@ -36,14 +36,16 @@
             </div>
           </ul>
         </div>
-        <div id=becomeInstructor><button onclick="becomeInstructor.html">Become Instructor</button></div>
-        <div id=instructorZone><button id="btnManageCourses" type="button">Manage courses</button></div>
-      </div>
-      <div id="courses">
-        <div class="container">
+        <div id=becomeInstructor class="enjoy-css" onclick="document.location.href = 'instructor.html'">Become instuctor
         </div>
+        <div id=instructorZone class="enjoy-css">Manage courses</div>
       </div>
     </div>
+    <div id="courses">
+      <div class="container">
+      </div>
+    </div>
+  </div>
   </div>
 
   <script type="text/javascript" src="app/home.js"></script>

@@ -41,6 +41,11 @@ def edit_user():
     return edit_user_routine(response)
 
 
+@app.route('/get_courses_and_exercises/', methods=["POST"])
+def get_courses():
+    return retreive_all_courses_and_exercises()
+
+
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')

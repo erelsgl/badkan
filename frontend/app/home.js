@@ -9,9 +9,18 @@ $('a[href="#public"]').click(function () {
 });
 
 function onLoadMain() {
-  $('#main').show();
+  // Make this part more secure...
+  if (userDetails.instructor == "False") {
+    $("#becomeInstructor").show()
+  } else {
+    $("#instructorZone").show()
+  }
+  doPostJSON("", "get_courses_and_exercises", "json", onFinishRetreiveData)
 }
 
+function onFinishRetreiveData(data) {
+  $('#main').show();
+}
 
 
 // var $template = $('.template');

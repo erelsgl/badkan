@@ -1,20 +1,6 @@
-// Here are all the script needed by the header
-var scripts = ["util/firebaseConfig.js", "util/utils.js", "data/retreiveUser.js", "util/notif.js", "util/protocols/httpProtocol.js"];
-for (index = 0; index < scripts.length; ++index) {
-    var script = document.createElement('script');
-    script.src = scripts[index];
-    script.type = 'text/javascript';
-    var done = false;
-    script.onload = script.onreadystatechange = function () {
-        if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
-            done = true;
-        }
-    };
-    document.getElementsByTagName("head")[0].appendChild(script);
-}
-
 // Here are all the links needed by the header
-var links = ["style/header.css", "style/notif.css", "style/shape.css"];
+var links = ["style/header.css", "style/notif.css", "style/shape.css",
+    "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css", "https://www.w3schools.com/w3css/4/w3.css"];
 for (index = 0; index < links.length; ++index) {
     var link = document.createElement('link');
     link.href = links[index];
@@ -28,10 +14,28 @@ for (index = 0; index < links.length; ++index) {
     document.getElementsByTagName("head")[0].appendChild(link);
 }
 
+// Here are all the script needed by the header
+var scripts = ["util/utils.js", "util/notif.js",
+    "util/protocols/httpProtocol.js", "https://cdn.jsdelivr.net/npm/sweetalert2@8", "data/retreiveUser.js"];
+for (index = 0; index < scripts.length; ++index) {
+    var script = document.createElement('script');
+    script.src = scripts[index];
+    script.type = 'text/javascript';
+    var done = false;
+    script.onload = script.onreadystatechange = function () {
+        if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
+            done = true;
+        }
+    };
+    document.getElementsByTagName("head")[0].appendChild(script);
+}
+
 // Here is the html code needed in the body.
 let div = '<div class="container">' +
     '<input id = "logo" type = "image" src = "logo/logo.png" onclick = "document.location.href=\'home.html\'">' +
-    '<div id="pagename">Home Page</div>' +
+    '<div id="pagename">' +
+    document.title +
+    '</div>' +
     '<div id="notif">' +
     '<ul>' +
     '<li id="noti_Container">' +
@@ -46,7 +50,6 @@ let div = '<div class="container">' +
     '</ul>' +
     '</div>' +
     '<div id="home" onclick="document.location.href=\'home.html\'">Home</div>' +
-
     '<div class="dropdown">' +
     '<button id=button_profile class="dropbtn"></button>' +
     '<div class="dropdown-content">' +

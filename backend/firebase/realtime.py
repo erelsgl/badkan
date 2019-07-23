@@ -19,3 +19,13 @@ def user_update(uid, json):
     ref = db.reference('userDetails')
     user_ref = ref.child(uid)
     user_ref.update(json)
+
+
+def retreive_all_courses_and_exercises():
+    courses = db.reference('courses/')
+    exercises = db.reference('exercises/')
+    answer = dict()
+    answer["courses"] = courses.get()
+    answer["exercises"] = exercises.get()
+    print(answer)
+    return answer
