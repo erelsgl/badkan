@@ -5,6 +5,11 @@ from flask import Flask, request, jsonify
 app = Flask(__name__)
 
 
+@app.route('/')
+def index():
+    return 'Index Page'
+
+
 @app.route('/get_data_user/', methods=["POST"])
 def get_data_user():
     response = request.get_json()

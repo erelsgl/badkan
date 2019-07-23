@@ -1,0 +1,2 @@
+function createAccordion(courseName, exercises, ) {
+}

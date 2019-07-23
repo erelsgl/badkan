@@ -108,3 +108,45 @@ function showSnackbar(message) {
     }, 2500);
     return;
 }
+
+/**
+ * This method check that all the field are filed.
+ * @param {String} name 
+ * @param {String} lastName 
+ * @param {Stirng} id 
+ */
+function checkEmptyFields(args) {
+    console.log(JSON.stringify(args))
+    var emptyField = document.getElementById("emptyField");
+    if (args.includes(undefined) || args.includes("")) {
+        emptyField.className = "show";
+        setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Sanitize the input of any user.
+ * @param {String} unsafe 
+ */
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/**
+ * Sanitize the input of any user with respect to git.
+ * @param {String} unsafe 
+ */
+function escapeHtmlWithRespectGit(unsafe) {
+    return unsafe
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}

@@ -20,7 +20,7 @@ def update_courses():
 
     DIR = os.path.dirname(os.path.realpath(__file__))
 
-    with open('../../frontend/util/FirebaseConfig.js') as dataFile:
+    with open('../../frontend/util/firebaseConfig.js') as dataFile:
         data = dataFile.read()
     id = re.search('projectId: "(.+?)",', data)
     FIREBASE_APP = id.group(1)

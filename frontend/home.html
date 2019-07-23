@@ -8,79 +8,19 @@
 
   <!-- Import js. -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script>
-  <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script>
+  <!-- <script src="https://unpkg.com/react@16/umd/react.production.min.js" crossorigin></script> -->
+  <!-- <script src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js" crossorigin></script> -->
   <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-  <script src='util/FirebaseConfig.js'></script>
-  <script src='util/utils.js'></script>
-
-  <script src='react/accordion.js'></script>
-  <script src='util/utils.js'></script>
-  <link rel="stylesheet" href="react/accordion.css">
-
-
-
-
-
-  <script type="text/javascript" src="util/protocols/WsProtocol.js"></script>
-  <script type="text/javascript" src="util/protocols/httpProtocol.js"></script>
-
-  <script type="text/javascript" src="data/retreiveUser.js"></script>
-
-  <script type="text/javascript" src="util/Notif.js"></script>
-  <script type="text/javascript" src="objects/MyNotification.js"></script>
-
-
-
-  <script type="text/javascript" src="objects/Deadline.js"></script>
-  <script type="text/javascript" src="objects/PeerExercise.js"></script>
-  <script type="text/javascript" src="util/Firebase.js"></script>
 
   <!-- Import css. -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="style/font.css">
-  <link rel="stylesheet" href="style/notif.css">
-  <link rel="stylesheet" href="style/header.css  ">
-  <link rel="stylesheet" href="style/shape.css  ">
   <link rel="stylesheet" href="style/app/home.css">
-  <link rel="stylesheet" href="style/style.css">
 </head>
 
 <body>
-  <div id="header">
-    <div class="container">
-      <input id="logo" type="image" src="logo/logo.png" onclick="location.reload();">
-      <div id="pagename">Home Page</div>
-      <div id="notif">
-        <ul>
-          <li id="noti_Container">
-            <div id="noti_Counter"></div>
-            <div id="noti_Button"></div>
-            <div id="notifications">
-              <div class="notif">Notifications</div>
-              <div id=addNotif></div>
-              <div style="height:300px;"></div>
-            </div>
-          </li>
-        </ul>
-      </div>
-      <div id="home" onclick="document.location.href='home.html'">Home</div>
-
-      <div class="dropdown">
-        <button id=button_profile class="dropbtn"></button>
-        <div class="dropdown-content">
-          <a href="grades.html"><i class="glyphicon glyphicon-user"></i> Profile</a>
-          <a href="#settings"><i class="glyphicon glyphicon-cog"></i> Settings</a>
-          <a href="#logout"><i class="glyphicon glyphicon-off"></i> Log Out</a>
-        </div>
-      </div>
-    </div>
-  </div>
+  <div id="header"></div>
 
   <div id="main">
     <div class="container">
@@ -96,7 +36,7 @@
             </div>
           </ul>
         </div>
-        <div id=becodeInstructor><button>Become Instructor</button></div>
+        <div id=becomeInstructor><button onclick="becomeInstructor.html">Become Instructor</button></div>
         <div id=instructorZone><button id="btnManageCourses" type="button">Manage courses</button></div>
       </div>
       <div id="courses">
@@ -106,27 +46,8 @@
     </div>
   </div>
 
-
-
-  <div class="accordion">
-
-    <div>
-      <h1> Heading </h1>
-      <div> Content </div>
-    </div>
-
-    <div>
-      <h1> Heading </h1>
-      <div> Content </div>
-    </div>
-
-  </div>
-
-
-  <script type="text/javascript" src="app/Home.js"></script>
+  <script type="text/javascript" src="app/home.js"></script>
   <script type="text/javascript" src="third_party/header.js"></script>
-
-  <script src='react/test.js'></script>
 
 </body>
 

@@ -10,7 +10,7 @@ sys.path.append("../util")
 
 from terminal import *
 
-with open('../../frontend/util/FirebaseConfig.js') as dataFile:
+with open('../../frontend/util/firebaseConfig.js') as dataFile:
     data = dataFile.read()
 
 id = re.search('projectId: "(.+?)",', data)
