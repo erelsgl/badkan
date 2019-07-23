@@ -16,6 +16,12 @@ function onLoadMain() {
     $("#instructorZone").show()
   }
   doPostJSON("", "get_courses_and_exercises", "json", onFinishRetreiveData)
+
+  var div = $("#accordion");
+  createAccordion(div,"courseName", "exercises");
+  createAccordion(div,"courseName", "exercises");
+  accordion_listener("accordion");
+  $('#main').show();
 }
 
 function onFinishRetreiveData(data) {

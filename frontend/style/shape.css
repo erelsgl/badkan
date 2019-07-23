@@ -26,4 +26,5 @@ html, body {
     background: rgb(211, 230, 241);
     width: 100%;
     position: relative;
+    height: 100%;
 }
