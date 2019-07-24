@@ -1,16 +1,46 @@
 #menunav {
-    float: left;
+    float: right;
+    margin-top: 2%;
     width: 17%;
+    background: #FFF;
+    border:1px solid #C0C0C0;
+    border-radius: 25px;
 }
 
-#courses {
-    padding-top: 1.5%;
-    padding-left: 2%; 
+#instructor {
+    margin-left: 7%;
+    margin-bottom: 7%;
+    margin-top: 20%;
+    width: 85%;
+    height: 100%;
+}
+
+#coursesContent {
+    display: block;
+    /* padding-top: 1.5%;
+    padding-left: 2%;  */
     float: left;
     width: 82%;
 }
 
+#becomeInstructor {
+    display: none;
+}
+
+#instructorZone {
+    display: none;
+}
+
+.unregisterCourses {
+    display: block;
+
+}
+.registerCourses {
+    display: none;
+}
+
 .ul {
+    margin-left:4%;
     list-style-type: none;
     overflow: hidden;
     width: 200px;
@@ -27,21 +57,21 @@
 
 .li a {
     display: block;
-    color: white;
+    color: #00bfff;
+    background: rgba(255,255,255,1); 
     font-family: Georgia, Times, "Times New Roman", serif;
     font-size: 20px;
-    text-align: center;
     text-decoration: none;
+    text-align: center;
 }
 
-.li a:hover:not(.active) {
-    background-color: #C0C0C0;
+.li a:hover {
+    color: rgba(255,255,255,1);
+    background: #00bfff;
 }
 
 .current {
-    background-color: rgb(171, 190, 201);
-}
-
-.current a {
-    color: black;
+    color: rgba(255,255,255,1) !important;
+    background: #00bfff !important;
+    text-decoration: none !important;
 }

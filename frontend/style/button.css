@@ -1,18 +1,15 @@
 .enjoy-css {
-    display: none;
-    margin-top: 20%;
     -webkit-box-sizing: content-box;
     -moz-box-sizing: content-box;
     box-sizing: content-box;
-    width: 100%;
-    height: 100%;
     cursor: pointer;
     border: 2px solid #00bfff;
     -webkit-border-radius: 40px;
     border-radius: 40px;
-    font: normal 20px "Advent Pro", Helvetica, sans-serif;
     color: #00bfff;
     text-align: center;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 18px;
     -o-text-overflow: clip;
     text-overflow: clip;
     letter-spacing: 1px;

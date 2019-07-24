@@ -1,15 +1,19 @@
 $('a[href="#mycourses"]').click(function () {
   $('a[href="#public"]').removeClass("current");
   $('a[href="#mycourses"]').addClass("current");
+  $("#registerCourses").show()
+  $("#unregisterCourses").hide()
 });
 
 $('a[href="#public"]').click(function () {
   $('a[href="#mycourses"]').removeClass("current");
   $('a[href="#public"]').addClass("current");
+  $("#registerCourses").hide()
+  $("#unregisterCourses").show()
 });
 
 function onLoadMain() {
-  // Make this part more secure...
+  // TODO: Make this part much more secure...
   if (userDetails.instructor == "False") {
     $("#becomeInstructor").show()
   } else {
@@ -19,9 +23,15 @@ function onLoadMain() {
 }
 
 function onFinishRetreiveData(data) {
-  var div = $("#accordion");  // Change the name.
-  createAccordion(div,"Course Name", ["exercises"]);  // Example.
-  accordion_listener("accordion");
+  // var registerCourses = $("#registerCourses"); 
+  // var unregisterCourses = $("#unregisterCourses");  
+  // createAccordion(registerCourses,"Register Courses", ["exercises"]);  // Example.
+  // createAccordion(unregisterCourses,"Unregister Courses", ["exercises"]);  // Example.
+  // createAccordion(registerCourses,"Register Courses2", ["exercises"]);  // Example.
+  // createAccordion(registerCourses,"Register Courses3", ["exercises"]);  // Example.
+  // createAccordion(registerCourses,"Register Courses4", ["exercises"]);  // Example.
+
+  // accordionListener()
   $('#main').show();
 }
 
