@@ -30,8 +30,6 @@ function onFinishRetreiveData(data) {
   createAccordion(registerCourses,"Register Courses2", ["exercises"]);  // Example.
   createAccordion(registerCourses,"Register Courses3", ["exercises"]);  // Example.
   createAccordion(registerCourses,"Register Courses4", ["exercises"]);  // Example.
-
-  // accordionListener()
   $('#main').show();
 }
 
