@@ -53,7 +53,6 @@ async def run(websocket, path):
         pass
     else:
         print("Illegal target {}".format(target))
-    update_courses()      # TODO: verify that Firebase has finished updating.
     if redirect:
         await tee(websocket, "@$@redirect@$@" + redirect)
     print("> Closing connection")

@@ -69,8 +69,8 @@ function websocketCloseReason(code) {
 }
 
 /**
-* From https://stackoverflow.com/a/901144/827927
-*/
+ * From https://stackoverflow.com/a/901144/827927
+ */
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -81,15 +81,10 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function adminPrivilege(checked) {
+function instructorPrivilege(checked) {
     if (checked) {
-        var response = prompt("Please enter the password to get admin privilege:");
-        if (response === "3ubf2e9-cb") {
-            return true;
-        } else {
-            alert("wrong password");
-            return false;
-        }
+        alert("Currently everyone can be instructor, we'll change this by redirecting the user to a payment page.")
+        return true;
     } else {
         return true;
     }
@@ -104,10 +99,54 @@ function displayBlockById(id) {
     document.getElementById(id).style.display = "block";
 }
 
-function showSnackbar(myClass) {
+function showSnackbar(message) {
+    $('#snackbar').html(message);
+    myClass = $('#snackbar')[0]
     myClass.className = "show";
     setTimeout(function () {
         myClass.className = myClass.className.replace("show", "");
     }, 2500);
     return;
+}
+
+/**
+ * This method check that all the field are filed.
+ * @param {String} name 
+ * @param {String} lastName 
+ * @param {Stirng} id 
+ */
+function checkEmptyFields(args) {
+    console.log(JSON.stringify(args))
+    var emptyField = document.getElementById("emptyField");
+    if (args.includes(undefined) || args.includes("")) {
+        emptyField.className = "show";
+        setTimeout(function () { emptyField.className = emptyField.className.replace("show", ""); }, 2500);
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Sanitize the input of any user.
+ * @param {String} unsafe 
+ */
+function escapeHtml(unsafe) {
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/**
+ * Sanitize the input of any user with respect to git.
+ * @param {String} unsafe 
+ */
+function escapeHtmlWithRespectGit(unsafe) {
+    return unsafe
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }

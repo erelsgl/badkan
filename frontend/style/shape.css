@@ -1,35 +1,29 @@
-html,
-
-
-body {
-    padding: 0;
-    height: 100%;
+* {
+    box-sizing: border-box;
 }
 
-#container {
-    min-height: 100%;
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#header {
+    display: none;
+    background: #C0C0C0;
+    width: 100%;
     position: relative;
 }
 
-#body {
-    margin-top:50px;
-    margin-left: 100px;
-    margin-right: 200px;
-
-}
-
-#enum {
-    position: absolute;
-    left: 129px;
-    left: 0;
-    margin-left: 70px;
-    margin-top: 50px;
-}
-
-#footer {
-    background: #FFF;
-    position:absolute;
-    bottom:0;
-    width:100%;
-    height:100px;   /* Height of the footer */
+#main {
+    display: none;
+    background: rgb(211, 230, 241);
+    width: 100%;
+    position: relative;
+    height: 100%;
 }

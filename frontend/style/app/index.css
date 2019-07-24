@@ -1,0 +1,35 @@
+#logo{
+    padding-top: 1%;
+    float:left;
+    width: 20%;
+    height: auto;
+}
+
+#pagename{
+    float:left;
+    padding-left: 2%;
+    padding-top: 1%;
+    width: 80%;
+    color: #9799a7;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-style: italic;
+    font-size: 35px;
+}
+
+#list {    
+    float:left;
+    padding-top: 8%;
+    padding-left: 4%;
+    padding-bottom: 5%;
+}
+
+#form {
+    float:right;   
+    padding-top: 10%;
+}
+
+#sofia {
+    font-family: 'Sofia';
+    font-size: 40px;
+    text-align: center;
+}

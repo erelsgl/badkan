@@ -191,7 +191,7 @@ function loadCurrentUser(userId, onLoaded) {
     var data = snapshot.val();
     if (!data || (typeof data === 'undefined')) {
       // User object does not exist
-      document.location.href = "completeInfo.html";
+     // document.location.href = "completeInfo.html";
     } else {
       // User object exists
       var homeUser = snapshot.val().user;

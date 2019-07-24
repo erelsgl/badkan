@@ -4,7 +4,7 @@
     width: 430px;
     position: absolute;
     top: 30px;
-    left: 0;
+    right: 0;
     z-index: 3;
     background: #FFF;
     border: solid 1px rgba(100, 100, 100, .20);
@@ -13,7 +13,6 @@
 
 ul {
     display: block;
-    background: #45619D;
     list-style: none;
     margin: 0;
     padding: 12px 10px;
@@ -36,7 +35,7 @@ ul.nav.nav-pills li a {
 }
 
 ul.nav.nav-pills li a:hover { 
-    background: #425B90;
+    background: rgb(32, 3, 20);
     text-decoration: none;
     cursor: pointer;
 }
@@ -57,13 +56,13 @@ ul li a {
 
 
 ul li a:hover {
-    background: #425B90;
+    background: rgb(144, 66, 79);
     text-decoration: none;
     cursor: pointer;
 }
 
 #noti_Container {
-    position: relative;
+    position: absolute;
 }
 
 /* A CIRCLE LIKE BUTTON IN THE TOP MENU. */
@@ -75,8 +74,13 @@ ul li a:hover {
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
     background: #FFF;
-    margin: -3px 10px 0 10px;
+    margin: 4px 10px 0 10px;
     cursor: pointer;
+}
+
+#noti_Button:hover {
+    background: #A9A9A9;
+
 }
 
 /* THE POPULAR RED NOTIFICATIONS COUNTER. */
@@ -100,15 +104,16 @@ ul li a:hover {
     content: '';
     display: block;
     width: 0;
+    float: right;
     height: 0;
     color: transparent;
     border: 10px solid #CCC;
     border-color: transparent transparent #FFF;
     margin-top: -20px;
-    margin-left: 10px;
+    margin-right: 10px;
 }
 
-h3 {
+.notif {
     display: block;
     color: #333;
     background: #FFF;

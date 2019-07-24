@@ -7,105 +7,88 @@
   <title>Badkan Home</title>
 
   <!-- Import js. -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-  <script src='util/FirebaseConfig.js'></script>
-  <script src='util/utils.js'></script>
-
-  <script type="text/javascript" src="objects/Deadline.js"></script>
-  <script type="text/javascript" src="objects/PeerExercise.js"></script>
-  <script type="text/javascript" src="objects/MyNotification.js"></script>
-
-  <script type="text/javascript" src="util/Firebase.js"></script>
-  <script type="text/javascript" src="util/protocols/WsProtocol.js"></script>
-  <script type="text/javascript" src="util/Loading.js"></script>
-  <script type="text/javascript" src="util/Notif.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="util/firebaseConfig.js"></script>
+  <script src="util/html/accordion.js"></script>
 
   <!-- Import css. -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="style/notif.css">
-  <link rel="stylesheet" href="style/style.css">
-  <link rel="stylesheet" href="style/loading.css">
+  <link async href="http://fonts.googleapis.com/css?family=Advent%20Pro" data-generated="http://enjoycss.com"
+    rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="style/app/home.css">
+  <link rel="stylesheet" href="style/button.css">
+  <link rel="stylesheet" href="style/accordion.css">
 </head>
 
 <body>
+  <div id="header"></div>
 
-  <!-- The footer -->
-  <div>
-    <ul>
-      <li><a href="home.html">Home</a></li>
-      <li id="noti_Container">
-        <div id="noti_Counter"></div>
-        <!--SHOW NOTIFICATIONS COUNT.-->
-
-        <!--A CIRCLE LIKE BUTTON TO DISPLAY NOTIFICATION DROPDOWN.-->
-        <div id="noti_Button"></div>
-
-        <!--THE NOTIFICAIONS DROPDOWN BOX.-->
-        <div id="notifications">
-          <h3>Notifications</h3>
-          <div id=addNotif></div>
-          <div style="height:300px;"></div>
+  <div id="main">
+    <div class="container">
+      <div id="menunav">
+        <div class="ul">
+          <ul>
+            <div class="li">
+              <li>
+                <a class="current" href="#public">Public Courses</a></li>
+            </div>
+            <div class="li">
+              <li><a href="#mycourses">My Courses</a></li>
+            </div>
+          </ul>
         </div>
-      </li>
-    </ul>
+        <div id="instructor">
+        <div id=becomeInstructor class="enjoy-css" onclick="document.location.href = 'instructor.html'">Become instuctor
+        </div>
+        <div id=instructorZone class="enjoy-css">Manage courses</div>
+      </div>
+      </div>
+      <div id="coursesContent">
+        <div class="naccs">
+          <div class="grid">
+           <div class="gc gc--1-of-3">
+            <div class="menu">
+             <div class="active"><span class="light"></span><span>Beer</span></div>
+             <div><span class="light"></span><span>Vine</span></div>
+             <div><span class="light"></span><span>Lemonade</span></div>
+            </div>
+           </div>
+           <div class="gc gc--2-of-3">
+            <ul class="nacc">
+             <li class="active">
+              <div>
+               <p>Beer is the world's oldest[1][2][3] and most widely consumed[4] alcoholic drink; it is the third most popular drink overall, after water and tea.[5] The production of beer is called brewing, which involves the fermentation of sugars, mainly derived
+                from cereal grain starches—most commonly from malted barley, although wheat, maize (corn), and rice are widely used.[6] Most beer is flavoured with hops, which add bitterness and act as a natural preservative, though other flavourings such as
+                herbs or fruit may occasionally be included. The fermentation process causes a natural carbonation effect, although this is often removed during processing, and replaced with forced carbonation.[7] Some of humanity's earliest known writings refer
+                to the production and distribution of beer: the Code of Hammurabi included laws regulating beer and beer parlours,[8] and "The Hymn to Ninkasi", a prayer to the Mesopotamian goddess of beer, served as both a prayer and as a method of remembering
+                the recipe for beer in a culture with few literate people.[9][10]</p>
+              </div>
+             </li>
+             <li>
+              <div>
+               <p>A vine (Latin vīnea "grapevine", "vineyard", from vīnum "wine") in the narrowest sense is the grapevine (Vitis), but more generally it can refer to any plant with a growth habit of trailing or scandent (that is, climbing) stems, lianas or runners.
+                The word also can refer to such stems or runners themselves, for instance when used in wicker work.[1][2] In the United Kingdom, the term "vine" applies almost exclusively to the grapevine. The term "climber" is used for all climbing plants.[3]</p>
+              </div>
+             </li>
+             <li>
+              <div>
+               <p>Lemonade is any of various sweetened beverages found around the world, all characterized by lemon flavor. Most lemonade varieties can be separated into two distinct types: cloudy and clear; each is known simply as "lemonade" (or a cognate) in countries
+                where dominant.[1] Cloudy lemonade, generally found in North America and India, is a traditionally homemade drink made with lemon juice, water, and sweetener such as cane sugar or honey.[2] Found in the United Kingdom, Ireland, South Africa, Australia,
+                and New Zealand, clear lemonade is a lemon flavoured carbonated soft drink. Not to be confused with Sprite a lemon-lime flavored, soft drink.</p>
+              </div>
+             </li>
+            </ul>
+           </div>
+          </div>
+         </div>
+      </div>
+      <!-- <div id="registerCourses"></div> -->
+    </div>
   </div>
 
-  <div id=loading class="loader"></div>
-  <div id="show">
-    <div class="container">
-      <div id="div1" class="container">
-        <h1>Badkan Home Page</h1>
-        <pre><p id="name"> </p></pre>
+  <script type="text/javascript" src="app/home.js"></script>
+  <script type="text/javascript" src="third_party/header.js"></script>
 
-        <div class="panel-group" id="accordion-registered">
-          <div class="panel panel-default template">
-            <div class="panel-heading">
-              <h4 class="panel-title">
-                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
-                  <div>Welcome to the Badkan </div>
-                </a>
-              </h4>
-            </div>
-            <div id="collapseThree" class="panel-collapse collapse">
-              <div class="panel-body">
-                <p><b>Students</b> -- find your courses, register, solve exercises, submit your solutions and get graded
-                  in
-                  real time!</p>
-
-                <p><b>Teachers</b> -- create courses, fill them with existing programming exercises or create new ones,
-                  and
-                  enjoy the automatic grading!</p>
-              </div>
-            </div>
-          </div>
-          <h2>Your courses:</h2>
-        </div>
-
-        <div class="panel-group" id="accordion-unregistered">
-          <h2>Other courses:</h2>
-        </div>
-
-        <!-- <button id="btnSolveEx" type="button" class="btn btn-success">Solve Exercise</button> -->
-        <!-- <button id="records" type="button" class="btn btn-info">Records</button> -->
-        <button style="display:none" id="btnManageCourses" type="button" class="btn btn-primary">Manage courses</button>
-        <button id="btnSettings" type="button" class="btn btn-warning">Settings</button>
-        <button id="btnGrades" type="button" class="btn btn-info">Grades</button>
-        <button id="btnLogOut" type="button" class="btn btn-danger">Log Out</button>
-      </div>
-      <script type="text/javascript" src="data/courses.js"></script><!-- loads object coursesObject -->
-      <script type="text/javascript" src="data/exercises.js"></script><!-- loads object exercisesObject -->
-      <script type="text/javascript" src="app/Home.js"></script>
-      <p class="footer">
-        Badkan 2.0 by <a href="https://github.com/SamuelBismuth">Samuel Bismuth</a>, samuelbismuth101@gmail.com.
-        <script>
-          document.write("Last modified: " + document.lastModified)
-        </script>
-      </p>
-    </div>
 </body>
 
 </html>
