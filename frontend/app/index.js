@@ -80,7 +80,7 @@ $("#btnSignUp").click(function () {
             name: name,
             lastName: lastName,
             id: id,
-            checked: False
+            checked: false
         });
         let onSuccess = () => { signIn(email, pass) }
         doPostJSON(json, "create_auth", "text", (data) => { onMessageCreateAuth(data, onSuccess) })

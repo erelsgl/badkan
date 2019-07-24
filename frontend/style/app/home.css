@@ -1,9 +1,11 @@
+/* This is linked with the menu nav in the right side. */
+
 #menunav {
     float: right;
     margin-top: 2%;
     width: 17%;
     background: #FFF;
-    border:1px solid #C0C0C0;
+    border: 1px solid #C0C0C0;
     border-radius: 25px;
 }
 
@@ -15,14 +17,6 @@
     height: 100%;
 }
 
-#coursesContent {
-    display: block;
-    /* padding-top: 1.5%;
-    padding-left: 2%;  */
-    float: left;
-    width: 82%;
-}
-
 #becomeInstructor {
     display: none;
 }
@@ -31,24 +25,16 @@
     display: none;
 }
 
-.unregisterCourses {
-    display: block;
-
-}
-.registerCourses {
-    display: none;
-}
-
 .ul {
-    margin-left:4%;
+    margin-left: 4%;
     list-style-type: none;
     overflow: hidden;
     width: 200px;
 }
-  
+
 .li {
     float: left;
-    border-bottom:1px solid #bbb;
+    border-bottom: 1px solid #bbb;
 }
 
 .li:last-child {
@@ -58,7 +44,7 @@
 .li a {
     display: block;
     color: #00bfff;
-    background: rgba(255,255,255,1); 
+    background: rgba(255, 255, 255, 1);
     font-family: Georgia, Times, "Times New Roman", serif;
     font-size: 20px;
     text-decoration: none;
@@ -66,12 +52,29 @@
 }
 
 .li a:hover {
-    color: rgba(255,255,255,1);
+    color: rgba(255, 255, 255, 1);
     background: #00bfff;
 }
 
 .current {
-    color: rgba(255,255,255,1) !important;
+    color: rgba(255, 255, 255, 1) !important;
     background: #00bfff !important;
     text-decoration: none !important;
+}
+
+/* This is linked to the body in the left side. */
+
+#coursesContent {
+    display: block;
+    margin-top: 2%;
+    float: left;
+    width: 83%;
+}
+
+.unregisterCourses {
+    display: block;
+}
+
+.registerCourses {
+    display: none;
 }
