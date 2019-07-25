@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="style/app/manage.css">
     <link rel="stylesheet" href="style/button.css">
     <link rel="stylesheet" href="style/accordion.css">
+    <link rel="stylesheet" href="style/thirdparty.css">
 </head>
 
 <body>
@@ -28,7 +29,8 @@
                             <div class="menu">
                                 <!-- here complete -->
                             </div>
-                            <button data-toggle="tooltip" title="New course" class="plus-button addCourse"></button>
+                            <button id=newCourse data-toggle="tooltip" title="New course"
+                                class="plus-button addCourse"></button>
                         </div>
                         <div class="gc gc--2-of-3">
                             <ul class="nacc">
@@ -41,6 +43,7 @@
         </div>
     </div>
 
+    <div id="snackbar"></div>
 
 
     <script type="text/javascript" src="app/manage.js"></script>
