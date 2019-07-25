@@ -27,5 +27,24 @@ def retreive_all_courses_and_exercises():
     answer = dict()
     answer["courses"] = courses.get()
     answer["exercises"] = exercises.get()
-    print(answer)
     return answer
+
+
+def retreive_courses_and_exercises_by_uid(uid):
+    courses = db.reference('courses/'+uid)
+    exercises = db.reference('exercises/'+uid)
+    answer = dict()
+    answer["courses"] = courses.get()
+    answer["exercises"] = exercises.get()
+    return answer
+
+
+def create_new_course(json):
+    json["grader_uid"] = get_uid_by_country_id(json["grader_uid"])
+    json["uids"] = get_uid_by_country_id(json["uids"])
+    ref = db.reference('courses')
+    ref.push(json)
+
+
+def get_uid_by_country_id(ids):
+    for id in ids:

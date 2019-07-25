@@ -23,6 +23,7 @@ function onLoadMain() {
 }
 
 function onFinishRetreiveData(data) {
+  // TODO: make the first active at the beginning.
   var registerCourses = $("#registerCourses"); 
   var unregisterCourses = $("#unregisterCourses");  
   createAccordion(registerCourses,"Register Courses", ["exercises", "exercises"]);  // Example.
@@ -30,8 +31,6 @@ function onFinishRetreiveData(data) {
   createAccordion(registerCourses,"Register Courses2", ["exercises"]);  // Example.
   createAccordion(registerCourses,"Register Courses3", ["exercises"]);  // Example.
   createAccordion(registerCourses,"Register Courses4", ["exercises"]);  // Example.
-
-  // accordionListener()
   $('#main').show();
 }
 

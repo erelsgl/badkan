@@ -1,0 +1,10 @@
+#coursesContent {
+    display: block;
+    margin-top: 2%;
+    float: left;
+    width: 83%;
+}
+
+.addCourse {
+    margin-left: 37%;
+}
