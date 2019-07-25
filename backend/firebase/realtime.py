@@ -27,5 +27,12 @@ def retreive_all_courses_and_exercises():
     answer = dict()
     answer["courses"] = courses.get()
     answer["exercises"] = exercises.get()
-    print(answer)
+    return answer
+
+def retreive_courses_and_exercises_by_uid(uid):
+    courses = db.reference('courses/'+uid)
+    exercises = db.reference('exercises/'+uid)
+    answer = dict()
+    answer["courses"] = courses.get()
+    answer["exercises"] = exercises.get()
     return answer

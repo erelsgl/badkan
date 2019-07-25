@@ -46,6 +46,11 @@ def get_courses():
     return retreive_all_courses_and_exercises()
 
 
+@app.route('/get_courses_manager/<uid>/', methods=["POST"])
+def get_courses_manager(uid):
+    return retreive_courses_and_exercises_by_uid(uid)
+
+
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')

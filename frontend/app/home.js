@@ -23,6 +23,7 @@ function onLoadMain() {
 }
 
 function onFinishRetreiveData(data) {
+  // TODO: make the first active at the beginning.
   var registerCourses = $("#registerCourses"); 
   var unregisterCourses = $("#unregisterCourses");  
   createAccordion(registerCourses,"Register Courses", ["exercises", "exercises"]);  // Example.
