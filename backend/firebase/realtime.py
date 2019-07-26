@@ -41,11 +41,19 @@ def retreive_courses_and_exercises_by_uid(uid):
 
 def create_new_course(json):
     json["grader_uid"] = get_uid_by_country_id(json["grader_uid"])
-    json["uids"] = get_uid_by_country_id(json["uids"])
+    json["uids"] = get_uids_by_country_ids(json["uids"])
     ref = db.reference('courses')
     ref.push(json)
 
 
-def get_uid_by_country_id(ids):
+def get_uid_by_country_id(id):
+    user = db.reference('userDetails/')
+    snapshot = user.order_by_child('country_id').equal_to(id).get()
+    for key in snapshot:
+        print(key)
+        return key
+
+
+def get_uids_by_country_ids(ids):
     for id in ids:
-        pass
+        id = get_uid_by_country_id(id)
