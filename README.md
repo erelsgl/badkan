@@ -45,8 +45,34 @@ Then put the file in the folder database_exports and change its name to private_
 Then, go to the Database onglet from your firebase project.
 Create a database and then start in test mode.
 
-Go to rules pages, and change the read and write option from false to true. 
-Publish the changes.
+## TODO: CHECK IF IT'S WORK FINE
+
+open the terminal in the firebase folder and dl the firebase tools:
+
+    sudo npm install -g firebase-tools a
+
+Then, you need to login with:
+
+    firebase login
+
+Follow the instructions.
+
+To verify if it's worked:
+
+    firebase list
+
+Now need to test if init or deployement.
+
+if deployement:
+
+    firebase deploy -m "Deploying the best new feature ever."
+
+if init:
+
+    firebase init
+
+<!-- Go to rules pages, and change the read and write option from false to true. 
+Publish the changes. -->
 
 Once Firebase is initialized you need to install all the network stuff.
 
