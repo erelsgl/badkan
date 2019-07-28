@@ -6,13 +6,12 @@ function onLoadMain() {
 
 function onFinishRetreiveData(data) {
     // TODO: make the first active at the beginning.
-    var registerCourses = $("#registerCourses");
-    var unregisterCourses = $("#unregisterCourses");
-    createAccordion(registerCourses, "Register Courses", ["exercises", "exercises"]);  // Example.
-    createAccordion(unregisterCourses, "Unregister Courses", ["exercises"]);  // Example.
-    createAccordion(registerCourses, "Register Courses2", ["exercises"]);  // Example.
-    createAccordion(registerCourses, "Register Courses3", ["exercises"]);  // Example.
-    createAccordion(registerCourses, "Register Courses4", ["exercises"]);  // Example.
+    const entries = Object.entries(data.courses)
+    for (course of entries) {
+        // course[0] = courseId
+        // course[1] = course (the value)
+        createAccordionManage(course, ["exercises", "exercises"]);  // Example.
+    }
     $('#main').show();
 
 }
@@ -21,11 +20,12 @@ $("#newCourse").click(function () {
     var info = newCourse();
     info.then((json) => {
         doPostJSON(json, "create_course", "text", onCreateCourseSuccess)
+        $("#main").hide()
     })
 })
 
 function onCreateCourseSuccess() {
-
+    document.location.reload();
 }
 
 async function newCourse() {

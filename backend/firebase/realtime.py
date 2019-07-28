@@ -31,11 +31,12 @@ def retreive_all_courses_and_exercises():
 
 
 def retreive_courses_and_exercises_by_uid(uid):
-    courses = db.reference('courses/'+uid)
-    exercises = db.reference('exercises/'+uid)
+    courses = db.reference('courses/')
+    snapshot = courses.order_by_child('owner_uid').equal_to(uid).get()
+    # exercises = db.reference('exercises/'+uid)
     answer = dict()
-    answer["courses"] = courses.get()
-    answer["exercises"] = exercises.get()
+    answer["courses"] = snapshot
+    # answer["exercises"] = exercises.get()
     return answer
 
 
@@ -50,10 +51,13 @@ def get_uid_by_country_id(id):
     user = db.reference('userDetails/')
     snapshot = user.order_by_child('country_id').equal_to(id).get()
     for key in snapshot:
-        print(key)
+        if key is None:
+            return "id unknown"
         return key
 
 
 def get_uids_by_country_ids(ids):
-    for id in ids:
-        id = get_uid_by_country_id(id)
+    uids = []
+    for id in ids.split(' '):
+        uids.append(get_uid_by_country_id(id))
+    return uids
