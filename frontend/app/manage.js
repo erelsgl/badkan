@@ -6,11 +6,13 @@ function onLoadMain() {
 
 function onFinishRetreiveData(data) {
     // TODO: make the first active at the beginning.
-    const entries = Object.entries(data.courses)
-    for (course of entries) {
-        // course[0] = courseId
-        // course[1] = course (the value)
-        createAccordionManage(course, ["exercises", "exercises"]);  // Example.
+    if (data.courses) {
+        const entries = Object.entries(data.courses)
+        for (course of entries) {
+            // course[0] = courseId
+            // course[1] = course (the value)
+            createAccordionManage(course, ["exercises", "exercises"]); // Example.
+        }
     }
     $('#main').show();
 
