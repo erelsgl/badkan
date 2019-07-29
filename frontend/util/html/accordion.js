@@ -48,7 +48,7 @@ function createAccordionBodyManageExercise(courseObj) {
 	let courseId = courseObj[0]
 	let course = courseObj[1]
 	let html = '<div class="panel">' +
-		'<div class="course" name="' + courseId + '">' +
+		'<div class="course">' +
 		'<label for="courseInputEdit"><div class="explanation" data-toggle="tooltip" title="Required field">Course name *</div></label>' +
 		'<input class="courseInputEdit" value="' + course.course_name + '"></input><br>' +
 		'<label for="courseInputEdit"><div class="explanation" data-toggle="tooltip" title="The grader must be admin. \nGives an access to the manage course.">Grader id \n </div></label>' +
@@ -63,10 +63,10 @@ function createAccordionBodyManageExercise(courseObj) {
 		'<div id="pass' + courseId + '"' + 
 		((course.privacy == 'public') ? "style=display:none;>" : ">") + 
 		'<label for="ids"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
-		'<input class="ids" class="swal2-input" placeholder="000000000 000000000">' +
-		'<input class="ids" value="' + course.uids + ' placeholder="000000000 000000000""></input><br>' +
-
+		'<input class="ids" value="' + String(course.uids).replace(",", " ") + '" placeholder="000000000 000000000""></input><br>' +
 		'</div>' +
+		'<button onclick="editCourse(' + [courseId, ""] + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>'
+		'<button> </button>'
 		'</div>';
 	return html;
 }

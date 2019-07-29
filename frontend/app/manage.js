@@ -83,3 +83,7 @@ $('input[type=radio][name=privacy]').change(function () {
         x.style.display = "block";
     }
 });
+
+function editCourse(courseId) {
+    alert(courseId)
+}
