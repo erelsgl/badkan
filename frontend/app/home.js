@@ -24,13 +24,9 @@ function onLoadMain() {
 
 function onFinishRetreiveData(data) {
   // TODO: make the first active at the beginning.
-  var registerCourses = $("#registerCourses"); 
-  var unregisterCourses = $("#unregisterCourses");  
-  createAccordion(registerCourses,"Register Courses", ["exercises", "exercises"]);  // Example.
-  createAccordion(unregisterCourses,"Unregister Courses", ["exercises"]);  // Example.
-  createAccordion(registerCourses,"Register Courses2", ["exercises"]);  // Example.
-  createAccordion(registerCourses,"Register Courses3", ["exercises"]);  // Example.
-  createAccordion(registerCourses,"Register Courses4", ["exercises"]);  // Example.
+  // var registerCourses = $("#registerCourses"); 
+  // var unregisterCourses = $("#unregisterCourses");  
+  createAccordionHomeRegister("Register Courses", ["exercises", "exercises"]);  // Example.
   $('#main').show();
 }
 
