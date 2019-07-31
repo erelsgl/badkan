@@ -48,3 +48,4 @@ def create_new_course(json):
 
 def get_uid_by_country_id(ids):
     for id in ids:
+        pass
