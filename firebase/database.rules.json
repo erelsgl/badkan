@@ -5,6 +5,9 @@
     ".write": false,
       "userDetails": {
       ".indexOn": "country_id"
+    },
+    "courses": {
+      ".indexOn": "owner_uid"
     }
 
   }
