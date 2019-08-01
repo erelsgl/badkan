@@ -5,6 +5,7 @@ function onLoadMain() {
 }
 
 function onFinishRetreiveData(data) {
+    console.log(data)
     // TODO: make the first active at the beginning.
     if (data.courses) {
         const entries = Object.entries(data.courses)
@@ -21,12 +22,12 @@ function onFinishRetreiveData(data) {
 $("#newCourse").click(function () {
     var info = newCourse();
     info.then((json) => {
-        doPostJSON(json, "create_course", "text", onCreateCourseSuccess)
+        doPostJSON(json, "create_course", "text", onCreateEditCourseSuccess)
         $("#main").hide()
     })
 })
 
-function onCreateCourseSuccess() {
+function onCreateEditCourseSuccess() {
     document.location.reload();
 }
 
@@ -87,5 +88,12 @@ $('input[type=radio][name=privacy]').change(function () {
 });
 
 function editCourse(courseId) {
-    alert(courseId)
+    let json = JSON.stringify({
+        owner_uid: userUid,
+        course_name: escapeHtml($("#course_name" + courseId).val()),
+        grader_uid: escapeHtml($("#course_grader" + courseId).val()),
+        privacy: ($("#pass" + courseId).is(":visible") ? "private" : "public"),
+        uids: escapeHtml($("#course_ids" + courseId).val())
+    })
+    doPostJSON(json, "edit_course/" + courseId, "text", onCreateEditCourseSuccess)
 }
