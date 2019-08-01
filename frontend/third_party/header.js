@@ -99,6 +99,7 @@ async function settings() {
             '<a class="btn btn-danger" onclick="deleteConfirmation();">Delete account</a>',
         focusConfirm: false,
         preConfirm: () => {
+            $("#main").hide()
             return [
                 escapeHtml(document.getElementById('name').value),
                 escapeHtml(document.getElementById('lastname').value),

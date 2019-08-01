@@ -111,7 +111,7 @@ $("#github").click(function () {
                     target: "create_auth_github",
                     uid: result.user.uid,
                     country_id: prom[0],
-                    checked: False
+                    checked: false
                 });
                 doPostJSON(json, "create_auth_github", "text", (data) => { onMessageCreateAuth(data, signInSuccess) })
             });
