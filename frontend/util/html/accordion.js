@@ -1,4 +1,5 @@
 function createAccordionManage(courseObj, exercises) {
+	let courseId = courseObj[0]
 	let course = courseObj[1]
 	createAccordionMenu(course.course_name)
 	let panel = "<li>";
@@ -7,7 +8,7 @@ function createAccordionManage(courseObj, exercises) {
 	// 	panel += createAccordionBodyManage(course, exercise)
 	// }
 	panel += '<div class="panel"><button id=newExercise data-toggle="tooltip" title="New exercise" ' +
-		'class="plus-button addExercise"></button></div>'
+		'class="plus-button addExercise" onclick="newExercise(' + "'" + courseId + "'" +')"></button></div>'
 	$(".nacc").append(panel + "</li>")
 }
 
