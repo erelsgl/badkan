@@ -35,7 +35,11 @@ def retreive_courses_and_exercises_by_uid(uid):
     snapshot = courses.order_by_child('owner_uid').equal_to(uid).get()
     for course in snapshot:
         if "uids" in snapshot[course]:
-            snapshot[course]["uids"] = get_country_ids_by_uids(snapshot[course]["uids"])
+            snapshot[course]["uids"] = get_country_ids_by_uids(
+                snapshot[course]["uids"])
+        if "grader_uid" in snapshot[course]:
+            snapshot[course]["grader_uid"] = get_country_id_by_uid(
+                snapshot[course]["grader_uid"])
     # print(snapshot["uids"])
     # exercises = db.reference('exercises/'+uid)
     answer = dict()
@@ -49,6 +53,13 @@ def create_new_course(json):
     json["uids"] = get_uids_by_country_ids(json["uids"])
     ref = db.reference('courses')
     ref.push(json)
+
+
+def edit_old_course(json, course_id):
+    json["grader_uid"] = get_uid_by_country_id(json["grader_uid"])
+    json["uids"] = get_uids_by_country_ids(json["uids"])
+    ref = db.reference('courses/'+course_id)
+    ref.update(json)
 
 
 def get_uid_by_country_id(id):
@@ -69,7 +80,6 @@ def get_uids_by_country_ids(ids):
 
 def get_country_id_by_uid(uid):
     user_country_id = db.reference('userDetails/'+uid+'/country_id')
-    print(user_country_id.get())
     return user_country_id.get()
 
 

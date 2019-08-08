@@ -1,4 +1,5 @@
 function createAccordionManage(courseObj, exercises) {
+	let courseId = courseObj[0]
 	let course = courseObj[1]
 	createAccordionMenu(course.course_name)
 	let panel = "<li>";
@@ -6,6 +7,8 @@ function createAccordionManage(courseObj, exercises) {
 	// for (exercise of exercises) {
 	// 	panel += createAccordionBodyManage(course, exercise)
 	// }
+	panel += '<div class="panel"><button id=newExercise data-toggle="tooltip" title="New exercise" ' +
+		'class="plus-button addExercise" onclick="newExercise(' + "'" + courseId + "'" +')"></button></div>'
 	$(".nacc").append(panel + "</li>")
 }
 
@@ -16,6 +19,7 @@ function createAccordionHomeRegister(courseName, exercises) {
 		panel += createAccordionBodyHomeRegister(exercise)
 	}
 	$(".nacc").append(panel + "</li>")
+
 }
 
 function createAccordionMenu(courseName) {
@@ -50,9 +54,9 @@ function createAccordionBodyManageExercise(courseObj) {
 	let html = '<div class="panel">' +
 		'<div class="course">' +
 		'<label for="courseInputEdit"><div class="explanation" data-toggle="tooltip" title="Required field">Course name *</div></label>' +
-		'<input class="courseInputEdit" value="' + course.course_name + '"></input><br>' +
+		'<input id="course_name' + courseId + '" class="courseInputEdit" value="' + course.course_name + '"></input><br>' +
 		'<label for="courseInputEdit"><div class="explanation" data-toggle="tooltip" title="The grader must be admin. \nGives an access to the manage course.">Grader id \n </div></label>' +
-		'<input class="courseInputEdit" value="' + course.grader + '"></input><br>' +
+		'<input id="course_grader' + courseId + '" class="courseInputEdit" value="' + course.grader_uid + '"></input><br>' +
 		'<label for="privacyEdit"><div class="explanation" data-toggle="tooltip" title="The course is shared only with the students you want.">Privacy</div></label><br>' +
 		'<input type="radio" name="privacy' + courseId + '" value="public" onclick=\'$(\"#pass' + courseId + '\").hide()\'' +
 		((course.privacy == 'public') ? "checked" : "") +
@@ -60,14 +64,13 @@ function createAccordionBodyManageExercise(courseObj) {
 		'<input type="radio" name="privacy' + courseId + '" value="private" onclick=\'$(\"#pass' + courseId + '\").show()\'' +
 		((course.privacy == 'private') ? "checked" : "") +
 		'> Private</input><br><br>' +
-		'<div id="pass' + courseId + '"' + 
-		((course.privacy == 'public') ? "style=display:none;>" : ">") + 
+		'<div id="pass' + courseId + '"' +
+		((course.privacy == 'public') ? "style=display:none;>" : ">") +
 		'<label for="ids"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
-		'<input class="ids" value="' + String(course.uids).replace(",", " ") + '" placeholder="000000000 000000000""></input><br>' +
+		'<input id="course_ids' + courseId + '" class="ids" value="' + String(course.uids).replace(",", " ") + '" placeholder="000000000 000000000""></input><br>' +
 		'</div>' +
-		'<button onclick="editCourse(' + [courseId, ""] + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>'
-		'<button> </button>'
-		'</div>';
+		'<button onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
+		'</div></div>';
 	return html;
 }
 

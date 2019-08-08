@@ -58,6 +58,13 @@ def create_course():
     return 'OK'
 
 
+@app.route('/edit_course/<course_id>/', methods=["POST"])
+def edit_course(course_id):
+    response = request.get_json()
+    edit_old_course(response, course_id)
+    return 'OK'
+
+
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
