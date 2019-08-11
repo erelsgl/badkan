@@ -7,7 +7,7 @@
 
 #pagename{
     float:left;
-    padding-left: 2%;
+    padding-left: 1%;
     padding-top: 1%;
     width: 80%;
     color: #9799a7;
@@ -31,4 +31,8 @@
     font-family: 'Sofia';
     font-size: 40px;
     text-align: center;
+}
+.container {
+    width: 1220px;
+    padding-bottom: 1%
 }
