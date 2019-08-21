@@ -143,12 +143,13 @@ async function newNormalExercise(courseId) {
     // TODO: FINISH HERE.
     let exerciseName, exerciseCompiler, submissionViaGithub, submissionViaZip, mainFile,
         exerciseDescription, instructionPdf, deadline, inputFileName, outputFileName
+    let inputOutputPoints = []
     Swal.mixin({
         showCancelButton: true,
-        progressSteps: ['1', '2', '3']
+        progressSteps: ['1', '2', '3', '4']
     }).queue([{
             confirmButtonText: 'Next &rarr;',
-            title: 'New exercise 1/3',
+            title: 'New exercise 1/4',
             html: '<label for="exercise_name"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +
                 '<input id="exercise_name" class="swal2-input" placeholder="First assignment...">' +
                 '<label for="exercise_compiler"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise. ">Exercise compiler *</div></label>' +
@@ -181,7 +182,7 @@ async function newNormalExercise(courseId) {
         },
         {
             confirmButtonText: 'Next &rarr;',
-            title: 'New exercise 2/3',
+            title: 'New exercise 2/4',
             html: '<label for="exercise_description"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
                 '<textarea id="exercise_description" class="swal2-input" placeholder="Your short description of the exercise... "></textarea>' +
                 '<label for="exercise_instruction"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
@@ -196,32 +197,53 @@ async function newNormalExercise(courseId) {
             }
         },
         {
-            confirmButtonText: 'End &rarr;',
-            title: 'New exercise 3/3',
-            html: '<label for="input_file_name"><div class="explanation" data-toggle="tooltip" title="The default input is the standart input.">Input file name *</div></label>' +
-                '<input id="input_file_name" class="swal2-input" placeholder="input.txt, input.csv...">' +
-                '<label for="output_file_name"><div class="explanation" data-toggle="tooltip" title="The default output is the standart output.">Output file name *</div></label>' +
-                '<input id="output_file_name" class="swal2-input" placeholder="output.txt, output.csv...">' +
-
-                '<label for="input_one"><div class="explanation" data-toggle="tooltip" title="The first given input.">Given input *</div></label>' +
-                '<textarea id="input_one" class="swal2-input" placeholder="2, abcd..."></textarea>' +
-                '<label for="output_one"><div class="explanation" data-toggle="tooltip" title="The first expected output.">Expected output *</div></label>' +
-                '<textarea id="output_one" class="swal2-input" placeholder="4, a b c d..."></textarea>' +
-                '<label for="points_one"><div class="explanation" data-toggle="tooltip" title="The number of point for a good answer.">Points number * </div></label>' +
-                '<input id="points_one" class="swal2-input" type="number" ></input>',
+            confirmButtonText: 'Next &rarr;',
+            title: 'New exercise 3/4',
+            html: '<label for="input_file_name"><div class="explanation" data-toggle="tooltip" title="The default input is the standart input. Let standart if you do not want to change it.">Input file name *</div></label>' +
+                '<input id="input_file_name" class="swal2-input" value="standart" placeholder="input.txt, input.csv...">' +
+                '<label for="output_file_name"><div class="explanation" data-toggle="tooltip" title="The default output is the standart output.  Let standart if you do not want to change it.">Output file name *</div></label>' +
+                '<input id="output_file_name" class="swal2-input" value="standart" placeholder="output.txt, output.csv...">',
             focusConfirm: false,
             preConfirm: () => {
                 inputFileName = escapeHtml($("#input_file_name").val())
                 outputFileName = escapeHtml($("#output_file_name").val())
 
-                if (exerciseName == "" || exerciseCompiler == "" || mainFile == "" || (!submissionViaGithub && !submissionViaZip)) {
+                if (inputFileName == "" || outputFileName == "") {
                     Swal.showValidationMessage(
                         `Please fill all the required fields.`
                     )
+                } else {
+                    moreIO(1, inputOutputPoints)
                 }
             }
         }
     ]).then(() => {
-        alert(deadline)
+        
     })
+}
+
+function moreIO(i, inputOutputPoints) {
+    console.log(inputOutputPoints)
+    swal.insertQueueStep({
+        title: 'More input',
+        confirmButtonText: 'Next &rarr;',
+        html: '<label for="input_' + i + '"><div class="explanation" data-toggle="tooltip" title="The first given input.">Given input *</div></label>' +
+            '<textarea id="input_' + i + '" class="swal2-input" placeholder="2, abcd..."></textarea>' +
+            '<label for="output_' + i + '"><div class="explanation" data-toggle="tooltip" title="The first expected output.">Expected output *</div></label>' +
+            '<textarea id="output_' + i + '" class="swal2-input" placeholder="4, a b c d..."></textarea>' +
+            '<label for="points_' + i + '"><div class="explanation" data-toggle="tooltip" title="The number of point for a good answer.">Points number * </div></label>' +
+            '<input id="points_' + i + '"s class="swal2-input" type="number" ></input>',
+        preConfirm: function () {
+            inputOutputPoints.push({
+                input: escapeHtml($("#input_" + i).val()),
+                output: escapeHtml($("#output_" + i).val()),
+                point: escapeHtml($("#points_" + i).val())
+            })
+            if (confirm("More input/output?") == true) {
+                moreIO(i++, inputOutputPoints)
+            } 
+            
+
+        }
+    });
 }
