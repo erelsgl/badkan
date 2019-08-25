@@ -88,3 +88,9 @@ def get_country_ids_by_uids(uids):
     for uid in uids:
         country_ids.append(get_country_id_by_uid(uid))
     return country_ids
+
+
+def create_new_exercise(json):
+    ref = db.reference('exercises')
+    ref.push(json)
+    

@@ -21,13 +21,13 @@ function onFinishRetreiveData(data) {
 $("#newCourse").click(function () {
     var info = newCourse();
     info.then((json) => {
-        doPostJSON(json, "create_course", "text", onCreateEditCourseSuccess)
+        doPostJSON(json, "create_course", "text", onCreateEditCourseExerciseSuccess)
         $("#main").hide()
     })
 })
 
-function onCreateEditCourseSuccess() {
-    document.location.reload();
+function onCreateEditCourseExerciseSuccess() {
+    // document.location.reload();
 }
 
 async function newCourse() {
@@ -96,7 +96,7 @@ function editCourse(courseId) {
             privacy: ($("#pass" + courseId).is(":visible") ? "private" : "public"),
             uids: escapeHtml($("#course_ids" + courseId).val())
         })
-        doPostJSON(json, "edit_course/" + courseId, "text", onCreateEditCourseSuccess)
+        doPostJSON(json, "edit_course/" + courseId, "text", onCreateEditCourseExerciseSuccess)
     }
 }
 
@@ -139,8 +139,6 @@ function newExercise(courseId) {
  * @param {string} courseId 
  */
 async function newNormalExercise(courseId) {
-    console.log(courseId)
-    // TODO: FINISH HERE.
     let exerciseName, exerciseCompiler, submissionViaGithub, submissionViaZip, mainFile,
         exerciseDescription, instructionPdf, deadline, inputFileName, outputFileName
     let inputOutputPoints = []
@@ -192,7 +190,7 @@ async function newNormalExercise(courseId) {
             focusConfirm: false,
             preConfirm: () => {
                 exerciseDescription = escapeHtml($("#exercise_description").val())
-                instructionPdf = $("#exercise_instruction").val()
+                instructionPdf = $('#exercise_instruction').prop('files')[0];
                 deadline = $("#deadline").val()
             }
         },
@@ -207,7 +205,6 @@ async function newNormalExercise(courseId) {
             preConfirm: () => {
                 inputFileName = escapeHtml($("#input_file_name").val())
                 outputFileName = escapeHtml($("#output_file_name").val())
-
                 if (inputFileName == "" || outputFileName == "") {
                     Swal.showValidationMessage(
                         `Please fill all the required fields.`
@@ -218,12 +215,27 @@ async function newNormalExercise(courseId) {
             }
         }
     ]).then(() => {
-        
+        let json = JSON.stringify({
+            course_id: courseId,
+            exercise_name: exerciseName,
+            exercise_compiler: exerciseCompiler,
+            submission_via_github: submissionViaGithub,
+            submission_via_zip: submissionViaZip,
+            main_file: mainFile,
+            exercise_description: exerciseDescription,
+            deadline: deadline,
+            input_file_name: inputFileName,
+            output_file_name: outputFileName,
+            input_output_points: inputOutputPoints
+        })
+        var fd = new FormData();
+        fd.append("file", instructionPdf);
+        fd.append("json", json);
+        doPostJSONAndFile(fd, "create_exercise", "text", onCreateEditCourseExerciseSuccess)
     })
 }
 
 function moreIO(i, inputOutputPoints) {
-    console.log(inputOutputPoints)
     swal.insertQueueStep({
         title: 'More input',
         confirmButtonText: 'Next &rarr;',
@@ -241,9 +253,7 @@ function moreIO(i, inputOutputPoints) {
             })
             if (confirm("More input/output?") == true) {
                 moreIO(i++, inputOutputPoints)
-            } 
-            
-
+            }
         }
     });
 }
