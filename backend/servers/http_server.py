@@ -65,6 +65,11 @@ def edit_course(course_id):
     return 'OK'
 
 
+@app.route('/delete_course/<course_id>/', methods=["POST"])
+def delete_course(course_id):
+    delete_old_course(course_id)
+    return 'OK'
+
 @app.route('/create_exercise/', methods=["POST"])
 def create_exercise():
     # TODO: Check if the user should have the ref of the course or inverse, same with course and exercise...

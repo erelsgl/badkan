@@ -70,6 +70,7 @@ function createAccordionBodyManageExercise(courseObj) {
 		'<input id="course_ids' + courseId + '" class="ids" value="' + String(course.uids).replace(",", " ") + '" placeholder="000000000 000000000""></input><br>' +
 		'</div>' +
 		'<button onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
+		'<button onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
 		'</div></div>';
 	return html;
 }

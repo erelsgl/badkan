@@ -101,6 +101,24 @@ function editCourse(courseId) {
     }
 }
 
+/**
+ * Notice that currently only the course object is deleted, the exercises remains stored in the db.
+ * @param {String} courseId 
+ */
+function deleteCourse(courseId) {
+    Swal.fire({
+        title: 'Delete course',
+        text: 'Are you sure that you want to delete the course?',
+        allowOutsideClick: false,
+        showConfirmButton: true,
+        showCancelButton: true,
+    }).then(result => {
+        if (result.value) {
+            doPostJSON(null, "delete_course/" + courseId, "text", onCreateEditCourseExerciseSuccess)
+        }
+    })
+}
+
 function newExercise(courseId) {
     Swal.fire({
         title: 'Create exercise',
