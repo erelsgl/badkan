@@ -32,7 +32,7 @@ function createAccordionBodyHomeRegister(exercise) {
 	let grade = 0;
 	let description = "Short description:";
 	let timeStamp = "Thu Jun 06 2019 12:21:34 GMT+0300 (Israel Daylight Time)."
-	return '<div class="panel">' +
+	return '<div class="panel" style="background: rgb(211, 230, 241)";>' +
 		'<div class="exercise" name="Vu1XBFXwv7aXLWnWuTADwBUOzQD2_1">' +
 		'<div class="exerciseName">' + exerciseName + '</div>' +
 		'<div class="description">Short description: ' + description + '</div>' +

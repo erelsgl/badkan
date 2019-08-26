@@ -11,7 +11,7 @@ Create a new Firebase project:
 * Open the Firebase console at https://console.firebase.google.com/.
 * Click "Add project".
 * Add a project name and confirm.
-
+r
 After your project is initialized, add a web app by clicking on "</>".
 Copy the script code from the text box, and paste it in the file:
 
