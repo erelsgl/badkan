@@ -89,6 +89,7 @@ async function settings() {
     const {
         value: formValues
     } = await Swal.fire({
+        allowOutsideClick: false,
         title: 'Settings',
         html: '<label for="name">Name: </label>' +
             '<input id="name" class="swal2-input" value=' + userDetails["name"] + '>' + // Retreive here the data.

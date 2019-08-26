@@ -67,10 +67,9 @@ def edit_course(course_id):
 
 @app.route('/create_exercise/', methods=["POST"])
 def create_exercise():
-    # TODO: Here check conflict between storage and realtime: how to connect both?
     # TODO: Check if the user should have the ref of the course or inverse, same with course and exercise...
     exercise_id = create_new_exercise(json.loads(request.form["json"]))
-    # upload_pdf_instruction(request.files, exercise_id)
+    upload_pdf_instruction(request.files["file"], exercise_id)
     return 'OK'
 
 

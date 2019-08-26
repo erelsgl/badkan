@@ -27,13 +27,14 @@ $("#newCourse").click(function () {
 })
 
 function onCreateEditCourseExerciseSuccess() {
-    // document.location.reload();
+    document.location.reload();
 }
 
 async function newCourse() {
     const {
         value: formValues
     } = await Swal.fire({
+        allowOutsideClick: false,
         title: 'New course',
         html: '<label for="course_name"><div class="explanation" data-toggle="tooltip" title="Required field">Course name *</div></label>' +
             '<input id="course_name" class="swal2-input" placeholder="C++...">' +
@@ -104,6 +105,7 @@ function newExercise(courseId) {
     Swal.fire({
         title: 'Create exercise',
         text: 'Which type of exercise do you want to create?',
+        allowOutsideClick: false,
         showConfirmButton: true,
         showCancelButton: true,
         confirmButtonText: "Normal exercise",
@@ -143,6 +145,7 @@ async function newNormalExercise(courseId) {
         exerciseDescription, instructionPdf, deadline, inputFileName, outputFileName
     let inputOutputPoints = []
     Swal.mixin({
+        allowOutsideClick: false,
         showCancelButton: true,
         progressSteps: ['1', '2', '3', '4']
     }).queue([{
@@ -214,29 +217,35 @@ async function newNormalExercise(courseId) {
                 }
             }
         }
-    ]).then(() => {
-        let json = JSON.stringify({
-            course_id: courseId,
-            exercise_name: exerciseName,
-            exercise_compiler: exerciseCompiler,
-            submission_via_github: submissionViaGithub,
-            submission_via_zip: submissionViaZip,
-            main_file: mainFile,
-            exercise_description: exerciseDescription,
-            deadline: deadline,
-            input_file_name: inputFileName,
-            output_file_name: outputFileName,
-            input_output_points: inputOutputPoints
-        })
-        var fd = new FormData();
-        fd.append("file", instructionPdf);
-        fd.append("json", json);
-        doPostJSONAndFile(fd, "create_exercise", "text", onCreateEditCourseExerciseSuccess)
+    ]).then((result) => {
+        if (result.value) {
+            $("#main").hide()
+            let json = JSON.stringify({
+                course_id: courseId,
+                exercise_name: exerciseName,
+                exercise_compiler: exerciseCompiler,
+                submission_via_github: submissionViaGithub,
+                submission_via_zip: submissionViaZip,
+                main_file: mainFile,
+                exercise_description: exerciseDescription,
+                deadline: deadline,
+                input_file_name: inputFileName,
+                output_file_name: outputFileName,
+                input_output_points: inputOutputPoints
+            })
+            var fd = new FormData();
+            fd.append("file", instructionPdf);
+            fd.append("json", json);
+            doPostJSONAndFile(fd, "create_exercise", "text", onCreateEditCourseExerciseSuccess)
+        } else {
+            console.log("cancel")
+        }
     })
 }
 
 function moreIO(i, inputOutputPoints) {
     swal.insertQueueStep({
+        closeOnClickOutside: false,
         title: 'More input',
         confirmButtonText: 'Next &rarr;',
         html: '<label for="input_' + i + '"><div class="explanation" data-toggle="tooltip" title="The first given input.">Given input *</div></label>' +
@@ -246,13 +255,23 @@ function moreIO(i, inputOutputPoints) {
             '<label for="points_' + i + '"><div class="explanation" data-toggle="tooltip" title="The number of point for a good answer.">Points number * </div></label>' +
             '<input id="points_' + i + '"s class="swal2-input" type="number" ></input>',
         preConfirm: function () {
-            inputOutputPoints.push({
-                input: escapeHtml($("#input_" + i).val()),
-                output: escapeHtml($("#output_" + i).val()),
-                point: escapeHtml($("#points_" + i).val())
-            })
-            if (confirm("More input/output?") == true) {
-                moreIO(i++, inputOutputPoints)
+            let input = escapeHtml($("#input_" + i).val())
+            let output = escapeHtml($("#output_" + i).val())
+            let point = escapeHtml($("#points_" + i).val())
+            if (input == "" || output == "" || point == "") {
+                Swal.showValidationMessage(
+                    `Please fill all the fields.`
+                )
+            } else {
+                inputOutputPoints.push({
+                    input: input,
+                    output: output,
+                    point: point
+                })
+                // TODO: Improve style and overide text cancel.
+                if (confirm("More input/output?") == true) {
+                    moreIO(i++, inputOutputPoints)
+                }
             }
         }
     });

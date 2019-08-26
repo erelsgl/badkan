@@ -16,4 +16,5 @@ from check_normal_submission import *
 from check_peer_submission import *
 from admin import *
 from auth import *
+from storage import *
 from routine import *

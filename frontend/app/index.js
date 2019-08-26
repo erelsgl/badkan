@@ -160,6 +160,7 @@ async function additionalInformation() {
     const {
         value: formValues
     } = await Swal.fire({
+        allowOutsideClick: false,
         title: 'Additional information',
         html: '<label for="user_country_id">Id</label>' +
             '<input id="user_country_id" class="swal2-input">',

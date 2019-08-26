@@ -92,5 +92,7 @@ def get_country_ids_by_uids(uids):
 
 def create_new_exercise(json):
     ref = db.reference('exercises')
-    ref.push(json)
+    new_ref = ref.push(json)
+    return new_ref.key
+
     
