@@ -29,10 +29,18 @@ html, body {
 }
 .exercise {
   box-shadow: 5px 10px 18px grey;
-  border-bottom-style: solid;
-  border-top-style: solid;
+  /*border-bottom-style: solid;
+  border-top-style: solid;*/
   border-width: 5px ;
   border-radius: 20px;
   padding:10px;
+  background-color: white;
+}
 
+.course{
+    box-shadow: 5px 10px 18px grey;
+    border-width: 5px ;
+    border-radius: 20px;
+    padding:10px;
+    background-color: white;
 }
