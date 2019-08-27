@@ -1,12 +1,12 @@
-#logo{
+#logo {
     padding-top: 1%;
-    float:left;
+    float: left;
     width: 20%;
     height: auto;
 }
 
-#pagename{
-    float:left;
+#pagename {
+    float: left;
     padding-left: 1%;
     padding-top: 1%;
     width: 80%;
@@ -16,14 +16,14 @@
     font-size: 35px;
 }
 
-#list {    
-    float:left;
+#list {
+    float: left;
     padding-top: 8%;
     padding-left: 4%;
 }
 
 #form {
-    float:right;   
+    float: right;
     padding-top: 9%;
 }
 
@@ -32,6 +32,7 @@
     font-size: 40px;
     text-align: center;
 }
+
 .container {
     width: 1220px;
     padding-bottom: 1%
