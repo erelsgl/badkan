@@ -70,12 +70,13 @@ def delete_course(course_id):
     delete_old_course(course_id)
     return 'OK'
 
-@app.route('/create_exercise/<course_id>/', methods=["POST"])
-def create_exercise(course_id):
-    # TODO: Check if the user should have the ref of the course or inverse, same with course and exercise...
+
+@app.route('/create_exercise/', methods=["POST"])
+def create_exercise():
     exercise_id = create_new_exercise(json.loads(request.form["json"]))
-    course_update_exercises(course_id, exercise_id)
-    upload_pdf_instruction(request.files["file"], exercise_id)
+    print(request.files)
+    if "file" in request.files:
+        upload_pdf_instruction(request.files["file"], exercise_id)
     return 'OK'
 
 

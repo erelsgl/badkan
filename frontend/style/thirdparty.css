@@ -1,0 +1,10 @@
+/* For Jeremy: This file includes the css that is share between some few files, like the explanation of a field... */
+
+.explanation {
+    font-family: FreeMono, monospace;
+    border-bottom: solid 1px;
+}
+
+.explanation:hover {
+    color: #00bfff;
+}

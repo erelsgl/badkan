@@ -8,7 +8,9 @@
     },
     "courses": {
       ".indexOn": "owner_uid"
+    },
+    "exercises": {
+      ".indexOn": "course_id"
     }
-
   }
 }

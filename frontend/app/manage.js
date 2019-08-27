@@ -6,13 +6,12 @@ function onLoadMain() {
 
 function onFinishRetreiveData(data) {
     // TODO: make the first active at the beginning.
-    console.log(data)
     if (data.courses) {
         const entries = Object.entries(data.courses)
         for (course of entries) {
-            // course[0] = courseId
-            // course[1] = course (the value)
-            createAccordionManage(course, ["exercises", "exercises"]); // Example.
+            // course[0] -> courseId
+            // course[1] -> course (the value)
+            createAccordionManage(course); // Example.
         }
     }
     $('#main').show();
@@ -240,6 +239,7 @@ async function newNormalExercise(courseId) {
         if (result.value) {
             $("#main").hide()
             let json = JSON.stringify({
+                course_id: courseId,
                 exercise_name: exerciseName,
                 exercise_compiler: exerciseCompiler,
                 submission_via_github: submissionViaGithub,
@@ -254,10 +254,8 @@ async function newNormalExercise(courseId) {
             var fd = new FormData();
             fd.append("file", instructionPdf);
             fd.append("json", json);
-            doPostJSONAndFile(fd, "create_exercise/" + courseId, "text", onCreateEditCourseExerciseSuccess)
-        } else {
-            console.log("cancel")
-        }
+            doPostJSONAndFile(fd, "create_exercise", "text", onCreateEditCourseExerciseSuccess)
+        } 
     })
 }
 
