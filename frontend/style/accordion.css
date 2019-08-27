@@ -113,6 +113,7 @@ ul.nacc li p {
 .exerciseName {
   text-align: center;
   font-size: 35px;
+  font-family:FreeMono, monospace; text-decoration: underline;
 }
 
 .courseInputEdit {
@@ -121,5 +122,11 @@ ul.nacc li p {
   font-size: 20px;
 }
 
+.explanation{
+  font-family:FreeMono, monospace; border-bottom:solid 1px;
+}
+.explanation:hover {
+  color: #00bfff;
+}
 
 /* TODO: finish here the style for the result rectangle. */
