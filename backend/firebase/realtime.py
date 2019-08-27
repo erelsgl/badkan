@@ -21,12 +21,6 @@ def user_update(uid, json):
     user_ref.update(json)
 
 
-def course_update_exercises(course_id, exercise_id):
-    ref = db.reference('courses')
-    course_ref = ref.child(course_id + "/exercises")
-    course_ref.push({"exercise_id": exercise_id})
-
-
 def retreive_all_courses_and_exercises():
     courses = db.reference('courses/')
     exercises = db.reference('exercises/')
@@ -37,20 +31,22 @@ def retreive_all_courses_and_exercises():
 
 
 def retreive_courses_and_exercises_by_uid(uid):
-    courses = db.reference('courses/')
-    snapshot = courses.order_by_child('owner_uid').equal_to(uid).get()
-    for course in snapshot:
-        if "uids" in snapshot[course]:
-            snapshot[course]["uids"] = get_country_ids_by_uids(
-                snapshot[course]["uids"])
-        if "grader_uid" in snapshot[course]:
-            snapshot[course]["grader_uid"] = get_country_id_by_uid(
-                snapshot[course]["grader_uid"])
-    # print(snapshot["uids"])
-    # exercises = db.reference('exercises/'+uid)
+    courses_ref = db.reference('courses/')
+    exercises_ref = db.reference('exercises/')
+    # Check about the grader....
+    # courses = courses.order_by_child('grader_uid').equal_to(uid).get()
+    owner_courses = courses_ref.order_by_child('owner_uid').equal_to(uid).get()
+    for course_id in owner_courses:
+        if "uids" in owner_courses[course_id]:
+            owner_courses[course_id]["uids"] = get_country_ids_by_uids(
+                owner_courses[course_id]["uids"])
+        if "grader_uid" in owner_courses[course_id]:
+            owner_courses[course_id]["grader_uid"] = get_country_id_by_uid(
+                owner_courses[course_id]["grader_uid"])
+        exercises_of_course = exercises_ref.order_by_child('course_id').equal_to(course_id).get()
+        owner_courses[course_id]["exercises"] = exercises_of_course
     answer = dict()
-    answer["courses"] = snapshot
-    # answer["exercises"] = exercises.get()
+    answer["courses"] = owner_courses
     return answer
 
 
