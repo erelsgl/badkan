@@ -62,6 +62,11 @@ def edit_old_course(json, course_id):
     ref.update(json)
 
 
+def delete_old_course(course_id):
+    ref = db.reference('courses/'+course_id)
+    ref.delete()
+
+
 def get_uid_by_country_id(id):
     user = db.reference('userDetails/')
     snapshot = user.order_by_child('country_id').equal_to(id).get()
@@ -92,5 +97,5 @@ def get_country_ids_by_uids(uids):
 
 def create_new_exercise(json):
     ref = db.reference('exercises')
-    ref.push(json)
-    
+    new_ref = ref.push(json)
+    return new_ref.key
