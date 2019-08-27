@@ -91,36 +91,18 @@ function createAccordionBodyManageExercise(exerciseObj) {
 		'<option value="gcc"' + (exercise.exercise_compiler == "gcc" ? "selected" : "") + '>gcc</option>' +
 		'<option value="clang"' + (exercise.exercise_compiler == "clang" ? "selected" : "") + '>clang</option>' +
 		'</select>' +
-
 		'<label for="submission_option' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="For each method checked, the student will be able to submit his exercise via the method.' +
 		'If you want the student only submit via GitHub, then check only the GitHub button .">Submission option *</div></label>' +
 		'<div id="submission_option' + exerciseId + '" >' +
-		'<input id="github' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="github" required="" ' + 
-		(exercise.submission_via_github? "checked" : "") +
+		'<input id="github' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="github" required="" ' +
+		(exercise.submission_via_github ? "checked" : "") +
 		'>GitHub</input> <br>' +
-		'<input id="zip' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="zip" required="" ' + 
-		(exercise.submission_via_zip? "checked" : "") +
+		'<input id="zip' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="zip" required="" ' +
+		(exercise.submission_via_zip ? "checked" : "") +
 		'>Zip</input>' +
 		'</div>' +
-
 		'<label for="main_file' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
-		'<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.main_file	 + '"></input><br>' + '<br>' +
-
-		
-		// '<label for="course_grader"><div class="explanation" data-toggle="tooltip" title="The grader must be admin. \nGives an access to the manage course.">Grader id \n </div></label>' +
-		// '<input id="course_grader' + courseId + '" class="courseExerciseInputEdit" value="' + course.grader_uid + '" style="margin-left:88px"></input><br>' + '<br>' +
-		// '<label for="privacyEdit"><div class="explanation" data-toggle="tooltip" title="The course is shared only with the students you want.">Privacy</div></label><br>' +
-		// '<input type="radio" name="privacy' + courseId + '" value="public" onclick=\'$(\"#pass' + courseId + '\").hide()\'' +
-		// ((course.privacy == 'public') ? "checked" : "") +
-		// '> Public</input><br>' +
-		// '<input type="radio" name="privacy' + courseId + '" value="private" onclick=\'$(\"#pass' + courseId + '\").show()\'' +
-		// ((course.privacy == 'private') ? "checked" : "") +
-		// '> Private</input><br><br>' +
-		// '<div id="pass' + courseId + '"' +
-		// ((course.privacy == 'public') ? "style=display:none;>" : ">") +
-		// '<label for="course_ids"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
-		// '<input id="course_ids' + courseId + '" class="ids courseExerciseInputEdit" value="' + String(course.uids).replace(",", " ") + '" placeholder="000000000 000000000"" style="margin-left:47px"></input><br>' +
-		// '</div>' + '<br>' +
+		'<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.main_file + '"></input><br>' + '<br>' +
 		// '<button class="btn btn_edit" onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
 		// '<button class="btn btn_edit" onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
 		'</div></div>';
