@@ -6,6 +6,7 @@ function onLoadMain() {
 
 function onFinishRetreiveData(data) {
     // TODO: make the first active at the beginning.
+    console.log(data)
     if (data.courses) {
         const entries = Object.entries(data.courses)
         for (course of entries) {
@@ -239,7 +240,6 @@ async function newNormalExercise(courseId) {
         if (result.value) {
             $("#main").hide()
             let json = JSON.stringify({
-                course_id: courseId,
                 exercise_name: exerciseName,
                 exercise_compiler: exerciseCompiler,
                 submission_via_github: submissionViaGithub,
@@ -254,7 +254,7 @@ async function newNormalExercise(courseId) {
             var fd = new FormData();
             fd.append("file", instructionPdf);
             fd.append("json", json);
-            doPostJSONAndFile(fd, "create_exercise", "text", onCreateEditCourseExerciseSuccess)
+            doPostJSONAndFile(fd, "create_exercise/" + courseId, "text", onCreateEditCourseExerciseSuccess)
         } else {
             console.log("cancel")
         }
@@ -263,7 +263,7 @@ async function newNormalExercise(courseId) {
 
 function moreIO(i, inputOutputPoints) {
     swal.insertQueueStep({
-        closeOnClickOutside: false,
+        allowOutsideClick: false,
         title: 'More input',
         confirmButtonText: 'Next &rarr;',
         html: '<label for="input_' + i + '"><div class="explanation" data-toggle="tooltip" title="The first given input.">Given input *</div></label>' +
