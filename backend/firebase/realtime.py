@@ -21,6 +21,12 @@ def user_update(uid, json):
     user_ref.update(json)
 
 
+def course_update_exercises(course_id, exercise_id):
+    ref = db.reference('courses')
+    course_ref = ref.child(course_id + "/exercises")
+    course_ref.push({"exercise_id": exercise_id})
+
+
 def retreive_all_courses_and_exercises():
     courses = db.reference('courses/')
     exercises = db.reference('exercises/')
