@@ -108,6 +108,8 @@ function createAccordionBodyManageExercise(exerciseObj) {
 
 		// TODO: Handle the pdf instruction
 
+		'<a href="' + exercise.pdf_instruction + '" style=""> Download pdf</a><br><br>' +
+
 		'<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
 		'<input id="deadline' + exerciseId + '" class="courseExerciseInputEdit" type="date" name="dealine" value="' + exercise.deadline + '"></input><br><br>' +
 		'<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +

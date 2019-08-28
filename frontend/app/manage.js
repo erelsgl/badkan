@@ -5,6 +5,8 @@ function onLoadMain() {
 }
 
 function onFinishRetreiveData(data) {
+    console.log(data)
+    // const blobUrl = URL.createObjectURL(blob);
     // TODO: make the first active at the beginning.
     if (data.courses) {
         const entries = Object.entries(data.courses)
