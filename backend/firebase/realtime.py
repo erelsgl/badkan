@@ -1,4 +1,5 @@
 from import_firebase import *
+from storage import download_pdf_instruction
 
 
 def edit_admin(uid, checked, user_country_id):
@@ -33,7 +34,8 @@ def retreive_all_courses_and_exercises():
 def retreive_courses_and_exercises_by_uid(uid):
     courses_ref = db.reference('courses/')
     exercises_ref = db.reference('exercises/')
-    # Check about the grader....
+    pdf_instructions = []
+    # TODO: Check about the grader....
     # courses = courses.order_by_child('grader_uid').equal_to(uid).get()
     owner_courses = courses_ref.order_by_child('owner_uid').equal_to(uid).get()
     for course_id in owner_courses:
@@ -43,8 +45,13 @@ def retreive_courses_and_exercises_by_uid(uid):
         if "grader_uid" in owner_courses[course_id]:
             owner_courses[course_id]["grader_uid"] = get_country_id_by_uid(
                 owner_courses[course_id]["grader_uid"])
-        exercises_of_course = exercises_ref.order_by_child('course_id').equal_to(course_id).get()
+        exercises_of_course = exercises_ref.order_by_child(
+            'course_id').equal_to(course_id).get()
+        for exercise_id in exercises_of_course:
+            exercises_of_course[exercise_id]["pdf_instruction"] = download_pdf_instruction(
+                exercise_id)
         owner_courses[course_id]["exercises"] = exercises_of_course
+
     answer = dict()
     answer["courses"] = owner_courses
     return answer
