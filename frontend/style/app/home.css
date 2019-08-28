@@ -80,18 +80,26 @@
 }
 
 .exerciseName {
-    /* For Jeremy: Change here the px */
     text-align: center;
     font-size: 35px;
-    font-family: FreeMono, monospace;
+    font-family: monospace;
     text-decoration: underline;
 }
 
 .exercise {
-    /* For Jeremy: Change here the px */
-    box-shadow: 5px 10px 18px grey;
-    border-width: 5px;
-    border-radius: 20px;
-    padding: 10px;
-    background-color: white;
+  /* just "box-shadow" it's not possible to convert to % */
+  box-shadow: 5px 10px 18px grey;
+  border-radius: 5%/4%;
+  padding: 2%;
+  background-color: white;
+}
+
+/* Font of the exercise in the home page */
+
+.text-register{
+    font-family: monospace;
+}
+
+.timestamp{
+    font-family:URW Chancery L, cursive;
 }

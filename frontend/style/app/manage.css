@@ -14,11 +14,10 @@
 }
 
 .course {
-    /* For Jeremy: Change here the px */
+    /* just "box-shadow" it's not possible to convert to % */
     box-shadow: 5px 10px 18px grey;
-    border-width: 5px;
-    border-radius: 20px;
-    padding: 10px;
+    border-radius: 4%/8%;
+    padding: 2%;
     background-color: white;
 }
 
@@ -29,12 +28,36 @@
 }
 
 .exercise {
-    /* For Jeremy: Here is the box for the exercise.
-    This box need to be different from the course box to make the ux better.
-    It can be by changing the background color or something else... */
+    /* just "box-shadow" it's not possible to convert to % */
     box-shadow: 5px 10px 18px grey;
-    border-width: 5px;
-    border-radius: 20px;
-    padding: 10px;
-    background-color: white;
+    border-radius: 5%/4%;
+    padding: 2%;
+    background-color: rgb(211, 230, 241);
+}
+
+
+select.swal2-input{
+    /* just "box-shadow" it's not possible to convert to % */
+    -webkit-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
+    -moz-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
+    box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
+    overflow: auto;   
+    border: 1px solid #aaa;
+}
+
+textarea.swal2-input{
+    /* just "box-shadow" it's not possible to convert to % */
+    -webkit-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
+    -moz-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
+    box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
+    overflow: auto;   
+    border: 1px solid #aaa;
+}
+
+.exerciseComplete{
+
+    margin-left: 10%;
+    text-align: center;
+    font-size: 20px;
+    background-color: rgb(211, 230, 241);
 }
