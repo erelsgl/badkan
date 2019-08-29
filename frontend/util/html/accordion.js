@@ -36,11 +36,11 @@ function createAccordionBodyHomeRegister(exercise) {
 		'<div class="exercise" name="Vu1XBFXwv7aXLWnWuTADwBUOzQD2_1">' +
 		'<div class="exerciseName">' + exerciseName + '</div>' +
 		'<br>' +
-		'<div class="text-register description" style="font-family:monospace">Short description: ' + description + '</div>' +
+		'<div class="text-register description">Short description: ' + description + '</div>' +
 		'<div class="btn btn-link">Download PDF</div>' +
 		'<div class="result">' +
-		'<div class="text-register countryId" style="font-family:monospace">For the submission with the id(s): ' + userDetails.country_id + '</div>' +
-		'<div class="text-register grade" style="font-family:monospace">Your current grade is: ' + grade + '</div>' +
+		'<div class="text-register countryId">For the submission with the id(s): ' + userDetails.country_id + '</div>' +
+		'<div class="text-register grade">Your current grade is: ' + grade + '</div>' +
 		'<br>' +
 		'<div class=timestamp>Submitted on:' + timeStamp + '</div>' +
 		'<br>' +
@@ -84,7 +84,7 @@ function createAccordionBodyManageExercise(exerciseObj) {
 	let html = '<div class="panel" style="background:transparent">' +
 		'<div class="exercise">' +
 		'<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +
-		'<input id="exercise_name' + exerciseId + '" class="courseExerciseInputEdit exerciseComplete" value="' + exercise.exercise_name + '"></input><br><br>' +
+		'<input id="exercise_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.exercise_name + '"></input><br><br>' +
 		'<label for="exercise_compiler' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise.">Exercise compiler *</div></label>' +
 		'<select id="exercise_compiler' + exerciseId + '" class="swal2-input">' +
 		'<option value="javac"' + (exercise.exercise_compiler == "javac" ? "selected" : "") + '>javac</option>' +
@@ -102,7 +102,7 @@ function createAccordionBodyManageExercise(exerciseObj) {
 		'>Zip</input>' +
 		'</div>' +
 		'<label for="main_file' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
-		'<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit exerciseComplete" value="' + exercise.main_file + '"></input><br><br>' +
+		'<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.main_file + '"></input><br><br>' +
 		'<label for="exercise_description' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
 		'<textarea id="exercise_description' + exerciseId + '" class="swal2-input">' + exercise.exercise_description + '</textarea><br><br>' +
 
@@ -111,13 +111,13 @@ function createAccordionBodyManageExercise(exerciseObj) {
 		'<a href="' + exercise.pdf_instruction + '" class="btn btn-link" style=""> Download pdf</a><br><br>' +
 
 		'<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
-		'<input id="deadline' + exerciseId + '" class="courseExerciseInputEdit exerciseComplete" type="date" name="dealine" value="' + exercise.deadline + '"></input><br><br>' +
+		'<input id="deadline' + exerciseId + '" class="courseExerciseInputEdit" type="date" name="dealine" value="' + exercise.deadline + '"></input><br><br>' +
 		'<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +
-		'<input id="exercise_name' + exerciseId + '" class="courseExerciseInputEdit exerciseComplete" value="' + exercise.exercise_name + '"></input><br><br>' +
+		'<input id="exercise_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.exercise_name + '"></input><br><br>' +
 		'<label for="input_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default input is the standart input. Let standart if you do not want to change it.">Input file name *</div></label>' +
-		'<input id="input_file_name' + exerciseId + '" class="courseExerciseInputEdit exerciseComplete" value="' + exercise.input_file_name + '"></input><br><br>' +
+		'<input id="input_file_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.input_file_name + '"></input><br><br>' +
 		'<label for="output_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default output is the standart output.  Let standart if you do not want to change it.">Output file name *</div></label>' +
-		'<input id="output_file_name' + exerciseId + '" class="courseExerciseInputEdit exerciseComplete" value="' + exercise.output_file_name + '"></input><br><br>' +
+		'<input id="output_file_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.output_file_name + '"></input><br><br>' +
 
 		// TODO: Handle multiple input/output
 
