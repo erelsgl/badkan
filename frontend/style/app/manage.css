@@ -19,6 +19,7 @@
     border-radius: 4%/8%;
     padding: 2%;
     background-color: white;
+    border: 2px solid #00bfff;
 }
 
 .courseExerciseInputEdit {
@@ -33,6 +34,7 @@
     border-radius: 5%/4%;
     padding: 2%;
     background-color: rgb(211, 230, 241);
+    border: 2px solid #00bfff;
 }
 
 

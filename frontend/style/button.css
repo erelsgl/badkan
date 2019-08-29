@@ -22,7 +22,7 @@
   transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
 }
 
-.enjoy-css:hover, .btn-solve, .btn_edit, .btn_delete:hover{
+.enjoy-css:hover, .btn-solve, button.btn_edit, button.btn_delete:hover{
   color: rgba(255, 255, 255, 1);
   background: #00bfff;
   margin-right: 2%;
@@ -75,7 +75,7 @@
 }
 
 
-.btn-solve:hover, .btn_edit:hover, .btn_delete {
+div.btn-solve:hover, button.btn_edit:hover, button.btn_delete {
   background-color: transparent;
   color: #00bfff;
   border: 1px solid #00bfff;
