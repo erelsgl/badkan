@@ -123,7 +123,7 @@ function createAccordionBodyManageExercise(exerciseObj) {
 			'<label for="points_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The number of point for a good answer.">Points number * </div></label>' +
 			'<input id="points_' + exerciseId + item + '" class="courseExerciseInputEdit" type="number" value="' + exercise.input_output_points[item].point + '"></input><br><br>'
 	}
-	html += '<button class="btn btn_edit" onclick="editExercise(' + "'" + exerciseId + "'" + ')">Edit exercise <i class="glyphicon glyphicon-edit"></i></button>' +
+	html += '<button class="btn btn_edit" onclick="editExercise(' + "'" + exerciseId + "','" + exercise.input_output_points.length + "'" + ')">Edit exercise <i class="glyphicon glyphicon-edit"></i></button>' +
 		'<button class="btn btn_edit" onclick="deleteExercise(' + "'" + exerciseId + "'" + ')">Delete exercise <i class="glyphicon glyphicon-trash"></i></button>' +
 		'</div></div>';
 	return html;

@@ -74,7 +74,14 @@ def delete_course(course_id):
 @app.route('/create_exercise/', methods=["POST"])
 def create_exercise():
     exercise_id = create_new_exercise(json.loads(request.form["json"]))
-    print(request.files)
+    if "file" in request.files:
+        upload_pdf_instruction(request.files["file"], exercise_id)
+    return 'OK'
+
+
+@app.route('/edit_exercise/<exercise_id>/', methods=["POST"])
+def edit_exercise(exercise_id):
+    edit_old_exercise(json.loads(request.form["json"]), exercise_id)
     if "file" in request.files:
         upload_pdf_instruction(request.files["file"], exercise_id)
     return 'OK'

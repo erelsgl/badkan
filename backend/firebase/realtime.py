@@ -108,3 +108,8 @@ def create_new_exercise(json):
     ref = db.reference('exercises')
     new_ref = ref.push(json)
     return new_ref.key
+
+
+def edit_old_exercise(json, exercise_id):
+    ref = db.reference('exercises/'+exercise_id)
+    ref.update(json)
