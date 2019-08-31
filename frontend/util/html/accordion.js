@@ -36,13 +36,13 @@ function createAccordionBodyHomeRegister(exercise) {
 		'<div class="exercise" name="Vu1XBFXwv7aXLWnWuTADwBUOzQD2_1">' +
 		'<div class="exerciseName">' + exerciseName + '</div>' +
 		'<br>' +
-		'<div class="description" style="font-family:monospace">Short description: ' + description + '</div>' +
+		'<div class="description text-register">Short description: ' + description + '</div>' +
 		'<div class="btn btn-link">Download PDF</div>' +
 		'<div class="result">' +
-		'<div class=countryId style="font-family:monospace">For the submission with the id(s): ' + userDetails.country_id + '</div>' +
-		'<div class=grade style="font-family:monospace">Your current grade is: ' + grade + '</div>' +
+		'<div class="countryId text-register">For the submission with the id(s): ' + userDetails.country_id + '</div>' +
+		'<div class="grade text-register">Your current grade is: ' + grade + '</div>' +
 		'<br>' +
-		'<div class=timestamp style="font-family:URW Chancery L, cursive">Submitted on:' + timeStamp + '</div>' +
+		'<div class=timestamp >Submitted on:' + timeStamp + '</div>' +
 		'<br>' +
 		'<div class="btn btn-success">Solve</button>' +
 		'</div>' +
@@ -86,7 +86,7 @@ function createAccordionBodyManageExercise(exerciseObj) {
 		'<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +
 		'<input id="exercise_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.exercise_name + '"></input><br><br>' +
 		'<label for="exercise_compiler' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise.">Exercise compiler *</div></label>' +
-		'<select id="exercise_compiler' + exerciseId + '" class="swal2-input">' + /* For Jeremy you can play with the class swal2 if you want. */
+		'<select id="exercise_compiler' + exerciseId + '" class="swal2-input">' +
 		'<option value="javac"' + (exercise.exercise_compiler == "javac" ? "selected" : "") + '>javac</option>' +
 		'<option value="gcc"' + (exercise.exercise_compiler == "gcc" ? "selected" : "") + '>gcc</option>' +
 		'<option value="clang"' + (exercise.exercise_compiler == "clang" ? "selected" : "") + '>clang</option>' +

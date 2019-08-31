@@ -75,7 +75,7 @@
 }
 
 
-div.btn-solve:hover, button.btn_edit:hover, button.btn_delete {
+div.btn-solve:hover, button.btn_edit:hover, button.btn_delete{
   background-color: transparent;
   color: #00bfff;
   border: 1px solid #00bfff;
