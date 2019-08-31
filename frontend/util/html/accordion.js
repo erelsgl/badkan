@@ -32,7 +32,7 @@ function createAccordionBodyHomeRegister(exercise) {
 	let grade = 0;
 	let description = "Short description:";
 	let timeStamp = "Thu Jun 06 2019 12:21:34 GMT+0300 (Israel Daylight Time)."
-	return '<div class="panel" style="background: transparent">' +
+	return '<div class="panel">' +
 		'<div class="exercise" name="Vu1XBFXwv7aXLWnWuTADwBUOzQD2_1">' +
 		'<div class="exerciseName">' + exerciseName + '</div>' +
 		'<br>' +
@@ -54,7 +54,7 @@ function createAccordionBodyHomeRegister(exercise) {
 function createAccordionBodyManageCourse(courseObj) {
 	let courseId = courseObj[0]
 	let course = courseObj[1]
-	let html = '<div class="panel" style="background:transparent">' +
+	let html = '<div class="panel">' +
 		'<div class="course">' +
 		'<label for="course_name' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Course name *</div></label>' +
 		'<input id="course_name' + courseId + '" class="courseExerciseInputEdit" value="' + course.course_name + '"></input><br><br>' +
@@ -81,7 +81,7 @@ function createAccordionBodyManageCourse(courseObj) {
 function createAccordionBodyManageExercise(exerciseObj) {
 	let exerciseId = exerciseObj[0]
 	let exercise = exerciseObj[1]
-	let html = '<div class="panel" style="background:transparent">' +
+	let html = '<div class="panel">' +
 		'<div class="exercise">' +
 		'<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +
 		'<input id="exercise_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.exercise_name + '"></input><br><br>' +
