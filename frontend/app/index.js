@@ -73,7 +73,7 @@ $("#btnSignUp").click(function () {
     const name = escapeHtml($("#txtName").val())
     const lastName = escapeHtml($("#txtLastName").val())
     const id = escapeHtml($("#txtId").val())
-    if (checkEmptyFields([email, pass, name, lastName, id])) {
+    if (checkEmptyFieldsSnackbar([email, pass, name, lastName, id])) {
         let json = JSON.stringify({
             email: email,
             pass: pass,

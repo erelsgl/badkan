@@ -5,8 +5,6 @@ function onLoadMain() {
 }
 
 function onFinishRetreiveData(data) {
-    console.log(data)
-    // const blobUrl = URL.createObjectURL(blob);
     // TODO: make the first active at the beginning.
     if (data.courses) {
         const entries = Object.entries(data.courses)
@@ -91,7 +89,7 @@ $('input[type=radio][name=privacy]').change(function () {
 
 function editCourse(courseId) {
     const courseName = escapeHtml($("#course_name" + courseId).val())
-    if (checkEmptyFields([courseName])) {
+    if (checkEmptyFieldsAlert([courseName])) {
         let json = JSON.stringify({
             owner_uid: userUid,
             course_name: escapeHtml($("#course_name" + courseId).val()),
@@ -257,7 +255,7 @@ async function newNormalExercise(courseId) {
             fd.append("file", instructionPdf);
             fd.append("json", json);
             doPostJSONAndFile(fd, "create_exercise", "text", onCreateEditCourseExerciseSuccess)
-        } 
+        }
     })
 }
 
@@ -293,4 +291,54 @@ function moreIO(i, inputOutputPoints) {
             }
         }
     });
+}
+
+function editExercise(exerciseId, inputOutputPointsSize) {
+    const exerciseName = escapeHtml($("#exercise_name" + exerciseId).val())
+    const exerciseCompiler = escapeHtml($("#exercise_compiler" + exerciseId).val())
+    const submissionViaGithub = $('input[id="github' + exerciseId + '"]:checked').val()
+    const submissionViaZip = $('input[id="zip' + exerciseId + '"]:checked').val()
+    const mainFile = escapeHtml($("#main_file" + exerciseId).val())
+    const inputFileName = escapeHtml($("#input_file_name" + exerciseId).val())
+    const outputFileName = escapeHtml($("#output_file_name" + exerciseId).val())
+    let inputOutputPoints = [];
+    for (let i = 0; i < inputOutputPointsSize; i++) {
+        const input = escapeHtml($("#input_" + exerciseId + i).val())
+        const output = escapeHtml($("#output_" + exerciseId + i).val())
+        const point = escapeHtml($("#points_" + exerciseId + i).val())
+        if (checkEmptyFieldsAlert([input, output, point])) {
+            inputOutputPoints.push({
+                input: input,
+                output: output,
+                point: point
+            })
+        } else {
+            return;
+        }
+    }
+    if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler, submissionViaGithub, submissionViaZip,
+            mainFile, inputFileName, outputFileName
+        ])) {
+        exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
+        instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
+        deadline = $("#deadline" + exerciseId).val()
+        $("#main").hide()
+        let json = JSON.stringify({
+            // No need to update the course id since the exercise can't move.
+            exercise_name: exerciseName,
+            exercise_compiler: exerciseCompiler,
+            submission_via_github: submissionViaGithub,
+            submission_via_zip: submissionViaZip,
+            main_file: mainFile,
+            exercise_description: exerciseDescription,
+            deadline: deadline,
+            input_file_name: inputFileName,
+            output_file_name: outputFileName,
+            input_output_points: inputOutputPoints
+        })
+        var fd = new FormData();
+        fd.append("file", instructionPdf);
+        fd.append("json", json);
+        doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", onCreateEditCourseExerciseSuccess)
+    }
 }

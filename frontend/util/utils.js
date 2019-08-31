@@ -115,10 +115,21 @@ function showSnackbar(message) {
  * @param {String} lastName 
  * @param {Stirng} id 
  */
-function checkEmptyFields(args) {
-    console.log(JSON.stringify(args))
+function checkEmptyFieldsSnackbar(args) {
     if (args.includes(undefined) || args.includes("")) {
-        showSnackbar("Please fill all the fields.")        
+        showSnackbar("Please fill all the fields.")
+        return false;
+    }
+    return true;
+}
+
+function checkEmptyFieldsAlert(args) {
+    if (args.includes(undefined) || args.includes("")) {
+        Swal.fire(
+            'An error occured!',
+            'Please fill all the fields.',
+            'error'
+          )
         return false;
     }
     return true;
