@@ -1,16 +1,24 @@
 $('a[href="#mycourses"]').click(function () {
-  $('a[href="#public"]').removeClass("current");
-  $('a[href="#mycourses"]').addClass("current");
-  $("#registerCourses").show()
-  $("#unregisterCourses").hide()
+  showMyCourses()
 });
 
 $('a[href="#public"]').click(function () {
+  showPublic()
+});
+
+function showPublic() {
   $('a[href="#mycourses"]').removeClass("current");
   $('a[href="#public"]').addClass("current");
-  $("#registerCourses").hide()
-  $("#unregisterCourses").show()
-});
+  $(".public").show()
+  $(".myCourse").hide()
+}
+
+function showMyCourses() {
+  $('a[href="#public"]').removeClass("current");
+  $('a[href="#mycourses"]').addClass("current");
+  $(".myCourse").show()
+  $(".public").hide()
+}
 
 function onLoadMain() {
   // TODO: Make this part much more secure...
@@ -19,17 +27,35 @@ function onLoadMain() {
   } else {
     $("#instructorZone").show()
   }
-  doPostJSON("", "get_courses_and_exercises", "json", onFinishRetreiveData)
+  doPostJSON("", "get_courses_and_exercises/" + userUid, "json", onFinishRetreiveData)
 }
 
 function onFinishRetreiveData(data) {
   // TODO: make the first active at the beginning.
-  // var registerCourses = $("#registerCourses"); 
-  // var unregisterCourses = $("#unregisterCourses");  
-  createAccordionHomeRegister("Register Courses", ["exercises", "exercises"]);  // Example.
+  if (data.courses) {
+    for (let course of data.courses[0]) {
+      createAccordionHome(course, "myCourse"); // myCourse
+    }
+    for (let course of data.courses[1]) {
+      createAccordionHome(course, "public"); // public
+    }
+  }
   $('#main').show();
+  showPublic()
 }
 
+function registeringToCourse(courseId) {
+  doPostJSON(null, "registering_to_course/" + courseId + "/" + userUid, "text", reloadHome)
+  $("#main").hide()
+}
+
+function reloadHome() {
+  document.location.reload();
+}
+
+function solveExercise(exerciseId) {
+  document.location.href = 'badkan.html?exercise=' + exerciseId;
+}
 
 // var $template = $('.template');
 // let hash = 2;
@@ -484,6 +510,3 @@ function onFinishRetreiveData(data) {
 //   let course = coursesObject[courseId].course;
 //   registerSuccess(course, courseId);
 // });
-
-
-

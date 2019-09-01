@@ -71,14 +71,6 @@
     width: 83%;
 }
 
-.unregisterCourses {
-    display: block;
-}
-
-.registerCourses {
-    display: none;
-}
-
 .exerciseName {
     /* For Jeremy: Change here the px */
     text-align: center;

@@ -3,57 +3,73 @@ function createAccordionManage(courseObj) {
 	let course = courseObj[1]
 	createAccordionMenu(course.course_name)
 	let panel = "<li>";
-	panel += createAccordionBodyManageCourse(courseObj)
+	panel += createAccordionBodyManageCourse(courseId, course)
 	for (exerciseObj of Object.entries(course.exercises)) {
-		panel += createAccordionBodyManageExercise(exerciseObj)
+		let exerciseId = exerciseObj[0]
+		let exercise = exerciseObj[1]
+		panel += createAccordionBodyManageExercise(exerciseId, exercise)
 	}
 	panel += '<button id=newExercise data-toggle="tooltip" title="New exercise" ' +
 		'class="plus-button addExercise" onclick="newExercise(' + "'" + courseId + "'" + ')"></button>'
 	$(".nacc").append(panel + "</li>")
 }
 
-function createAccordionHomeRegister(courseName, exercises) {
-	createAccordionMenu(courseName)
+function createAccordionHome(courseObj, myClass) {
+	let courseId = courseObj[0]
+	let course = courseObj[1]
+	createAccordionMenu(course.course_name, myClass)
 	let panel = "<li>";
-	for (exercise of exercises) {
-		panel += createAccordionBodyHomeRegister(exercise)
+	for (exerciseObj of Object.entries(course.exercises)) {
+		let exerciseId = exerciseObj[0]
+		let exercise = exerciseObj[1]
+		if (myClass == "myCourse") {
+			panel += createAccordionBodyHomeSolve(exerciseId, exercise)
+		} else if (myClass == "public") {
+			panel += createAccordionBodyHomeRegister(courseId, exercise)
+		}
 	}
 	$(".nacc").append(panel + "</li>")
-
 }
 
-function createAccordionMenu(courseName) {
-	let menu = '<div class="courseName"><span class="light"></span><span>' + courseName + '</span></div>'
+function createAccordionMenu(courseName, myClass = null) {
+	let menu = '<div class="courseName ' + (myClass ? myClass : "") + '"><span class="light"></span><span>' + courseName + '</span></div>'
 	$(".menu").append(menu)
 }
 
-function createAccordionBodyHomeRegister(exercise) {
-	let exerciseName = "Exercise Name"
-	let grade = 0;
-	let description = "Short description:";
-	let timeStamp = "Thu Jun 06 2019 12:21:34 GMT+0300 (Israel Daylight Time)."
-	return '<div class="panel" style="background: transparent">' +
-		'<div class="exercise" name="Vu1XBFXwv7aXLWnWuTADwBUOzQD2_1">' +
-		'<div class="exerciseName">' + exerciseName + '</div>' +
-		'<br>' +
-		'<div class="description" style="font-family:monospace">Short description: ' + description + '</div>' +
-		'<div class="btn btn-link">Download PDF</div>' +
-		'<div class="result">' +
-		'<div class=countryId style="font-family:monospace">For the submission with the id(s): ' + userDetails.country_id + '</div>' +
-		'<div class=grade style="font-family:monospace">Your current grade is: ' + grade + '</div>' +
-		'<br>' +
-		'<div class=timestamp style="font-family:URW Chancery L, cursive">Submitted on:' + timeStamp + '</div>' +
-		'<br>' +
-		'<div class="btn btn-success">Solve</button>' +
-		'</div>' +
-		'</div>' +
-		'</div>' +
+function createAccordionBodyHomeRegister(courseId, exercise) {
+	return '<div class="exercise panel public">' + // Check in the class here for the style
+		'<div class="exerciseName">' + exercise.exercise_name + '</div><br><br>' +
+		'<div class="description">Compiler: ' + exercise.exercise_compiler + '</div><br><br>' +
+		(exercise.exercise_description ? '<div class="description" style="font-family:monospace"> Description: ' +
+			exercise.exercise_description + '</div><br><br>' : "") +
+		(exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction +
+			'" style="">Current pdf</a><br><br>' : "") +
+		(exercise.deadline ? '<div class=timestamp style="font-family:URW Chancery L, cursive">Deadline: ' +
+			exercise.deadline + '</div><br><br>' : "") +
+		'<button class="btn btn_edit" onclick="registeringToCourse(' + "'" + courseId + "'" +
+		')">Register to the course <i class="glyphicon glyphicon-plus"></i></button>' +
 		'</div>';
 }
 
-function createAccordionBodyManageCourse(courseObj) {
-	let courseId = courseObj[0]
-	let course = courseObj[1]
+
+function createAccordionBodyHomeSolve(exerciseId, exercise) {
+	return '<div class="exercise panel myCourse">' + // Check in the class here for the style
+		'<div class="exerciseName">' + exercise.exercise_name + '</div><br><br>' +
+		'<div class="description">Compiler: ' + exercise.exercise_compiler + '</div><br><br>' +
+		(exercise.exercise_description ? '<div class="description" style="font-family:monospace"> Description: ' +
+			exercise.exercise_description + '</div><br><br>' : "") +
+		(exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction +
+			'" style="">Current pdf</a><br><br>' : "") +
+		(exercise.deadline ? '<div class=timestamp style="font-family:URW Chancery L, cursive">Deadline: ' +
+			exercise.deadline + '</div><br><br>' : "") +
+		'<div class="">The filename where the main function of your submission must be: ' + exercise.main_file + '</div><br><br>' +
+		'<button class="btn btn_edit" onclick="solveExercise(' + "'" + exerciseId + "'" +
+		// Need to add the last(s) submission.
+		')">Solve <i class="glyphicon glyphicon-fire"></i></button>' +
+		'</div>';
+}
+
+function createAccordionBodyManageCourse(courseId, course) {
 	let html = '<div class="panel" style="background:transparent">' +
 		'<div class="course">' +
 		'<label for="course_name' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Course name *</div></label>' +
@@ -78,9 +94,7 @@ function createAccordionBodyManageCourse(courseObj) {
 	return html;
 }
 
-function createAccordionBodyManageExercise(exerciseObj) {
-	let exerciseId = exerciseObj[0]
-	let exercise = exerciseObj[1]
+function createAccordionBodyManageExercise(exerciseId, exercise) {
 	let html = '<div class="panel" style="background:transparent">' +
 		'<div class="exercise">' +
 		'<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +

@@ -15,18 +15,17 @@ function onFinishRetreiveData(data) {
         }
     }
     $('#main').show();
-
 }
 
 $("#newCourse").click(function () {
     var info = newCourse();
     info.then((json) => {
-        doPostJSON(json, "create_course", "text", onCreateEditCourseExerciseSuccess)
+        doPostJSON(json, "create_course", "text", reloadManage)
         $("#main").hide()
     })
 })
 
-function onCreateEditCourseExerciseSuccess() {
+function reloadManage() {
     document.location.reload();
 }
 
@@ -97,7 +96,7 @@ function editCourse(courseId) {
             privacy: ($("#pass" + courseId).is(":visible") ? "private" : "public"),
             uids: escapeHtml($("#course_ids" + courseId).val())
         })
-        doPostJSON(json, "edit_course/" + courseId, "text", onCreateEditCourseExerciseSuccess)
+        doPostJSON(json, "edit_course/" + courseId, "text", reloadManage)
     }
 }
 
@@ -114,7 +113,7 @@ function deleteCourse(courseId) {
         showCancelButton: true,
     }).then(result => {
         if (result.value) {
-            doPostJSON(null, "delete_course/" + courseId, "text", onCreateEditCourseExerciseSuccess)
+            doPostJSON(null, "delete_course/" + courseId, "text", reloadManage)
         }
     })
 }
@@ -254,7 +253,7 @@ async function newNormalExercise(courseId) {
             var fd = new FormData();
             fd.append("file", instructionPdf);
             fd.append("json", json);
-            doPostJSONAndFile(fd, "create_exercise", "text", onCreateEditCourseExerciseSuccess)
+            doPostJSONAndFile(fd, "create_exercise", "text", reloadManage)
         }
     })
 }
@@ -339,6 +338,20 @@ function editExercise(exerciseId, inputOutputPointsSize) {
         var fd = new FormData();
         fd.append("file", instructionPdf);
         fd.append("json", json);
-        doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", onCreateEditCourseExerciseSuccess)
+        doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", reloadManage)
     }
+}
+
+function deleteExercise(exerciseId) {
+    Swal.fire({
+        title: 'Delete exercise',
+        text: 'Are you sure that you want to delete the exercise?',
+        allowOutsideClick: false,
+        showConfirmButton: true,
+        showCancelButton: true,
+    }).then(result => {
+        if (result.value) {
+            doPostJSON(null, "delete_exercise/" + exerciseId, "text", reloadManage)
+        }
+    })
 }

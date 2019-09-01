@@ -22,12 +22,32 @@ def user_update(uid, json):
     user_ref.update(json)
 
 
-def retreive_all_courses_and_exercises():
-    courses = db.reference('courses/')
-    exercises = db.reference('exercises/')
+def retreive_all_courses_and_exercises(uid):
+    courses_ref = db.reference('courses/')
+    exercises_ref = db.reference('exercises/')
+    pdf_instructions = []
+    courses = courses_ref.get()
+    my_course = []
+    public = []
+    for course_id in courses:
+        course = courses[course_id]
+        exercises_of_course = exercises_ref.order_by_child(
+            'course_id').equal_to(course_id).get()
+        for exercise_id in exercises_of_course:
+            exercises_of_course[exercise_id]["pdf_instruction"] = download_pdf_instruction(
+                exercise_id)
+        course["exercises"] = exercises_of_course
+        if "uids" in course and isinstance(course["uids"], dict):
+            if uid in course["uids"].values():
+                my_course.append([course_id, course])
+            elif course["privacy"] == "public":
+                public.append([course_id, course])
+        elif "uids" in course and uid in course["uids"]:
+            my_course.append([course_id, course])
+        elif course["privacy"] == "public":
+            public.append([course_id, course])
     answer = dict()
-    answer["courses"] = courses.get()
-    answer["exercises"] = exercises.get()
+    answer["courses"] = [my_course, public]
     return answer
 
 
@@ -40,8 +60,12 @@ def retreive_courses_and_exercises_by_uid(uid):
     owner_courses = courses_ref.order_by_child('owner_uid').equal_to(uid).get()
     for course_id in owner_courses:
         if "uids" in owner_courses[course_id]:
-            owner_courses[course_id]["uids"] = get_country_ids_by_uids(
-                owner_courses[course_id]["uids"])
+            if isinstance(owner_courses[course_id]["uids"], list):
+                owner_courses[course_id]["uids"] = get_country_ids_by_uids(
+                    owner_courses[course_id]["uids"])
+            else:
+                owner_courses[course_id]["uids"] = get_country_ids_by_uids(
+                    owner_courses[course_id]["uids"].values())
         if "grader_uid" in owner_courses[course_id]:
             owner_courses[course_id]["grader_uid"] = get_country_id_by_uid(
                 owner_courses[course_id]["grader_uid"])
@@ -51,7 +75,6 @@ def retreive_courses_and_exercises_by_uid(uid):
             exercises_of_course[exercise_id]["pdf_instruction"] = download_pdf_instruction(
                 exercise_id)
         owner_courses[course_id]["exercises"] = exercises_of_course
-
     answer = dict()
     answer["courses"] = owner_courses
     return answer
@@ -113,3 +136,13 @@ def create_new_exercise(json):
 def edit_old_exercise(json, exercise_id):
     ref = db.reference('exercises/'+exercise_id)
     ref.update(json)
+
+
+def delete_old_exercise(exercise_id):
+    ref = db.reference('exercises/'+exercise_id)
+    ref.delete()
+
+
+def new_registering_to_course(course_id, uid):
+    ref = db.reference('courses/'+course_id+"/uids")
+    ref.push(uid)
