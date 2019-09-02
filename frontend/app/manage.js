@@ -6,6 +6,7 @@ function onLoadMain() {
 
 function onFinishRetreiveData(data) {
     // TODO: make the first active at the beginning.
+    // TODO: use form to save the input.
     if (data.courses) {
         const entries = Object.entries(data.courses)
         for (course of entries) {

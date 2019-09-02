@@ -146,3 +146,14 @@ def delete_old_exercise(exercise_id):
 def new_registering_to_course(course_id, uid):
     ref = db.reference('courses/'+course_id+"/uids")
     ref.push(uid)
+
+
+def retreive_exercise_for_submission(exercise_id):
+    ref = db.reference('exercises/'+exercise_id)
+    exercise = ref.get()
+    if "deadline" in exercise and exercise["deadline"] != "":
+        deadline = datetime.strptime(
+            exercise["deadline"] + ' 23:59:59.59', '%Y-%m-%d %H:%M:%S.%f')
+        if deadline < datetime.now():
+            return {"error": "The submissions are over."}
+    return {"exercise_name" : exercise["exercise_name"]}

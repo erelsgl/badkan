@@ -1,0 +1,21 @@
+#submitterIds {
+    margin-top: 4%;
+}
+
+#saveGradeCheck {
+    margin-top: 3%;
+}
+
+#pad {
+    margin-top: 2%;
+}
+
+#submissionResult {
+    margin-top: 2%;
+}
+
+#output {
+    border: dashed 1px; 
+    padding: 5px; 
+    font-family: courier'
+}

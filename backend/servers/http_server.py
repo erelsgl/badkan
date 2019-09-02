@@ -99,6 +99,11 @@ def registering_to_course(course_id, uid):
     return 'OK'
 
 
+@app.route('/get_exercise_submission/<exercise_id>/', methods=["POST"])
+def get_exercise_submission(exercise_id):
+    return retreive_exercise_for_submission(exercise_id)
+
+
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')
