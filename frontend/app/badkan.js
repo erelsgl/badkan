@@ -15,6 +15,16 @@ function onFinishRetreiveData(data) {
             document.location.href = "home.html";
         });
     } else {
+        if (data.submission_via_zip) {
+            $('.zip').show()
+        } else {
+            $('.zip').hide()
+        }
+        if (data.submission_via_github) {
+            $('.github').show()
+        } else {
+            $('.github').hide()
+        }
         $("#exerciseName").html(data.exercise_name);
         $("#userId").val(userDetails.country_id);
         $("#userId").attr('readonly', true);
@@ -46,8 +56,6 @@ function submit() {
         const githubUrl = escapeHtml($("#githubUrl").val())
         if (checkEmptyFieldsAlert([githubUrl])) {
             json.github_url = githubUrl;
-            console.log(json.github_url)
-            console.log(json)
             sendWebsocket(JSON.stringify(json), onOpen, onMessage, onClose, onError)
         }
     } else if (submissionGate == "Zip") {
@@ -70,6 +78,8 @@ function onReceiveZipFile() {
 function getAdditionnalInfo() {
     return {
         target: "check_submission",
+        exercise_id: exerciseId,
+        uid: userUid,
         collab1: escapeHtml($("#collab1").val()),
         collab2: escapeHtml($("#collab2").val()),
         saveGrade: $("input[id='saveGrade']:checked").val()
