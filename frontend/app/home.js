@@ -33,15 +33,33 @@ function onLoadMain() {
 function onFinishRetreiveData(data) {
   // TODO: make the first active at the beginning.
   if (data.courses) {
+    console.log(data.courses[0].length)
+    if (data.courses[0].length == 0) {
+      noMyCourseAvailable()
+    }
+    if (data.courses[1].length == 0) {
+      noPublicCourseAvailable()
+    }
     for (let course of data.courses[0]) {
       createAccordionHome(course, "myCourse"); // myCourse
     }
     for (let course of data.courses[1]) {
       createAccordionHome(course, "public"); // public
     }
+  } else {
+    noPublicCourseAvailable()
+    noMyCourseAvailable()
   }
   $('#main').show();
   showPublic()
+}
+
+function noPublicCourseAvailable() {
+  $(".nacc").append('<div class="public">No public course available</div>')
+}
+
+function noMyCourseAvailable() {
+  $(".nacc").append('<div class="myCourse">No my course available</div>')
 }
 
 function registeringToCourse(courseId) {

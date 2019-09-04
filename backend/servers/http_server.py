@@ -104,6 +104,13 @@ def get_exercise_submission(exercise_id):
     return retreive_exercise_for_submission(exercise_id)
 
 
+@app.route('/submit_zip_file/<exercise_id>/<uid>/', methods=["POST"])
+def submit_zip_file(exercise_id, uid):
+    if "file" in request.files:
+        store_zip_solution(request.files["file"], exercise_id, uid)
+    return 'OK'
+
+
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')

@@ -15,16 +15,17 @@ async def run(websocket, path):
     Run a websocket server that receives submissions and grades them.
     """
     submission_json = await websocket.recv()   # returns a string
-#     print("< {} ".format(submission_json))
-#     # converts the string to a python dict
-#     submission = json.loads(submission_json)
-#     # The target fields is mandatory for all websocket protocol we use.
-#     target = submission["target"]
+    print("< {} ".format(submission_json))
+    # converts the string to a python dict
+    submission = json.loads(submission_json)
+    # The target fields is mandatory for all websocket protocol we use.
+    target = submission["target"]
+    if target == 'check_submission':
+        await check_submission(websocket, submission)
+
 #     redirect = None
 #     if "redirect" in submission and submission["redirect"] != "None":
 #         redirect = submission["redirect"]
-#     if target == 'check_url_submission':
-#         await check_submission(websocket, submission, dealing_with_url)
 #     elif target == 'check_file_submission':
 #         await check_submission(websocket, submission, dealing_with_file)
 #     elif target == 'check_private_submission':
@@ -55,7 +56,7 @@ async def run(websocket, path):
 #         print("Illegal target {}".format(target))
 #     if redirect:
 #         await tee(websocket, "@$@redirect@$@" + redirect)
-#     print("> Closing connection")
+    print("> Closing connection")
 
 
 websocketserver = websockets.server.serve(

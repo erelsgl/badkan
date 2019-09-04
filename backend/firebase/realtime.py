@@ -156,4 +156,13 @@ def retreive_exercise_for_submission(exercise_id):
             exercise["deadline"] + ' 23:59:59.59', '%Y-%m-%d %H:%M:%S.%f')
         if deadline < datetime.now():
             return {"error": "The submissions are over."}
-    return {"exercise_name" : exercise["exercise_name"]}
+    return {"exercise_name": exercise["exercise_name"]}
+
+
+def store_zip_solution(zip_file, exercise_id, uid):
+    try:
+        os.mkdir("../../docker/submissions/" + exercise_id)
+    except FileExistsError:
+        print("Directory already exists")
+    zip_file.save("../../docker/submissions/" +
+                  exercise_id + "/" + uid + ".zip")

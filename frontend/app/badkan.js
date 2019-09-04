@@ -45,16 +45,17 @@ function submit() {
         let json = getAdditionnalInfo()
         const githubUrl = escapeHtml($("#githubUrl").val())
         if (checkEmptyFieldsAlert([githubUrl])) {
-            json["github_url"] = githubUrl;
-            sendWebsocket(json, onOpen, onMessage, onClose, onError)
+            json.github_url = githubUrl;
+            console.log(json.github_url)
+            console.log(json)
+            sendWebsocket(JSON.stringify(json), onOpen, onMessage, onClose, onError)
         }
     } else if (submissionGate == "Zip") {
         const zipFile = $('#zipFile').prop('files')[0];
         if (checkEmptyFieldsAlert([zipFile])) {
             var fd = new FormData();
             fd.append("file", zipFile);
-            // TODO: to continue...
-            doPostJSONAndFile(fd, "submit_zip_file/" + exerciseId, "text", onReceiveZipFile)
+            doPostJSONAndFile(fd, "submit_zip_file/" + exerciseId + "/" + userUid, "text", onReceiveZipFile)
         }
     } else {
         alert("error.")
@@ -63,15 +64,16 @@ function submit() {
 
 function onReceiveZipFile() {
     let json = getAdditionnalInfo()
-    sendWebsocket(json, onOpen, onMessage, onClose, onError)
+    sendWebsocket(JSON.stringify(json), onOpen, onMessage, onClose, onError)
 }
 
 function getAdditionnalInfo() {
-    return JSON.stringify({
+    return {
+        target: "check_submission",
         collab1: escapeHtml($("#collab1").val()),
         collab2: escapeHtml($("#collab2").val()),
         saveGrade: $("input[id='saveGrade']:checked").val()
-    })
+    }
 }
 
 function onOpen(_event) {
