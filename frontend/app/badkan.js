@@ -80,6 +80,7 @@ function getAdditionnalInfo() {
         target: "check_submission",
         exercise_id: exerciseId,
         uid: userUid,
+        country_id: userDetails.country_id,
         collab1: escapeHtml($("#collab1").val()),
         collab2: escapeHtml($("#collab2").val()),
         saveGrade: $("input[id='saveGrade']:checked").val()

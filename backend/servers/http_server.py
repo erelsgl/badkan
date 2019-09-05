@@ -107,7 +107,7 @@ def get_exercise_submission(exercise_id):
 @app.route('/submit_zip_file/<exercise_id>/<uid>/', methods=["POST"])
 def submit_zip_file(exercise_id, uid):
     if "file" in request.files:
-        store_zip_solution(request.files["file"], exercise_id, uid)
+        save_zip_submission(request.files["file"], exercise_id, uid)
     return 'OK'
 
 
