@@ -102,8 +102,8 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
 		'<label for="exercise_compiler' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise.">Exercise compiler *</div></label>' +
 		'<select id="exercise_compiler' + exerciseId + '" class="swal2-input">' + /* For Jeremy you can play with the class swal2 if you want. */
 		'<option value="javac"' + (exercise.exercise_compiler == "javac" ? "selected" : "") + '>javac</option>' +
-		'<option value="gcc"' + (exercise.exercise_compiler == "gcc" ? "selected" : "") + '>gcc</option>' +
-		'<option value="clang"' + (exercise.exercise_compiler == "clang" ? "selected" : "") + '>clang</option>' +
+		'<option value="gcc"' + (exercise.exercise_compiler == "gcc" ? "selected" : "") + '>gcc (c or c++)</option>' +
+		'<option value="python3"' + (exercise.exercise_compiler == "python3" ? "selected" : "") + '>python3</option>' +
 		'</select>' +
 		'<label for="submission_option' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="For each method checked, the student will be able to submit his exercise via the method.' +
 		'If you want the student only submit via GitHub, then check only the GitHub button .">Submission option *</div></label>' +

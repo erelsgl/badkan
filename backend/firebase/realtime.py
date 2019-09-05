@@ -29,6 +29,8 @@ def retreive_all_courses_and_exercises(uid):
     courses = courses_ref.get()
     my_course = []
     public = []
+    if not courses:
+        return {}
     for course_id in courses:
         course = courses[course_id]
         exercises_of_course = exercises_ref.order_by_child(

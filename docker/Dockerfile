@@ -3,7 +3,7 @@ FROM ubuntu:latest
 
 # Install any needed packages specified in requirements.txt
 RUN apt-get update
-RUN apt-get -y install git build-essential clang++-5.0 clang-tidy-5.0 valgrind python3 pnmtopng unzip bc gradle
+RUN apt-get -y install git build-essential python3 unzip default-jdk
 
 RUN mkdir grading_room
 RUN mkdir www
@@ -12,6 +12,8 @@ RUN mkdir www
 WORKDIR /
 
 # Copy required files into the container:
+COPY files/grade.sh   /
+
 # COPY files/get-submission.sh   /
 # COPY files/get-submission-file.sh   /
 # COPY files/get-private-submission.sh   /

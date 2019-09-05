@@ -174,8 +174,8 @@ async function newNormalExercise(courseId) {
                 '<label for="exercise_compiler"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise. ">Exercise compiler *</div></label>' +
                 '<select id="exercise_compiler" class="swal2-input">' +
                 '<option value="javac">javac</option>' +
-                '<option value="gcc">gcc</option>' +
-                '<option value="clang">clang</option>' +
+                '<option value="gcc">gcc (c or c++)</option>' +
+                '<option value="python3">python3</option>' +
                 '</select>' +
                 '<label for="submission_option"><div class="explanation" data-toggle="tooltip" title="For each method checked, the student will be able to submit his exercise via the method.' +
                 'If you want the student only submit via GitHub, then check only the GitHub button .">Submission option *</div></label>' +
@@ -184,7 +184,7 @@ async function newNormalExercise(courseId) {
                 '<input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required="" checked>Zip</input>' +
                 '</div>' +
                 '<label for="main_file"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
-                '<input id="main_file" class="swal2-input" placeholder="Main, Ex01, a...">',
+                '<input id="main_file" class="swal2-input" placeholder="Main.java, Ex01.cpp, a.c...">',
             focusConfirm: false,
             preConfirm: () => {
                 exerciseName = escapeHtml($("#exercise_name").val())
@@ -316,30 +316,38 @@ function editExercise(exerciseId, inputOutputPointsSize) {
             return;
         }
     }
-    if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler, submissionViaGithub, submissionViaZip,
-            mainFile, inputFileName, outputFileName
-        ])) {
-        exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
-        instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
-        deadline = $("#deadline" + exerciseId).val()
-        $("#main").hide()
-        let json = JSON.stringify({
-            // No need to update the course id since the exercise can't move.
-            exercise_name: exerciseName,
-            exercise_compiler: exerciseCompiler,
-            submission_via_github: submissionViaGithub,
-            submission_via_zip: submissionViaZip,
-            main_file: mainFile,
-            exercise_description: exerciseDescription,
-            deadline: deadline,
-            input_file_name: inputFileName,
-            output_file_name: outputFileName,
-            input_output_points: inputOutputPoints
-        })
-        var fd = new FormData();
-        fd.append("file", instructionPdf);
-        fd.append("json", json);
-        doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", reloadManage)
+
+    console.log(submissionViaGithub)
+    console.log(submissionViaZip)
+
+    if (!submissionViaGithub && !submissionViaZip) {
+          alert("Please check at least one of the two submission option.")
+    } else {
+        if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler,
+                mainFile, inputFileName, outputFileName
+            ])) {
+            exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
+            instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
+            deadline = $("#deadline" + exerciseId).val()
+            $("#main").hide()
+            let json = JSON.stringify({
+                // No need to update the course id since the exercise can't move.
+                exercise_name: exerciseName,
+                exercise_compiler: exerciseCompiler,
+                submission_via_github: submissionViaGithub,
+                submission_via_zip: submissionViaZip,  // TODO: fix the case where the admin delete one submission option.
+                main_file: mainFile,
+                exercise_description: exerciseDescription,
+                deadline: deadline,
+                input_file_name: inputFileName,
+                output_file_name: outputFileName,
+                input_output_points: inputOutputPoints
+            })
+            var fd = new FormData();
+            fd.append("file", instructionPdf);
+            fd.append("json", json);
+            doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", reloadManage)
+        }
     }
 }
 

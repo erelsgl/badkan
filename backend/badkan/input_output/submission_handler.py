@@ -23,6 +23,7 @@ async def check_submission(websocket, submission):
         edit_csv_trace(str(currentDT), "zip", submitters,
                        "START", exercise["exercise_name"], zip_filename)
         await upload_submission_to_docker_and_firebase(submission, zip_filename)
+    await run_submission(websocket, exercise, submission["uid"])
     return 'OK'
 
 
@@ -52,3 +53,17 @@ async def upload_submission_to_docker_and_firebase(submission, zip_filename):
     await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+submission["uid"]])
     await docker_command_log(["cp", zip_filename, "badkan:/grading_room/"+submission["uid"]])
     await terminal_command_log(["rm", zip_filename])
+
+
+async def run_submission(websocket, exercise, uid):
+    await docker_command_tee(["exec", "badkan", "bash", "grade.sh",
+                              exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(exercise["input_output_points"]),
+                              exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], uid], websocket)
+
+
+def dict_to_string(my_dicts):
+    answer = ''
+    for my_dict in my_dicts:
+        for item in my_dict.values():
+            answer += item + ' '
+    return answer

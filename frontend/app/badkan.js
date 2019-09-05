@@ -96,7 +96,7 @@ function onError(_event) {
 }
 
 function onMessage(_event) {
-    logServer("color:black", event.data);
+    logServer("color:black", _event.data);
 }
 
 function onClose(event) {
