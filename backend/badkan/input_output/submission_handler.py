@@ -57,13 +57,27 @@ async def upload_submission_to_docker_and_firebase(submission, zip_filename):
 
 async def run_submission(websocket, exercise, uid):
     await docker_command_tee(["exec", "badkan", "bash", "grade.sh",
-                              exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(exercise["input_output_points"]),
-                              exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], uid], websocket)
+                              exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(
+                                  exercise["input_output_points"]),
+                              exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], uid,
+                              get_running_command(exercise["exercise_compiler"], exercise["main_file"])], websocket)
 
 
 def dict_to_string(my_dicts):
     answer = ''
     for my_dict in my_dicts:
         for item in my_dict.values():
-            answer += item + ' '
+            answer += item + '@*@'
+        answer += ' '
     return answer
+
+
+def get_running_command(compiler, main_file):
+    if compiler == "javac":
+        return "bash ../../../run_java.sh"
+    elif compiler == "g++":
+        return "bash ../../../run_cpp.sh"
+    elif compiler == "python3":
+        return "python3 " + main_file
+    else:
+        return "unknown compiler."

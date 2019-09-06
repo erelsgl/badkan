@@ -174,7 +174,7 @@ async function newNormalExercise(courseId) {
                 '<label for="exercise_compiler"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise. ">Exercise compiler *</div></label>' +
                 '<select id="exercise_compiler" class="swal2-input">' +
                 '<option value="javac">javac</option>' +
-                '<option value="gcc">gcc (c or c++)</option>' +
+                '<option value="g++">g++ (c or c++)</option>' +
                 '<option value="python3">python3</option>' +
                 '</select>' +
                 '<label for="submission_option"><div class="explanation" data-toggle="tooltip" title="For each method checked, the student will be able to submit his exercise via the method.' +
