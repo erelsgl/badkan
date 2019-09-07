@@ -6,6 +6,7 @@ function onLoadMain() {
 
 function onFinishRetreiveData(data) {
     // TODO: make the first active at the beginning.
+    // TODO: use form to save the input.
     if (data.courses) {
         const entries = Object.entries(data.courses)
         for (course of entries) {
@@ -15,18 +16,17 @@ function onFinishRetreiveData(data) {
         }
     }
     $('#main').show();
-
 }
 
 $("#newCourse").click(function () {
     var info = newCourse();
     info.then((json) => {
-        doPostJSON(json, "create_course", "text", onCreateEditCourseExerciseSuccess)
+        doPostJSON(json, "create_course", "text", reloadManage)
         $("#main").hide()
     })
 })
 
-function onCreateEditCourseExerciseSuccess() {
+function reloadManage() {
     document.location.reload();
 }
 
@@ -97,7 +97,7 @@ function editCourse(courseId) {
             privacy: ($("#pass" + courseId).is(":visible") ? "private" : "public"),
             uids: escapeHtml($("#course_ids" + courseId).val())
         })
-        doPostJSON(json, "edit_course/" + courseId, "text", onCreateEditCourseExerciseSuccess)
+        doPostJSON(json, "edit_course/" + courseId, "text", reloadManage)
     }
 }
 
@@ -114,7 +114,7 @@ function deleteCourse(courseId) {
         showCancelButton: true,
     }).then(result => {
         if (result.value) {
-            doPostJSON(null, "delete_course/" + courseId, "text", onCreateEditCourseExerciseSuccess)
+            doPostJSON(null, "delete_course/" + courseId, "text", reloadManage)
         }
     })
 }
@@ -174,8 +174,8 @@ async function newNormalExercise(courseId) {
                 '<label for="exercise_compiler"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise. ">Exercise compiler *</div></label>' +
                 '<select id="exercise_compiler" class="swal2-input">' +
                 '<option value="javac">javac</option>' +
-                '<option value="gcc">gcc</option>' +
-                '<option value="clang">clang</option>' +
+                '<option value="g++">g++ (c or c++)</option>' +
+                '<option value="python3">python3</option>' +
                 '</select>' +
                 '<label for="submission_option"><div class="explanation" data-toggle="tooltip" title="For each method checked, the student will be able to submit his exercise via the method.' +
                 'If you want the student only submit via GitHub, then check only the GitHub button .">Submission option *</div></label>' +
@@ -184,7 +184,7 @@ async function newNormalExercise(courseId) {
                 '<input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required="" checked>Zip</input>' +
                 '</div>' +
                 '<label for="main_file"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
-                '<input id="main_file" class="swal2-input" placeholder="Main, Ex01, a...">',
+                '<input id="main_file" class="swal2-input" placeholder="Main.java, Ex01.cpp, a.c...">',
             focusConfirm: false,
             preConfirm: () => {
                 exerciseName = escapeHtml($("#exercise_name").val())
@@ -254,7 +254,7 @@ async function newNormalExercise(courseId) {
             var fd = new FormData();
             fd.append("file", instructionPdf);
             fd.append("json", json);
-            doPostJSONAndFile(fd, "create_exercise", "text", onCreateEditCourseExerciseSuccess)
+            doPostJSONAndFile(fd, "create_exercise", "text", reloadManage)
         }
     })
 }
@@ -316,29 +316,51 @@ function editExercise(exerciseId, inputOutputPointsSize) {
             return;
         }
     }
-    if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler, submissionViaGithub, submissionViaZip,
-            mainFile, inputFileName, outputFileName
-        ])) {
-        exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
-        instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
-        deadline = $("#deadline" + exerciseId).val()
-        $("#main").hide()
-        let json = JSON.stringify({
-            // No need to update the course id since the exercise can't move.
-            exercise_name: exerciseName,
-            exercise_compiler: exerciseCompiler,
-            submission_via_github: submissionViaGithub,
-            submission_via_zip: submissionViaZip,
-            main_file: mainFile,
-            exercise_description: exerciseDescription,
-            deadline: deadline,
-            input_file_name: inputFileName,
-            output_file_name: outputFileName,
-            input_output_points: inputOutputPoints
-        })
-        var fd = new FormData();
-        fd.append("file", instructionPdf);
-        fd.append("json", json);
-        doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", onCreateEditCourseExerciseSuccess)
+
+    console.log(submissionViaGithub)
+    console.log(submissionViaZip)
+
+    if (!submissionViaGithub && !submissionViaZip) {
+          alert("Please check at least one of the two submission option.")
+    } else {
+        if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler,
+                mainFile, inputFileName, outputFileName
+            ])) {
+            exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
+            instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
+            deadline = $("#deadline" + exerciseId).val()
+            $("#main").hide()
+            let json = JSON.stringify({
+                // No need to update the course id since the exercise can't move.
+                exercise_name: exerciseName,
+                exercise_compiler: exerciseCompiler,
+                submission_via_github: submissionViaGithub,
+                submission_via_zip: submissionViaZip,  // TODO: fix the case where the admin delete one submission option.
+                main_file: mainFile,
+                exercise_description: exerciseDescription,
+                deadline: deadline,
+                input_file_name: inputFileName,
+                output_file_name: outputFileName,
+                input_output_points: inputOutputPoints
+            })
+            var fd = new FormData();
+            fd.append("file", instructionPdf);
+            fd.append("json", json);
+            doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", reloadManage)
+        }
     }
+}
+
+function deleteExercise(exerciseId) {
+    Swal.fire({
+        title: 'Delete exercise',
+        text: 'Are you sure that you want to delete the exercise?',
+        allowOutsideClick: false,
+        showConfirmButton: true,
+        showCancelButton: true,
+    }).then(result => {
+        if (result.value) {
+            doPostJSON(null, "delete_exercise/" + exerciseId, "text", reloadManage)
+        }
+    })
 }

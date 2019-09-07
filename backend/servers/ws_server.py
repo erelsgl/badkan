@@ -20,41 +20,42 @@ async def run(websocket, path):
     submission = json.loads(submission_json)
     # The target fields is mandatory for all websocket protocol we use.
     target = submission["target"]
-    redirect = None
-    if "redirect" in submission and submission["redirect"] != "None":
-        redirect = submission["redirect"]
-    if target == 'check_url_submission':
-        await check_submission(websocket, submission, dealing_with_url)
-    elif target == 'check_file_submission':
-        await check_submission(websocket, submission, dealing_with_file)
-    elif target == 'check_private_submission':
-        await check_private_submission(websocket, submission)
-    elif target == 'load_ex':
-        await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
-    elif target == 'edit_ex':
-        await edit_ex(submission["folderName"], submission["exFolder"])
-    elif target == 'delete_ex':
-        await delete_ex(submission["delete_exercise"])
-    elif target == 'run_admin':
-        await run_for_admin(submission["owner_firebase_id"], submission["exercise_id"], websocket)
-    elif target == 'run_all':
-        await run_all_submissions(submission["exercise_id"], submission["users_map"], websocket)
-    elif target == 'moss_command':
-        await moss_command(websocket, submission)
-    elif target == "check_test_peer_submission":
-        await check_test_peer_submission(websocket, submission)
-    elif target == "check_solution_peer_submission":
-        await check_solution_peer_submission(websocket, submission)
-    elif target == "create_course":
-        pass
-    elif target == "edit_course":
-        pass
-    elif target == "delete_course":
-        pass
-    else:
-        print("Illegal target {}".format(target))
-    if redirect:
-        await tee(websocket, "@$@redirect@$@" + redirect)
+    if target == 'check_submission':
+        await check_submission(websocket, submission)
+
+#     redirect = None
+#     if "redirect" in submission and submission["redirect"] != "None":
+#         redirect = submission["redirect"]
+#     elif target == 'check_file_submission':
+#         await check_submission(websocket, submission, dealing_with_file)
+#     elif target == 'check_private_submission':
+#         await check_private_submission(websocket, submission)
+#     elif target == 'load_ex':
+#         await load_ex(submission["git_url"], submission["folderName"], submission["username"], submission["pass"], submission["exFolder"])
+#     elif target == 'edit_ex':
+#         await edit_ex(submission["folderName"], submission["exFolder"])
+#     elif target == 'delete_ex':
+#         await delete_ex(submission["delete_exercise"])
+#     elif target == 'run_admin':
+#         await run_for_admin(submission["owner_firebase_id"], submission["exercise_id"], websocket)
+#     elif target == 'run_all':
+#         await run_all_submissions(submission["exercise_id"], submission["users_map"], websocket)
+#     elif target == 'moss_command':
+#         await moss_command(websocket, submission)
+#     elif target == "check_test_peer_submission":
+#         await check_test_peer_submission(websocket, submission)
+#     elif target == "check_solution_peer_submission":
+#         await check_solution_peer_submission(websocket, submission)
+#     elif target == "create_course":
+#         pass
+#     elif target == "edit_course":
+#         pass
+#     elif target == "delete_course":
+#         pass
+#     else:
+#         print("Illegal target {}".format(target))
+#     if redirect:
+#         await tee(websocket, "@$@redirect@$@" + redirect)
     print("> Closing connection")
 
 

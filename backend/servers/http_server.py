@@ -41,9 +41,9 @@ def edit_user():
     return edit_user_routine(response)
 
 
-@app.route('/get_courses_and_exercises/', methods=["POST"])
-def get_courses():
-    return retreive_all_courses_and_exercises()
+@app.route('/get_courses_and_exercises/<uid>/', methods=["POST"])
+def get_courses(uid):
+    return retreive_all_courses_and_exercises(uid)
 
 
 @app.route('/get_courses_manager/<uid>/', methods=["POST"])
@@ -84,6 +84,30 @@ def edit_exercise(exercise_id):
     edit_old_exercise(json.loads(request.form["json"]), exercise_id)
     if "file" in request.files:
         upload_pdf_instruction(request.files["file"], exercise_id)
+    return 'OK'
+
+
+@app.route('/delete_exercise/<exercise_id>/', methods=["POST"])
+def delete_old_course(exercise_id):
+    delete_old_exercise(exercise_id)
+    return 'OK'
+
+
+@app.route('/registering_to_course/<course_id>/<uid>/', methods=["POST"])
+def registering_to_course(course_id, uid):
+    new_registering_to_course(course_id, uid)
+    return 'OK'
+
+
+@app.route('/get_exercise_submission/<exercise_id>/', methods=["POST"])
+def get_exercise_submission(exercise_id):
+    return retreive_exercise_for_submission(exercise_id)
+
+
+@app.route('/submit_zip_file/<exercise_id>/<uid>/', methods=["POST"])
+def submit_zip_file(exercise_id, uid):
+    if "file" in request.files:
+        save_zip_submission(request.files["file"], exercise_id, uid)
     return 'OK'
 
 

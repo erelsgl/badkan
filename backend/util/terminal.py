@@ -7,16 +7,6 @@ from subprocess import call
 import asyncio
 
 
-async def old_docker_command(command_words):
-    """
-    :param command_words: a list of words to be executed by docker.
-    :return: a stream that contains all output of the command (stdout and stderr together)
-    """
-    return await asyncio.subprocess.create_subprocess_exec(
-        *(["docker"] + command_words),
-        stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
-
-
 async def tee(websocket, message):
     """
     Send a message both to the backend screen and to the frontend client.

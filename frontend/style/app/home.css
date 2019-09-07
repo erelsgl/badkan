@@ -71,14 +71,6 @@
     width: 83%;
 }
 
-.unregisterCourses {
-    display: block;
-}
-
-.registerCourses {
-    display: none;
-}
-
 .exerciseName {
     text-align: center;
     font-size: 35px;
