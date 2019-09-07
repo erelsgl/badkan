@@ -86,7 +86,7 @@ function createAccordionBodyManageExercise(exerciseObj) {
 		'<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +
 		'<input id="exercise_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.exercise_name + '"></input><br><br>' +
 		'<label for="exercise_compiler' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise.">Exercise compiler *</div></label>' +
-		'<select id="exercise_compiler' + exerciseId + '" class="swal2-input">' +
+		'<select id="exercise_compiler' + exerciseId + '" class="swal2-input input">' +
 		'<option value="javac"' + (exercise.exercise_compiler == "javac" ? "selected" : "") + '>javac</option>' +
 		'<option value="gcc"' + (exercise.exercise_compiler == "gcc" ? "selected" : "") + '>gcc</option>' +
 		'<option value="clang"' + (exercise.exercise_compiler == "clang" ? "selected" : "") + '>clang</option>' +

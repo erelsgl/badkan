@@ -98,13 +98,3 @@
 div.panel{
     background: transparent;
 }
-
-/* Font of the exercise in the home page */
-
-.text-register{
-    font-family: monospace;
-}
-
-.timestamp{
-    font-family:URW Chancery L, cursive;
-}

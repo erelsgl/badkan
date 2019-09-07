@@ -39,7 +39,7 @@
 }
 
 
-select.swal2-input{
+select.input{
     /* just "box-shadow" it's not possible to convert to % */
     -webkit-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
     -moz-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
@@ -48,7 +48,7 @@ select.swal2-input{
     border: 1px solid #aaa;
 }
 
-textarea.swal2-input{
+textarea.input{
     /* just "box-shadow" it's not possible to convert to % */
     -webkit-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
     -moz-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
