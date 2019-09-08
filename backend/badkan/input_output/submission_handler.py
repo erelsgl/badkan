@@ -1,6 +1,6 @@
 from imports_input_output import *
 
-
+# TODO: Checked about Erel works: long line, signature, valgrind...
 # Example https: https://github.com/SamuelBismuth/badkan.git
 # Example ssh: git@github.com:SamuelBismuth/badkan.git
 GIT_REGEXP = re.compile(".*github[.]com.(.*)/(.*)", re.IGNORECASE)
@@ -39,7 +39,6 @@ def save_zip_submission(zip_file, exercise_id, uid):
 
 async def save_github_submission(submission, zip_filename, wget_url):
     create_folder_if_not_exists(submission["exercise_id"], submission["uid"])
-    print(wget_url)
     await terminal_command_log(["wget", wget_url, "-O", zip_filename])
 
 
