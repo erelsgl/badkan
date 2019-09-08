@@ -88,7 +88,7 @@ def edit_exercise(exercise_id):
 
 
 @app.route('/delete_exercise/<exercise_id>/', methods=["POST"])
-def delete_old_course(exercise_id):
+def delete_exercise(exercise_id):
     delete_old_exercise(exercise_id)
     return 'OK'
 

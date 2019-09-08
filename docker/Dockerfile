@@ -13,8 +13,6 @@ WORKDIR /
 
 # Copy required files into the container:
 COPY files/grade.sh   /
-COPY files/run_cpp.sh   /
-COPY files/run_java.sh   /
 COPY www-readme.md       /www/README.md
 
 # Run bash when the container launches

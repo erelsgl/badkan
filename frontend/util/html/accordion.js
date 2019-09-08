@@ -63,6 +63,8 @@ function createAccordionBodyHomeSolve(exerciseId, exercise) {
 		(exercise.deadline ? '<div class=timestamp style="font-family:URW Chancery L, cursive">Deadline: ' +
 			exercise.deadline + '</div><br><br>' : "") +
 		'<div class="">The filename where the main function of your submission must be: ' + exercise.main_file + '</div><br><br>' +
+		'<div class="">You need to read the input from: ' + exercise.input_file_name + '</div><br><br>' +	
+		'<div class="">You need to read the output from: ' + exercise.output_file_name + '</div><br><br>' +		
 		'<button class="btn btn_edit" onclick="solveExercise(' + "'" + exerciseId + "'" +
 		// Need to add the last(s) submission.
 		')">Solve <i class="glyphicon glyphicon-fire"></i></button>' +

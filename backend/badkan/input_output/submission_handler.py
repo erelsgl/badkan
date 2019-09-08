@@ -15,9 +15,13 @@ async def check_submission(websocket, submission):
     zip_filename = "../submissions/" + \
         submission["exercise_id"]+"/"+submission["uid"]+".zip"
     if "github_url" in submission:
+        matches = GIT_REGEXP.search(submission["github_url"])
+        username = matches.group(1)
+        repository = GIT_CLEAN.sub("", matches.group(2))
+        wget_url = "https://github.com/"+username+"/"+repository+"/archive/master.zip"
         edit_csv_trace(str(
             currentDT), submission["github_url"], submitters, "START", exercise["exercise_name"], zip_filename)
-        await save_github_submission(submission, zip_filename)
+        await save_github_submission(submission, zip_filename, wget_url)
         await upload_submission_to_docker_and_firebase(submission, zip_filename)
     else:
         edit_csv_trace(str(currentDT), "zip", submitters,
@@ -33,10 +37,9 @@ def save_zip_submission(zip_file, exercise_id, uid):
                   exercise_id + "/" + uid + ".zip")
 
 
-async def save_github_submission(submission, zip_filename):
+async def save_github_submission(submission, zip_filename, wget_url):
     create_folder_if_not_exists(submission["exercise_id"], submission["uid"])
-    # TODO: check for typo with regex.
-    wget_url = submission["github_url"]+"/archive/master.zip"
+    print(wget_url)
     await terminal_command_log(["wget", wget_url, "-O", zip_filename])
 
 
@@ -74,9 +77,9 @@ def dict_to_string(my_dicts):
 
 def get_running_command(compiler, main_file):
     if compiler == "javac":
-        return "bash ../../../run_java.sh"
+        return "java " + main_file[:main_file.find('.')]
     elif compiler == "g++":
-        return "bash ../../../run_cpp.sh"
+        return "./a.out"
     elif compiler == "python3":
         return "python3 " + main_file
     else:
