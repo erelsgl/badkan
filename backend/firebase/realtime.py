@@ -38,6 +38,13 @@ def retreive_all_courses_and_exercises(uid):
         for exercise_id in exercises_of_course:
             exercises_of_course[exercise_id]["pdf_instruction"] = download_pdf_instruction(
                 exercise_id)
+            if "submissions" in exercises_of_course[exercise_id]:
+                for submission in exercises_of_course[exercise_id]["submissions"]:
+                    submissions_ref = db.reference(
+                        'submissions/'+exercises_of_course[exercise_id]["submissions"][submission])
+                    current_submission = submissions_ref.get()
+                    if str(current_submission["uid"]) == str(uid):
+                        exercises_of_course[exercise_id]["owner_submission"] = current_submission
         course["exercises"] = exercises_of_course
         if "uids" in course and isinstance(course["uids"], dict):
             if uid in course["uids"].values():

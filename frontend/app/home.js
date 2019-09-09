@@ -33,7 +33,6 @@ function onLoadMain() {
 function onFinishRetreiveData(data) {
   // TODO: make the first active at the beginning.
   if (data.courses) {
-    console.log(data.courses[0].length)
     if (data.courses[0].length == 0) {
       noMyCourseAvailable()
     }
