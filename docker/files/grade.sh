@@ -86,7 +86,9 @@ for item in $INPUT_OUTPUT_POINTS; do
     edit_grade $output $expected_output $points
 done
 
-echo "Your final grade is " $GRADE
+echo "Your final grade is" $GRADE
 
 cd ../../
 rm -R $FOLDER_NAME
+
+echo "*** $GRADE ***"

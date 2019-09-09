@@ -11,6 +11,9 @@
     },
     "exercises": {
       ".indexOn": "course_id"
+    }, 
+    "submissions": {
+      ".indexOn": "uid"
     }
   }
 }

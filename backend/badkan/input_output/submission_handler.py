@@ -27,8 +27,22 @@ async def check_submission(websocket, submission):
         edit_csv_trace(str(currentDT), "zip", submitters,
                        "START", exercise["exercise_name"], zip_filename)
         await upload_submission_to_docker_and_firebase(submission, zip_filename)
-    await run_submission(websocket, exercise, submission["uid"])
+    grade = await run_submission(websocket, exercise, submission["uid"])
+    if "save_grade" in submission:
+        await save_grade(submission, websocket, grade, str(currentDT))
+    else:
+        await tee(websocket, "This submission is meaningless, any grade has been stored. <br> < If you want the grade to be stored, please check the \"Save the grade\" button.")
     return 'OK'
+
+
+async def save_grade(submission, websocket, grade, timestamp):
+    url = "zip"
+    if "github_url" in submission:
+        url = submission["github_url"]
+    create_or_update_submission(grade, submission["exercise_id"], submission["uid"], submission["country_id"],
+                                submission["collab1"], submission["collab2"], url, timestamp)
+    # TODO: (eventually put the name of the collab if exists.
+    await tee(websocket, "Your grade is successfully stored.")
 
 
 def save_zip_submission(zip_file, exercise_id, uid):
@@ -58,11 +72,11 @@ async def upload_submission_to_docker_and_firebase(submission, zip_filename):
 
 
 async def run_submission(websocket, exercise, uid):
-    await docker_command_tee(["exec", "badkan", "bash", "grade.sh",
-                              exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(
-                                  exercise["input_output_points"]),
-                              exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], uid,
-                              get_running_command(exercise["exercise_compiler"], exercise["main_file"])], websocket)
+    return await docker_command_tee_with_grade(["exec", "badkan", "bash", "grade.sh",
+                                                exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(
+                                                    exercise["input_output_points"]),
+                                                exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], uid,
+                                                get_running_command(exercise["exercise_compiler"], exercise["main_file"])], websocket)
 
 
 def dict_to_string(my_dicts):
