@@ -1,8 +1,10 @@
 /* For Jeremy: This file includes the css that is share between some few files, like the explanation of a field... */
 
 .explanation {
-    font-family: FreeMono, monospace;
+    font-family: Arial;
     border-bottom: solid 1px;
+    font-size: 120%;
+
 }
 
 .explanation:hover {
@@ -10,9 +12,16 @@
 }
 
 .text-register{
-    font-family: monospace;
+    font-family: Arial;
+    font-size: 150%;
 }
 
 .timestamp{
-    font-family:URW Chancery L, cursive;
+    font-family:cursive;
+}
+
+input[value]{
+    font-family: monospace;
+    text-align: center;
+    letter-spacing: 5px;
 }

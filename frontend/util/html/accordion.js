@@ -44,7 +44,7 @@ function createAccordionBodyHomeRegister(courseId, exercise) {
 			exercise.exercise_description + '</div><br><br>' : "") +
 		(exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction +
 			'" style="">Current pdf</a><br><br>' : "") +
-		(exercise.deadline ? '<div class=timestamp style="font-family:URW Chancery L, cursive">Deadline: ' +
+		(exercise.deadline ? '<div class=timestamp">Deadline: ' +
 			exercise.deadline + '</div><br><br>' : "") +
 		'<button class="btn btn_edit" onclick="registeringToCourse(' + "'" + courseId + "'" +
 		')">Register to the course <i class="glyphicon glyphicon-plus"></i></button>' +
@@ -60,7 +60,7 @@ function createAccordionBodyHomeSolve(exerciseId, exercise) {
 			exercise.exercise_description + '</div><br><br>' : "") +
 		(exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction +
 			'" style="">Current pdf</a><br><br>' : "") +
-		(exercise.deadline ? '<div class=timestamp style="font-family:URW Chancery L, cursive">Deadline: ' +
+		(exercise.deadline ? '<div class=timestamp">Deadline: ' +
 			exercise.deadline + '</div><br><br>' : "") +
 		'<div class="">The filename where the main function of your submission must be: ' + exercise.main_file + '</div><br><br>' +
 		'<button class="btn btn_edit" onclick="solveExercise(' + "'" + exerciseId + "'" +
@@ -70,55 +70,64 @@ function createAccordionBodyHomeSolve(exerciseId, exercise) {
 }
 
 function createAccordionBodyManageCourse(courseId, course) {
-	let html = '<div class="panel" style="background:transparent">' +
+	let html = '<div class="panel">' +
 		'<div class="course">' +
-		'<label for="course_name' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Course name *</div></label>' +
+		'<label for="course_name' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Required field" style="margin-top: 17px">Course name *</div></label>' +
 		'<input id="course_name' + courseId + '" class="courseExerciseInputEdit" value="' + course.course_name + '"></input><br><br>' +
 		'<label for="course_grader' + courseId + '"><div class="explanation" data-toggle="tooltip" title="The grader must be admin. \nGives an access to the manage course.">Grader id \n </div></label>' +
 		'<input id="course_grader' + courseId + '" class="courseExerciseInputEdit" value="' + course.grader_uid + '" style="margin-left:88px"></input><br><br>' +
 		'<label for="privacyEdit"><div class="explanation" data-toggle="tooltip" title="The course is shared only with the students you want.">Privacy</div></label><br>' +
-		'<input type="radio" name="privacy' + courseId + '" value="public" onclick=\'$(\"#pass' + courseId + '\").hide()\'' +
+		
+		'<div class="radio_checkbox border_radio">' +
+
+		'<input id="radio_public' + courseId + '" class="btn_radio" type="radio" name="privacy' + courseId + '" value="public" onclick=\'$(\"#pass' + courseId + '\").hide()\'' +
 		((course.privacy == 'public') ? "checked" : "") +
-		'> Public</input><br>' +
-		'<input type="radio" name="privacy' + courseId + '" value="private" onclick=\'$(\"#pass' + courseId + '\").show()\'' +
+		'/>'+
+		'<label class="btn_radio" for="radio_public' + courseId + '">Public</label><br>' +
+		
+		'<input id="radio_private' + courseId + '" class="btn_radio" type="radio" name="privacy' + courseId + '" value="private" onclick=\'$(\"#pass' + courseId + '\").show()\'' +
 		((course.privacy == 'private') ? "checked" : "") +
-		'> Private</input><br><br>' +
+		'/><label class="btn_radio" for="radio_private' + courseId + '">Private</label>'+
+
+		'</div><br><br>' +
+
 		'<div id="pass' + courseId + '"' +
 		((course.privacy == 'public') ? "style=display:none;>" : ">") +
 		'<label for="course_ids' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
-		'<input id="course_ids' + courseId + '" class="ids courseExerciseInputEdit" value="' + String(course.uids).replace(",", " ") + '" placeholder="000000000 000000000"" style="margin-left:47px"></input><br>' +
+		'<input id="course_ids' + courseId + '" class="ids courseExerciseInputEdit" value="' + String(course.uids).replace(",", " ") + '" value="000000000 000000000""></input><br><br><br><br>' +
 		'</div>' + '<br>' +
 		'<button class="btn btn_edit" onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
-		'<button class="btn btn_edit" onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
+		'<button class="btn btn_delete" onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
 		'</div></div>';
 	return html;
 }
 
 function createAccordionBodyManageExercise(exerciseId, exercise) {
-	let html = '<div class="panel" style="background:transparent">' +
+	let html = '<div class="panel">' +
 		'<div class="exercise">' +
-		'<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +
+		'<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field" style="margin-top: 17px">Exercise name *</div></label>' +
 		'<input id="exercise_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.exercise_name + '"></input><br><br>' +
 		'<label for="exercise_compiler' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise.">Exercise compiler *</div></label>' +
-		'<select id="exercise_compiler' + exerciseId + '" class="swal2-input">' + /* For Jeremy you can play with the class swal2 if you want. */
-		'<option value="javac"' + (exercise.exercise_compiler == "javac" ? "selected" : "") + '>javac</option>' +
-		'<option value="g++"' + (exercise.exercise_compiler == "g++" ? "selected" : "") + '>g++ (c or c++)</option>' +
-		'<option value="python3"' + (exercise.exercise_compiler == "python3" ? "selected" : "") + '>python3</option>' +
+		'<select id="exercise_compiler' + exerciseId + '" class="swal2-input input">' + /* For Jeremy you can play with the class swal2 if you want. */
+		'<option  value="javac"' + (exercise.exercise_compiler == "javac" ? "selected" : "") + '>javac</option>' +
+		'<option  value="g++"' + (exercise.exercise_compiler == "g++" ? "selected" : "") + '>g++ (c or c++)</option>' +
+		'<option  value="python3"' + (exercise.exercise_compiler == "python3" ? "selected" : "") + '>python3</option>' +
 		'</select>' +
 		'<label for="submission_option' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="For each method checked, the student will be able to submit his exercise via the method.' +
 		'If you want the student only submit via GitHub, then check only the GitHub button .">Submission option *</div></label>' +
-		'<div id="submission_option' + exerciseId + '" >' +
-		'<input id="github' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="github" required="" ' +
+		'<div id="submission_option' + exerciseId + '" ></div>' +
+
+		'<div class="radio_checkbox"><input class="btn_checkbox"  id="github' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="github" required="" ' +
 		(exercise.submission_via_github ? "checked" : "") +
-		'>GitHub</input> <br>' +
-		'<input id="zip' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="zip" required="" ' +
+		'/><label class="btn_checkbox" for="github' + exerciseId + '">GitHub</label> <br>' +
+		'<input class="btn_checkbox"  id="zip' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="zip" required="" ' +
 		(exercise.submission_via_zip ? "checked" : "") +
-		'>Zip</input>' +
-		'</div>' +
+		'/><label class="btn_checkbox" for="zip' + exerciseId + '">Zip</label></div> <br>' +
+
 		'<label for="main_file' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
 		'<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.main_file + '"></input><br><br>' +
 		'<label for="exercise_description' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
-		'<textarea id="exercise_description' + exerciseId + '" class="swal2-input">' + exercise.exercise_description + '</textarea><br><br>' +
+		'<textarea id="exercise_description' + exerciseId + '" class="swal2-input input"> </textarea><br><br>' +
 		(exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction + '" style=""> Current pdf</a><br><br>' : '') +
 		'<label for="exercise_instruction' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
 		'<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
@@ -131,14 +140,14 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
 	for (item in exercise.input_output_points) {
 		html +=
 			'<label for="input_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The first given input.">Given input *</div></label>' +
-			'<textarea id="input_' + exerciseId + item + '" class="courseExerciseInputEdit">' + exercise.input_output_points[item].input + '</textarea><br><br>' +
+			'<textarea id="input_' + exerciseId + item + '" class="swal2-input input">' + exercise.input_output_points[item].input + '</textarea><br><br>' +
 			'<label for="output_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The first given output.">Given output *</div></label>' +
-			'<textarea id="output_' + exerciseId + item + '" class="courseExerciseInputEdit">' + exercise.input_output_points[item].output + '</textarea><br><br>' +
+			'<textarea id="output_' + exerciseId + item + '" class="swal2-input input">' + exercise.input_output_points[item].output + '</textarea><br><br>' +
 			'<label for="points_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The number of point for a good answer.">Points number * </div></label>' +
 			'<input id="points_' + exerciseId + item + '" class="courseExerciseInputEdit" type="number" value="' + exercise.input_output_points[item].point + '"></input><br><br>'
 	}
 	html += '<button class="btn btn_edit" onclick="editExercise(' + "'" + exerciseId + "','" + exercise.input_output_points.length + "'" + ')">Edit exercise <i class="glyphicon glyphicon-edit"></i></button>' +
-		'<button class="btn btn_edit" onclick="deleteExercise(' + "'" + exerciseId + "'" + ')">Delete exercise <i class="glyphicon glyphicon-trash"></i></button>' +
+		'<button class="btn btn_delete" onclick="deleteExercise(' + "'" + exerciseId + "'" + ')">Delete exercise <i class="glyphicon glyphicon-trash"></i></button>' +
 		'</div></div>';
 	return html;
 }
