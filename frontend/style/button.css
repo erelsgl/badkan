@@ -86,6 +86,5 @@ div.btn-solve:hover, button.btn_edit:hover, button.btn_delete{
 }
 
 button.btn_delete{
-  position: fixed;
-  left: 75%;
+  float: right; 
 }

@@ -23,22 +23,23 @@
 }
 
 .courseExerciseInputEdit {
-  margin-left: 10%;
-  text-align: center;
-  font-size: 20px;
-  background-color: transparent;
-  position:relative;
-	padding: 3px;
-	display: inline-block;
-  border-radius: 9999em;
+    margin-left: 10%;
+    text-align: center;
+    font-size: 20px;
+    background-color: transparent;
+    position: relative;
+    padding: 3px;
+    display: inline-block;
+    border-radius: 9999em;
 }
+
 .courseExerciseInputEdit:focus {
-  color: black;
-  transform: scale(.993, .994);
-	transition: transform .5s, opacity .25s;
-	box-shadow:  1px -1px 20px #1beabd, 
-                -1px 1px 20px #10abff;
-  border: 2px solid #00bfff;
+    color: black;
+    transform: scale(.993, .994);
+    transition: transform .5s, opacity .25s;
+    box-shadow: 1px -1px 20px #1beabd,
+        -1px 1px 20px #10abff;
+    border: 2px solid #00bfff;
 }
 
 .exercise {
@@ -61,17 +62,17 @@ select.input {
     border: 1px solid #aaa;
 }
 
-select.input:focus{
+select.input:focus {
     color: black;
     background-color: transparent;
     transform: scale(.993, .994);
-	transition: transform .5s, opacity .25s;
-	box-shadow:  1px -1px 20px #1beabd, 
-                -1px 1px 20px #10abff;
+    transition: transform .5s, opacity .25s;
+    box-shadow: 1px -1px 20px #1beabd,
+        -1px 1px 20px #10abff;
     border: 2px solid #00bfff;
 }
 
-textarea.input{
+textarea.input {
     /* just "box-shadow" it's not possible to convert to % */
     -webkit-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
     -moz-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
@@ -80,73 +81,85 @@ textarea.input{
     border: 1px solid #aaa;
 }
 
-textarea.input:focus{
+textarea.input:focus {
     color: black;
     background-color: transparent;
     transform: scale(.993, .994);
-	transition: transform .5s, opacity .25s;
-	box-shadow:  1px -1px 20px #1beabd, 
-                -1px 1px 20px #10abff;
+    transition: transform .5s, opacity .25s;
+    box-shadow: 1px -1px 20px #1beabd,
+        -1px 1px 20px #10abff;
     border: 2px solid #00bfff;
 }
 
 /* Cachons la case à cocher */
 .radio_checkbox {
-  position: relative;
+    position: relative;
 }
 
-input.btn_radio, input.btn_checkbox {
-  display: none;
-  
+input.btn_radio,
+input.btn_checkbox {
+    display: none;
+
 }
+
 /* Aspect des contours de la case */
-label.btn_radio, label.btn_checkbox{
-  display: block;
-  position: relative;
-  margin:10px;
-  padding: 15px 30px 15px 62px;
-  border: 3px solid white;
-  border-radius: 100px;
-  color: white;
-  cursor: pointer;
-  transition: background-color .2s, box-shadow .2s;
-  width: 95%;
+label.btn_radio,
+label.btn_checkbox {
+    display: block;
+    position: relative;
+    margin: 10px;
+    padding: 15px 30px 15px 62px;
+    border: 3px solid white;
+    border-radius: 100px;
+    color: white;
+    cursor: pointer;
+    transition: background-color .2s, box-shadow .2s;
+    width: 95%;
 }
 
 /* Aspect avant d'être coché */
-label.btn_radio:before, label.btn_checkbox:before{
-  content: '';
-  display: block;
-  position: absolute;
-  top: 10px;
-  bottom: 10px;
-  left: 10px;
-  width: 32px;
-  border: 3px solid white;
-  border-radius: 100px;
-  transition: background-color .2s;
+label.btn_radio:before,
+label.btn_checkbox:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: 32px;
+    border: 3px solid white;
+    border-radius: 100px;
+    transition: background-color .2s;
 }
 
-
- /* Aspect après être coché */
-label.btn_radio:hover, input.btn_radio:focus + label, label.btn_checkbox:hover, input.btn_checkbox:focus+label{
-  box-shadow: 0 0 20px rgba(0, 0, 0, .6);
+label.btn_radio:hover,
+input.btn_radio:focus+label,
+label.btn_checkbox:hover,
+input.btn_checkbox:focus+label {
+    box-shadow: 0 0 20px rgba(0, 0, 0, .6);
 }
 
-input.btn_radio:checked + label, input.btn_checkbox:checked+label{
-  background-color: #00bfff;
-}
-input.btn_radio:not(:checked) + label, input.btn_checkbox:not(:checked)+label{
-  background-color: #DCDCDC;
-  border-color: #C0C0C0;
-  color:#C0C0C0;
+input.btn_radio:checked+label,
+input.btn_checkbox:checked+label {
+    background-color: #00bfff;
 }
 
-input.btn_radio:checked + label:before, input.btn_checkbox:checked+label:before{
-  background-color: white;
+input.btn_radio:not(:checked)+label,
+input.btn_checkbox:not(:checked)+label {
+    background-color: #DCDCDC;
+    border-color: #C0C0C0;
+    color: #C0C0C0;
 }
-input.btn_radio:not(:checked) + label:before, input.btn_checkbox:not(:checked)+label:before{
-  border-color: #C0C0C0;
+
+input.btn_radio:checked+label:before,
+input.btn_checkbox:checked+label:before {
+    background-color: white;
+}
+
+input.btn_radio:not(:checked)+label:before,
+input.btn_checkbox:not(:checked)+label:before {
+    border-color: #C0C0C0;
+}
 
 div.panel {
     width: 70%;
@@ -154,11 +167,11 @@ div.panel {
     background: transparent;
 }
 
-.gc--1-of-4-manage {  
+.gc--1-of-4-manage {
     width: 25%;
 }
 
-.gc--3-of-4-manage  {  
+.gc--3-of-4-manage {
     width: 75%;
 }
 
