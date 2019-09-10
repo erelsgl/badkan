@@ -38,6 +38,13 @@ def retreive_all_courses_and_exercises(uid):
         for exercise_id in exercises_of_course:
             exercises_of_course[exercise_id]["pdf_instruction"] = download_pdf_instruction(
                 exercise_id)
+            if "submissions" in exercises_of_course[exercise_id]:
+                for submission in exercises_of_course[exercise_id]["submissions"]:
+                    submissions_ref = db.reference(
+                        'submissions/'+exercises_of_course[exercise_id]["submissions"][submission])
+                    current_submission = submissions_ref.get()
+                    if str(current_submission["uid"]) == str(uid):
+                        exercises_of_course[exercise_id]["owner_submission"] = current_submission
         course["exercises"] = exercises_of_course
         if "uids" in course and isinstance(course["uids"], dict):
             if uid in course["uids"].values():
@@ -164,3 +171,67 @@ def retreive_exercise_for_submission(exercise_id):
 def get_exercise_by_id(exercise_id):
     ref = db.reference('exercises/'+exercise_id)
     return ref.get()
+
+
+def create_or_update_submission(grade, exercise_id, uid, country_id, collab1, collab2, url, timestamp):
+    uid2 = get_uid_by_country_id(collab1)
+    uid3 = get_uid_by_country_id(collab2)
+    for current_uid in [uid, uid2, uid3]:
+        if current_uid is not None:
+            submission_id = is_submission_exist(current_uid, exercise_id)
+            if submission_id is not None:
+                update_submission(submission_id, grade, [country_id,
+                                                         collab1, collab2], url, timestamp)
+            else:
+                create_submission(grade, exercise_id, current_uid,
+                                  [country_id, collab1, collab2], url, timestamp)
+
+
+def is_submission_exist(uid, exercise_id):
+    submissions_ref = db.reference('submissions/')
+    owner_submissions = submissions_ref.order_by_child(
+        'uid').equal_to(uid).get()
+    for submission in owner_submissions:
+        if owner_submissions[submission]["exercise_id"] == exercise_id:
+            return submission
+    return None
+
+
+def update_submission(submission_id, grade, collaborators, url, timestamp):
+    ref = db.reference('submissions/'+submission_id)
+    ref.update({
+        "grade": grade,
+        "collaborators": collaborators,
+        "url": url,
+        "timestamp": timestamp
+    })
+    pass
+
+
+def create_submission(grade, exercise_id, uid, collaborators, url, timestamp):
+    ref = db.reference('submissions')
+    new_ref = ref.push({
+        "grade": grade,
+        "exercise_id": exercise_id,
+        "uid": uid,
+        "collaborators": collaborators,
+        "url": url,
+        "timestamp": timestamp
+    })
+    new_submission_to_exercise(exercise_id, new_ref.key)
+
+
+def new_submission_to_exercise(exercise_id, submission_id):
+    ref = db.reference('exercises/'+exercise_id+"/submissions")
+    ref.push(submission_id)
+
+
+def retreive_exercise_submissions(submissions_id):
+    submissions = []
+    ref = db.reference('submissions')
+    for submission_id in submissions_id:
+        submission = ref.child(submission_id).get()
+        submissions.append([submission, submission_id, get_country_id_by_uid(submission["uid"])])
+    answer = dict()
+    answer["submissions"] = submissions
+    return answer

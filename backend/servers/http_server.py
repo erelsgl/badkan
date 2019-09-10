@@ -88,7 +88,7 @@ def edit_exercise(exercise_id):
 
 
 @app.route('/delete_exercise/<exercise_id>/', methods=["POST"])
-def delete_old_course(exercise_id):
+def delete_exercise(exercise_id):
     delete_old_exercise(exercise_id)
     return 'OK'
 
@@ -110,6 +110,10 @@ def submit_zip_file(exercise_id, uid):
         save_zip_submission(request.files["file"], exercise_id, uid)
     return 'OK'
 
+@app.route('/download_submissions/', methods=["POST"])
+def download_submissions():
+    response = request.get_json()
+    return retreive_exercise_submissions(response["submissions_id"])
 
 @app.after_request
 def add_headers(response):

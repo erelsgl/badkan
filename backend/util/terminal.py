@@ -5,6 +5,9 @@ Utility functions: clone git repository, pull git repository, remove path
 import subprocess
 from subprocess import call
 import asyncio
+import re
+
+GRADE_REGEXP = re.compile("\*\*\* ([0-9]+) \*\*\*", re.IGNORECASE)
 
 
 async def tee(websocket, message):
@@ -70,4 +73,17 @@ async def docker_command_log(args):
 async def docker_command_tee(args, websocket):
     proc = await docker_command(args)
     await tee_process_async(proc, websocket)
+    await proc.wait()
+
+
+async def docker_command_tee_with_grade(args, websocket):
+    proc = await docker_command(args)
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        match = GRADE_REGEXP.search(line)
+        if not match:
+            await tee(websocket, line)
+        else:
+            grade = match.group(1)
+            return grade
     await proc.wait()
