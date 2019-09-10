@@ -486,9 +486,24 @@ function downloadSubmissions(exerciseId) {
 }
 
 function displayCurrentSubmissions(data) {
-    console.log(data)
+    let html = '<div id="submissions">'
+    for (submission of data.submissions) {
+        html += '<button class="btn btn-link" onclick="focusSubmission(' +
+            "'" + submission[0].exercise_id + "','" +
+            submission[0].uid + "','" +
+            submission[1] + "','" +
+            submission[2] + "'" +
+            ')">' +
+            submission[2] + '</button><br>'
+    }
+    html += '<br><button class="btn btn_edit">Run Submissions</button></div>'
+    Swal.fire({
+        title: 'Current submissions',
+        html: html,
+        focusConfirm: false,
+        showCancelButton: true,
+    })
 }
-
 
 function myStringify(submissions) {
     stringify = ""
@@ -496,4 +511,19 @@ function myStringify(submissions) {
         stringify += "'" + submission + "', ";
     }
     return stringify
+}
+
+function focusSubmission(exerciseId, submiter_id, submission_id, submiter_country_id) {
+    let html = '<div id="submission">' +
+    '<button class="btn btn_edit" onclick="runSubmission(' + "'" + submiter_id + "'" + ')">Run Submission</button><br>' +
+    '<button class="btn btn_edit" onclick="downloadSubmission(' + submiter_id + ')">Download Submission</button><br>' +
+    '<button class="btn btn_edit" onclick="editGrade(' + "'" + submission_id + "'" + ')">Edit Grade</button><br>' +
+    '<button class="btn btn_edit" onclick="manualGrade(' + "'" + submission_id + "'" + ')">Grade Manually</button>' +
+    '<div>'
+    Swal.fire({
+        title: 'Submission of ' + submiter_country_id,
+        html: html,
+        focusConfirm: false,
+        showCancelButton: true,
+    })
 }

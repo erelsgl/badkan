@@ -230,7 +230,8 @@ def retreive_exercise_submissions(submissions_id):
     submissions = []
     ref = db.reference('submissions')
     for submission_id in submissions_id:
-        submissions.append(ref.child(submission_id).get())
+        submission = ref.child(submission_id).get()
+        submissions.append([submission, submission_id, get_country_id_by_uid(submission["uid"])])
     answer = dict()
     answer["submissions"] = submissions
     return answer
