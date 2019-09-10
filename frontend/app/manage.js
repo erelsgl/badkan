@@ -10,12 +10,109 @@ function onFinishRetreiveData(data) {
     if (data.courses) {
         const entries = Object.entries(data.courses)
         for (course of entries) {
-            // course[0] -> courseId
-            // course[1] -> course (the value)
             createAccordionManage(course); // Example.
         }
     }
     $('#main').show();
+}
+
+function createAccordionManage(courseObj) {
+    let courseId = courseObj[0]
+    let course = courseObj[1]
+    createAccordionMenu(course.course_name)
+    let panel = "<li>";
+    panel += createAccordionBodyManageCourse(courseId, course)
+    for (exerciseObj of Object.entries(course.exercises)) {
+        let exerciseId = exerciseObj[0]
+        let exercise = exerciseObj[1]
+        panel += createAccordionBodyManageExercise(exerciseId, exercise)
+    }
+    panel += '<button id=newExercise data-toggle="tooltip" title="New exercise" ' +
+        'class="plus-button addExercise" onclick="newExercise(' + "'" + courseId + "'" + ')"></button>'
+    $(".nacc").append(panel + "</li>")
+}
+
+function createAccordionBodyManageCourse(courseId, course) {
+    let html = '<div class="panel" style="background:transparent">' +
+        '<div class="course">' +
+        '<label for="course_name' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Course name *</div></label>' +
+        '<input id="course_name' + courseId + '" class="courseExerciseInputEdit" value="' + course.course_name + '"></input><br><br>' +
+        '<label for="course_grader' + courseId + '"><div class="explanation" data-toggle="tooltip" title="The grader must be admin. \nGives an access to the manage course.">Grader id \n </div></label>' +
+        '<input id="course_grader' + courseId + '" class="courseExerciseInputEdit" value="' + course.grader_uid + '" style="margin-left:88px"></input><br><br>' +
+        '<label for="privacyEdit"><div class="explanation" data-toggle="tooltip" title="The course is shared only with the students you want.">Privacy</div></label><br>' +
+        '<input type="radio" name="privacy' + courseId + '" value="public" onclick=\'$(\"#pass' + courseId + '\").hide()\'' +
+        ((course.privacy == 'public') ? "checked" : "") +
+        '> Public</input><br>' +
+        '<input type="radio" name="privacy' + courseId + '" value="private" onclick=\'$(\"#pass' + courseId + '\").show()\'' +
+        ((course.privacy == 'private') ? "checked" : "") +
+        '> Private</input><br><br>' +
+        '<div id="pass' + courseId + '"' +
+        ((course.privacy == 'public') ? "style=display:none;>" : ">") +
+        '<label for="course_ids' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
+        '<input id="course_ids' + courseId + '" class="ids courseExerciseInputEdit" value="' + String(course.uids).replace(",", " ") + '" placeholder="000000000 000000000"" style="margin-left:47px"></input><br>' +
+        '</div>' + '<br>' +
+        '<button class="btn btn_edit" onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
+        '<button class="btn btn_edit" onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
+        '</div></div>' +
+        '<div class="manage_button"><button class="btn btn_edit" onclick="downloadGradesCourse(' + "'" + courseId + "'" + ')">Download Course Grades</button></div>';
+    return html;
+}
+
+function createAccordionBodyManageExercise(exerciseId, exercise) {
+    let html = '<div class="panel" style="background:transparent">' +
+        '<div class="exercise">' +
+        '<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +
+        '<input id="exercise_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.exercise_name + '"></input><br><br>' +
+        '<label for="exercise_compiler' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise.">Exercise compiler *</div></label>' +
+        '<select id="exercise_compiler' + exerciseId + '" class="swal2-input">' + /* For Jeremy you can play with the class swal2 if you want. */
+        '<option value="javac"' + (exercise.exercise_compiler == "javac" ? "selected" : "") + '>javac</option>' +
+        '<option value="g++"' + (exercise.exercise_compiler == "g++" ? "selected" : "") + '>g++ (c or c++)</option>' +
+        '<option value="python3"' + (exercise.exercise_compiler == "python3" ? "selected" : "") + '>python3</option>' +
+        '</select>' +
+        '<label for="submission_option' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="For each method checked, the student will be able to submit his exercise via the method.' +
+        'If you want the student only submit via GitHub, then check only the GitHub button .">Submission option *</div></label>' +
+        '<div id="submission_option' + exerciseId + '" >' +
+        '<input id="github' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="github" required="" ' +
+        (exercise.submission_via_github ? "checked" : "") +
+        '>GitHub</input> <br>' +
+        '<input id="zip' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="zip" required="" ' +
+        (exercise.submission_via_zip ? "checked" : "") +
+        '>Zip</input>' +
+        '</div>' +
+        '<label for="main_file' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
+        '<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.main_file + '"></input><br><br>' +
+        '<label for="exercise_description' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
+        '<textarea id="exercise_description' + exerciseId + '" class="swal2-input">' + exercise.exercise_description + '</textarea><br><br>' +
+        (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction + '" style=""> Current pdf</a><br><br>' : '') +
+        '<label for="exercise_instruction' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
+        '<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
+        '<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
+        '<input id="deadline' + exerciseId + '" class="courseExerciseInputEdit" type="date" name="dealine" value="' + exercise.deadline + '"></input><br><br>' +
+        '<label for="input_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default input is the standart input. Let standart if you do not want to change it.">Input file name *</div></label>' +
+        '<input id="input_file_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.input_file_name + '"></input><br><br>' +
+        '<label for="output_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default output is the standart output.  Let standart if you do not want to change it.">Output file name *</div></label>' +
+        '<input id="output_file_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.output_file_name + '"></input><br><br>';
+    for (item in exercise.input_output_points) {
+        html +=
+            '<label for="input_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The first given input.">Given input *</div></label>' +
+            '<textarea id="input_' + exerciseId + item + '" class="courseExerciseInputEdit">' + exercise.input_output_points[item].input + '</textarea><br><br>' +
+            '<label for="output_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The first given output.">Given output *</div></label>' +
+            '<textarea id="output_' + exerciseId + item + '" class="courseExerciseInputEdit">' + exercise.input_output_points[item].output + '</textarea><br><br>' +
+            '<label for="points_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The number of point for a good answer.">Points number * </div></label>' +
+            '<input id="points_' + exerciseId + item + '" class="courseExerciseInputEdit" type="number" value="' + exercise.input_output_points[item].point + '"></input><br><br>'
+    }
+    html += '<button class="btn btn_edit" onclick="editExercise(' + "'" + exerciseId + "','" + exercise.input_output_points.length + "'" + ')">Edit exercise <i class="glyphicon glyphicon-edit"></i></button>' +
+        '<button class="btn btn_edit" onclick="deleteExercise(' + "'" + exerciseId + "'" + ')">Delete exercise <i class="glyphicon glyphicon-trash"></i></button>' +
+        '</div></div>' +
+        (exercise.submissions ?
+            '<div class="manage_button">' +
+            '<button class="btn btn_edit" onclick="downloadGradesExercise(' + "'" + exerciseId + "'" + ')">Download Exercise Grades</button>' +
+            '<button class="btn btn_edit" onclick="currentSubmissionView(' + myStringify(exercise.submissions) + ')">Current Submissions</button>' +
+            '<button class="btn btn_edit" onclick="mossCommand(' + "'" + exerciseId + "'" + ')">Check Plagiarism</button>' +
+            '<button class="btn btn_edit" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')">Download Statistics</button>' +
+            '<button class="btn btn_edit" onclick="downloadSubmissions(' + "'" + exerciseId + "'" + ')">Download Submissions</button>' +
+            '</div>' : "");
+    return html;
 }
 
 $("#newCourse").click(function () {
@@ -316,12 +413,8 @@ function editExercise(exerciseId, inputOutputPointsSize) {
             return;
         }
     }
-
-    console.log(submissionViaGithub)
-    console.log(submissionViaZip)
-
     if (!submissionViaGithub && !submissionViaZip) {
-          alert("Please check at least one of the two submission option.")
+        alert("Please check at least one of the two submission option.")
     } else {
         if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler,
                 mainFile, inputFileName, outputFileName
@@ -335,7 +428,7 @@ function editExercise(exerciseId, inputOutputPointsSize) {
                 exercise_name: exerciseName,
                 exercise_compiler: exerciseCompiler,
                 submission_via_github: submissionViaGithub,
-                submission_via_zip: submissionViaZip,  // TODO: fix the case where the admin delete one submission option.
+                submission_via_zip: submissionViaZip, // TODO: fix the case where the admin delete one submission option.
                 main_file: mainFile,
                 exercise_description: exerciseDescription,
                 deadline: deadline,
@@ -363,4 +456,44 @@ function deleteExercise(exerciseId) {
             doPostJSON(null, "delete_exercise/" + exerciseId, "text", reloadManage)
         }
     })
+}
+
+function downloadGradesCourse(courseId) {
+    alert("Dowload Grades course " + courseId)
+}
+
+function downloadGradesExercise(exerciseId) {
+    alert("Dowload Grades exercise " + exerciseId)
+}
+
+function currentSubmissionView(...submissions_id) {
+    json = JSON.stringify({
+        submissions_id: submissions_id
+    })
+    doPostJSON(json, "download_submissions", "json", displayCurrentSubmissions)
+}
+
+function mossCommand(exerciseId) {
+    alert("Moss command " + exerciseId)
+}
+
+function downloadStatistics(exerciseId) {
+    alert("Dowload summary " + exerciseId)
+}
+
+function downloadSubmissions(exerciseId) {
+    alert("Dowload projects " + exerciseId)
+}
+
+function displayCurrentSubmissions(data) {
+    console.log(data)
+}
+
+
+function myStringify(submissions) {
+    stringify = ""
+    for (submission of Object.values(submissions)) {
+        stringify += "'" + submission + "', ";
+    }
+    return stringify
 }

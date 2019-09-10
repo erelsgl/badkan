@@ -224,3 +224,13 @@ def create_submission(grade, exercise_id, uid, collaborators, url, timestamp):
 def new_submission_to_exercise(exercise_id, submission_id):
     ref = db.reference('exercises/'+exercise_id+"/submissions")
     ref.push(submission_id)
+
+
+def retreive_exercise_submissions(submissions_id):
+    submissions = []
+    ref = db.reference('submissions')
+    for submission_id in submissions_id:
+        submissions.append(ref.child(submission_id).get())
+    answer = dict()
+    answer["submissions"] = submissions
+    return answer

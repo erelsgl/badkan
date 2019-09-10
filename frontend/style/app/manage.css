@@ -2,7 +2,7 @@
     display: block;
     margin-top: 2%;
     float: left;
-    width: 83%;
+    width: 100%;
 }
 
 .addCourse {
@@ -39,24 +39,39 @@
 }
 
 
-select.input{
+select.input {
     /* just "box-shadow" it's not possible to convert to % */
     -webkit-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
     -moz-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
     box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
-    overflow: auto;   
+    overflow: auto;
     border: 1px solid #aaa;
 }
 
-textarea.input{
+textarea.input {
     /* just "box-shadow" it's not possible to convert to % */
     -webkit-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
     -moz-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
     box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
-    overflow: auto;   
+    overflow: auto;
     border: 1px solid #aaa;
 }
 
-div.panel{
+div.panel {
+    width: 70%;
+    float: left;
     background: transparent;
+}
+
+.gc--1-of-4-manage {  
+    width: 25%;
+}
+
+.gc--3-of-4-manage  {  
+    width: 75%;
+}
+
+div.manage_button {
+    width: 20%;
+    float: right;
 }

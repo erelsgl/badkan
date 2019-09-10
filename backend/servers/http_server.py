@@ -110,6 +110,10 @@ def submit_zip_file(exercise_id, uid):
         save_zip_submission(request.files["file"], exercise_id, uid)
     return 'OK'
 
+@app.route('/download_submissions/', methods=["POST"])
+def download_submissions():
+    response = request.get_json()
+    return retreive_exercise_submissions(response["submissions_id"])
 
 @app.after_request
 def add_headers(response):
