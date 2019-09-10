@@ -75,19 +75,17 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         '<label for="submission_option' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="For each method checked, the student will be able to submit his exercise via the method.' +
         'If you want the student only submit via GitHub, then check only the GitHub button .">Submission option *</div></label>' +
         '<div id="submission_option' + exerciseId + '" ></div>' +
-
         '<div class="radio_checkbox"><input class="btn_checkbox"  id="github' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="github" required="" ' +
         (exercise.submission_via_github ? "checked" : "") +
         '/><label class="btn_checkbox" for="github' + exerciseId + '">GitHub</label> <br>' +
         '<input class="btn_checkbox"  id="zip' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="zip" required="" ' +
         (exercise.submission_via_zip ? "checked" : "") +
         '/><label class="btn_checkbox" for="zip' + exerciseId + '">Zip</label></div> <br>' +
-
         '<label for="main_file' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
         '<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.main_file + '"></input><br><br>' +
         '<label for="exercise_description' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
         '<textarea id="exercise_description' + exerciseId + '" class="swal2-input input"> </textarea><br><br>' +
-        (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction + '" style=""> Current pdf</a><br><br>' : '') +
+        (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction + '" class="btn btn-link"> Current pdf</a><br><br>' : '') +
         '<label for="exercise_instruction' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
         '<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
         '<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
@@ -118,7 +116,6 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
             '</div>' : "");
     return html;
 }
-
 
 $("#newCourse").click(function () {
     var info = newCourse();
