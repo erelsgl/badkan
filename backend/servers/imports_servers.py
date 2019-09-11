@@ -21,3 +21,4 @@ from auth import *
 from storage import *
 from routine import *
 from submission_handler import *
+from instructor_options import *

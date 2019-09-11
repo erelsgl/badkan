@@ -69,6 +69,23 @@ if init:
 
     firebase init
 
+The system is also using the CLI from google "gsutil"
+To initialize it, first, in the terminal enter:
+
+    curl https://sdk.cloud.google.com | bash
+
+Then restart your shell:
+
+    exec -l $SHELL
+
+Finally, initialize the gcloud environment: 
+
+    gcloud init
+
+To check if everything worked fine, you can test the gsutil command with:
+
+    gsutil -m cp -R gs://<bucket_name>.appspot.com .
+
 Once Firebase is initialized you need to install all the network stuff.
 
 

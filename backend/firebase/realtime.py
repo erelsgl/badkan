@@ -231,7 +231,33 @@ def retreive_exercise_submissions(submissions_id):
     ref = db.reference('submissions')
     for submission_id in submissions_id:
         submission = ref.child(submission_id).get()
-        submissions.append([submission, submission_id, get_country_id_by_uid(submission["uid"])])
+        submissions.append(
+            [submission, submission_id, get_country_id_by_uid(submission["uid"])])
     answer = dict()
     answer["submissions"] = submissions
     return answer
+
+
+def edit_grade_of_submission(submission_id, grade):
+    ref = db.reference('submissions/'+submission_id)
+    ref.update({
+        "grade": grade
+    })
+    return 'OK'
+
+
+def edit_grades_of_submission(submission_id, grade, manual_grade):
+    ref = db.reference('submissions/'+submission_id)
+    ref.update({
+        "grade": grade,
+        "manual_grade": manual_grade
+    })
+    return 'OK'
+
+
+def new_manual_grade(submission_id, manual_grade):
+    ref = db.reference('submissions/'+submission_id)
+    ref.update({
+        "manual_grade": manual_grade
+    })
+    return 'OK'

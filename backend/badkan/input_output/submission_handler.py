@@ -41,7 +41,7 @@ async def save_grade(submission, websocket, grade, timestamp):
         url = submission["github_url"]
     create_or_update_submission(grade, submission["exercise_id"], submission["uid"], submission["country_id"],
                                 submission["collab1"], submission["collab2"], url, timestamp)
-    # TODO: (eventually put the name of the collab if exists.
+    # TODO: eventually put the name of the collab if exists.
     await tee(websocket, "Your grade is successfully stored.")
 
 
