@@ -3,6 +3,7 @@
 #menunav {
     float: right;
     margin-top: 2%;
+    margin-right:-5%;
     width: 17%;
     background: #FFF;
     border: 1px solid #C0C0C0;
@@ -71,16 +72,9 @@
     width: 83%;
 }
 
-.exerciseName {
-    text-align: center;
-    font-size: 35px;
-    font-family: monospace;
-    text-decoration: underline;
-}
-
-.exercise {
+.exercise.panel {
   /* just "box-shadow" it's not possible to convert to % */
-  box-shadow: 5px 10px 18px grey;
+    box-shadow: 5px 10px 18px grey;
     border-radius: 4%/8%;
     padding: 2%;
     background-color: white;
@@ -89,4 +83,19 @@
 
 div.panel{
     background: transparent;
+}
+
+.lastSubmission{
+    background-color: whitesmoke;
+    border: 1px solid #D3D3D3;
+    border-radius: 4%/20%;
+}
+.text_lastSubmission{
+    float:left;
+    margin-left:2%;
+    margin-top:1%;
+}
+
+.grade{
+    color: red;
 }

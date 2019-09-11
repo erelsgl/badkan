@@ -1,23 +1,24 @@
 /* For Jeremy: This file includes the css that is share between some few files, like the explanation of a field... */
 
-.explanation {
+.explanation,.description {
     font-family: Arial;
     border-bottom: solid 1px;
+    font-size: 130%;
+    float:left;
+}
+.test{
+    padding-left:1%;
+    font-family: monospace;
     font-size: 120%;
-
+    float:left;
 }
 
 .explanation:hover {
     color: #00bfff;
 }
 
-.text-register{
-    font-family: Arial;
-    font-size: 150%;
-}
-
 .timestamp{
-    font-family:cursive;
+    font-family:'URW Chancery L', cursive;
 }
 
 input[value]{
@@ -25,3 +26,10 @@ input[value]{
     text-align: center;
     letter-spacing: 5px;
 }
+.title_font {
+    font-family:'Times New Roman', Times, serif;
+     text-transform : uppercase;
+     text-align: center;
+     font-size: 35px;
+     text-decoration: underline;
+ }
