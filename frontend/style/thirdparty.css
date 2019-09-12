@@ -28,8 +28,10 @@ input[value]{
 }
 .title_font {
     font-family:'Times New Roman', Times, serif;
-     text-transform : uppercase;
-     text-align: center;
-     font-size: 35px;
-     text-decoration: underline;
+    text-transform : uppercase;
+    text-align: center;
+    font-size: 35px;
+    text-decoration: underline;
+    display: flex;
+    justify-content: center;
  }

@@ -54,11 +54,11 @@ function onFinishRetreiveData(data) {
 }
 
 function noPublicCourseAvailable() {
-  $(".nacc").append('<div class="public">No public course available</div>')
+  $(".nacc").append('<div class="public public_msg"><img class=warning src="images/msg-err.png">No public course available</div>')
 }
 
 function noMyCourseAvailable() {
-  $(".nacc").append('<div class="myCourse">No my course available</div>')
+  $(".nacc").append('<div class="myCourse myCourse_msg"><img class=warning src="images/msg-err.png">No my course available</div>')
 }
 
 function createAccordionHome(courseObj, myClass) {

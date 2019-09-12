@@ -97,5 +97,28 @@ div.panel{
 }
 
 .grade{
-    color: red;
+    color: green;
+}
+
+/* Aspect message quand les courses sont vides */
+.public_msg{
+    background-color: whitesmoke;
+    border:1px solid grey;
+    margin: 5% 20% 0 -5%;
+    padding: 10px 20px 5px 42px;
+    text-align: center;
+    border-radius: 4%/35%;
+    box-shadow: 5px 10px 18px grey;
+}
+.myCourse_msg{
+    background-color: whitesmoke;
+    border:1px solid grey;
+    margin: 5% 20% 0 -5%;
+    padding: 10px 20px 5px 42px;
+    text-align: center;
+    border-radius: 4%/35%;
+    box-shadow: 5px 10px 18px grey;
+}
+.warning{
+    margin-right: 5%;
 }

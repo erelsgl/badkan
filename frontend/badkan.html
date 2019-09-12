@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="style/app/badkan.css">
   <link rel="stylesheet" href="style/accordion.css">
   <link rel="stylesheet" href="style/button.css">
+  <link rel="stylesheet" href="style/thirdparty.css">
 
 </head>
 
@@ -25,7 +26,10 @@
 
   <div id="main">
     <div class="container">
-      <h1><b><span id="exerciseName"></span></b></h1>
+      <br>
+      <h1><b><span id="exerciseName" class="title_font"></span></b></h1>
+      <br>
+      <div class="menuArea git_zip">
       <div class="naccs">
         <div class="grid">
           <div class="gc gc--1-of-3">
@@ -49,13 +53,14 @@
                   <br>
                   <input id="zipFile" type="file" />
                 </div>
+              </div>
               </li>
             </ul>
           </div>
         </div>
       </div>
     </div>
-    <div id="submitterIds" class="container">
+    <div id="submitterIds" class="container menuArea inputId" style="margin-top:1.5%">
       <label for="userId">Your id:</label>
       <input id="userId" type="text" class="form-control" /> <br>
       <label for="collab1">Enter here the id of your first collaborator (if exists):</label>
@@ -63,7 +68,9 @@
       <label for="collab2">Enter here the id of your second collaborator (if exists):</label>
       <input id="collab2" type="text" class="form-control" /> <br>
     </div>
-    <div id="saveGradeCheck" class="container">
+    <br>
+    <div class="menuArea gradeMenu">
+      <div id="saveGradeCheck" class="container">
       <label for="saveGrade">Check it if you want the grade to be save</label> <br>
       <input id="saveGrade" name="BoxSelect[]" type="checkbox"><label>Save the grade</label>
     </div>
@@ -72,6 +79,7 @@
       <button id="clear" class="btn btn_edit">Clean <i class="glyphicon glyphicon-erase"></i></button>
       <button id="clear_and_submit" class="btn btn_edit">Clean+Send <i class="glyphicon glyphicon-refresh"></i></button>
     </div>
+  </div>
 
     <div id="submissionResult" class="container">
       <h2>Submission result</h2>
