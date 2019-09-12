@@ -8,11 +8,11 @@ import re
 from datetime import datetime
 import os 
 
-# import sys
+import sys
 
-# sys.path.append("../util")
+sys.path.append("../util")
 
-# from terminal import *
+from terminal import *
 
 with open('../../frontend/util/firebaseConfig.js') as dataFile:
     data = dataFile.read()
