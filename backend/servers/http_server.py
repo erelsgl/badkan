@@ -110,10 +110,37 @@ def submit_zip_file(exercise_id, uid):
         save_zip_submission(request.files["file"], exercise_id, uid)
     return 'OK'
 
-@app.route('/download_submissions/', methods=["POST"])
-def download_submissions():
+
+@app.route('/retreive_submissions/', methods=["POST"])
+def retreive_submissions():
     response = request.get_json()
     return retreive_exercise_submissions(response["submissions_id"])
+
+
+@app.route('/edit_grade/<submission_id>/<grade>/', methods=["POST"])
+def edit_grade(submission_id, grade):
+    return edit_grade_of_submission(submission_id, grade)
+
+
+@app.route('/edit_grade_and_manual_grade/<submission_id>/<grade>/<manual_grade>/', methods=["POST"])
+def edit_grade_and_manual_grade(submission_id, grade, manual_grade):
+    return edit_grades_of_submission(submission_id, grade, manual_grade)
+
+
+@app.route('/download_submission/<exercise_id>/<submiter_id>/', methods=["POST"])
+def download_submission(exercise_id, submiter_id):
+    return download_submission_zip(exercise_id, submiter_id)
+
+
+@app.route('/download_submissions/<exercise_id>/', methods=["POST"])
+def download_submissions(exercise_id):
+    return download_submissions_zip(exercise_id)
+
+
+@app.route('/manual_grade/<submission_id>/<manual_grade>/', methods=["POST"])
+def manual_grade(submission_id, manual_grade):
+    return new_manual_grade(submission_id, manual_grade)
+
 
 @app.after_request
 def add_headers(response):

@@ -468,11 +468,11 @@ function downloadGradesExercise(exerciseId) {
     alert("Dowload Grades exercise " + exerciseId)
 }
 
-function currentSubmissionView(...submissions_id) {
+function currentSubmissionView(...submissionsId) {
     json = JSON.stringify({
-        submissions_id: submissions_id
+        submissions_id: submissionsId
     })
-    doPostJSON(json, "download_submissions", "json", displayCurrentSubmissions)
+    doPostJSON(json, "retreive_submissions", "json", displayCurrentSubmissions)
 }
 
 function mossCommand(exerciseId) {
@@ -484,7 +484,7 @@ function downloadStatistics(exerciseId) {
 }
 
 function downloadSubmissions(exerciseId) {
-    alert("Dowload projects " + exerciseId)
+    doPostJSON(null, "download_submissions/" + exerciseId, "text", onSubmissionReceive)
 }
 
 function displayCurrentSubmissions(data) {
@@ -492,6 +492,8 @@ function displayCurrentSubmissions(data) {
     for (submission of data.submissions) {
         html += '<button class="btn btn-link" onclick="focusSubmission(' +
             "'" + submission[0].exercise_id + "','" +
+            submission[0].grade + "','" +
+            submission[0].manual_grade + "','" +
             submission[0].uid + "','" +
             submission[1] + "','" +
             submission[2] + "'" +
@@ -503,7 +505,6 @@ function displayCurrentSubmissions(data) {
         title: 'Current submissions',
         html: html,
         focusConfirm: false,
-        showCancelButton: true,
     })
 }
 
@@ -515,17 +516,117 @@ function myStringify(submissions) {
     return stringify
 }
 
-function focusSubmission(exerciseId, submiter_id, submission_id, submiter_country_id) {
+function focusSubmission(exerciseId, grade, manualGrade, submiterId, submissionId, submiterCountryId) {
     let html = '<div id="submission">' +
-        '<button class="btn btn_edit" onclick="runSubmission(' + "'" + submiter_id + "'" + ')">Run Submission</button><br>' +
-        '<button class="btn btn_edit" onclick="downloadSubmission(' + submiter_id + ')">Download Submission</button><br>' +
-        '<button class="btn btn_edit" onclick="editGrade(' + "'" + submission_id + "'" + ')">Edit Grade</button><br>' +
-        '<button class="btn btn_edit" onclick="manualGrade(' + "'" + submission_id + "'" + ')">Grade Manually</button>' +
+        '<button class="btn btn_edit" onclick="runSubmission(' + "'" + exerciseId + "','" + submiterId + "'" + ')">Run Submission</button><br>' +
+        '<button class="btn btn_edit" onclick="downloadSubmission(' + "'" + exerciseId + "','" + submiterId + "'" + ')">Download Submission</button><br>' +
+        '<button class="btn btn_edit" onclick="editGrade(' + "'" + submissionId + "','" + grade + "','" +
+        (manualGrade ? manualGrade + "'" : "") +
+        ')">Edit Grade</button><br>' +
+        '<button class="btn btn_edit" onclick="manualGrade(' + "'" + submissionId + "','" + grade + "'" + ')">Grade Manually</button>' +
         '<div>'
     Swal.fire({
-        title: 'Submission of ' + submiter_country_id,
+        title: 'Submission of ' + submiterCountryId,
         html: html,
         focusConfirm: false,
-        showCancelButton: true,
     })
+}
+
+function editGrade(submissionId, grade, manualGrade) {
+    Swal.fire({
+        title: 'Choose a new grade',
+        html: '<div class="edit_grade">The actual grade is ' + grade + '<br><br>' +
+            '<label for="new_grade">Enter the new grade</label>' +
+            '<input id="new_grade" class="courseExerciseInputEdit" placeholder="' + grade + '"></input><br><br>' +
+            (manualGrade != "undefined" ?
+                '<br>The actual manual grade is ' + manualGrade + '<br><br>' +
+                '<label for="new_manual_grade">Enter the new manual grade</label>' +
+                '<input id="new_manual_grade" class="courseExerciseInputEdit" placeholder="' + manualGrade + '"></input><br><br>' :
+                "") +
+            '<div/>',
+        focusConfirm: false,
+        showCancelButton: true,
+        preConfirm: function () {
+            const newGrade = escapeHtml($("#new_grade").val())
+            const newManualGrade = escapeHtml($("#new_manual_grade").val())
+            if (newGrade != "") {
+                if (newManualGrade == "") {
+                    doPostJSON(null, "edit_grade/" + submissionId + "/" + newGrade, "text", reloadManage)
+                } else {
+                    doPostJSON(null, "edit_grade_and_manual_grade/" + submissionId + "/" + newGrade + "/" + newManualGrade, "text", reloadManage)
+                }
+            } else {
+                Swal.showValidationMessage(
+                    `Please enter a new grade.`
+                )
+            }
+        }
+    })
+}
+
+function downloadSubmission(exerciseId, submiterId) {
+    doPostJSON(null, "download_submission/" + exerciseId + "/" + submiterId, "text", onSubmissionReceive)
+}
+
+function onSubmissionReceive(data) {
+    window.open(data)
+}
+
+function manualGrade(submissionId, grade) {
+    Swal.fire({
+        title: 'Manual Grade',
+        html: '<div class="manual_grade">The actual grade given by the badkan is ' + grade + '<br><br>' +
+            '<label for="manual_grade">Enter the manual grade</label>' +
+            '<input id="manual_grade" class="courseExerciseInputEdit"></input><br><br>' +
+            '<div/>',
+        focusConfirm: false,
+        showCancelButton: true,
+        preConfirm: function () {
+            const manualGrade = escapeHtml($("#manual_grade").val())
+            if (manualGrade != "") {
+                doPostJSON(null, "manual_grade/" + submissionId + "/" + manualGrade, "text", reloadManage)
+            } else {
+                Swal.showValidationMessage(
+                    `Please enter a manual grade.`
+                )
+            }
+        }
+    })
+}
+
+function runSubmission(exerciseId, submiterId) {
+    json = JSON.stringify({
+        target: "run_submission_admin",
+        exercise_id: exerciseId,
+        uid: submiterId
+    })
+    sendWebsocket(json, onOpen, onMessage, onClose, onError)
+}
+
+function onOpen(_event) {
+    Swal.fire({
+        title: 'Running submission',
+        html: ' <div id="submissionResult">' +
+            '<h2>Submission result</h2>' +
+            '<div id="output" dir="ltr">' +
+            '</div>',
+        focusConfirm: false,
+    })
+    logServer("color:blue", "Submission starting!");
+}
+
+function onError(_event) {
+    logServer("color:red", "Error in websocket.");
+}
+
+function onMessage(_event) {
+    logServer("color:black", _event.data);
+}
+
+function onClose(event) {
+    if (event.code === 1000) {
+        logServer("color:blue", "Submission completed!");
+    } else {
+        logServer("color:red", "Connection closed abnormally!");
+    }
 }
