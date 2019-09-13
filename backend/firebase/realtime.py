@@ -136,6 +136,13 @@ def get_country_ids_by_uids(uids):
     return country_ids
 
 
+def get_country_ids_by_uids_key_value(uids):
+    country_ids = dict()
+    for uid in uids:
+        country_ids[uid] = get_country_id_by_uid(uid)
+    return country_ids
+
+
 def create_new_exercise(json):
     ref = db.reference('exercises')
     new_ref = ref.push(json)

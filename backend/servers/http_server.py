@@ -1,7 +1,6 @@
 from imports_servers import *
 from flask import Flask, request, jsonify
 
-
 app = Flask(__name__)
 
 
@@ -130,11 +129,6 @@ def edit_grade_and_manual_grade(submission_id, grade, manual_grade):
 @app.route('/download_submission/<exercise_id>/<submiter_id>/', methods=["POST"])
 def download_submission(exercise_id, submiter_id):
     return download_submission_zip(exercise_id, submiter_id)
-
-
-@app.route('/download_submissions/<exercise_id>/', methods=["POST"])
-def download_submissions(exercise_id):
-    return download_submissions_zip(exercise_id)
 
 
 @app.route('/manual_grade/<submission_id>/<manual_grade>/', methods=["POST"])
