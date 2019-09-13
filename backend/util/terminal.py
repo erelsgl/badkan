@@ -58,6 +58,14 @@ async def terminal_command_log(args):
     proc.wait()
 
 
+async def terminal_command_return(args):
+    proc = terminal_command(args)
+    answer = ""
+    for line in proc.stdout:
+        answer += line.decode('utf-8').strip()
+    return answer
+
+
 async def terminal_command_tee(args, websocket):
     proc = terminal_command(args)
     await tee_process(proc, websocket)

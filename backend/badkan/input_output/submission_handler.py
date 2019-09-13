@@ -22,11 +22,11 @@ async def check_submission(websocket, submission):
         edit_csv_trace(str(
             currentDT), submission["github_url"], submitters, "START", exercise["exercise_name"], zip_filename)
         await save_github_submission(submission, zip_filename, wget_url)
-        await upload_submission_to_docker_and_firebase(submission, zip_filename)
+        await upload_submission_to_docker_and_firebase(submission["exercise_id"], submission["uid"], zip_filename)
     else:
         edit_csv_trace(str(currentDT), "zip", submitters,
                        "START", exercise["exercise_name"], zip_filename)
-        await upload_submission_to_docker_and_firebase(submission, zip_filename)
+        await upload_submission_to_docker_and_firebase(submission["exercise_id"], submission["uid"], zip_filename)
     grade = await run_submission(websocket, exercise, submission["uid"])
     if "save_grade" in submission:
         await save_grade(submission, websocket, grade, str(currentDT))
@@ -63,19 +63,23 @@ def create_folder_if_not_exists(exercise_id, uid):
         print("Directory already exists")
 
 
-async def upload_submission_to_docker_and_firebase(submission, zip_filename):
+async def upload_submission_to_docker_and_firebase(exercise_id, uid, zip_filename):
     upload_zip_solution(
-        zip_filename, submission["exercise_id"], submission["uid"])
-    await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+submission["uid"]])
-    await docker_command_log(["cp", zip_filename, "badkan:/grading_room/"+submission["uid"]])
+        zip_filename, exercise_id, uid)
+    await upload_submission_to_docker(uid, zip_filename)
+
+
+async def upload_submission_to_docker(uid, zip_filename):
+    await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+uid])
+    await docker_command_log(["cp", zip_filename, "badkan:/grading_room/"+uid])
     await terminal_command_log(["rm", zip_filename])
 
 
-async def run_submission(websocket, exercise, uid):
+async def run_submission(websocket, exercise, folder_name):
     return await docker_command_tee_with_grade(["exec", "badkan", "bash", "grade.sh",
                                                 exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(
                                                     exercise["input_output_points"]),
-                                                exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], uid,
+                                                exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], folder_name,
                                                 get_running_command(exercise["exercise_compiler"], exercise["main_file"])], websocket)
 
 

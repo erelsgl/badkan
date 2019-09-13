@@ -268,3 +268,16 @@ def new_manual_grade(submission_id, manual_grade):
         "manual_grade": manual_grade
     })
     return 'OK'
+
+
+def get_language_by_exercise_id(exercise_id):
+    ref = db.reference('exercises/'+exercise_id+"/exercise_compiler")
+    compiler = ref.get()
+    if compiler == "javac":
+        return "java"
+    elif compiler == "python3":
+        return "python"
+    elif compiler == "g++":
+        return "c"  # TODO: Correct this: it could be c or c++.
+    else:
+        return "unknown"

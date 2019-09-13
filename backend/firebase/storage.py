@@ -24,7 +24,7 @@ def download_submission_zip(exercise_id, submiter_id):
         return blob.generate_signed_url(100000000000)
 
 
-async def download_submissions_zip(exercise_id, exercise_name):
+async def download_submissions_zip(exercise_id):
     await terminal_command_log(["bash", "download_submissions.sh", exercise_id])
 
 
