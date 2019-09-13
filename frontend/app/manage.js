@@ -108,19 +108,11 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         '</div></div>' +
         (exercise.submissions ?
             '<div class="manage_button">' +
-<<<<<<< HEAD
             '<button class="btn btn_manage" onclick="downloadGradesExercise(' + "'" + exerciseId + "'" + ')" style="border:1px solid green"><span>Download Exercise Grades</button>' +
             '<button class="btn btn_manage" onclick="currentSubmissionView(' + myStringify(exercise.submissions) + ')" style="border:1px solid blue"><span>Current Submissions</button>' +
             '<button class="btn btn_manage" onclick="mossCommand(' + "'" + exerciseId + "'" + ')" style="border:1px solid red"><span>Check Plagiarism</button>' +
             '<button class="btn btn_manage" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')" style="border:1px solid grey"><span>Download Statistics</button>' +
             '<button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button>' +
-=======
-            '<button class="btn btn_edit" onclick="downloadGradesExercise(' + "'" + exerciseId + "'" + ')">Download Exercise Grades</button>' +
-            '<button class="btn btn_edit" onclick="currentSubmissionView(' + myStringify(exercise.submissions) + ')">Current Submissions</button>' +
-            '<button class="btn btn_edit" onclick="mossCommand(' + "'" + exerciseId + "'" + ')">Check Plagiarism</button>' +
-            '<button class="btn btn_edit" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')">Download Statistics</button>' +
-            '<button class="btn btn_edit" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')">Download Submissions</button>' +
->>>>>>> 3f2c5a88da8cd82be04b8d5ec529bad413d6b7f6
             '</div>' : "");
     return html;
 }
