@@ -112,7 +112,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
             '<button class="btn btn_edit" onclick="currentSubmissionView(' + myStringify(exercise.submissions) + ')">Current Submissions</button>' +
             '<button class="btn btn_edit" onclick="mossCommand(' + "'" + exerciseId + "'" + ')">Check Plagiarism</button>' +
             '<button class="btn btn_edit" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')">Download Statistics</button>' +
-            '<button class="btn btn_edit" onclick="downloadSubmissions(' + "'" + exerciseId + "'" + ')">Download Submissions</button>' +
+            '<button class="btn btn_edit" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')">Download Submissions</button>' +
             '</div>' : "");
     return html;
 }
@@ -483,8 +483,8 @@ function downloadStatistics(exerciseId) {
     alert("Dowload summary " + exerciseId)
 }
 
-function downloadSubmissions(exerciseId) {
-    doPostJSON(null, "download_submissions/" + exerciseId, "text", onSubmissionReceive)
+function downloadSubmissions(exerciseId, exerciseName) {
+    doGETJSON(null, "download_submissions/" + exerciseId + "/" + exerciseName, '', onSubmissionsReceive) // Async
 }
 
 function displayCurrentSubmissions(data) {
@@ -570,6 +570,17 @@ function downloadSubmission(exerciseId, submiterId) {
 
 function onSubmissionReceive(data) {
     window.open(data)
+}
+
+function onSubmissionsReceive(data) {
+    const blob = new Blob([data], {
+        type: "application/zip"
+    });
+    var link = document.createElement('a');
+    document.body.appendChild(link);
+    link.href = window.URL.createObjectURL(blob);
+    link.download = "submissions.zip";
+    link.click();
 }
 
 function manualGrade(submissionId, grade) {

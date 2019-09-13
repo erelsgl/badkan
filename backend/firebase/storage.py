@@ -24,20 +24,8 @@ def download_submission_zip(exercise_id, submiter_id):
         return blob.generate_signed_url(100000000000)
 
 
-def download_submission_zip(exercise_id, submiter_id):
-    blob = bucket.blob("submissions/"+exercise_id+"/"+submiter_id)
-    if blob.exists():
-        return blob.generate_signed_url(100000000000)
-
-
-def download_submissions_zip(exercise_id):
-    # solution: gsutil -m cp -R gs://badkanlocal.appspot.com/submissions .
-    blob = bucket.blob("submissions/"+exercise_id)
-    if blob.exists():
-        return blob.generate_signed_url(100000000000)
-    else:
-        print("Blob doesn't exist")
-    
+async def download_submissions_zip(exercise_id, exercise_name):
+    await terminal_command_log(["bash", "download_submissions.sh", exercise_id])
 
 
 def download_and_save_submission(firebase_path, zip_file):
