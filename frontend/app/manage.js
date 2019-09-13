@@ -57,7 +57,7 @@ function createAccordionBodyManageCourse(courseId, course) {
         '<button class="btn btn_edit" onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
         '<button class="btn btn_delete" onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
         '</div></div>' +
-        '<div class="manage_button"><button class="btn btn_edit" onclick="downloadGradesCourse(' + "'" + courseId + "'" + ')">Download Course Grades</button></div>';
+        '<div class="manage_button"><button class="btn btn_manage btn_course" onclick="downloadGradesCourse(' + "'" + courseId + "'" + ')" style="border:1px solid green"><span>Download Course Grades</button></div>';
     return html;
 }
 
@@ -108,11 +108,11 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         '</div></div>' +
         (exercise.submissions ?
             '<div class="manage_button">' +
-            '<button class="btn btn_edit" onclick="downloadGradesExercise(' + "'" + exerciseId + "'" + ')">Download Exercise Grades</button>' +
-            '<button class="btn btn_edit" onclick="currentSubmissionView(' + myStringify(exercise.submissions) + ')">Current Submissions</button>' +
-            '<button class="btn btn_edit" onclick="mossCommand(' + "'" + exerciseId + "'" + ')">Check Plagiarism</button>' +
-            '<button class="btn btn_edit" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')">Download Statistics</button>' +
-            '<button class="btn btn_edit" onclick="downloadSubmissions(' + "'" + exerciseId + "'" + ')">Download Submissions</button>' +
+            '<button class="btn btn_manage" onclick="downloadGradesExercise(' + "'" + exerciseId + "'" + ')" style="border:1px solid green"><span>Download Exercise Grades</button>' +
+            '<button class="btn btn_manage" onclick="currentSubmissionView(' + myStringify(exercise.submissions) + ')" style="border:1px solid blue"><span>Current Submissions</button>' +
+            '<button class="btn btn_manage" onclick="mossCommand(' + "'" + exerciseId + "'" + ')" style="border:1px solid red"><span>Check Plagiarism</button>' +
+            '<button class="btn btn_manage" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')" style="border:1px solid grey"><span>Download Statistics</button>' +
+            '<button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button>' +
             '</div>' : "");
     return html;
 }
@@ -500,7 +500,7 @@ function displayCurrentSubmissions(data) {
             ')">' +
             submission[2] + '</button><br>'
     }
-    html += '<br><button class="btn btn_edit">Run Submissions</button></div>'
+    html += '<br><button class="btn btn_submission" style="border:1px solid green"><span>Run Submissions</button></div>'
     Swal.fire({
         title: 'Current submissions',
         html: html,
@@ -518,12 +518,12 @@ function myStringify(submissions) {
 
 function focusSubmission(exerciseId, grade, manualGrade, submiterId, submissionId, submiterCountryId) {
     let html = '<div id="submission">' +
-        '<button class="btn btn_edit" onclick="runSubmission(' + "'" + exerciseId + "','" + submiterId + "'" + ')">Run Submission</button><br>' +
-        '<button class="btn btn_edit" onclick="downloadSubmission(' + "'" + exerciseId + "','" + submiterId + "'" + ')">Download Submission</button><br>' +
-        '<button class="btn btn_edit" onclick="editGrade(' + "'" + submissionId + "','" + grade + "','" +
+        '<button class="btn btn_submission" onclick="runSubmission(' + "'" + exerciseId + "','" + submiterId + "'" + ')" style="border:1px solid green"><span>Run Submission</button><br>' +
+        '<button class="btn btn_submission" onclick="downloadSubmission(' + "'" + exerciseId + "','" + submiterId + "'" + ')" style="border:1px solid orange"><span>Download Submission</button><br>' +
+        '<button class="btn btn_submission" onclick="editGrade(' + "'" + submissionId + "','" + grade + "','" +
         (manualGrade ? manualGrade + "'" : "") +
-        ')">Edit Grade</button><br>' +
-        '<button class="btn btn_edit" onclick="manualGrade(' + "'" + submissionId + "','" + grade + "'" + ')">Grade Manually</button>' +
+        ')" style="border:1px solid red"><span>Edit Grade</button><br>' +
+        '<button class="btn btn_submission" onclick="manualGrade(' + "'" + submissionId + "','" + grade + "'" + ')" style="border:1px solid grey"><span>Grade Manually</button>' +
         '<div>'
     Swal.fire({
         title: 'Submission of ' + submiterCountryId,
