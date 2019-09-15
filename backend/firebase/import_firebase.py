@@ -7,12 +7,15 @@ from firebase_admin import storage
 import re
 from datetime import datetime
 import os 
+import concurrent.futures
 
 import sys
 
 sys.path.append("../util")
 
 from terminal import *
+
+executor = concurrent.futures.ThreadPoolExecutor(max_workers=20)
 
 with open('../../frontend/util/firebaseConfig.js') as dataFile:
     data = dataFile.read()

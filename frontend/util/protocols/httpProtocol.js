@@ -1,4 +1,6 @@
-function doPostJSON(data, target, dataType, onFinish, port = 9000, contentType = "application/json") {
+// TODO: Handle conflict here make better design
+
+function doPostJSON(data, target, dataType, onFinish, port = 9000, onBlobFinish = false) {
     // Maybe change this design. This is the solution to the problem of the asynchronous with utils.
     var BACKEND_FILE_PORTS = [port];
     var backendPort = getParameterByName("backend"); // in utils.js
@@ -6,9 +8,14 @@ function doPostJSON(data, target, dataType, onFinish, port = 9000, contentType =
         backendPort = BACKEND_FILE_PORTS[Math.floor(Math.random() * BACKEND_FILE_PORTS.length)];
     var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
     $.ajax({
+        xhr: function () { // Seems like the only way to get access to the xhr object
+            var xhr = new XMLHttpRequest();
+            xhr.responseType = (onBlobFinish ? 'blob' : '')
+            return xhr;
+        },
         url: httpurl + target + "/",
         type: "POST",
-        contentType: contentType,
+        contentType: 'application/json',
         data: data,
         dataType: dataType
     }).done(function (data) {
@@ -43,7 +50,7 @@ function doPostJSONAndFile(data, target, dataType, onFinish) {
     });
 }
 
-function doGETJSON(data, target, dataType, onFinish) {
+function doGETJSON(data, target, dataType, onFinish, type = "GET") {
     // Maybe change this design. This is the solution to the problem of the asynchronous with utils.
     var BACKEND_FILE_PORTS = [7000];
     var backendPort = getParameterByName("backend"); // in utils.js
@@ -52,7 +59,7 @@ function doGETJSON(data, target, dataType, onFinish) {
     var httpurl = "http://" + location.hostname + ":" + backendPort + "/"
     $.ajax({
         url: httpurl + target + "/",
-        type: "GET",
+        type: type,
         xhr: function () { // Seems like the only way to get access to the xhr object
             var xhr = new XMLHttpRequest();
             xhr.responseType = 'blob'

@@ -136,6 +136,20 @@ def manual_grade(submission_id, manual_grade):
     return new_manual_grade(submission_id, manual_grade)
 
 
+@app.route('/download_grades_exercise/', methods=["POST"])
+def download_grades_exercise():
+    response = request.get_json()
+    event_loop = asyncio.new_event_loop()
+    try:
+        lines = [event_loop.run_until_complete(get_grades_exercise(
+            response["submissions_id"], event_loop))]
+    finally:
+        event_loop.close()
+    answer = dict()
+    answer["grades"] = lines
+    return answer
+
+
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')

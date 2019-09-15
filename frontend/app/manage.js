@@ -108,11 +108,11 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         '</div></div>' +
         (exercise.submissions ?
             '<div class="manage_button">' +
-            '<button class="btn btn_manage" onclick="downloadGradesExercise(' + "'" + exerciseId + "'" + ')" style="border:1px solid green"><span>Download Exercise Grades</button>' +
+            '<button class="btn btn_manage" onclick="downloadGradesExercise(' + myStringify(exercise.submissions) + ')" style="border:1px solid green"><span>Download Exercise Grades</button>' +
             '<button class="btn btn_manage" onclick="currentSubmissionView(' + myStringify(exercise.submissions) + ')" style="border:1px solid blue"><span>Current Submissions</button>' +
             '<button class="btn btn_manage" onclick="mossCommand(' + "'" + exerciseId + "'" + ')" style="border:1px solid red"><span>Check Plagiarism</button>' +
             '<button class="btn btn_manage" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')" style="border:1px solid grey"><span>Download Statistics</button>' +
-            '<button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button>' +
+            '<button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button>' +
             '</div>' : "");
     return html;
 }
@@ -465,8 +465,26 @@ function downloadGradesCourse(courseId) {
     alert("Dowload Grades course " + courseId)
 }
 
-function downloadGradesExercise(exerciseId) {
-    alert("Dowload Grades exercise " + exerciseId)
+function downloadGradesExercise(...submissionsId) {
+    json = JSON.stringify({
+        submissions_id: submissionsId
+    })
+    doPostJSON(json, "download_grades_exercise", 'json', onDownloadGradeExerciseFinish) // Async to change
+}
+
+function onDownloadGradeExerciseFinish(data) {
+    var lineArray = [];
+    data.grades[0].forEach(function (infoArray, index) {
+        var line = infoArray.join(",");
+        lineArray.push(index == 0 ? "data:text/csv;charset=utf-8," + line : line);
+    });
+    var csvContent = lineArray.join("\n");
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "exercises_grades.csv");
+    document.body.appendChild(link);
+    link.click();
 }
 
 function currentSubmissionView(...submissionsId) {
@@ -477,7 +495,7 @@ function currentSubmissionView(...submissionsId) {
 }
 
 function mossCommand(exerciseId) {
-    doPostJSON(null, "moss_command/" + exerciseId, "text", onCheckPlagiatFinish, 7000)  // Async
+    doPostJSON(null, "moss_command/" + exerciseId, "text", onCheckPlagiatFinish, 7000) // Async
 }
 
 function onCheckPlagiatFinish(data) {
