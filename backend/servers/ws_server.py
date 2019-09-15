@@ -24,6 +24,8 @@ async def run(websocket, path):
         await check_submission(websocket, submission)
     if target == 'run_submission_admin':
         await run_submission_admin(websocket, submission)
+    if target == "run_submissions_admin":
+        await run_submissions_admin(websocket, submission["exercise_id"])
     print("> Closing connection")
 
 

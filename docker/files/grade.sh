@@ -54,7 +54,7 @@ edit_grade() {
 echo "Grade exercise $EXERCISE_NAME"
 
 cd grading_room/$FOLDER_NAME
-unzip -qq $FOLDER_NAME.zip
+unzip -qq $FOLDER_NAME
 
 cd */
 

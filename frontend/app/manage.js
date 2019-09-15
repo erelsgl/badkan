@@ -476,7 +476,11 @@ function currentSubmissionView(...submissionsId) {
 }
 
 function mossCommand(exerciseId) {
-    alert("Moss command " + exerciseId)
+    doPostJSON(null, "moss_command/" + exerciseId, "text", onCheckPlagiatFinish, 7000)  // Async
+}
+
+function onCheckPlagiatFinish(data) {
+    window.open(data)
 }
 
 function downloadStatistics(exerciseId) {
@@ -500,7 +504,8 @@ function displayCurrentSubmissions(data) {
             ')">' +
             submission[2] + '</button><br>'
     }
-    html += '<br><button class="btn btn_submission" style="border:1px solid green"><span>Run Submissions</button></div>'
+
+    html += '<br><button class="btn btn_submission" onclick="runSubmissions(' + "'" + data.submissions[0][0].exercise_id + "'" + ')" style="border:1px solid green"><span>Run Submissions</button></div>'
     Swal.fire({
         title: 'Current submissions',
         html: html,
@@ -605,6 +610,14 @@ function manualGrade(submissionId, grade) {
     })
 }
 
+function runSubmissions(exerciseId) {
+    json = JSON.stringify({
+        target: "run_submissions_admin",
+        exercise_id: exerciseId,
+    })
+    sendWebsocket(json, onOpen, onMessage, onClose, onError)
+}
+
 function runSubmission(exerciseId, submiterId) {
     json = JSON.stringify({
         target: "run_submission_admin",
@@ -616,14 +629,14 @@ function runSubmission(exerciseId, submiterId) {
 
 function onOpen(_event) {
     Swal.fire({
-        title: 'Running submission',
+        title: 'Running submission(s)',
         html: ' <div id="submissionResult">' +
-            '<h2>Submission result</h2>' +
+            '<h2>Submission(s) result</h2>' +
             '<div id="output" dir="ltr">' +
             '</div>',
         focusConfirm: false,
     })
-    logServer("color:blue", "Submission starting!");
+    logServer("color:blue", "Submission(s) starting!");
 }
 
 function onError(_event) {
@@ -631,7 +644,11 @@ function onError(_event) {
 }
 
 function onMessage(_event) {
-    logServer("color:black", _event.data);
+    if (_event.data.includes('Submission of the student')) {
+        logServer("color:green", _event.data);
+    } else {
+        logServer("color:black", _event.data);
+    }
 }
 
 function onClose(event) {
