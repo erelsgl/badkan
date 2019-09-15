@@ -148,8 +148,7 @@ async function newCourse() {
             '<label for="ids"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
             '<input id="ids" class="swal2-input" placeholder="000000000 000000000">' +
             '</div>',
-        focusConfirm: false,
-
+        showCancelButton: true,
         preConfirm: () => {
             const course_name = escapeHtml($("#course_name").val())
             const grader = escapeHtml($("#grader").val())
@@ -169,10 +168,11 @@ async function newCourse() {
                 )
             }
         }
+    }).then(result => {
+        if (result.value && formValues) {
+            return formValues
+        }
     })
-    if (formValues) {
-        return formValues
-    }
 }
 
 $('input[type=radio][name=privacy]').change(function () {
