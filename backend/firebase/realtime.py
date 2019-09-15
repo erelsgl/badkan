@@ -281,3 +281,20 @@ def get_language_by_exercise_id(exercise_id):
         return "c"  # TODO: Correct this: it could be c or c++.
     else:
         return "unknown"
+
+
+async def get_grade_line(key, event_loop):
+    ref = db.reference('submissions').child(key)
+    return await event_loop.run_in_executor(executor, ref.get)
+
+
+async def get_grades_exercise(submissions_id, event_loop):
+    lines = []
+    coroutines = [get_grade_line(submission_id, event_loop)
+                  for submission_id in submissions_id]
+    completed, pending = await asyncio.wait(coroutines)
+    for item in completed:
+        submission = item.result()
+        # TODO: manual grade
+        lines.append([submission["grade"], submission["collaborators"][0]]) 
+    return lines

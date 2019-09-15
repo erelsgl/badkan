@@ -108,7 +108,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         '</div></div>' +
         (exercise.submissions ?
             '<div class="manage_button">' +
-            '<button class="btn btn_edit" onclick="downloadGradesExercise(' + "'" + exerciseId + "'" + ')">Download Exercise Grades</button>' +
+            '<button class="btn btn_edit" onclick="downloadGradesExercise(' + myStringify(exercise.submissions) + ')">Download Exercise Grades</button>' +
             '<button class="btn btn_edit" onclick="currentSubmissionView(' + myStringify(exercise.submissions) + ')">Current Submissions</button>' +
             '<button class="btn btn_edit" onclick="mossCommand(' + "'" + exerciseId + "'" + ')">Check Plagiarism</button>' +
             '<button class="btn btn_edit" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')">Download Statistics</button>' +
@@ -464,8 +464,15 @@ function downloadGradesCourse(courseId) {
     alert("Dowload Grades course " + courseId)
 }
 
-function downloadGradesExercise(exerciseId) {
-    alert("Dowload Grades exercise " + exerciseId)
+function downloadGradesExercise(...submissionsId) {
+    json = JSON.stringify({
+        submissions_id: submissionsId
+    })
+    doPostJSON(json, "download_grades_exercise", '', onDownloadExerciseFinish, 9000, true) // Async to change
+}
+
+function onDownloadExerciseFinish(data) {
+    console.log(data)
 }
 
 function currentSubmissionView(...submissionsId) {
@@ -476,7 +483,7 @@ function currentSubmissionView(...submissionsId) {
 }
 
 function mossCommand(exerciseId) {
-    doPostJSON(null, "moss_command/" + exerciseId, "text", onCheckPlagiatFinish, 7000)  // Async
+    doPostJSON(null, "moss_command/" + exerciseId, "text", onCheckPlagiatFinish, 7000) // Async
 }
 
 function onCheckPlagiatFinish(data) {
