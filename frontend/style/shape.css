@@ -7,10 +7,12 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
     overflow: scroll;
+    background: rgb(211, 230, 241) !important;
 }
 
 #header {
@@ -22,10 +24,5 @@ html, body {
 
 #main {
     display: none;
-    background: rgb(211, 230, 241);
-    width: 100%;
-    height: 80%;
     position: relative;
 }
-
-/* For Jeremy: This file must remain unchange */
