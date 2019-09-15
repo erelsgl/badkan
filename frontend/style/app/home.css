@@ -3,6 +3,7 @@
 #menunav {
     float: right;
     margin-top: 2%;
+    margin-right:-5%;
     width: 17%;
     background: #FFF;
     border: 1px solid #C0C0C0;
@@ -71,22 +72,52 @@
     width: 83%;
 }
 
-.exerciseName {
-    text-align: center;
-    font-size: 35px;
-    font-family: monospace;
-    text-decoration: underline;
-}
-
-.exercise {
+.exercise.panel {
   /* just "box-shadow" it's not possible to convert to % */
-  box-shadow: 5px 10px 18px grey;
-    border-radius: 4%/8%;
+    border-radius: 1%/2%;
     padding: 2%;
     background-color: white;
-    border: 2px solid #00bfff;
+    border: 1px solid black;
 }
 
 div.panel{
     background: transparent;
+}
+
+.lastSubmission{
+    background-color: whitesmoke;
+    border: 1px solid #D3D3D3;
+    border-radius: 4%/20%;
+}
+.text_lastSubmission{
+    float:left;
+    margin-left:2%;
+    margin-top:1%;
+}
+
+.grade{
+    color: green;
+}
+
+/* Aspect message quand les courses sont vides */
+.public_msg{
+    background-color: whitesmoke;
+    border:1px solid grey;
+    margin: 5% 20% 0 -5%;
+    padding: 10px 20px 5px 42px;
+    text-align: center;
+    border-radius: 4%/35%;
+    box-shadow: 5px 10px 18px grey;
+}
+.myCourse_msg{
+    background-color: whitesmoke;
+    border:1px solid grey;
+    margin: 5% 20% 0 -5%;
+    padding: 10px 20px 5px 42px;
+    text-align: center;
+    border-radius: 4%/35%;
+    box-shadow: 5px 10px 18px grey;
+}
+.warning{
+    margin-right: 5%;
 }
