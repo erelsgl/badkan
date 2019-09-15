@@ -148,7 +148,6 @@ async function newCourse() {
             '<label for="ids"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
             '<input id="ids" class="swal2-input" placeholder="000000000 000000000">' +
             '</div>',
-        focusConfirm: false,
         showCancelButton: true,
         preConfirm: () => {
             const course_name = escapeHtml($("#course_name").val())

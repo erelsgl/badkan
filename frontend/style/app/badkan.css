@@ -29,9 +29,8 @@
 }
 .menuArea{
     background-color: white;
-    border: 2px solid #00bfff;
-    border-radius: 4%/15%;
-    box-shadow: 5px 10px 18px grey;
+    border: 1px solid black;
+    border-radius: 1%/4%;
 }
 .inputId{
     padding-top: 1.5%;
@@ -43,7 +42,7 @@
 
 .gradeMenu{
     padding:1%;
-    border-radius: 4%/25%;
+    border-radius: 1%/6%;
     width: 64%;
     margin-left: 18%;
 }

@@ -163,6 +163,9 @@ button.btn_manage, button.btn_submission{
     cursor: pointer;
     background:whitesmoke;
 }
+button.btn_submission{
+    margin-bottom: 3%;
+}
 button.btn_course, button.btn_submission{
     background: white;
 }
