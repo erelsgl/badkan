@@ -468,11 +468,22 @@ function downloadGradesExercise(...submissionsId) {
     json = JSON.stringify({
         submissions_id: submissionsId
     })
-    doPostJSON(json, "download_grades_exercise", '', onDownloadExerciseFinish, 9000, true) // Async to change
+    doPostJSON(json, "download_grades_exercise", 'json', onDownloadGradeExerciseFinish) // Async to change
 }
 
-function onDownloadExerciseFinish(data) {
-    console.log(data)
+function onDownloadGradeExerciseFinish(data) {
+    var lineArray = [];
+    data.grades[0].forEach(function (infoArray, index) {
+        var line = infoArray.join(",");
+        lineArray.push(index == 0 ? "data:text/csv;charset=utf-8," + line : line);
+    });
+    var csvContent = lineArray.join("\n");
+    var encodedUri = encodeURI(csvContent);
+    var link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "exercises_grades.csv");
+    document.body.appendChild(link);
+    link.click();
 }
 
 function currentSubmissionView(...submissionsId) {

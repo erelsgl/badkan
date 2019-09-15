@@ -141,11 +141,13 @@ def download_grades_exercise():
     response = request.get_json()
     event_loop = asyncio.new_event_loop()
     try:
-        print([event_loop.run_until_complete(get_grades_exercise(
-            response["submissions_id"], event_loop))])
+        lines = [event_loop.run_until_complete(get_grades_exercise(
+            response["submissions_id"], event_loop))]
     finally:
         event_loop.close()
-    return 'OK'
+    answer = dict()
+    answer["grades"] = lines
+    return answer
 
 
 @app.after_request

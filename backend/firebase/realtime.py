@@ -289,12 +289,22 @@ async def get_grade_line(key, event_loop):
 
 
 async def get_grades_exercise(submissions_id, event_loop):
-    lines = []
+    lines = [["id", "grade", "manual grade"]]
     coroutines = [get_grade_line(submission_id, event_loop)
                   for submission_id in submissions_id]
     completed, pending = await asyncio.wait(coroutines)
     for item in completed:
         submission = item.result()
-        # TODO: manual grade
-        lines.append([submission["grade"], submission["collaborators"][0]]) 
+        if "manual_grade" in submission:
+            lines.append([
+                get_country_id_by_uid(submission["uid"]),
+                submission["grade"],
+                submission["manual_grade"]
+            ])
+        else:
+            lines.append([
+                get_country_id_by_uid(submission["uid"]),
+                submission["grade"],
+                ""
+            ])
     return lines
