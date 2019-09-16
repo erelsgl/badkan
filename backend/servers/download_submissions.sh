@@ -4,5 +4,5 @@
 
 export EXERCISE_ID=$1
 
-echo "$HOME/google-cloud-sdk/bin/gsutil -m cp -R gs://badkanlocal.appspot.com/submissions/$EXERCISE_ID ."
-$HOME/google-cloud-sdk/bin/gsutil -m cp -R gs://badkanlocal.appspot.com/submissions/$EXERCISE_ID .
+echo "$HOME/google-cloud-sdk/bin/gsutil -m cp -R gs://badkan-local.appspot.com/submissions/$EXERCISE_ID ."
+$HOME/google-cloud-sdk/bin/gsutil -m cp -R gs://badkan-local.appspot.com/submissions/$EXERCISE_ID .
