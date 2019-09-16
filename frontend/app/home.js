@@ -100,7 +100,7 @@ function createAccordionBodyHomeSolve(exerciseId, exercise) {
     (exercise.exercise_description ? '<div class="description"> Description : </div>' +'<div class="test">' +
       exercise.exercise_description + '</div><br><br>' : "") +
     (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction +
-      '" style="">Current pdf</a><br><br>' : "") +
+      '"class="btn btn-link">Current pdf</a><br><br>' : "") +
     (exercise.deadline ? '<div class=timestamp>Deadline : ' +
       exercise.deadline + '</div><br><br>' : "") +
     '<div class="description">The main function of your submission must be : </div>' + '<div class="test">' + exercise.main_file + '</div><br><br>' +
