@@ -31,7 +31,7 @@ def download_statistics_csv(exercise_id):
 
 
 async def download_submissions_zip(exercise_id):
-    await terminal_command_log(["bash", "download_submissions.sh", exercise_id])
+    await terminal_command_log(["bash", "download_submissions.sh", exercise_id, id])
 
 
 def download_and_save_submission(firebase_path, zip_file):
