@@ -8,6 +8,7 @@ import asyncio
 import re
 
 GRADE_REGEXP = re.compile("\*\*\* ([0-9]+) \*\*\*", re.IGNORECASE)
+OUTPUT_REGEXP = re.compile("Your output is (.*)", re.IGNORECASE)
 
 
 async def tee(websocket, message):
@@ -84,14 +85,17 @@ async def docker_command_tee(args, websocket):
     await proc.wait()
 
 
-async def docker_command_tee_with_grade(args, websocket):
+async def docker_command_tee_with_grade(args, websocket, output=None):
     proc = await docker_command(args)
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
-        match = GRADE_REGEXP.search(line)
-        if not match:
+        match_grade = GRADE_REGEXP.search(line)
+        if not match_grade:
+            match_output = OUTPUT_REGEXP.search(line)
+            if output is not None and match_output:
+                output.append(match_output.group(1))
             await tee(websocket, line)
         else:
-            grade = match.group(1)
+            grade = match_grade.group(1)
             return grade
     await proc.wait()

@@ -136,19 +136,27 @@ def manual_grade(submission_id, manual_grade):
     return new_manual_grade(submission_id, manual_grade)
 
 
-@app.route('/download_grades_exercise/', methods=["POST"])
-def download_grades_exercise():
+@app.route('/download_grades_exercise/<exercise_name>/', methods=["POST"])
+def download_grades_exercise(exercise_name):
     response = request.get_json()
-    event_loop = asyncio.new_event_loop()
-    try:
-        lines = [event_loop.run_until_complete(get_grades_exercise(
-            response["submissions_id"], event_loop))]
-    finally:
-        event_loop.close()
     answer = dict()
-    answer["grades"] = lines
+    answer["grades"] = download_grades(
+        response["submissions_id"], exercise_name)
     return answer
 
+
+@app.route('/download_grades_course/', methods=["POST"])
+def download_grades_course():
+    response = request.get_json()
+    answer = dict()
+    answer["grades"] = []
+    for exercise in response["all_submissions"]:
+        answer["grades"].extend(download_grades(exercise[0], exercise[1]))
+    return answer
+
+@app.route('/download_statistics/<exercise_id>/', methods=["POST"])
+def download_statistics(exercise_id):
+    return download_statistics_csv(exercise_id)
 
 @app.after_request
 def add_headers(response):

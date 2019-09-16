@@ -27,9 +27,13 @@ async def check_submission(websocket, submission):
         edit_csv_trace(str(currentDT), "zip", submitters,
                        "START", exercise["exercise_name"], zip_filename)
         await upload_submission_to_docker_and_firebase(submission["exercise_id"], submission["uid"], zip_filename)
-    grade = await run_submission(websocket, exercise, submission["uid"])
+    output = []
+    grade = await run_submission(websocket, exercise, submission["uid"], output)
     if "save_grade" in submission:
         await save_grade(submission, websocket, grade, str(currentDT))
+        x = threading.Thread(target=edit_statistics, args=(
+            output, submission["country_id"], submission["exercise_id"],))
+        x.start()
     else:
         await tee(websocket, "This submission is meaningless, any grade has been stored. <br> < If you want the grade to be stored, please check the \"Save the grade\" button.")
     return 'OK'
@@ -75,12 +79,12 @@ async def upload_submission_to_docker(uid, zip_filename):
     await terminal_command_log(["rm", zip_filename])
 
 
-async def run_submission(websocket, exercise, folder_name):
+async def run_submission(websocket, exercise, folder_name, output=None):
     return await docker_command_tee_with_grade(["exec", "badkan", "bash", "grade.sh",
                                                 exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(
                                                     exercise["input_output_points"]),
                                                 exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], folder_name,
-                                                get_running_command(exercise["exercise_compiler"], exercise["main_file"])], websocket)
+                                                get_running_command(exercise["exercise_compiler"], exercise["main_file"])], websocket, output)
 
 
 def dict_to_string(my_dicts):

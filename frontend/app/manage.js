@@ -1,3 +1,5 @@
+let allSubmissions = [];
+
 function onLoadMain() {
     // The user will have a field "myCourses" and retreive all the course by this field.
     // Each course will have a field "My exercises"...
@@ -57,17 +59,20 @@ function createAccordionBodyManageCourse(courseId, course) {
         '<button class="btn btn_edit" onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
         '<button class="btn btn_delete" onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
         '</div></div>' +
-        '<div class="manage_button"><button class="btn btn_manage btn_course" onclick="downloadGradesCourse(' + "'" + courseId + "'" + ')" style="border:1px solid green"><span>Download Course Grades</button></div>';
+        '<div class="manage_button"><button class="btn btn_manage btn_course" onclick="downloadGradesCourse()" style="border:1px solid green"><span>Download Course Grades</button></div>';
     return html;
 }
 
 function createAccordionBodyManageExercise(exerciseId, exercise) {
+    if (exercise.submissions) {
+        allSubmissions.push([Object.values(exercise.submissions), exercise.exercise_name])
+    }
     let html = '<div class="panel">' +
         '<div class="exercise">' +
         '<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field" style="margin-top: 17px">Exercise name *</div></label>' +
         '<input id="exercise_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.exercise_name + '"></input><br><br>' +
         '<label for="exercise_compiler' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise.">Exercise compiler *</div></label>' +
-        '<select id="exercise_compiler' + exerciseId + '" class="swal2-input input">' + /* For Jeremy you can play with the class swal2 if you want. */
+        '<select id="exercise_compiler' + exerciseId + '" class="swal2-input input">' +
         '<option  value="javac"' + (exercise.exercise_compiler == "javac" ? "selected" : "") + '>javac</option>' +
         '<option  value="g++"' + (exercise.exercise_compiler == "g++" ? "selected" : "") + '>g++ (c or c++)</option>' +
         '<option  value="python3"' + (exercise.exercise_compiler == "python3" ? "selected" : "") + '>python3</option>' +
@@ -108,7 +113,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         '</div></div>' +
         (exercise.submissions ?
             '<div class="manage_button">' +
-            '<button class="btn btn_manage" onclick="downloadGradesExercise(' + myStringify(exercise.submissions) + ')" style="border:1px solid green"><span>Download Exercise Grades</button>' +
+            '<button class="btn btn_manage" onclick="downloadGradesExercise(' + myStringify(exercise.submissions) + "'" + exercise.exercise_name + "'" + ')" style="border:1px solid green"><span>Download Exercise Grades</button>' +
             '<button class="btn btn_manage" onclick="currentSubmissionView(' + myStringify(exercise.submissions) + ')" style="border:1px solid blue"><span>Current Submissions</button>' +
             '<button class="btn btn_manage" onclick="mossCommand(' + "'" + exerciseId + "'" + ')" style="border:1px solid red"><span>Check Plagiarism</button>' +
             '<button class="btn btn_manage" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')" style="border:1px solid grey"><span>Download Statistics</button>' +
@@ -461,20 +466,25 @@ function deleteExercise(exerciseId) {
     })
 }
 
-function downloadGradesCourse(courseId) {
-    alert("Dowload Grades course " + courseId)
+function downloadGradesCourse() {
+    json = JSON.stringify({
+        all_submissions: allSubmissions
+    })
+    doPostJSON(json, "download_grades_course", 'json', onDownloadGradeFinish)
 }
 
 function downloadGradesExercise(...submissionsId) {
+    exerciseName = submissionsId.pop()
     json = JSON.stringify({
         submissions_id: submissionsId
     })
-    doPostJSON(json, "download_grades_exercise", 'json', onDownloadGradeExerciseFinish) // Async to change
+    doPostJSON(json, "download_grades_exercise/" + exerciseName, 'json', onDownloadGradeFinish)
 }
 
-function onDownloadGradeExerciseFinish(data) {
+function onDownloadGradeFinish(data) {
+    console.log(data.grades)
     var lineArray = [];
-    data.grades[0].forEach(function (infoArray, index) {
+    data.grades.forEach(function (infoArray, index) {
         var line = infoArray.join(",");
         lineArray.push(index == 0 ? "data:text/csv;charset=utf-8," + line : line);
     });
@@ -503,7 +513,7 @@ function onCheckPlagiatFinish(data) {
 }
 
 function downloadStatistics(exerciseId) {
-    alert("Dowload summary " + exerciseId)
+    doPostJSON(null, "download_statistics/" + exerciseId, "text", onSubmissionReceive)
 }
 
 function downloadSubmissions(exerciseId, exerciseName) {
