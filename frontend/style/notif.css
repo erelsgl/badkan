@@ -73,7 +73,7 @@ ul li a:hover {
     border-radius: 50%;
     -moz-border-radius: 50%;
     -webkit-border-radius: 50%;
-    background: #FFF;
+    background: white;
     margin: 4px 10px 0 10px;
     cursor: pointer;
 }
