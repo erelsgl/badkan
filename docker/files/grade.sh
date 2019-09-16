@@ -82,7 +82,7 @@ for item in $INPUT_OUTPUT_POINTS; do
         echo "error..."
     fi;
     output=$?
-    echo "Your output is " $output  # Make this parameter.
+    echo "Your output is" $output  # Make this parameter.
     edit_grade $output $expected_output $points
 done
 

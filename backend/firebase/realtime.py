@@ -288,8 +288,8 @@ async def get_grade_line(key, event_loop):
     return await event_loop.run_in_executor(executor, ref.get)
 
 
-async def get_grades_exercise(submissions_id, event_loop):
-    lines = [["id", "grade", "manual grade"]]
+async def get_grades_exercise(submissions_id, exercise_name, event_loop):
+    lines = [["exercise name:", exercise_name], ["id", "grade", "manual grade"]]
     coroutines = [get_grade_line(submission_id, event_loop)
                   for submission_id in submissions_id]
     completed, pending = await asyncio.wait(coroutines)

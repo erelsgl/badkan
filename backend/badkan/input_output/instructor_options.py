@@ -42,3 +42,13 @@ async def check_plagiat(exercise_id, language):
     submission_path = "../"+exercise_id+"/*/*/*"
     line = await terminal_command_return(["bash", "moss/moss_command.sh", language, submission_path])
     return line[line.find("http"):]
+
+
+def download_grades(submissions_id, exercise_name):
+    event_loop = asyncio.new_event_loop()
+    try:
+        lines = event_loop.run_until_complete(get_grades_exercise(
+            submissions_id, exercise_name, event_loop))
+    finally:
+        event_loop.close()
+    return lines
