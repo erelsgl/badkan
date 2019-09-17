@@ -29,13 +29,14 @@ def retreive_all_courses_and_exercises(uid):
         return {}
     answer = dict()
     answer["courses"] = []
+    course_ids = []
     for course_id in courses:
         course = courses[course_id]
         if is_user_course(course, uid):
             answer["courses"].append([course_id, course])
+            course_ids.append(course_id)
     answer["exercises"] = []
-    for course_id in courses:
-        answer["exercises"].append(retreive_exercise_for_the_course(course_id))
+    answer["exercises"] = get_exercises_async(course_ids)
     # It's possible here to improve the parallelism but it's irrelevant for now.
     answer["submissions"] = retreive_submissions_by_uid(uid)
     return answer
@@ -53,43 +54,58 @@ def is_user_course(course, uid):
     return False
 
 
-def retreive_exercise_for_the_course(course_id):
-    exercises_ref = db.reference('exercises/')
-    return exercises_ref.order_by_child(
-        'course_id').equal_to(course_id).get()
-
-
 def retreive_submissions_by_uid(uid):
     submissions_ref = db.reference('submissions/')
     return submissions_ref.order_by_child(
         'uid').equal_to(uid).get()
 
 
+async def retreive_exercise_for_the_course(course_id, event_loop):
+    exercises_ref = db.reference(
+        'exercises/').order_by_child('course_id').equal_to(course_id)
+    return await event_loop.run_in_executor(executor, exercises_ref.get)
+
+
+async def retreive_exercises_for_the_courses(course_ids, event_loop):
+    coroutines = [retreive_exercise_for_the_course(
+        course_id, event_loop) for course_id in course_ids]
+    completed, pending = await asyncio.wait(coroutines)
+    exercises = []
+    for item in completed:
+        exercises.append(item.result())
+    return exercises
+
+
+def get_exercises_async(course_ids):
+    event_loop = asyncio.new_event_loop()
+    try:
+        return event_loop.run_until_complete(retreive_exercises_for_the_courses(course_ids, event_loop))
+    finally:
+        event_loop.close()
+
+
 def retreive_courses_and_exercises_by_uid(uid):
     courses_ref = db.reference('courses/')
-    exercises_ref = db.reference('exercises/')
+    owner_courses = courses_ref.order_by_child('owner_uid').equal_to(uid).get()
+    answer = dict()
+    answer["courses"] = owner_courses
     # TODO: Check about the grader....
     # courses = courses.order_by_child('grader_uid').equal_to(uid).get()
-    owner_courses = courses_ref.order_by_child('owner_uid').equal_to(uid).get()
+    uids = []
+    course_ids = []
     for course_id in owner_courses:
         if "uids" in owner_courses[course_id]:
             if isinstance(owner_courses[course_id]["uids"], list):
-                owner_courses[course_id]["uids"] = get_country_ids_by_uids(
-                    owner_courses[course_id]["uids"])
+                uids.extend(owner_courses[course_id]["uids"])
             else:
-                owner_courses[course_id]["uids"] = get_country_ids_by_uids(
-                    owner_courses[course_id]["uids"].values())
+                uids.extend(owner_courses[course_id]["uids"].values())
         if "grader_uid" in owner_courses[course_id]:
-            owner_courses[course_id]["grader_uid"] = get_country_id_by_uid(
-                owner_courses[course_id]["grader_uid"])
-        exercises_of_course = exercises_ref.order_by_child(
-            'course_id').equal_to(course_id).get()
-        for exercise_id in exercises_of_course:
-            exercises_of_course[exercise_id]["pdf_instruction"] = download_pdf_instruction(
-                exercise_id)
-        owner_courses[course_id]["exercises"] = exercises_of_course
-    answer = dict()
-    answer["courses"] = owner_courses
+            uids.append(owner_courses[course_id]["grader_uid"])
+        course_ids.append(course_id)
+    answer["exercises"] = get_exercises_async(course_ids)
+    keys = list(set(uids))
+    values = get_country_ids_by_uids(keys)
+    answer["ids"] = dict(zip(keys, values))
     return answer
 
 

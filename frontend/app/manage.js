@@ -10,21 +10,23 @@ function onFinishRetreiveData(data) {
     // TODO: make the first active at the beginning.
     // TODO: use form to save the input.
     if (data.courses) {
-        const entries = Object.entries(data.courses)
-        for (course of entries) {
-            createAccordionManage(course); // Example.
+        for (courseObj of Object.entries(data.courses)) {
+            let courseId = courseObj[0]
+            let course = courseObj[1]
+            let index = getExercisesItem(data.exercises, courseId)
+            if (index != -1) {
+                createAccordionManage(courseId, course, data.exercises[index], data.ids);
+            }
         }
     }
     $('#main').show();
 }
 
-function createAccordionManage(courseObj) {
-    let courseId = courseObj[0]
-    let course = courseObj[1]
+function createAccordionManage(courseId, course, exercises, ids) {
     createAccordionMenu(course.course_name)
     let panel = "<li>";
-    panel += createAccordionBodyManageCourse(courseId, course)
-    for (exerciseObj of Object.entries(course.exercises)) {
+    panel += createAccordionBodyManageCourse(courseId, course, ids)
+    for (exerciseObj of Object.entries(exercises)) {
         let exerciseId = exerciseObj[0]
         let exercise = exerciseObj[1]
         panel += createAccordionBodyManageExercise(exerciseId, exercise)
@@ -34,13 +36,13 @@ function createAccordionManage(courseObj) {
     $(".nacc").append(panel + "</li>")
 }
 
-function createAccordionBodyManageCourse(courseId, course) {
+function createAccordionBodyManageCourse(courseId, course, ids) {
     let html = '<div class="panel">' +
         '<div class="course">' +
         '<label for="course_name' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Required field" style="margin-top: 17px">Course name *</div></label>' +
         '<input id="course_name' + courseId + '" class="courseExerciseInputEdit" value="' + course.course_name + '"></input><br><br>' +
         '<label for="course_grader' + courseId + '"><div class="explanation" data-toggle="tooltip" title="The grader must be admin. \nGives an access to the manage course.">Grader id \n </div></label>' +
-        '<input id="course_grader' + courseId + '" class="courseExerciseInputEdit" value="' + course.grader_uid + '" style="margin-left:88px"></input><br><br>' +
+        '<input id="course_grader' + courseId + '" class="courseExerciseInputEdit" value="' + (course.grader_uid ? ids[course.grader_uid] : course.grader_uid) + '" style="margin-left:88px"></input><br><br>' +
         '<label for="privacyEdit"><div class="explanation" data-toggle="tooltip" title="The course is shared only with the students you want.">Privacy</div></label><br>' +
         '<div class="radio_checkbox border_radio">' +
         '<input id="radio_public' + courseId + '" class="btn_radio" type="radio" name="privacy' + courseId + '" value="public" onclick=\'$(\"#pass' + courseId + '\").hide()\'' +
@@ -54,7 +56,7 @@ function createAccordionBodyManageCourse(courseId, course) {
         '<div id="pass' + courseId + '"' +
         ((course.privacy == 'public') ? "style=display:none;>" : ">") +
         '<label for="course_ids' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
-        '<input id="course_ids' + courseId + '" class="ids courseExerciseInputEdit" value="' + String(course.uids).replace(",", " ") + '" value="000000000 000000000""></input><br><br><br><br>' +
+        '<input id="course_ids' + courseId + '" class="ids courseExerciseInputEdit" value="' + (course.uids ? uidToCountryIds(course.uids, ids) : course.uids) + '" value="000000000 000000000""></input><br><br><br><br>' +
         '</div>' + '<br>' +
         '<button class="btn btn_edit" onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
         '<button class="btn btn_delete" onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
@@ -90,7 +92,13 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         '<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.main_file + '"></input><br><br>' +
         '<label for="exercise_description' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
         '<textarea id="exercise_description' + exerciseId + '" class="swal2-input input">' + exercise.exercise_description + ' </textarea><br><br>' +
-        (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction + '" class="btn btn-link"> Current pdf</a><br><br>' : '') +
+
+
+        // (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction + '" class="btn btn-link"> Current pdf</a><br><br>' : '') +
+
+        (exercise.pdf_instruction ? '<button class="btn btn-link"  onclick="downloadPdfInstruction(' + "'" + exerciseId + "'" + ')">Current pdf</button><br><br>' : "") +
+
+
         '<label for="exercise_instruction' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
         '<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
         '<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
@@ -120,6 +128,14 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
             '<button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button>' +
             '</div>' : "");
     return html;
+}
+
+function uidToCountryIds(uids, ids) {
+    let answer = ""
+    for (uid of Object.values(uids)) {
+        answer += ids[uid] + " "
+    }
+    return answer
 }
 
 $("#newCourse").click(function () {
@@ -475,7 +491,6 @@ function downloadGradesExercise(...submissionsId) {
 }
 
 function onDownloadGradeFinish(data) {
-    console.log(data.grades)
     var lineArray = [];
     data.grades.forEach(function (infoArray, index) {
         var line = infoArray.join(",");
