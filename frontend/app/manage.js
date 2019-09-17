@@ -114,7 +114,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         (exercise.submissions ?
             '<div class="manage_button">' +
             '<button class="btn btn_manage" onclick="downloadGradesExercise(' + myStringify(exercise.submissions) + "'" + exercise.exercise_name + "'" + ')" style="border:1px solid green"><span>Download Exercise Grades</button>' +
-            '<button class="btn btn_manage" onclick="currentSubmissionView(' + myStringify(exercise.submissions) + ')" style="border:1px solid blue"><span>Current Submissions</button>' +
+            '<button class="btn btn_manage" onclick="currentSubmissionView(' + "'" + exerciseId + "'" + ')" style="border:1px solid blue"><span>Current Submissions</button>' +
             '<button class="btn btn_manage" onclick="mossCommand(' + "'" + exerciseId + "'" + ')" style="border:1px solid red"><span>Check Plagiarism</button>' +
             '<button class="btn btn_manage" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')" style="border:1px solid grey"><span>Download Statistics</button>' +
             '<button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button>' +
@@ -490,11 +490,8 @@ function onDownloadGradeFinish(data) {
     link.click();
 }
 
-function currentSubmissionView(...submissionsId) {
-    json = JSON.stringify({
-        submissions_id: submissionsId
-    })
-    doPostJSON(json, "retreive_submissions", "json", displayCurrentSubmissions)
+function currentSubmissionView(exerciseId) {
+    doPostJSON(null, "retreive_submissions/" + exerciseId, "json", displayCurrentSubmissions)
 }
 
 function mossCommand(exerciseId) {
@@ -515,19 +512,26 @@ function downloadSubmissions(exerciseId, exerciseName) {
 
 function displayCurrentSubmissions(data) {
     let html = '<div id="submissions">'
-    for (submission of data.submissions) {
+    let exerciseId = ""
+    for (submissionObj of Object.entries(data)) {
+        let submission_id = submissionObj[0]
+        let submission = submissionObj[1]
+        let collaborators_filtered = submission.collaborators.filter(function (el) {
+            return el != "";
+        });
         html += '<button class="btn btn-link" onclick="focusSubmission(' +
-            "'" + submission[0].exercise_id + "','" +
-            submission[0].grade + "','" +
-            submission[0].manual_grade + "','" +
-            submission[0].uid + "','" +
-            submission[1] + "','" +
-            submission[2] + "'" +
+            "'" + submission.exercise_id + "','" +
+            submission.grade + "','" +
+            submission.manual_grade + "','" +
+            submission.uid + "','" +
+            submission_id + "','" +
+            collaborators_filtered.join(" && ") + "'" +
             ')">' +
-            submission[2] + '</button><br>'
+            collaborators_filtered.join(" && ") + '</button><br>'
+        exerciseId = submission.exercise_id
     }
 
-    html += '<br><button class="btn btn_submission" onclick="runSubmissions(' + "'" + data.submissions[0][0].exercise_id + "'" + ')" style="border:1px solid green"><span>Run Submissions</button></div>'
+    html += '<br><button class="btn btn_submission" onclick="runSubmissions(' + "'" + exerciseId + "'" + ')" style="border:1px solid green"><span>Run Submissions</button></div>'
     Swal.fire({
         title: 'Current submissions',
         html: html,

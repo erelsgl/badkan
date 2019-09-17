@@ -110,10 +110,9 @@ def submit_zip_file(exercise_id, uid):
     return 'OK'
 
 
-@app.route('/retreive_submissions/', methods=["POST"])
-def retreive_submissions():
-    response = request.get_json()
-    return retreive_exercise_submissions(response["submissions_id"])
+@app.route('/retreive_submissions/<exercise_id>/', methods=["POST"])
+def retreive_submissions(exercise_id):
+    return retreive_exercise_submissions(exercise_id)
 
 
 @app.route('/edit_grade/<submission_id>/<grade>/', methods=["POST"])

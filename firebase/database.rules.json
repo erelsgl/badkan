@@ -13,7 +13,7 @@
       ".indexOn": "course_id"
     }, 
     "submissions": {
-      ".indexOn": "uid"
+      ".indexOn": ["uid", "exercise_id"] 
     }
   }
 }
