@@ -1,5 +1,3 @@
-// TODO: Handle conflict here make better design
-
 function doPostJSON(data, target, dataType, onFinish, port = 9000, onBlobFinish = false) {
     // Maybe change this design. This is the solution to the problem of the asynchronous with utils.
     var BACKEND_FILE_PORTS = [port];

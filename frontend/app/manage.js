@@ -249,7 +249,7 @@ function newExercise(courseId) {
         if (result.value) {
             newNormalExercise(courseId)
         } else {
-            alert("peer")
+            alert("Available soon.")
         }
     })
 }
@@ -408,7 +408,7 @@ function moreIO(i, inputOutputPoints) {
                 }
             }
         }
-    });
+    })
 }
 
 function editExercise(exerciseId, inputOutputPointsSize) {
