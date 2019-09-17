@@ -154,9 +154,16 @@ def download_grades_course():
         answer["grades"].extend(download_grades(exercise[0], exercise[1]))
     return answer
 
+
 @app.route('/download_statistics/<exercise_id>/', methods=["POST"])
 def download_statistics(exercise_id):
     return download_statistics_csv(exercise_id)
+
+
+@app.route('/download_instruction/<exercise_id>/', methods=["POST"])
+def download_instruction(exercise_id):
+    return download_pdf_instruction(exercise_id)
+
 
 @app.after_request
 def add_headers(response):

@@ -33,20 +33,14 @@ function onLoadMain() {
 function onFinishRetreiveData(data) {
   // TODO: make the first active at the beginning.
   if (data.courses) {
-    if (data.courses[0].length == 0) {
-      noMyCourseAvailable()
+    for (course of data.courses) {
+      createAccordionHome(course, data.exercises, Object.values(data.submissions))
     }
-    if (data.courses[1].length == 0) {
-      noPublicCourseAvailable()
-    }
-    for (let course of data.courses[0]) {
-      createAccordionHome(course, "myCourse"); // myCourse
-    }
-    for (let course of data.courses[1]) {
-      createAccordionHome(course, "public"); // public
-    }
-  } else {
+  }
+  if (($('.public').length) == 0) {
     noPublicCourseAvailable()
+  }
+  if (($('.myCourse').length) == 0) {
     noMyCourseAvailable()
   }
   $('#main').show();
@@ -61,21 +55,50 @@ function noMyCourseAvailable() {
   $(".nacc").append('<div class="myCourse myCourse_msg"><img class=warning src="images/msg-err.png">No my course available</div>')
 }
 
-function createAccordionHome(courseObj, myClass) {
+function createAccordionHome(courseObj, exercises, submissions) {
   let courseId = courseObj[0]
   let course = courseObj[1]
+  let myClass = "public"
+  if (course.uids) {
+    myClass = getClass(course.uids, userUid)
+  }
   createAccordionMenu(course.course_name, myClass)
   let panel = "<li>";
-  for (exerciseObj of Object.entries(course.exercises)) {
-    let exerciseId = exerciseObj[0]
-    let exercise = exerciseObj[1]
-    if (myClass == "myCourse") {
-      panel += createAccordionBodyHomeSolve(exerciseId, exercise)
-    } else if (myClass == "public") {
-      panel += createAccordionBodyHomeRegister(courseId, exercise)
+  let index = getExercisesItem(exercises, courseId)
+  if (index != -1) {
+    for (exerciseObj of Object.entries(exercises[index])) {
+      let exerciseId = exerciseObj[0]
+      let exercise = exerciseObj[1]
+      if (myClass == "myCourse") {
+        panel += createAccordionBodyHomeSolve(exerciseId, exercise, submissions)
+      } else if (myClass == "public") {
+        panel += createAccordionBodyHomeRegister(courseId, exercise)
+      }
     }
   }
   $(".nacc").append(panel + "</li>")
+}
+
+function getExercisesItem(exercises, courseId) {
+  for (let i = 0; i < exercises.length; i++) {
+    if (exercises[i]) {
+      let exercise = Object.entries(exercises[i])
+      if (exercise[0]) {
+        if (exercise[0][1].course_id == courseId) {
+          return i
+        }
+      }
+    }
+  }
+  return -1
+}
+
+function getClass(uids, id) {
+  if (Object.values(uids).includes(id)) {
+    return "myCourse"
+  } else {
+    return "public"
+  }
 }
 
 function createAccordionBodyHomeRegister(courseId, exercise) {
@@ -84,8 +107,6 @@ function createAccordionBodyHomeRegister(courseId, exercise) {
     '<div class="description">Compiler : </div>' + '<div class="test">' + exercise.exercise_compiler + '</div><br><br>' +
     (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="test">' +
       exercise.exercise_description + '</div><br><br>' : "") +
-    (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction +
-      '" style="">Current pdf</a><br><br>' : "") +
     (exercise.deadline ? '<div class=timestamp>Deadline : ' +
       exercise.deadline + '</div><br><br>' : "") +
     '<button class="btn btn_edit" onclick="registeringToCourse(' + "'" + courseId + "'" +
@@ -93,29 +114,43 @@ function createAccordionBodyHomeRegister(courseId, exercise) {
     '</div>';
 }
 
-function createAccordionBodyHomeSolve(exerciseId, exercise) {
+function createAccordionBodyHomeSolve(exerciseId, exercise, submissions) {
   return '<div class="exercise panel myCourse">' + // Check in the class here for the style
     '<div class="exerciseName title_font">' + exercise.exercise_name + '</div><br><br>' +
-    '<div class="description">Compiler : </div>'+'<div class="test">' + exercise.exercise_compiler + '</div><br><br>' +
-    (exercise.exercise_description ? '<div class="description"> Description : </div>' +'<div class="test">' +
+    '<div class="description">Compiler : </div>' + '<div class="test">' + exercise.exercise_compiler + '</div><br><br>' +
+    (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="test">' +
       exercise.exercise_description + '</div><br><br>' : "") +
-    (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction +
-      '"class="btn btn-link">Current pdf</a><br><br>' : "") +
+    (exercise.pdf_instruction ? '<button class="btn btn-link"  onclick="downloadPdfInstruction(' + "'" + exerciseId + "'" + ')">Current pdf</button><br><br>' : "") +
     (exercise.deadline ? '<div class=timestamp>Deadline : ' +
       exercise.deadline + '</div><br><br>' : "") +
     '<div class="description">The main function of your submission must be : </div>' + '<div class="test">' + exercise.main_file + '</div><br><br>' +
     '<div class="description">You need to read the input from : </div>' + '<div class="test">' + exercise.input_file_name + '</div><br><br>' +
     '<div class="description">You need to read the output from : </div>' + '<div class="test">' + exercise.output_file_name + '</div><br><br><br><br>' +
-    (exercise.owner_submission ?
-      '<div class=lastSubmission><div class="timestamp text_lastSubmission">Your last stored submission timestamp is : ' + exercise.owner_submission.timestamp + '</div><br><br>' +
-      (exercise.owner_submission.url == "zip" ?
-        '<div class="timestamp text_lastSubmission">Your solution was submitted via a ZIP file.</div><br><br>' :
-        '<div class="timestamp text_lastSubmission">You solution was submitted via a GitHub url :' + exercise.owner_submission.url + '</div><br><br>') +
-      '<div class="timestamp text_lastSubmission grade">Your current grade : </div>' + '<div class="timestamp text_lastSubmission grade">' + exercise.owner_submission.grade + '</div><br><br></div><br><br>' :
-      '') +
+    getSubmission(submissions, exerciseId) +
     '<button class="btn btn_edit" onclick="solveExercise(' + "'" + exerciseId + "'" +
     ')">Solve <i class="glyphicon glyphicon-fire"></i></button>' +
     '</div>';
+}
+
+function getSubmission(submissions, exerciseId) {
+  for (submission of submissions) {
+    if (submission.exercise_id == exerciseId) {
+      return '<div class=lastSubmission><div class="timestamp text_lastSubmission">Your last stored submission timestamp is : ' + submission.timestamp + '</div><br><br>' +
+        (submission.url == "zip" ?
+          '<div class="timestamp text_lastSubmission">Your solution was submitted via a ZIP file.</div><br><br>' :
+          '<div class="timestamp text_lastSubmission">You solution was submitted via a GitHub url :' + submission.url + '</div><br><br>') +
+        '<div class="timestamp text_lastSubmission grade">Your current grade : </div>' + '<div class="timestamp text_lastSubmission grade">' + submission.grade + '</div><br><br></div><br><br>'
+    }
+  }
+  return ""
+}
+
+function downloadPdfInstruction(exerciseId) {
+  doPostJSON(null, "download_instruction/" + exerciseId, "text", onDowloadPdfFinish)
+}
+
+function onDowloadPdfFinish(data) {
+  window.open(data)
 }
 
 function registeringToCourse(courseId) {

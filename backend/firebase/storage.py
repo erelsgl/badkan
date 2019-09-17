@@ -30,8 +30,15 @@ def download_statistics_csv(exercise_id):
         return blob.generate_signed_url(100000000000)
 
 
+def download_pdf_instruction(exercise_id):
+	blob = bucket.blob("pdf_instruction/"+exercise_id)
+	if blob.exists():
+		return blob.generate_signed_url(100000000000)
+
+
+
 async def download_submissions_zip(exercise_id):
-    await terminal_command_log(["bash", "download_submissions.sh", exercise_id, id])
+    await terminal_command_log(["bash", "download_submissions.sh", exercise_id, project_name])
 
 
 def download_and_save_submission(firebase_path, zip_file):

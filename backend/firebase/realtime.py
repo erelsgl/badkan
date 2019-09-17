@@ -24,46 +24,50 @@ def user_update(uid, json):
 
 def retreive_all_courses_and_exercises(uid):
     courses_ref = db.reference('courses/')
-    exercises_ref = db.reference('exercises/')
-    pdf_instructions = []
     courses = courses_ref.get()
-    my_course = []
-    public = []
     if not courses:
         return {}
+    answer = dict()
+    answer["courses"] = []
     for course_id in courses:
         course = courses[course_id]
-        exercises_of_course = exercises_ref.order_by_child(
-            'course_id').equal_to(course_id).get()
-        for exercise_id in exercises_of_course:
-            exercises_of_course[exercise_id]["pdf_instruction"] = download_pdf_instruction(
-                exercise_id)
-            if "submissions" in exercises_of_course[exercise_id]:
-                for submission in exercises_of_course[exercise_id]["submissions"]:
-                    submissions_ref = db.reference(
-                        'submissions/'+exercises_of_course[exercise_id]["submissions"][submission])
-                    current_submission = submissions_ref.get()
-                    if str(current_submission["uid"]) == str(uid):
-                        exercises_of_course[exercise_id]["owner_submission"] = current_submission
-        course["exercises"] = exercises_of_course
-        if "uids" in course and isinstance(course["uids"], dict):
-            if uid in course["uids"].values():
-                my_course.append([course_id, course])
-            elif course["privacy"] == "public":
-                public.append([course_id, course])
-        elif "uids" in course and uid in course["uids"]:
-            my_course.append([course_id, course])
-        elif course["privacy"] == "public":
-            public.append([course_id, course])
-    answer = dict()
-    answer["courses"] = [my_course, public]
+        if is_user_course(course, uid):
+            answer["courses"].append([course_id, course])
+    answer["exercises"] = []
+    for course_id in courses:
+        answer["exercises"].append(retreive_exercise_for_the_course(course_id))
+    # It's possible here to improve the parallelism but it's irrelevant for now.
+    answer["submissions"] = retreive_submissions_by_uid(uid)
     return answer
+
+
+def is_user_course(course, uid):
+    if course["privacy"] == "public":
+        return True
+    elif "uids" in course:  # The course is private
+        courses_data_structure = course["uids"]
+        if isinstance(course["uids"], dict):
+            courses_data_structure = course["uids"].values()
+        if uid in courses_data_structure:
+            return True
+    return False
+
+
+def retreive_exercise_for_the_course(course_id):
+    exercises_ref = db.reference('exercises/')
+    return exercises_ref.order_by_child(
+        'course_id').equal_to(course_id).get()
+
+
+def retreive_submissions_by_uid(uid):
+    submissions_ref = db.reference('submissions/')
+    return submissions_ref.order_by_child(
+        'uid').equal_to(uid).get()
 
 
 def retreive_courses_and_exercises_by_uid(uid):
     courses_ref = db.reference('courses/')
     exercises_ref = db.reference('exercises/')
-    pdf_instructions = []
     # TODO: Check about the grader....
     # courses = courses.order_by_child('grader_uid').equal_to(uid).get()
     owner_courses = courses_ref.order_by_child('owner_uid').equal_to(uid).get()
@@ -289,7 +293,8 @@ async def get_grade_line(key, event_loop):
 
 
 async def get_grades_exercise(submissions_id, exercise_name, event_loop):
-    lines = [["exercise name:", exercise_name], ["id", "grade", "manual grade"]]
+    lines = [["exercise name:", exercise_name],
+             ["id", "grade", "manual grade"]]
     coroutines = [get_grade_line(submission_id, event_loop)
                   for submission_id in submissions_id]
     completed, pending = await asyncio.wait(coroutines)

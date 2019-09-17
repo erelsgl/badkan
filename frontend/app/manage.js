@@ -89,7 +89,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         '<label for="main_file' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
         '<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.main_file + '"></input><br><br>' +
         '<label for="exercise_description' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
-        '<textarea id="exercise_description' + exerciseId + '" class="swal2-input input">'+ exercise.exercise_description + ' </textarea><br><br>' +
+        '<textarea id="exercise_description' + exerciseId + '" class="swal2-input input">' + exercise.exercise_description + ' </textarea><br><br>' +
         (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction + '" class="btn btn-link"> Current pdf</a><br><br>' : '') +
         '<label for="exercise_instruction' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
         '<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
@@ -123,21 +123,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
 }
 
 $("#newCourse").click(function () {
-    var info = newCourse();
-    info.then((json) => {
-        doPostJSON(json, "create_course", "text", reloadManage)
-        $("#main").hide()
-    })
-})
-
-function reloadManage() {
-    document.location.reload();
-}
-
-async function newCourse() {
-    const {
-        value: formValues
-    } = await Swal.fire({
+    Swal.fire({
         allowOutsideClick: false,
         title: 'New course',
         html: '<label for="course_name"><div class="explanation" data-toggle="tooltip" title="Required field">Course name *</div></label>' +
@@ -160,7 +146,7 @@ async function newCourse() {
             const privacy = $("input[name='privacy']:checked").val()
             const ids = escapeHtml($("#ids").val())
             if (!(course_name == "" || (ids == "" && privacy == "private"))) {
-                return JSON.stringify({
+                json = JSON.stringify({
                     owner_uid: userUid,
                     course_name: course_name,
                     grader_uid: grader,
@@ -174,10 +160,16 @@ async function newCourse() {
             }
         }
     }).then(result => {
-        if (result.value && formValues) {
-            return formValues
+        if (result.value) {
+            $("#main").hide()
+            doPostJSON(json, "create_course", "text", reloadManage)
         }
     })
+
+})
+
+function reloadManage() {
+    document.location.reload();
 }
 
 $('input[type=radio][name=privacy]').change(function () {
@@ -354,7 +346,8 @@ async function newNormalExercise(courseId) {
                 deadline: deadline,
                 input_file_name: inputFileName,
                 output_file_name: outputFileName,
-                input_output_points: inputOutputPoints
+                input_output_points: inputOutputPoints,
+                pdf_instruction: (instructionPdf ? true : false)
             })
             var fd = new FormData();
             fd.append("file", instructionPdf);
