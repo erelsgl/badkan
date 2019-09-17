@@ -155,12 +155,6 @@ Since we use contrab for the backup, from the database_exports folder please run
 
 Please, check that in the files crontab-backup, the cd is sending you to the good place.
 
-We also use crontab to send notification, then from the notifications folder please run:
-
-    crontab crontab-notifications
-
-Please, check that in the files crontab-notifications, the cd is sending you to the good place.
-
 
 ## Installing the Apache server
 

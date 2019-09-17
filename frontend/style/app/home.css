@@ -121,3 +121,11 @@ div.panel{
 .warning{
     margin-right: 5%;
 }
+
+ul {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 12px 10px;
+    height: 45px;
+}

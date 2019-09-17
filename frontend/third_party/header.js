@@ -1,6 +1,7 @@
 // Here are all the links needed by the header
-var links = ["style/header.css", "style/notif.css", "style/shape.css",
-    "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css", "https://www.w3schools.com/w3css/4/w3.css"];
+var links = ["style/header.css", "style/shape.css",
+    "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css", "https://www.w3schools.com/w3css/4/w3.css"
+];
 for (index = 0; index < links.length; ++index) {
     var link = document.createElement('link');
     link.href = links[index];
@@ -15,8 +16,9 @@ for (index = 0; index < links.length; ++index) {
 }
 
 // Here are all the script needed by the header
-var scripts = ["util/utils.js", "util/notif.js",
-    "util/protocols/httpProtocol.js", "https://cdn.jsdelivr.net/npm/sweetalert2@8", "data/retreiveUser.js"];
+var scripts = ["util/utils.js",
+    "util/protocols/httpProtocol.js", "https://cdn.jsdelivr.net/npm/sweetalert2@8", "data/retreiveUser.js"
+];
 for (index = 0; index < scripts.length; ++index) {
     var script = document.createElement('script');
     script.src = scripts[index];
@@ -36,24 +38,11 @@ let div = '<div class="container">' +
     '<div id="pagename">' +
     document.title +
     '</div>' +
-    '<div id="notif">' +
-    '<ul>' +
-    '<li id="noti_Container">' +
-    '<div id="noti_Counter"></div>' +
-    '<div id="noti_Button"></div>' +
-    '<div id="notifications">' +
-    '<div class="notif">Notifications</div>' +
-    '<div id=addNotif></div>' +
-    '<div style="height:300px;"></div>' +
-    '</div>' +
-    '</li>' +
-    '</ul>' +
-    '</div>' +
     '<div id="home" onclick="document.location.href=\'home.html\'">Home</div>' +
     '<div class="dropdown">' +
     '<button id=button_profile class="dropbtn"></button>' +
     '<div class="dropdown-content">' +
-    '<a href="grades.html" style="text-decoration: none; color: black;"><i class="glyphicon glyphicon-user"></i> Profile</a>' +
+    '<a href="profile.html" style="text-decoration: none; color: black;"><i class="glyphicon glyphicon-user"></i> Profile</a>' +
     '<a href="#settings" style="text-decoration: none; color: black;"><i class="glyphicon glyphicon-cog"></i> Settings</a>' +
     '<a href="#logout" style="text-decoration: none; color: black;"><i class="glyphicon glyphicon-off"></i> Log Out</a>' +
     '</div>' +
@@ -98,6 +87,7 @@ async function settings() {
             '<label for="user_country_id">Id</label>' +
             '<input id="user_country_id" class="swal2-input" value=' + userDetails["country_id"] + '>' + // Retreive here the data.
             '<a class="btn btn-danger" onclick="deleteConfirmation();">Delete account</a>',
+        showCancelButton: true,
         focusConfirm: false,
         preConfirm: () => {
             $("#main").hide()

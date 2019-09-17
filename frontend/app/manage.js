@@ -7,7 +7,6 @@ function onLoadMain() {
 }
 
 function onFinishRetreiveData(data) {
-    // TODO: make the first active at the beginning.
     // TODO: use form to save the input.
     if (data.courses) {
         for (courseObj of Object.entries(data.courses)) {
@@ -16,8 +15,13 @@ function onFinishRetreiveData(data) {
             let index = getExercisesItem(data.exercises, courseId)
             if (index != -1) {
                 createAccordionManage(courseId, course, data.exercises[index], data.ids);
+            } else {
+                createAccordionManage(courseId, course, [], data.ids);
             }
         }
+    }
+    if ($('.courseName')[0]) {
+        $('.courseName')[0].click();
     }
     $('#main').show();
 }
@@ -630,6 +634,7 @@ function onSubmissionsReceive(data) {
 }
 
 function manualGrade(submissionId, grade) {
+    // TODO: Add the possibility for the instructor to put a comment.
     Swal.fire({
         title: 'Manual Grade',
         html: '<div class="manual_grade">The actual grade given by the badkan is ' + grade + '<br><br>' +
