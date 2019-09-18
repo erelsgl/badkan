@@ -1,4 +1,5 @@
 let allSubmissions = [];
+let inputOutputPointsNew = []
 
 function onLoadMain() {
     // The user will have a field "myCourses" and retreive all the course by this field.
@@ -23,6 +24,7 @@ function onFinishRetreiveData(data) {
     if ($('.courseName')[0]) {
         $('.courseName')[0].click();
     }
+    $('#loader').hide();        
     $('#main').show();
 }
 
@@ -96,17 +98,20 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         '<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.main_file + '"></input><br><br>' +
         '<label for="exercise_description' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
         '<textarea id="exercise_description' + exerciseId + '" class="swal2-input input">' + exercise.exercise_description + ' </textarea><br><br>' +
-
-
-        // (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction + '" class="btn btn-link"> Current pdf</a><br><br>' : '') +
-
         (exercise.pdf_instruction ? '<button class="btn btn-link"  onclick="downloadPdfInstruction(' + "'" + exerciseId + "'" + ')">Current pdf</button><br><br>' : "") +
-
-
         '<label for="exercise_instruction' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
         '<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
         '<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
         '<input id="deadline' + exerciseId + '" class="courseExerciseInputEdit" type="date" name="dealine" value="' + exercise.deadline + '"></input><br><br>' +
+        '<label for="show' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="For each option checked, the student will be able to see the option when submitting.' +
+        'If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
+        '<div id="show' + exerciseId + '" ></div>' +
+        '<div class="radio_checkbox"><input class="btn_checkbox" id="input' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="input" required="" ' +
+        (exercise.show_input ? "checked" : "") +
+        '/><label class="btn_checkbox" for="input' + exerciseId + '">Input</label> <br>' +
+        '<input class="btn_checkbox"  id="output' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="output" required="" ' +
+        (exercise.show_output ? "checked" : "") +
+        '/><label class="btn_checkbox" for="output' + exerciseId + '">Output</label></div> <br>' +
         '<label for="input_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default input is the standart input. Let standart if you do not want to change it.">Input file name *</div></label>' +
         '<input id="input_file_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.input_file_name + '"></input><br><br>' +
         '<label for="output_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default output is the standart output.  Let standart if you do not want to change it.">Output file name *</div></label>' +
@@ -277,8 +282,7 @@ function newExercise(courseId) {
  */
 async function newNormalExercise(courseId) {
     let exerciseName, exerciseCompiler, submissionViaGithub, submissionViaZip, mainFile,
-        exerciseDescription, instructionPdf, deadline, inputFileName, outputFileName
-    let inputOutputPoints = []
+        exerciseDescription, instructionPdf, deadline, inputFileName, outputFileName, showInput, showOutput
     Swal.mixin({
         allowOutsideClick: false,
         showCancelButton: true,
@@ -324,12 +328,21 @@ async function newNormalExercise(courseId) {
                 '<label for="exercise_instruction"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
                 '<input id="exercise_instruction" class="swal2-input" type="file" accept="application/pdf">' +
                 '<label for="deadline"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
-                '<input id="deadline" class="swal2-input" type="date" name="dealine"></input>',
+                '<input id="deadline" class="swal2-input" type="date" name="dealine"></input>' +
+
+                '<label for="show"><div class="explanation" data-toggle="tooltip" title="For each option checked, the student will be able to see the option when submitting.' +
+                'If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
+                '<div id="show" class="swal2-input" >' +
+                '<input id="input" name="BoxSelect[]" type="checkbox" value="input" required="">Input</input> <br>' +
+                '<input id="output" name="BoxSelect[]" type="checkbox" value="output" required="">Output</input>' +
+                '</div>',
             focusConfirm: false,
             preConfirm: () => {
                 exerciseDescription = escapeHtml($("#exercise_description").val())
                 instructionPdf = $('#exercise_instruction').prop('files')[0];
                 deadline = $("#deadline").val()
+                showInput = $("input[id='input']:checked").val()
+                showOutput = $("input[id='output']:checked").val()
             }
         },
         {
@@ -348,7 +361,7 @@ async function newNormalExercise(courseId) {
                         `Please fill all the required fields.`
                     )
                 } else {
-                    moreIO(1, inputOutputPoints)
+                    moreIO(1)
                 }
             }
         }
@@ -366,7 +379,9 @@ async function newNormalExercise(courseId) {
                 deadline: deadline,
                 input_file_name: inputFileName,
                 output_file_name: outputFileName,
-                input_output_points: inputOutputPoints,
+                input_output_points: inputOutputPointsNew,
+                show_input: (showInput ? true : false),
+                show_output: (showOutput ? true : false),
                 pdf_instruction: (instructionPdf ? true : false)
             })
             var fd = new FormData();
@@ -377,7 +392,7 @@ async function newNormalExercise(courseId) {
     })
 }
 
-function moreIO(i, inputOutputPoints) {
+function moreIO(i) {
     swal.insertQueueStep({
         allowOutsideClick: false,
         title: 'More input',
@@ -387,7 +402,9 @@ function moreIO(i, inputOutputPoints) {
             '<label for="output_' + i + '"><div class="explanation" data-toggle="tooltip" title="The first expected output.">Expected output *</div></label>' +
             '<textarea id="output_' + i + '" class="swal2-input" placeholder="4, a b c d..."></textarea>' +
             '<label for="points_' + i + '"><div class="explanation" data-toggle="tooltip" title="The number of point for a good answer.">Points number * </div></label>' +
-            '<input id="points_' + i + '"s class="swal2-input" type="number" ></input>',
+            '<input id="points_' + i + '"s class="swal2-input" type="number" ></input><br>' +
+            '<button data-toggle="tooltip" title="More input output" class="plus-button" onclick=addMoreIO(' + i + ')></button>',
+        confirmButtonText: "Finish",
         preConfirm: function () {
             let input = escapeHtml($("#input_" + i).val())
             let output = escapeHtml($("#output_" + i).val())
@@ -397,18 +414,24 @@ function moreIO(i, inputOutputPoints) {
                     `Please fill all the fields.`
                 )
             } else {
-                inputOutputPoints.push({
+                inputOutputPointsNew.push({
                     input: input,
                     output: output,
                     point: point
                 })
-                // TODO: Improve style and overide text cancel.
-                if (confirm("More input/output?") == true) {
-                    moreIO(i++, inputOutputPoints)
-                }
             }
         }
     })
+}
+
+function addMoreIO(i) {
+    let input = escapeHtml($("#input_" + i).val())
+    let output = escapeHtml($("#output_" + i).val())
+    let point = escapeHtml($("#points_" + i).val())
+    if (!(input == "" || output == "" || point == "")) {
+        moreIO(++i)
+    }
+    $('.swal2-confirm').click()
 }
 
 function editExercise(exerciseId, inputOutputPointsSize) {
@@ -443,6 +466,8 @@ function editExercise(exerciseId, inputOutputPointsSize) {
             exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
             instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
             deadline = $("#deadline" + exerciseId).val()
+            const showInput = $('input[id="input' + exerciseId + '"]:checked').val()
+            const showOutput = $('input[id="output' + exerciseId + '"]:checked').val()
             $("#main").hide()
             let json = JSON.stringify({
                 // No need to update the course id since the exercise can't move.
@@ -455,7 +480,10 @@ function editExercise(exerciseId, inputOutputPointsSize) {
                 deadline: deadline,
                 input_file_name: inputFileName,
                 output_file_name: outputFileName,
-                input_output_points: inputOutputPoints
+                input_output_points: inputOutputPoints,
+                show_input: (showInput ? true : false),
+                show_output: (showOutput ? true : false),
+                pdf_instruction: (instructionPdf ? true : false)
             })
             var fd = new FormData();
             fd.append("file", instructionPdf);

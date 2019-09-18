@@ -68,6 +68,7 @@ for item in $INPUT_OUTPUT_POINTS; do
     iter=$(echo $item | tr "@*@" "\n")
     arr=($iter)
     input=${arr[0]}
+    echo "The input is" $input 
     expected_output=${arr[1]}
     points=${arr[2]}
     if [[ ( $INPUT_FILE_NAME == "standart" ) &&  ( $OUTPUT_FILE_NAME == "standart") ]]; then
@@ -82,7 +83,7 @@ for item in $INPUT_OUTPUT_POINTS; do
         echo "error..."
     fi;
     output=$?
-    echo "Your output is" $output  # Make this parameter.
+    echo "Your output is" $output  
     edit_grade $output $expected_output $points
 done
 

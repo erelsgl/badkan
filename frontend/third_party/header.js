@@ -1,5 +1,5 @@
 // Here are all the links needed by the header
-var links = ["style/header.css", "style/shape.css",
+var links = ["style/header.css", "style/shape.css", "style/loader.css",
     "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css", "https://www.w3schools.com/w3css/4/w3.css"
 ];
 for (index = 0; index < links.length; ++index) {
@@ -33,7 +33,7 @@ for (index = 0; index < scripts.length; ++index) {
 }
 
 // Here is the html code needed in the body.
-let div = '<div class="container">' +
+let divHeader = '<div class="container">' +
     '<input id = "logo" type = "image" src = "logo/logo.png" onclick = "document.location.href=\'home.html\'">' +
     '<div id="pagename">' +
     document.title +
@@ -48,7 +48,12 @@ let div = '<div class="container">' +
     '</div>' +
     '</div>' +
     '</div >'
-$("#header").append(div);
+$("#header").append(divHeader);
+
+let devLoader = '<div class="lds-default"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'
+
+$("#loader").append(devLoader);
+
 
 $('a[href="#settings"]').click(function () {
     var info = settings();
