@@ -164,6 +164,11 @@ def download_instruction(exercise_id):
     return download_pdf_instruction(exercise_id)
 
 
+@app.route('/get_profile_data/<uid>/', methods=["POST"])
+def get_profile_data(uid):
+    return get_submissions_and_grader_priviliege(uid)
+
+
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')

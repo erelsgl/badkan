@@ -28,6 +28,7 @@ async def run_submissions_admin(websocket, exercise_id):
     await terminal_command_log(["mv", "./"+exercise_id, "../submissions/"])
     submission_list = os.listdir("../submissions/"+exercise_id)
     for uid in submission_list:
+        print(uid)
         introducing = "Submission of the student " + \
             get_country_id_by_uid(uid) + ":"
         await tee(websocket, introducing)

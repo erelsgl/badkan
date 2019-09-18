@@ -7,7 +7,7 @@
       ".indexOn": "country_id"
     },
     "courses": {
-      ".indexOn": "owner_uid"
+      ".indexOn": ["owner_uid", "grader_uid"]
     },
     "exercises": {
       ".indexOn": "course_id"
