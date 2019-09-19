@@ -60,7 +60,7 @@ function createAccordionBodyManageCourse(courseId, course, ids) {
         '</div><br><br>' +
         '<div id="pass' + courseId + '"' +
         ((course.privacy == 'public') ? "style=display:none;>" : ">") +
-        '<label for="course_ids' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
+        '<label for="course_ids' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Student ids *</div></label>' +
         '<input id="course_ids' + courseId + '" class="ids courseExerciseInputEdit" value="' + (course.uids ? uidToCountryIds(course.uids, ids) : course.uids) + '" value="000000000 000000000""></input><br><br><br><br>' +
         '</div>' + '<br>' +
         '<button class="btn btn_edit" onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
@@ -165,7 +165,7 @@ $("#newCourse").click(function () {
             '<input type="radio" name="privacy" value="private" onclick=\'$(\"#pass\").show()\'> Private<br><br>' +
             '</div>' +
             '<div id="pass" style=display:none;>' +
-            '<label for="ids"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
+            '<label for="ids"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Student ids *</div></label>' +
             '<input id="ids" class="swal2-input" placeholder="000000000 000000000">' +
             '</div>',
         showCancelButton: true,

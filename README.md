@@ -86,6 +86,8 @@ To check if everything worked fine, you can test the gsutil command with:
 
     gsutil -m cp -R gs://<bucket_name>.appspot.com .
 
+From the firebase storage, upload manually the badkan_guide.pdf in a bucket named guide.
+
 Once Firebase is initialized you need to install all the network stuff.
 
 
