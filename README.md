@@ -543,3 +543,11 @@ To check the number of current connection:   https://console.firebase.google.com
 To see all the information about the spark plan:  
 https://firebase.google.com/pricing/?authuser=0
 Notice that at any moment, it's possible to change the plan.
+
+## Clean up
+
+To clean up the data of the whole project:
+
+- Delete the data of the firebase realtime db, storage and authentification from the firebase console.
+- Delete all the subfolders of the folder backend/submissions/
+

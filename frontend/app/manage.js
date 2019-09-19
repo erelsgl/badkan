@@ -468,8 +468,8 @@ function editExercise(exerciseId, inputOutputPointsSize) {
                 // No need to update the course id since the exercise can't move.
                 exercise_name: exerciseName,
                 exercise_compiler: exerciseCompiler,
-                submission_via_github: submissionViaGithub,
-                submission_via_zip: submissionViaZip, // TODO: fix the case where the admin delete one submission option.
+                submission_via_github: (submissionViaGithub ? true : false),
+                submission_via_zip: (submissionViaZip ? true : false),
                 main_file: mainFile,
                 exercise_description: exerciseDescription,
                 deadline: deadline,
@@ -503,6 +503,7 @@ function deleteExercise(exerciseId) {
 }
 
 function downloadGradesCourse() {
+    showLoader()
     json = JSON.stringify({
         all_submissions: allSubmissions
     })
