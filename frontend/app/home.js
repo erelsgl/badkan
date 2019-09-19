@@ -48,8 +48,7 @@ function onFinishRetreiveData(data) {
   if (($('.myCourse').length) == 0) {
     noMyCourseAvailable()
   }
-  $('#loader').hide();        
-  $('#main').show();
+  hideLoader()
   showPublic()
 }
 

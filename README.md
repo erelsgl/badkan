@@ -155,6 +155,12 @@ Since we use contrab for the backup, from the database_exports folder please run
 
 Please, check that in the files crontab-backup, the cd is sending you to the good place.
 
+To receive the email sended by the users, please, create two files in the backend/server/stmp folder:
+
+    nano backend/server/stmp/address.txt <your address email>
+    nano backend/server/stmp/password.txt <your password>
+
+Please, check that the stmp server correspond to your email.
 
 ## Installing the Apache server
 

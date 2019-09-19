@@ -169,6 +169,13 @@ def get_profile_data(uid):
     return get_submissions_and_grader_priviliege(uid)
 
 
+@app.route('/contact_us/', methods=["POST"])
+def contact_us():
+    response = request.get_json()
+    send_mail(response["message"], response["subject"])
+    return 'OK'
+
+
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')

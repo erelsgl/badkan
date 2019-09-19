@@ -90,15 +90,6 @@ function instructorPrivilege(checked) {
     }
 }
 
-function displayNoneById(id) {
-    document.getElementById(id).style.display = "none";
-}
-
-
-function displayBlockById(id) {
-    document.getElementById(id).style.display = "block";
-}
-
 function showSnackbar(message) {
     $('#snackbar').html(message);
     myClass = $('#snackbar')[0]
@@ -158,4 +149,14 @@ function escapeHtmlWithRespectGit(unsafe) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+function showLoader() {
+    $('#main').hide();
+    $('#loader').show();
+}
+
+function hideLoader() {
+    $('#loader').hide();
+    $('#main').show();
 }

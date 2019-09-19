@@ -9,6 +9,7 @@ function myStringify(submissions) {
 }
 
 function downloadGradesExercise(...submissionsId) {
+    showLoader()
     exerciseName = submissionsId.pop()
     json = JSON.stringify({
         submissions_id: submissionsId
@@ -28,6 +29,7 @@ function onDownloadGradeFinish(data) {
     link.setAttribute("href", encodedUri);
     link.setAttribute("download", "exercises_grades.csv");
     document.body.appendChild(link);
+    hideLoader()
     link.click();
 }
 
@@ -55,7 +57,6 @@ function displayCurrentSubmissions(data) {
             collaborators_filtered.join(" && ") + '</button><br>'
         exerciseId = submission.exercise_id
     }
-
     html += '<br><button class="btn btn_submission" onclick="runSubmissions(' + "'" + exerciseId + "'" + ')" style="border:1px solid green"><span>Run Submissions</button></div>'
     Swal.fire({
         title: 'Current submissions',
@@ -128,6 +129,7 @@ function onSubmissionsReceive(data) {
     document.body.appendChild(link);
     link.href = window.URL.createObjectURL(blob);
     link.download = "submissions.zip";
+    hideLoader()
     link.click();
 }
 
@@ -204,10 +206,12 @@ function onClose(event) {
 }
 
 function mossCommand(exerciseId) {
+    showLoader()
     doPostJSON(null, "moss_command/" + exerciseId, "text", onCheckPlagiatFinish, 7000) // Async
 }
 
 function onCheckPlagiatFinish(data) {
+    hideLoader()
     window.open(data)
 }
 
@@ -216,6 +220,7 @@ function downloadStatistics(exerciseId) {
 }
 
 function downloadSubmissions(exerciseId, exerciseName) {
+    showLoader()
     doGETJSON(null, "download_submissions/" + exerciseId + "/" + exerciseName, '', onSubmissionsReceive) // Async
 }
 

@@ -1,5 +1,6 @@
 let userUid;
 let userDetails;
+let userEmail
 
 /**
  * Every time a new page is loaded, we must go over this function to load the user.
@@ -7,6 +8,7 @@ let userDetails;
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         userUid = user.uid;
+        userEmail = firebase.auth().currentUser.email
         retreiveDataForHeader();
     } else {
         document.location.href = "index.html"

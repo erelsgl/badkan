@@ -24,8 +24,7 @@ function onFinishRetreiveData(data) {
     if ($('.courseName')[0]) {
         $('.courseName')[0].click();
     }
-    $('#loader').hide();
-    $('#main').show();
+    hideLoader()
 }
 
 function createAccordionManage(courseId, course, exercises, ids) {

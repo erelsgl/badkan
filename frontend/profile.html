@@ -15,14 +15,12 @@
     <script src="third_party/instructorGrader.js"></script>
     <script src="util/protocols/wsProtocol.js"></script>
 
-
     <!-- Import css. -->
     <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.1/build/pure-min.css"
         integrity="sha384-oAOxQR6DkCoMliIh8yFnu25d7Eq/PHS21PClpwjOTeU2jRSq11vu66rf90/cZr47" crossorigin="anonymous">
     <link rel="stylesheet" href="style/app/profile.css">
     <link rel="stylesheet" href="style/button.css">
-
-
+    <link rel="stylesheet" href="style/terminaltext.css">
 </head>
 
 <body>
@@ -31,7 +29,11 @@
 
     <div id="main">
         <div class="container">
-            <label  id="label_submissions_table" for="submissions_table">
+            <div class='console-container'><span id='user_data'></span>
+                <div class='console-underscore' id='console'>&#95;</div>
+            </div>
+
+            <label id="label_submissions_table" for="submissions_table">
                 <h1>Your grades history.</h1>
             </label>
             <div id="submissions_table">

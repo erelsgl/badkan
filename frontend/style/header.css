@@ -1,14 +1,14 @@
 #logo {
-    float:left;
+    float: left;
     padding-top: 0.3%;
-    width:4%;
+    width: 4%;
     height: auto;
 }
 
 #pagename {
-    float:left;
-    margin-left: 5%; 
-    width: 60%;
+    float: left;
+    margin-left: 12%;
+    width: 50%;
     color: #FFF;
     font-family: Georgia, Times, "Times New Roman", serif;
     font-style: italic;
@@ -18,7 +18,7 @@
 
 .dropdown {
     width: 10%;
-    margin-top:0.8%; 
+    margin-top: 0.8%;
     float: right;
     position: relative;
     display: block;
@@ -27,14 +27,14 @@
 .dropbtn {
     width: 100%;
     background-color: Transparent;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     color: #FFF;
     font-family: Georgia, Times, "Times New Roman", serif;
     font-size: 25px;
     text-align: center;
     border: none;
     cursor: pointer;
-    outline:none;
+    outline: none;
 }
 
 .dropbtn:hover {
@@ -46,7 +46,7 @@
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 3;
 }
 
@@ -66,15 +66,15 @@
 }
 
 #home {
-    float:right;
-    margin-top:0.8%; 
+    float: right;
+    margin-top: 0.8%;
     width: 10%;
     background-color: Transparent;
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     border: none;
-    cursor:pointer;
+    cursor: pointer;
     overflow: hidden;
-    outline:none;
+    outline: none;
     color: #FFF;
     font-family: Georgia, Times, "Times New Roman", serif;
     font-size: 25px;
@@ -85,8 +85,25 @@
     background-color: #A9A9A9;
 }
 
+#contact {
+    float: right;
+    margin-top: 0.8%;
+    width: 5%;
+    background-color: Transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+    color: #FFF;
+    font-size: 25px;
+    text-align: center;
+}
+
+#contact:hover {
+    background-color: #A9A9A9;
+}
+
 a {
     color: black;
 }
-
-/* For Jeremy: This file must remain unchange */

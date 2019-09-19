@@ -38,6 +38,7 @@ let divHeader = '<div class="container">' +
     '<div id="pagename">' +
     document.title +
     '</div>' +
+    '<div id="contact" onclick="contactUs()"><i class="glyphicon glyphicon-envelope"></i></div>' +
     '<div id="home" onclick="document.location.href=\'home.html\'">Home</div>' +
     '<div class="dropdown">' +
     '<button id=button_profile class="dropbtn"></button>' +
@@ -137,4 +138,43 @@ function signOut() {
             'error'
         )
     });
+}
+
+async function contactUs() {
+    Swal.fire({
+        title: 'Contact us',
+        html: '<label for="subject">Subject</label>' +
+            '<input id="subject" class="swal2-input">' +
+            '<label for="message">Message</label>' +
+            '<textarea id="message" class="swal2-input">',
+        showConfirmButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Send!',
+        preConfirm: () => {
+            const subject = escapeHtml($("#subject").val())
+            const message = escapeHtml($("#message").val())
+            if (subject == "" || message == "") {
+                Swal.showValidationMessage(
+                    `Please fill all the required fields.`
+                )
+            } else {
+                json = JSON.stringify({
+                    subject: subject,
+                    message: reformatText(message)
+                })
+                doPostJSON(json, "contact_us", "text", () => {})
+            }
+
+        }
+    })
+}
+
+function reformatText(text) {
+    return text + "\n\n" + "user id: " + userUid + "\n" +
+        "user country id: " + userDetails.country_id + "\n" +
+        "user display name: " + userDetails.display_name + "\n" +
+        "user instructor: " + userDetails.instructor + "\n" +
+        "user name: " + userDetails.name + "\n" +
+        "user last_name: " + userDetails.last_name + "\n" +
+        "user email: " + userEmail + "\n" 
 }

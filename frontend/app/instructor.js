@@ -1,4 +1,4 @@
 function onLoadMain() {
-    $('#loader').hide();
+    hideLoader()
     // TODO
 }
