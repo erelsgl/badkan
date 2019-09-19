@@ -33,7 +33,7 @@ def download_statistics_csv(exercise_id, exercise_name):
 def download_pdf_instruction(exercise_id):
     blob = bucket.blob("pdf_instruction/"+exercise_id)
     if blob.exists():
-        return blob.generate_signed_url(100000000000)
+        return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=instruction.pdf')
 
 
 async def download_submissions_zip(exercise_id):

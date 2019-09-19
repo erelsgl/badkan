@@ -4,8 +4,12 @@ function onLoadMain() {
 
 function onFinishRetreiveData(data) {
     displayDataUser()
-    createHistoryTable(data.submissions, data.exercise_name)
-    graderPrivilege(data.graders, data.exercises)
+    if (!jQuery.isEmptyObject(data.submissions)) {
+        createHistoryTable(data.submissions, data.exercise_name)
+    }
+    if (data.exercises && !jQuery.isEmptyObject(data.exercises[0])) {
+        graderPrivilege(data.graders, data.exercises)
+    }
     hideLoader()
 }
 

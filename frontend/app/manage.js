@@ -1,4 +1,4 @@
-let allSubmissions = [];
+let allSubmissions = new Map();
 let inputOutputPointsNew = []
 
 function onLoadMain() {
@@ -34,7 +34,7 @@ function createAccordionManage(courseId, course, exercises, ids) {
     for (exerciseObj of Object.entries(exercises)) {
         let exerciseId = exerciseObj[0]
         let exercise = exerciseObj[1]
-        panel += createAccordionBodyManageExercise(exerciseId, exercise)
+        panel += createAccordionBodyManageExercise(exerciseId, exercise, courseId)
     }
     panel += '<button id=newExercise data-toggle="tooltip" title="New exercise" ' +
         'class="plus-button addExercise" onclick="newExercise(' + "'" + courseId + "'" + ')"></button>'
@@ -66,13 +66,18 @@ function createAccordionBodyManageCourse(courseId, course, ids) {
         '<button class="btn btn_edit" onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
         '<button class="btn btn_delete" onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
         '</div></div>' +
-        '<div class="manage_button"><button class="btn btn_manage btn_course" onclick="downloadGradesCourse()" style="border:1px solid green"><span>Download Course Grades</button></div>';
+        '<div class="manage_button"><button class="btn btn_manage btn_course" onclick="downloadGradesCourse(' + "'" + courseId + "'" + ')" style="border:1px solid green"><span>Download Course Grades</button></div>';
     return html;
 }
 
-function createAccordionBodyManageExercise(exerciseId, exercise) {
+function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
     if (exercise.submissions) {
-        allSubmissions.push([Object.values(exercise.submissions), exercise.exercise_name])
+        if (allSubmissions.get(courseId)) {
+            allSubmissions.get(courseId).push([Object.values(exercise.submissions), exercise.exercise_name])
+        } else {
+            allSubmissions.set(courseId, [])
+            allSubmissions.get(courseId).push([Object.values(exercise.submissions), exercise.exercise_name])
+        }
     }
     let html = '<div class="panel">' +
         '<div class="exercise">' +
@@ -502,10 +507,14 @@ function deleteExercise(exerciseId) {
     })
 }
 
-function downloadGradesCourse() {
+function downloadGradesCourse(courseId) {
+    if (!allSubmissions.get(courseId)) {
+        alert("There is no grade to download...");
+        return;
+    }
     showLoader()
     json = JSON.stringify({
-        all_submissions: allSubmissions
+        all_submissions: allSubmissions.get(courseId)
     })
     doPostJSON(json, "download_grades_course", 'json', onDownloadGradeFinish)
 }

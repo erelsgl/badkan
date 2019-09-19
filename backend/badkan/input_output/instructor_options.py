@@ -46,6 +46,7 @@ async def check_plagiat(exercise_id, language):
 
 
 def download_grades(submissions_id, exercise_name):
+    print(submissions_id)
     event_loop = asyncio.new_event_loop()
     try:
         lines = event_loop.run_until_complete(get_grades_exercise(

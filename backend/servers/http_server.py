@@ -151,6 +151,9 @@ def download_grades_course():
     answer = dict()
     answer["grades"] = []
     for exercise in response["all_submissions"]:
+        print("##########")
+        print(exercise)
+        print("##########")
         answer["grades"].extend(download_grades(exercise[0], exercise[1]))
     return answer
 
