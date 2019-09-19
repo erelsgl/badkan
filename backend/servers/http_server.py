@@ -127,7 +127,8 @@ def edit_grade_and_manual_grade(submission_id, grade, manual_grade):
 
 @app.route('/download_submission/<exercise_id>/<submiter_id>/', methods=["POST"])
 def download_submission(exercise_id, submiter_id):
-    return download_submission_zip(exercise_id, submiter_id)
+    country_id = get_country_id_by_uid(submiter_id)
+    return download_submission_zip(exercise_id, submiter_id, country_id)
 
 
 @app.route('/manual_grade/<submission_id>/<manual_grade>/', methods=["POST"])
@@ -156,7 +157,8 @@ def download_grades_course():
 
 @app.route('/download_statistics/<exercise_id>/', methods=["POST"])
 def download_statistics(exercise_id):
-    return download_statistics_csv(exercise_id)
+    exercise_name = get_exercise_name_by_id(exercise_id).replace(" ", "_")
+    return download_statistics_csv(exercise_id, exercise_name)
 
 
 @app.route('/download_instruction/<exercise_id>/', methods=["POST"])

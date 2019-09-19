@@ -18,23 +18,22 @@ def upload_zip_solution(zip_filename, exercise_id, uid):
     blob.upload_from_filename(zip_filename)
 
 
-def download_submission_zip(exercise_id, submiter_id):
+def download_submission_zip(exercise_id, submiter_id, country_id):
     blob = bucket.blob("submissions/"+exercise_id+"/"+submiter_id)
     if blob.exists():
-        return blob.generate_signed_url(100000000000)
+        return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=' + country_id + '.zip')
 
 
-def download_statistics_csv(exercise_id):
+def download_statistics_csv(exercise_id, exercise_name):
     blob = bucket.blob("statistics/"+exercise_id)
     if blob.exists():
-        return blob.generate_signed_url(100000000000)
+        return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=' + exercise_name + '.csv')
 
 
 def download_pdf_instruction(exercise_id):
-	blob = bucket.blob("pdf_instruction/"+exercise_id)
-	if blob.exists():
-		return blob.generate_signed_url(100000000000)
-
+    blob = bucket.blob("pdf_instruction/"+exercise_id)
+    if blob.exists():
+        return blob.generate_signed_url(100000000000)
 
 
 async def download_submissions_zip(exercise_id):

@@ -367,3 +367,8 @@ def get_submissions_and_grader_priviliege(uid):
     if exercise_ids != []:
         answer["exercise_name"] = get_exercises_name_async(exercise_ids)
     return answer
+
+
+def get_exercise_name_by_id(exercise_id):
+    exercise_ref = db.reference('exercises/'+exercise_id + "/exercise_name/")
+    return exercise_ref.get()
