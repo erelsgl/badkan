@@ -97,7 +97,10 @@ function editGrade(submissionId, grade, manualGrade) {
         showCancelButton: true,
         preConfirm: function () {
             const newGrade = escapeHtml($("#new_grade").val())
-            const newManualGrade = escapeHtml($("#new_manual_grade").val())
+            let newManualGrade = ""
+            if ($("#new_manual_grade").val()) {
+                newManualGrade = escapeHtml($("#new_manual_grade").val())
+            }
             if (newGrade != "") {
                 if (newManualGrade == "") {
                     doPostJSON(null, "edit_grade/" + submissionId + "/" + newGrade, "text", reload)
