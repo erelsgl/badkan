@@ -116,9 +116,9 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
         '<input class="btn_checkbox"  id="output' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="output" required="" ' +
         (exercise.show_output ? "checked" : "") +
         '/><label class="btn_checkbox" for="output' + exerciseId + '">Output</label></div> <br>' +
-        '<label for="input_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default input is the standart input. Let standart if you do not want to change it.">Input file name *</div></label>' +
+        '<label for="input_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default input is the standard input. Let standard if you do not want to change it.">Input file name *</div></label>' +
         '<input id="input_file_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.input_file_name + '"></input><br><br>' +
-        '<label for="output_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default output is the standart output.  Let standart if you do not want to change it.">Output file name *</div></label>' +
+        '<label for="output_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default output is the standard output.  Let standard if you do not want to change it.">Output file name *</div></label>' +
         '<input id="output_file_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.output_file_name + '"></input><br><br>';
     for (item in exercise.input_output_points) {
         html +=
@@ -269,8 +269,8 @@ function newExercise(courseId) {
  * Submission option -> Github and/or Zip
  * Main file -> String (file where remain the main function)
  * I/O zip file -> inputs/outputs files (.txt) (input files must begin with the char "i" and output must begin with the char "o").
- * Input code (standart bt default)
- * Output code (standart by default)
+ * Input code (standard bt default)
+ * Output code (standard by default)
  * 
  * Not required fields:
  *  
@@ -348,10 +348,10 @@ async function newNormalExercise(courseId) {
         {
             confirmButtonText: 'Next &rarr;',
             title: 'New exercise 3/4',
-            html: '<label for="input_file_name"><div class="explanation" data-toggle="tooltip" title="The default input is the standart input. Let standart if you do not want to change it.">Input file name *</div></label>' +
-                '<input id="input_file_name" class="swal2-input" value="standart" placeholder="input.txt, input.csv...">' +
-                '<label for="output_file_name"><div class="explanation" data-toggle="tooltip" title="The default output is the standart output.  Let standart if you do not want to change it.">Output file name *</div></label>' +
-                '<input id="output_file_name" class="swal2-input" value="standart" placeholder="output.txt, output.csv...">',
+            html: '<label for="input_file_name"><div class="explanation" data-toggle="tooltip" title="The default input is the standard input. Let standard if you do not want to change it.">Input file name *</div></label>' +
+                '<input id="input_file_name" class="swal2-input" value="standard" placeholder="input.txt, input.csv...">' +
+                '<label for="output_file_name"><div class="explanation" data-toggle="tooltip" title="The default output is the standard output.  Let standard if you do not want to change it.">Output file name *</div></label>' +
+                '<input id="output_file_name" class="swal2-input" value="standard" placeholder="output.txt, output.csv...">',
             focusConfirm: false,
             preConfirm: () => {
                 inputFileName = escapeHtml($("#input_file_name").val())
