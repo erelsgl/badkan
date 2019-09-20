@@ -181,6 +181,11 @@ def contact_us():
     return 'OK'
 
 
+@app.route('/download_guide/', methods=["POST"])
+def download_guide():
+    return download_guide_instructor()
+
+
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')

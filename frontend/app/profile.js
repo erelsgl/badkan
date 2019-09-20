@@ -4,6 +4,9 @@ function onLoadMain() {
 
 function onFinishRetreiveData(data) {
     displayDataUser()
+    if (userDetails.instructor == "True") {
+        displayGuide();
+    }
     if (!jQuery.isEmptyObject(data.submissions)) {
         createHistoryTable(data.submissions, data.exercise_name)
     }
@@ -13,10 +16,16 @@ function onFinishRetreiveData(data) {
     hideLoader()
 }
 
+function displayGuide() {
+    $('#guide').append('<button class="btn btn-link" onclick="downloadGuide()">Download Guide</button>');
+}
+
 function displayDataUser() {
-    consoleText([userDetails.name + " " + userDetails.last_name, "id " + userDetails.country_id, userEmail],
+    consoleText([userDetails.name + " " + userDetails.last_name, "id " + userDetails.country_id, userEmail,
+            (userDetails.instructor == "True" ? "Instructor access" : "")
+        ],
         'user_data',
-        ['white', 'white', 'white']);
+        ['white']);
 }
 
 function consoleText(words, id, colors) {

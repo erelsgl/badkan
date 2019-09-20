@@ -36,6 +36,12 @@ def download_pdf_instruction(exercise_id):
         return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=instruction.pdf')
 
 
+def download_guide_instructor():
+	blob = bucket.blob("guide/badkan_guide.pdf")
+	if blob.exists():
+		return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=badkan_guide.pdf')
+
+
 async def download_submissions_zip(exercise_id):
     await terminal_command_log(["bash", "download_submissions.sh", exercise_id, project_name])
 

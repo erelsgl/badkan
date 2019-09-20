@@ -160,3 +160,11 @@ function hideLoader() {
     $('#loader').hide();
     $('#main').show();
 }
+
+function downloadGuide() {
+    doPostJSON("", "download_guide", "text", onFinishDownloadGuide)
+}
+
+function onFinishDownloadGuide(data) {
+    window.open(data)
+}
