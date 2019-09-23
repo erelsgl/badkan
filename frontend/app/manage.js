@@ -483,7 +483,6 @@ function editExercise(exerciseId, inputOutputPointsSize) {
             const showOutput = $('input[id="output' + exerciseId + '"]:checked').val()
             $("#main").hide()
             let is_pdf_exists = false
-            console.log($("#delete_pdf" + exerciseId).html())
             if ($("#delete_pdf" + exerciseId).html()) {
                 if ($("#delete_pdf" + exerciseId).html().includes('remove')) {
                     is_pdf_exists = true
