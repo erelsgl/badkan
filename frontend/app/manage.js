@@ -102,7 +102,9 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
         '<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.main_file + '"></input><br><br>' +
         '<label for="exercise_description' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
         '<textarea id="exercise_description' + exerciseId + '" class="swal2-input input">' + exercise.exercise_description + ' </textarea><br><br>' +
-        (exercise.pdf_instruction ? '<button class="btn btn-link"  onclick="downloadPdfInstruction(' + "'" + exerciseId + "'" + ')">Current pdf</button><br><br>' : "") +
+        (exercise.pdf_instruction ? '<button id="current_pdf' + exerciseId + '" class="btn btn-link"  onclick="downloadPdfInstruction(' + "'" + exerciseId + "'" + ')">Current pdf</button>' +
+            '<button id="delete_pdf' + exerciseId + '" class="astext" onclick="deletePdfInstruction(' + "'" + exerciseId + "'" + ')"><i class="glyphicon glyphicon-remove-circle"></i></button><br><br>' :
+            "") +
         '<label for="exercise_instruction' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
         '<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
         '<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
@@ -141,6 +143,17 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
             '<button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button>' +
             '</div>' : "");
     return html;
+}
+
+function deletePdfInstruction(exerciseId) {
+    if ($("#delete_pdf" + exerciseId).html().includes('remove')) {
+        $("#current_pdf" + exerciseId).hide()
+        $("#delete_pdf" + exerciseId).html('<i class="glyphicon glyphicon-ok-circle"></i>')
+    } else {
+        $("#current_pdf" + exerciseId).show()
+        $("#delete_pdf" + exerciseId).html('<i class="glyphicon glyphicon-remove-circle"></i>')
+    }
+
 }
 
 function uidToCountryIds(uids, ids) {
@@ -469,6 +482,15 @@ function editExercise(exerciseId, inputOutputPointsSize) {
             const showInput = $('input[id="input' + exerciseId + '"]:checked').val()
             const showOutput = $('input[id="output' + exerciseId + '"]:checked').val()
             $("#main").hide()
+            let is_pdf_exists = false
+            console.log($("#delete_pdf" + exerciseId).html())
+            if ($("#delete_pdf" + exerciseId).html()) {
+                if ($("#delete_pdf" + exerciseId).html().includes('remove')) {
+                    is_pdf_exists = true
+                } else {
+                    is_pdf_exists = false
+                }
+            }
             let json = JSON.stringify({
                 // No need to update the course id since the exercise can't move.
                 exercise_name: exerciseName,
@@ -483,7 +505,7 @@ function editExercise(exerciseId, inputOutputPointsSize) {
                 input_output_points: inputOutputPoints,
                 show_input: (showInput ? true : false),
                 show_output: (showOutput ? true : false),
-                pdf_instruction: (instructionPdf ? true : false)
+                pdf_instruction: (instructionPdf ? true : is_pdf_exists)
             })
             var fd = new FormData();
             fd.append("file", instructionPdf);
