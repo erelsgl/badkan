@@ -75,7 +75,6 @@ function createAccordionHome(courseObj, exercises, submissions) {
   let panel = "<li>";
   let index = getExercisesItem(exercises, courseId)
   if (index != -1) {
-    console.log(course.course_name)
     for (exerciseObj of Object.entries(exercises[index])) {
       let exerciseId = exerciseObj[0]
       let exercise = exerciseObj[1]
