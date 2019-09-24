@@ -4,7 +4,6 @@ from flask import Flask, request, jsonify, abort
 app = Flask(__name__)
 
 
-# TODO: check here.
 @app.route('/')
 def index():
     return abort(404)

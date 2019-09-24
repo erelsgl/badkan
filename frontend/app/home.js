@@ -27,7 +27,6 @@ function showMyCourses() {
 }
 
 function onLoadMain() {
-  // TODO: Make this part much more secure...
   if (userDetails.instructor == "False") {
     $("#becomeInstructor").show()
   } else {
