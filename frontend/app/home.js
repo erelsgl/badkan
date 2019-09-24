@@ -132,12 +132,14 @@ function createAccordionBodyHomeSolve(exerciseId, exercise, submissions) {
 function getSubmission(submissions, exerciseId) {
   for (submission of submissions) {
     if (submission.exercise_id == exerciseId) {
-      return '<div class=lastSubmission><div class="timestamp text_lastSubmission">Your last stored submission timestamp is : ' + submission.timestamp + '</div><br><br>' +
+      return '<div class=lastSubmission><div class="timestamp text_lastSubmission">Your last stored submission timestamp is: ' + submission.timestamp + '</div><br><br>' +
         (submission.url == "zip" ?
           '<div class="timestamp text_lastSubmission">Your solution was submitted via a ZIP file.</div><br><br>' :
           '<div class="timestamp text_lastSubmission">You solution was submitted via a GitHub url :' + submission.url + '</div><br><br>') +
-        '<div class="timestamp text_lastSubmission grade">Your current grade : </div>' + '<div class="timestamp text_lastSubmission grade">' + submission.grade + '</div><br><br>' +
-        (submission.manual_grade ? '<div class="timestamp text_lastSubmission grade">Your current manual grade : </div>' + '<div class="timestamp text_lastSubmission grade">' + submission.manual_grade + '</div><br><br></div><br><br>' :
+        '<div class="timestamp text_lastSubmission grade">Your current grade: ' + submission.grade + '</div><br><br>' +
+        (submission.manual_grade ? '<div class="timestamp text_lastSubmission grade">Your current manual grade: ' + submission.manual_grade + '</div><br><br>' :
+          '') +
+        (submission.comment ? '<div class="timestamp text_lastSubmission">comment :' + submission.comment + '</div><br><br></div><br><br>' :
           '</div><br><br>')
     }
   }

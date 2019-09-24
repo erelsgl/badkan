@@ -78,12 +78,13 @@ function consoleText(words, id, colors) {
 
 function createHistoryTable(submissions, exercise_name) {
     let content = '<table class="pure-table pure-table-bordered"><thead>'
-    content += '<tr><th>Exercise</th><th>Grade</th><th>Manual Grade</th><th>Collaborators</th><th>URL</th><th>Timestamp</th><th></th></tr></thead><tbody>'
+    content += '<tr><th>Exercise</th><th>Grade</th><th>Manual Grade</th><th>Comment</th><th>Collaborators</th><th>URL</th><th>Timestamp</th><th></th></tr></thead><tbody>'
     for (submissionObj of Object.entries(submissions)) {
         submission = submissionObj[1]
         content += '<tr><td>' + exercise_name[submission.exercise_id] +
             '</td><td>' + submission.grade +
             '</td><td>' + (submission.manual_grade ? submission.manual_grade : "None") +
+            '</td><td>' + (submission.comment ? submission.comment : "None") +
             '</td><td>' + submission.collaborators +
             '</td><td>' + submission.url +
             '</td><td>' + submission.timestamp +

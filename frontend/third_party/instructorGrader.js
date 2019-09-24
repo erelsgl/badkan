@@ -50,6 +50,7 @@ function displayCurrentSubmissions(data) {
             "'" + submission.exercise_id + "','" +
             submission.grade + "','" +
             submission.manual_grade + "','" +
+            submission.comment + "','" +
             submission.uid + "','" +
             submission_id + "','" +
             collaborators_filtered.join(" && ") + "'" +
@@ -65,14 +66,15 @@ function displayCurrentSubmissions(data) {
     })
 }
 
-function focusSubmission(exerciseId, grade, manualGrade, submiterId, submissionId, submiterCountryId) {
+function focusSubmission(exerciseId, grade, manualGrade, comment, submiterId, submissionId, submiterCountryId) {
     let html = '<div id="submission">' +
         '<button class="btn btn_submission" onclick="runSubmission(' + "'" + exerciseId + "','" + submiterId + "'" + ')" style="border:1px solid green"><span>Run Submission</button><br>' +
         '<button class="btn btn_submission" onclick="downloadSubmission(' + "'" + exerciseId + "','" + submiterId + "'" + ')" style="border:1px solid orange"><span>Download Submission</button><br>' +
-        '<button class="btn btn_submission" onclick="editGrade(' + "'" + submissionId + "','" + grade + "','" +
-        (manualGrade ? manualGrade + "'" : "") +
+        '<button class="btn btn_submission" onclick="editGrade(' + "'" + submissionId + "','" + grade + "'" +
+        (manualGrade ? ",'" + manualGrade + "'" : "") + (comment ? ",'" + comment + "'" : '') +
         ')" style="border:1px solid red"><span>Edit Grade</button><br>' +
         '<button class="btn btn_submission" onclick="manualGrade(' + "'" + submissionId + "','" + grade + "'" + ')" style="border:1px solid grey"><span>Grade Manually</button>' +
+
         '<div>'
     Swal.fire({
         title: 'Submission of ' + submiterCountryId,
@@ -81,32 +83,34 @@ function focusSubmission(exerciseId, grade, manualGrade, submiterId, submissionI
     })
 }
 
-function editGrade(submissionId, grade, manualGrade) {
+function editGrade(submissionId, grade, manualGrade, comment) {
     Swal.fire({
         title: 'Choose a new grade',
         html: '<div class="edit_grade">The actual grade is ' + grade + '<br><br>' +
             '<label for="new_grade">Enter the new grade</label>' +
-            '<input id="new_grade" class="courseExerciseInputEdit" placeholder="' + grade + '"></input><br><br>' +
-            (manualGrade != "undefined" ?
+            '<input id="new_grade" class="courseExerciseInputEdit" value="' + grade + '"></input><br><br>' +
+            (manualGrade != "false" ?
                 '<br>The actual manual grade is ' + manualGrade + '<br><br>' +
                 '<label for="new_manual_grade">Enter the new manual grade</label>' +
-                '<input id="new_manual_grade" class="courseExerciseInputEdit" placeholder="' + manualGrade + '"></input><br><br>' :
+                '<input id="new_manual_grade" class="courseExerciseInputEdit" value="' + manualGrade + '"></input><br><br>' :
                 "") +
+            (comment != "false" ?
+                '<label for="new_comment">Enter the new comment</label>' +
+                '<textarea id="new_comment" class="courseExerciseInputEdit">' + comment + '</textarea><br><br>' :
+                '') +
             '<div/>',
         focusConfirm: false,
         showCancelButton: true,
         preConfirm: function () {
             const newGrade = escapeHtml($("#new_grade").val())
-            let newManualGrade = ""
-            if ($("#new_manual_grade").val()) {
-                newManualGrade = escapeHtml($("#new_manual_grade").val())
-            }
+            const newManualGrade = escapeHtml($("#new_manual_grade").val())
+            const newComment = escapeHtml($("#new_comment").val())
             if (newGrade != "") {
-                if (newManualGrade == "") {
-                    doPostJSON(null, "edit_grade/" + submissionId + "/" + newGrade, "text", reload)
-                } else {
-                    doPostJSON(null, "edit_grade_and_manual_grade/" + submissionId + "/" + newGrade + "/" + newManualGrade, "text", reload)
-                }
+                let json = JSON.stringify({
+                    "new_manual_grade": newManualGrade,
+                    "new_comment": newComment
+                })
+                doPostJSON(json, "edit_grade/" + submissionId + "/" + newGrade, "text", reload)
             } else {
                 Swal.showValidationMessage(
                     `Please enter a new grade.`
@@ -137,24 +141,24 @@ function onSubmissionsReceive(data) {
 }
 
 function manualGrade(submissionId, grade) {
-    // TODO: Add the possibility for the instructor to put a comment.
     Swal.fire({
         title: 'Manual Grade',
         html: '<div class="manual_grade">The actual grade given by the badkan is ' + grade + '<br><br>' +
             '<label for="manual_grade">Enter the manual grade</label>' +
             '<input id="manual_grade" class="courseExerciseInputEdit"></input><br><br>' +
+            '<label for="comment">Enter a comment</label>' +
+            '<textarea id="comment" class="courseExerciseInputEdit"></textarea><br><br>' +
             '<div/>',
         focusConfirm: false,
         showCancelButton: true,
         preConfirm: function () {
             const manualGrade = escapeHtml($("#manual_grade").val())
-            if (manualGrade != "") {
-                doPostJSON(null, "manual_grade/" + submissionId + "/" + manualGrade, "text", reload)
-            } else {
-                Swal.showValidationMessage(
-                    `Please enter a manual grade.`
-                )
-            }
+            const comment = escapeHtml($("#comment").val())
+            let json = JSON.stringify({
+                "manual_grade" : manualGrade,
+                "comment": comment
+            })
+            doPostJSON(json, "manual_grade/" + submissionId, "text", reload)
         }
     })
 }

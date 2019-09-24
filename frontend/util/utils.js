@@ -131,6 +131,9 @@ function checkEmptyFieldsAlert(args) {
  * @param {String} unsafe 
  */
 function escapeHtml(unsafe) {
+    if (!unsafe) {
+        return ''
+    }
     return unsafe
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")

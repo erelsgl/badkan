@@ -117,12 +117,9 @@ def retreive_submissions(exercise_id):
 
 @app.route('/edit_grade/<submission_id>/<grade>/', methods=["POST"])
 def edit_grade(submission_id, grade):
-    return edit_grade_of_submission(submission_id, grade)
-
-
-@app.route('/edit_grade_and_manual_grade/<submission_id>/<grade>/<manual_grade>/', methods=["POST"])
-def edit_grade_and_manual_grade(submission_id, grade, manual_grade):
-    return edit_grades_of_submission(submission_id, grade, manual_grade)
+    response = request.get_json()
+    print(response)
+    return edit_grade_of_submission(submission_id, grade, response["new_manual_grade"], response["new_comment"])
 
 
 @app.route('/download_submission/<exercise_id>/<submiter_id>/', methods=["POST"])
@@ -131,9 +128,10 @@ def download_submission(exercise_id, submiter_id):
     return download_submission_zip(exercise_id, submiter_id, country_id)
 
 
-@app.route('/manual_grade/<submission_id>/<manual_grade>/', methods=["POST"])
-def manual_grade(submission_id, manual_grade):
-    return new_manual_grade(submission_id, manual_grade)
+@app.route('/manual_grade/<submission_id>/', methods=["POST"])
+def manual_grade(submission_id):
+    response = request.get_json()
+    return new_manual_grade(submission_id, response["manual_grade"], response["comment"])
 
 
 @app.route('/download_grades_exercise/<exercise_name>/', methods=["POST"])

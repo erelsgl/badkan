@@ -281,27 +281,21 @@ def retreive_exercise_submissions(exercise_id):
         'exercise_id').equal_to(exercise_id).get()
 
 
-def edit_grade_of_submission(submission_id, grade):
-    ref = db.reference('submissions/'+submission_id)
-    ref.update({
-        "grade": grade
-    })
-    return 'OK'
-
-
-def edit_grades_of_submission(submission_id, grade, manual_grade):
+def edit_grade_of_submission(submission_id, grade, manual_grade, comment):
     ref = db.reference('submissions/'+submission_id)
     ref.update({
         "grade": grade,
-        "manual_grade": manual_grade
+        "manual_grade": False if manual_grade == '' else manual_grade,
+        "comment": False if comment == '' else comment
     })
     return 'OK'
 
 
-def new_manual_grade(submission_id, manual_grade):
+def new_manual_grade(submission_id, manual_grade, comment):
     ref = db.reference('submissions/'+submission_id)
     ref.update({
-        "manual_grade": manual_grade
+        "manual_grade":False if manual_grade == "" else manual_grade,
+        "comment": False if comment == "" else comment
     })
     return 'OK'
 
