@@ -60,6 +60,10 @@ function noMyCourseAvailable() {
   $(".nacc").append('<div class="myCourse myCourse_msg"><img class=warning src="images/msg-err.png">No my course available</div>')
 }
 
+function noExerciseAvailable() {
+  return '<div class="no_exercise"><img class=warning src="images/msg-err.png">No exercise available</div>'
+}
+
 function createAccordionHome(courseObj, exercises, submissions) {
   let courseId = courseObj[0]
   let course = courseObj[1]
@@ -71,6 +75,7 @@ function createAccordionHome(courseObj, exercises, submissions) {
   let panel = "<li>";
   let index = getExercisesItem(exercises, courseId)
   if (index != -1) {
+    console.log(course.course_name)
     for (exerciseObj of Object.entries(exercises[index])) {
       let exerciseId = exerciseObj[0]
       let exercise = exerciseObj[1]
@@ -80,6 +85,8 @@ function createAccordionHome(courseObj, exercises, submissions) {
         panel += createAccordionBodyHomeRegister(courseId, exercise)
       }
     }
+  } else {
+    panel += noExerciseAvailable()
   }
   $(".nacc").append(panel + "</li>")
 }
@@ -132,7 +139,7 @@ function getSubmission(submissions, exerciseId) {
           '<div class="timestamp text_lastSubmission">You solution was submitted via a GitHub url :' + submission.url + '</div><br><br>') +
         '<div class="timestamp text_lastSubmission grade">Your current grade : </div>' + '<div class="timestamp text_lastSubmission grade">' + submission.grade + '</div><br><br>' +
         (submission.manual_grade ? '<div class="timestamp text_lastSubmission grade">Your current manual grade : </div>' + '<div class="timestamp text_lastSubmission grade">' + submission.manual_grade + '</div><br><br></div><br><br>' :
-        '</div><br><br>')
+          '</div><br><br>')
     }
   }
   return ""
