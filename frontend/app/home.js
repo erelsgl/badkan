@@ -130,7 +130,9 @@ function getSubmission(submissions, exerciseId) {
         (submission.url == "zip" ?
           '<div class="timestamp text_lastSubmission">Your solution was submitted via a ZIP file.</div><br><br>' :
           '<div class="timestamp text_lastSubmission">You solution was submitted via a GitHub url :' + submission.url + '</div><br><br>') +
-        '<div class="timestamp text_lastSubmission grade">Your current grade : </div>' + '<div class="timestamp text_lastSubmission grade">' + submission.grade + '</div><br><br></div><br><br>'
+        '<div class="timestamp text_lastSubmission grade">Your current grade : </div>' + '<div class="timestamp text_lastSubmission grade">' + submission.grade + '</div><br><br>' +
+        (submission.manual_grade ? '<div class="timestamp text_lastSubmission grade">Your current manual grade : </div>' + '<div class="timestamp text_lastSubmission grade">' + submission.manual_grade + '</div><br><br></div><br><br>' :
+        '</div><br><br>')
     }
   }
   return ""
