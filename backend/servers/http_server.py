@@ -1,12 +1,13 @@
 from imports_servers import *
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 
 app = Flask(__name__)
 
 
+# TODO: check here.
 @app.route('/')
 def index():
-    return 'Index Page'
+    return abort(404)
 
 
 @app.route('/get_data_user/', methods=["POST"])
@@ -47,6 +48,8 @@ def get_courses(uid):
 
 @app.route('/get_courses_manager/<uid>/', methods=["POST"])
 def get_courses_manager(uid):
+    if not is_instructor(uid):
+        return abort(404)
     return retreive_courses_and_exercises_by_uid(uid)
 
 

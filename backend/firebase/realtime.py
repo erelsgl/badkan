@@ -353,7 +353,6 @@ def get_submissions_and_grader_priviliege(uid):
     course_ids = []
     for course_id in graders:
         course_ids.append(course_id)
-    print(course_ids)
     if course_ids != []:
         answer["exercises"] = get_exercises_async(course_ids)
     exercise_ids = []
@@ -367,3 +366,8 @@ def get_submissions_and_grader_priviliege(uid):
 def get_exercise_name_by_id(exercise_id):
     exercise_ref = db.reference('exercises/'+exercise_id + "/exercise_name/")
     return exercise_ref.get()
+
+
+def is_instructor(uid):
+    user = get_user_details_data(uid)
+    return user["instructor"] == "True"
