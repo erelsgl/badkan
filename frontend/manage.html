@@ -7,11 +7,14 @@
     <title>Manage</title>
 
     <!-- Import js. -->
-    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-auth.js"></script>
     <script src="util/firebaseConfig.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="util/html/accordion.js"></script>
     <script src="util/protocols/wsProtocol.js"></script>
+    <script src="third_party/homeManage.js"></script>
+    <script src="third_party/instructorGrader.js"></script>
 
     <!-- Import css. -->
     <link rel="stylesheet" href="style/app/manage.css">
@@ -23,6 +26,7 @@
 
 <body>
     <div id="header"></div>
+    <div id="loader"></div>
 
     <div id="main">
         <div class="container">

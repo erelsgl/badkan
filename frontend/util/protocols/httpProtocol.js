@@ -1,5 +1,3 @@
-// TODO: Handle conflict here make better design
-
 function doPostJSON(data, target, dataType, onFinish, port = 9000, onBlobFinish = false) {
     // Maybe change this design. This is the solution to the problem of the asynchronous with utils.
     var BACKEND_FILE_PORTS = [port];
@@ -17,7 +15,12 @@ function doPostJSON(data, target, dataType, onFinish, port = 9000, onBlobFinish 
         type: "POST",
         contentType: 'application/json',
         data: data,
-        dataType: dataType
+        dataType: dataType,
+        complete: function (xmlHttp) {
+            if (xmlHttp.status != 200) {
+                top.location.href = 'index.html';
+            }
+        }
     }).done(function (data) {
         if (data == "OK") { // If the return is OK, there is no need to use the data.
             onFinish();
@@ -40,7 +43,12 @@ function doPostJSONAndFile(data, target, dataType, onFinish) {
         processData: false,
         contentType: false,
         data: data,
-        dataType: dataType
+        dataType: dataType,
+        complete: function (xmlHttp) {
+            if (xmlHttp.status != 200) {
+                top.location.href = 'index.html';
+            }
+        }
     }).done(function (data) {
         if (data == "OK") { // If the return is OK, there is no need to use the data.
             onFinish();
@@ -67,7 +75,12 @@ function doGETJSON(data, target, dataType, onFinish, type = "GET") {
         },
         contentType: 'application/zip',
         data: data,
-        dataType: dataType
+        dataType: dataType,
+        complete: function (xmlHttp) {
+            if (xmlHttp.status != 200) {
+                top.location.href = 'index.html';
+            }
+        }
     }).done(function (data) {
         if (data == "OK") { // If the return is OK, there is no need to use the data.
             onFinish();

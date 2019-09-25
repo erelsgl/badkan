@@ -1,3 +1,4 @@
 function onLoadMain() {
+    hideLoader()
     // TODO
-}   
+}

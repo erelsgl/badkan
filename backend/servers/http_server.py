@@ -1,12 +1,12 @@
 from imports_servers import *
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, abort
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def index():
-    return 'Index Page'
+    return abort(404)
 
 
 @app.route('/get_data_user/', methods=["POST"])
@@ -47,6 +47,8 @@ def get_courses(uid):
 
 @app.route('/get_courses_manager/<uid>/', methods=["POST"])
 def get_courses_manager(uid):
+    if not is_instructor(uid):
+        return abort(404)
     return retreive_courses_and_exercises_by_uid(uid)
 
 
@@ -110,30 +112,28 @@ def submit_zip_file(exercise_id, uid):
     return 'OK'
 
 
-@app.route('/retreive_submissions/', methods=["POST"])
-def retreive_submissions():
-    response = request.get_json()
-    return retreive_exercise_submissions(response["submissions_id"])
+@app.route('/retreive_submissions/<exercise_id>/', methods=["POST"])
+def retreive_submissions(exercise_id):
+    return retreive_exercise_submissions(exercise_id)
 
 
 @app.route('/edit_grade/<submission_id>/<grade>/', methods=["POST"])
 def edit_grade(submission_id, grade):
-    return edit_grade_of_submission(submission_id, grade)
-
-
-@app.route('/edit_grade_and_manual_grade/<submission_id>/<grade>/<manual_grade>/', methods=["POST"])
-def edit_grade_and_manual_grade(submission_id, grade, manual_grade):
-    return edit_grades_of_submission(submission_id, grade, manual_grade)
+    response = request.get_json()
+    print(response)
+    return edit_grade_of_submission(submission_id, grade, response["new_manual_grade"], response["new_comment"])
 
 
 @app.route('/download_submission/<exercise_id>/<submiter_id>/', methods=["POST"])
 def download_submission(exercise_id, submiter_id):
-    return download_submission_zip(exercise_id, submiter_id)
+    country_id = get_country_id_by_uid(submiter_id)
+    return download_submission_zip(exercise_id, submiter_id, country_id)
 
 
-@app.route('/manual_grade/<submission_id>/<manual_grade>/', methods=["POST"])
-def manual_grade(submission_id, manual_grade):
-    return new_manual_grade(submission_id, manual_grade)
+@app.route('/manual_grade/<submission_id>/', methods=["POST"])
+def manual_grade(submission_id):
+    response = request.get_json()
+    return new_manual_grade(submission_id, response["manual_grade"], response["comment"])
 
 
 @app.route('/download_grades_exercise/<exercise_name>/', methods=["POST"])
@@ -151,12 +151,40 @@ def download_grades_course():
     answer = dict()
     answer["grades"] = []
     for exercise in response["all_submissions"]:
+        print("##########")
+        print(exercise)
+        print("##########")
         answer["grades"].extend(download_grades(exercise[0], exercise[1]))
     return answer
 
+
 @app.route('/download_statistics/<exercise_id>/', methods=["POST"])
 def download_statistics(exercise_id):
-    return download_statistics_csv(exercise_id)
+    exercise_name = get_exercise_name_by_id(exercise_id).replace(" ", "_")
+    return download_statistics_csv(exercise_id, exercise_name)
+
+
+@app.route('/download_instruction/<exercise_id>/', methods=["POST"])
+def download_instruction(exercise_id):
+    return download_pdf_instruction(exercise_id)
+
+
+@app.route('/get_profile_data/<uid>/', methods=["POST"])
+def get_profile_data(uid):
+    return get_submissions_and_grader_priviliege(uid)
+
+
+@app.route('/contact_us/', methods=["POST"])
+def contact_us():
+    response = request.get_json()
+    send_mail(response["message"], response["subject"])
+    return 'OK'
+
+
+@app.route('/download_guide/', methods=["POST"])
+def download_guide():
+    return download_guide_instructor()
+
 
 @app.after_request
 def add_headers(response):

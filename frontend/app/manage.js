@@ -1,4 +1,5 @@
-let allSubmissions = [];
+let allSubmissions = new Map();
+let inputOutputPointsNew = []
 
 function onLoadMain() {
     // The user will have a field "myCourses" and retreive all the course by this field.
@@ -7,40 +8,46 @@ function onLoadMain() {
 }
 
 function onFinishRetreiveData(data) {
-    // TODO: make the first active at the beginning.
     // TODO: use form to save the input.
     if (data.courses) {
-        const entries = Object.entries(data.courses)
-        for (course of entries) {
-            createAccordionManage(course); // Example.
+        for (courseObj of Object.entries(data.courses)) {
+            let courseId = courseObj[0]
+            let course = courseObj[1]
+            let index = getExercisesItem(data.exercises, courseId)
+            if (index != -1) {
+                createAccordionManage(courseId, course, data.exercises[index], data.ids);
+            } else {
+                createAccordionManage(courseId, course, [], data.ids);
+            }
         }
     }
-    $('#main').show();
+    if ($('.courseName')[0]) {
+        $('.courseName')[0].click();
+    }
+    hideLoader()
 }
 
-function createAccordionManage(courseObj) {
-    let courseId = courseObj[0]
-    let course = courseObj[1]
+function createAccordionManage(courseId, course, exercises, ids) {
     createAccordionMenu(course.course_name)
     let panel = "<li>";
-    panel += createAccordionBodyManageCourse(courseId, course)
-    for (exerciseObj of Object.entries(course.exercises)) {
+    panel += createAccordionBodyManageCourse(courseId, course, ids)
+    for (exerciseObj of Object.entries(exercises)) {
         let exerciseId = exerciseObj[0]
         let exercise = exerciseObj[1]
-        panel += createAccordionBodyManageExercise(exerciseId, exercise)
+        panel += createAccordionBodyManageExercise(exerciseId, exercise, courseId)
     }
     panel += '<button id=newExercise data-toggle="tooltip" title="New exercise" ' +
         'class="plus-button addExercise" onclick="newExercise(' + "'" + courseId + "'" + ')"></button>'
     $(".nacc").append(panel + "</li>")
 }
 
-function createAccordionBodyManageCourse(courseId, course) {
+function createAccordionBodyManageCourse(courseId, course, ids) {
     let html = '<div class="panel">' +
         '<div class="course">' +
         '<label for="course_name' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Required field" style="margin-top: 17px">Course name *</div></label>' +
         '<input id="course_name' + courseId + '" class="courseExerciseInputEdit" value="' + course.course_name + '"></input><br><br>' +
         '<label for="course_grader' + courseId + '"><div class="explanation" data-toggle="tooltip" title="The grader must be admin. \nGives an access to the manage course.">Grader id \n </div></label>' +
-        '<input id="course_grader' + courseId + '" class="courseExerciseInputEdit" value="' + course.grader_uid + '" style="margin-left:88px"></input><br><br>' +
+        '<input id="course_grader' + courseId + '" class="courseExerciseInputEdit" value="' + (course.grader_uid ? ids[course.grader_uid] : course.grader_uid) + '" style="margin-left:88px"></input><br><br>' +
         '<label for="privacyEdit"><div class="explanation" data-toggle="tooltip" title="The course is shared only with the students you want.">Privacy</div></label><br>' +
         '<div class="radio_checkbox border_radio">' +
         '<input id="radio_public' + courseId + '" class="btn_radio" type="radio" name="privacy' + courseId + '" value="public" onclick=\'$(\"#pass' + courseId + '\").hide()\'' +
@@ -53,19 +60,24 @@ function createAccordionBodyManageCourse(courseId, course) {
         '</div><br><br>' +
         '<div id="pass' + courseId + '"' +
         ((course.privacy == 'public') ? "style=display:none;>" : ">") +
-        '<label for="course_ids' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
-        '<input id="course_ids' + courseId + '" class="ids courseExerciseInputEdit" value="' + String(course.uids).replace(",", " ") + '" value="000000000 000000000""></input><br><br><br><br>' +
+        '<label for="course_ids' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Student ids *</div></label>' +
+        '<input id="course_ids' + courseId + '" class="ids courseExerciseInputEdit" value="' + (course.uids ? uidToCountryIds(course.uids, ids) : course.uids) + '" value="000000000 000000000""></input><br><br><br><br>' +
         '</div>' + '<br>' +
         '<button class="btn btn_edit" onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
         '<button class="btn btn_delete" onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
         '</div></div>' +
-        '<div class="manage_button"><button class="btn btn_manage btn_course" onclick="downloadGradesCourse()" style="border:1px solid green"><span>Download Course Grades</button></div>';
+        '<div class="manage_button"><button class="btn btn_manage btn_course" onclick="downloadGradesCourse(' + "'" + courseId + "'" + ')" style="border:1px solid green"><span>Download Course Grades</button></div>';
     return html;
 }
 
-function createAccordionBodyManageExercise(exerciseId, exercise) {
+function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
     if (exercise.submissions) {
-        allSubmissions.push([Object.values(exercise.submissions), exercise.exercise_name])
+        if (allSubmissions.get(courseId)) {
+            allSubmissions.get(courseId).push([Object.values(exercise.submissions), exercise.exercise_name])
+        } else {
+            allSubmissions.set(courseId, [])
+            allSubmissions.get(courseId).push([Object.values(exercise.submissions), exercise.exercise_name])
+        }
     }
     let html = '<div class="panel">' +
         '<div class="exercise">' +
@@ -89,15 +101,26 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         '<label for="main_file' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
         '<input id="main_file' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.main_file + '"></input><br><br>' +
         '<label for="exercise_description' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
-        '<textarea id="exercise_description' + exerciseId + '" class="swal2-input input">'+ exercise.exercise_description + ' </textarea><br><br>' +
-        (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction + '" class="btn btn-link"> Current pdf</a><br><br>' : '') +
+        '<textarea id="exercise_description' + exerciseId + '" class="swal2-input input">' + exercise.exercise_description + ' </textarea><br><br>' +
+        (exercise.pdf_instruction ? '<button id="current_pdf' + exerciseId + '" class="btn btn-link"  onclick="downloadPdfInstruction(' + "'" + exerciseId + "'" + ')">Current pdf</button>' +
+            '<button id="delete_pdf' + exerciseId + '" class="astext" onclick="deletePdfInstruction(' + "'" + exerciseId + "'" + ')"><i class="glyphicon glyphicon-remove-circle"></i></button><br><br>' :
+            "") +
         '<label for="exercise_instruction' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
         '<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
         '<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
         '<input id="deadline' + exerciseId + '" class="courseExerciseInputEdit" type="date" name="dealine" value="' + exercise.deadline + '"></input><br><br>' +
-        '<label for="input_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default input is the standart input. Let standart if you do not want to change it.">Input file name *</div></label>' +
+        '<label for="show' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="For each option checked, the student will be able to see the option when submitting.' +
+        'If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
+        '<div id="show' + exerciseId + '" ></div>' +
+        '<div class="radio_checkbox"><input class="btn_checkbox" id="input' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="input" required="" ' +
+        (exercise.show_input ? "checked" : "") +
+        '/><label class="btn_checkbox" for="input' + exerciseId + '">Input</label> <br>' +
+        '<input class="btn_checkbox"  id="output' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="output" required="" ' +
+        (exercise.show_output ? "checked" : "") +
+        '/><label class="btn_checkbox" for="output' + exerciseId + '">Output</label></div> <br>' +
+        '<label for="input_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default input is the standard input. Let standard if you do not want to change it.">Input file name *</div></label>' +
         '<input id="input_file_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.input_file_name + '"></input><br><br>' +
-        '<label for="output_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default output is the standart output.  Let standart if you do not want to change it.">Output file name *</div></label>' +
+        '<label for="output_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default output is the standard output.  Let standard if you do not want to change it.">Output file name *</div></label>' +
         '<input id="output_file_name' + exerciseId + '" class="courseExerciseInputEdit" value="' + exercise.output_file_name + '"></input><br><br>';
     for (item in exercise.input_output_points) {
         html +=
@@ -114,7 +137,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
         (exercise.submissions ?
             '<div class="manage_button">' +
             '<button class="btn btn_manage" onclick="downloadGradesExercise(' + myStringify(exercise.submissions) + "'" + exercise.exercise_name + "'" + ')" style="border:1px solid green"><span>Download Exercise Grades</button>' +
-            '<button class="btn btn_manage" onclick="currentSubmissionView(' + myStringify(exercise.submissions) + ')" style="border:1px solid blue"><span>Current Submissions</button>' +
+            '<button class="btn btn_manage" onclick="currentSubmissionView(' + "'" + exerciseId + "'" + ')" style="border:1px solid blue"><span>Current Submissions</button>' +
             '<button class="btn btn_manage" onclick="mossCommand(' + "'" + exerciseId + "'" + ')" style="border:1px solid red"><span>Check Plagiarism</button>' +
             '<button class="btn btn_manage" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')" style="border:1px solid grey"><span>Download Statistics</button>' +
             '<button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button>' +
@@ -122,22 +145,27 @@ function createAccordionBodyManageExercise(exerciseId, exercise) {
     return html;
 }
 
-$("#newCourse").click(function () {
-    var info = newCourse();
-    info.then((json) => {
-        doPostJSON(json, "create_course", "text", reloadManage)
-        $("#main").hide()
-    })
-})
+function deletePdfInstruction(exerciseId) {
+    if ($("#delete_pdf" + exerciseId).html().includes('remove')) {
+        $("#current_pdf" + exerciseId).hide()
+        $("#delete_pdf" + exerciseId).html('<i class="glyphicon glyphicon-ok-circle"></i>')
+    } else {
+        $("#current_pdf" + exerciseId).show()
+        $("#delete_pdf" + exerciseId).html('<i class="glyphicon glyphicon-remove-circle"></i>')
+    }
 
-function reloadManage() {
-    document.location.reload();
 }
 
-async function newCourse() {
-    const {
-        value: formValues
-    } = await Swal.fire({
+function uidToCountryIds(uids, ids) {
+    let answer = ""
+    for (uid of Object.values(uids)) {
+        answer += ids[uid] + " "
+    }
+    return answer
+}
+
+$("#newCourse").click(function () {
+    Swal.fire({
         allowOutsideClick: false,
         title: 'New course',
         html: '<label for="course_name"><div class="explanation" data-toggle="tooltip" title="Required field">Course name *</div></label>' +
@@ -150,7 +178,7 @@ async function newCourse() {
             '<input type="radio" name="privacy" value="private" onclick=\'$(\"#pass\").show()\'> Private<br><br>' +
             '</div>' +
             '<div id="pass" style=display:none;>' +
-            '<label for="ids"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
+            '<label for="ids"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Student ids *</div></label>' +
             '<input id="ids" class="swal2-input" placeholder="000000000 000000000">' +
             '</div>',
         showCancelButton: true,
@@ -160,7 +188,7 @@ async function newCourse() {
             const privacy = $("input[name='privacy']:checked").val()
             const ids = escapeHtml($("#ids").val())
             if (!(course_name == "" || (ids == "" && privacy == "private"))) {
-                return JSON.stringify({
+                json = JSON.stringify({
                     owner_uid: userUid,
                     course_name: course_name,
                     grader_uid: grader,
@@ -174,11 +202,13 @@ async function newCourse() {
             }
         }
     }).then(result => {
-        if (result.value && formValues) {
-            return formValues
+        if (result.value) {
+            $("#main").hide()
+            doPostJSON(json, "create_course", "text", reload)
         }
     })
-}
+
+})
 
 $('input[type=radio][name=privacy]').change(function () {
     var x = document.getElementById("pass");
@@ -202,7 +232,7 @@ function editCourse(courseId) {
             privacy: ($("#pass" + courseId).is(":visible") ? "private" : "public"),
             uids: escapeHtml($("#course_ids" + courseId).val())
         })
-        doPostJSON(json, "edit_course/" + courseId, "text", reloadManage)
+        doPostJSON(json, "edit_course/" + courseId, "text", reload)
     }
 }
 
@@ -219,7 +249,7 @@ function deleteCourse(courseId) {
         showCancelButton: true,
     }).then(result => {
         if (result.value) {
-            doPostJSON(null, "delete_course/" + courseId, "text", reloadManage)
+            doPostJSON(null, "delete_course/" + courseId, "text", reload)
         }
     })
 }
@@ -237,7 +267,7 @@ function newExercise(courseId) {
         if (result.value) {
             newNormalExercise(courseId)
         } else {
-            alert("peer")
+            alert("Available soon.")
         }
     })
 }
@@ -252,8 +282,8 @@ function newExercise(courseId) {
  * Submission option -> Github and/or Zip
  * Main file -> String (file where remain the main function)
  * I/O zip file -> inputs/outputs files (.txt) (input files must begin with the char "i" and output must begin with the char "o").
- * Input code (standart bt default)
- * Output code (standart by default)
+ * Input code (standard bt default)
+ * Output code (standard by default)
  * 
  * Not required fields:
  *  
@@ -265,8 +295,7 @@ function newExercise(courseId) {
  */
 async function newNormalExercise(courseId) {
     let exerciseName, exerciseCompiler, submissionViaGithub, submissionViaZip, mainFile,
-        exerciseDescription, instructionPdf, deadline, inputFileName, outputFileName
-    let inputOutputPoints = []
+        exerciseDescription, instructionPdf, deadline, inputFileName, outputFileName, showInput, showOutput
     Swal.mixin({
         allowOutsideClick: false,
         showCancelButton: true,
@@ -312,21 +341,30 @@ async function newNormalExercise(courseId) {
                 '<label for="exercise_instruction"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
                 '<input id="exercise_instruction" class="swal2-input" type="file" accept="application/pdf">' +
                 '<label for="deadline"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
-                '<input id="deadline" class="swal2-input" type="date" name="dealine"></input>',
+                '<input id="deadline" class="swal2-input" type="date" name="dealine"></input>' +
+
+                '<label for="show"><div class="explanation" data-toggle="tooltip" title="For each option checked, the student will be able to see the option when submitting.' +
+                'If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
+                '<div id="show" class="swal2-input" >' +
+                '<input id="input" name="BoxSelect[]" type="checkbox" value="input" required="">Input</input> <br>' +
+                '<input id="output" name="BoxSelect[]" type="checkbox" value="output" required="">Output</input>' +
+                '</div>',
             focusConfirm: false,
             preConfirm: () => {
                 exerciseDescription = escapeHtml($("#exercise_description").val())
                 instructionPdf = $('#exercise_instruction').prop('files')[0];
                 deadline = $("#deadline").val()
+                showInput = $("input[id='input']:checked").val()
+                showOutput = $("input[id='output']:checked").val()
             }
         },
         {
             confirmButtonText: 'Next &rarr;',
             title: 'New exercise 3/4',
-            html: '<label for="input_file_name"><div class="explanation" data-toggle="tooltip" title="The default input is the standart input. Let standart if you do not want to change it.">Input file name *</div></label>' +
-                '<input id="input_file_name" class="swal2-input" value="standart" placeholder="input.txt, input.csv...">' +
-                '<label for="output_file_name"><div class="explanation" data-toggle="tooltip" title="The default output is the standart output.  Let standart if you do not want to change it.">Output file name *</div></label>' +
-                '<input id="output_file_name" class="swal2-input" value="standart" placeholder="output.txt, output.csv...">',
+            html: '<label for="input_file_name"><div class="explanation" data-toggle="tooltip" title="The default input is the standard input. Let standard if you do not want to change it.">Input file name *</div></label>' +
+                '<input id="input_file_name" class="swal2-input" value="standard" placeholder="input.txt, input.csv...">' +
+                '<label for="output_file_name"><div class="explanation" data-toggle="tooltip" title="The default output is the standard output.  Let standard if you do not want to change it.">Output file name *</div></label>' +
+                '<input id="output_file_name" class="swal2-input" value="standard" placeholder="output.txt, output.csv...">',
             focusConfirm: false,
             preConfirm: () => {
                 inputFileName = escapeHtml($("#input_file_name").val())
@@ -336,7 +374,7 @@ async function newNormalExercise(courseId) {
                         `Please fill all the required fields.`
                     )
                 } else {
-                    moreIO(1, inputOutputPoints)
+                    moreIO(1)
                 }
             }
         }
@@ -354,17 +392,20 @@ async function newNormalExercise(courseId) {
                 deadline: deadline,
                 input_file_name: inputFileName,
                 output_file_name: outputFileName,
-                input_output_points: inputOutputPoints
+                input_output_points: inputOutputPointsNew,
+                show_input: (showInput ? true : false),
+                show_output: (showOutput ? true : false),
+                pdf_instruction: (instructionPdf ? true : false)
             })
             var fd = new FormData();
             fd.append("file", instructionPdf);
             fd.append("json", json);
-            doPostJSONAndFile(fd, "create_exercise", "text", reloadManage)
+            doPostJSONAndFile(fd, "create_exercise", "text", reload)
         }
     })
 }
 
-function moreIO(i, inputOutputPoints) {
+function moreIO(i) {
     swal.insertQueueStep({
         allowOutsideClick: false,
         title: 'More input',
@@ -374,7 +415,9 @@ function moreIO(i, inputOutputPoints) {
             '<label for="output_' + i + '"><div class="explanation" data-toggle="tooltip" title="The first expected output.">Expected output *</div></label>' +
             '<textarea id="output_' + i + '" class="swal2-input" placeholder="4, a b c d..."></textarea>' +
             '<label for="points_' + i + '"><div class="explanation" data-toggle="tooltip" title="The number of point for a good answer.">Points number * </div></label>' +
-            '<input id="points_' + i + '"s class="swal2-input" type="number" ></input>',
+            '<input id="points_' + i + '"s class="swal2-input" type="number" ></input><br>' +
+            '<button data-toggle="tooltip" title="More input output" class="plus-button" onclick=addMoreIO(' + i + ')></button>',
+        confirmButtonText: "Finish",
         preConfirm: function () {
             let input = escapeHtml($("#input_" + i).val())
             let output = escapeHtml($("#output_" + i).val())
@@ -384,18 +427,24 @@ function moreIO(i, inputOutputPoints) {
                     `Please fill all the fields.`
                 )
             } else {
-                inputOutputPoints.push({
+                inputOutputPointsNew.push({
                     input: input,
                     output: output,
                     point: point
                 })
-                // TODO: Improve style and overide text cancel.
-                if (confirm("More input/output?") == true) {
-                    moreIO(i++, inputOutputPoints)
-                }
             }
         }
-    });
+    })
+}
+
+function addMoreIO(i) {
+    let input = escapeHtml($("#input_" + i).val())
+    let output = escapeHtml($("#output_" + i).val())
+    let point = escapeHtml($("#points_" + i).val())
+    if (!(input == "" || output == "" || point == "")) {
+        moreIO(++i)
+    }
+    $('.swal2-confirm').click()
 }
 
 function editExercise(exerciseId, inputOutputPointsSize) {
@@ -430,24 +479,37 @@ function editExercise(exerciseId, inputOutputPointsSize) {
             exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
             instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
             deadline = $("#deadline" + exerciseId).val()
+            const showInput = $('input[id="input' + exerciseId + '"]:checked').val()
+            const showOutput = $('input[id="output' + exerciseId + '"]:checked').val()
             $("#main").hide()
+            let is_pdf_exists = false
+            if ($("#delete_pdf" + exerciseId).html()) {
+                if ($("#delete_pdf" + exerciseId).html().includes('remove')) {
+                    is_pdf_exists = true
+                } else {
+                    is_pdf_exists = false
+                }
+            }
             let json = JSON.stringify({
                 // No need to update the course id since the exercise can't move.
                 exercise_name: exerciseName,
                 exercise_compiler: exerciseCompiler,
-                submission_via_github: submissionViaGithub,
-                submission_via_zip: submissionViaZip, // TODO: fix the case where the admin delete one submission option.
+                submission_via_github: (submissionViaGithub ? true : false),
+                submission_via_zip: (submissionViaZip ? true : false),
                 main_file: mainFile,
                 exercise_description: exerciseDescription,
                 deadline: deadline,
                 input_file_name: inputFileName,
                 output_file_name: outputFileName,
-                input_output_points: inputOutputPoints
+                input_output_points: inputOutputPoints,
+                show_input: (showInput ? true : false),
+                show_output: (showOutput ? true : false),
+                pdf_instruction: (instructionPdf ? true : is_pdf_exists)
             })
             var fd = new FormData();
             fd.append("file", instructionPdf);
             fd.append("json", json);
-            doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", reloadManage)
+            doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", reload)
         }
     }
 }
@@ -461,229 +523,19 @@ function deleteExercise(exerciseId) {
         showCancelButton: true,
     }).then(result => {
         if (result.value) {
-            doPostJSON(null, "delete_exercise/" + exerciseId, "text", reloadManage)
+            doPostJSON(null, "delete_exercise/" + exerciseId, "text", reload)
         }
     })
 }
 
-function downloadGradesCourse() {
+function downloadGradesCourse(courseId) {
+    if (!allSubmissions.get(courseId)) {
+        alert("There is no grade to download...");
+        return;
+    }
+    showLoader()
     json = JSON.stringify({
-        all_submissions: allSubmissions
+        all_submissions: allSubmissions.get(courseId)
     })
     doPostJSON(json, "download_grades_course", 'json', onDownloadGradeFinish)
-}
-
-function downloadGradesExercise(...submissionsId) {
-    exerciseName = submissionsId.pop()
-    json = JSON.stringify({
-        submissions_id: submissionsId
-    })
-    doPostJSON(json, "download_grades_exercise/" + exerciseName, 'json', onDownloadGradeFinish)
-}
-
-function onDownloadGradeFinish(data) {
-    console.log(data.grades)
-    var lineArray = [];
-    data.grades.forEach(function (infoArray, index) {
-        var line = infoArray.join(",");
-        lineArray.push(index == 0 ? "data:text/csv;charset=utf-8," + line : line);
-    });
-    var csvContent = lineArray.join("\n");
-    var encodedUri = encodeURI(csvContent);
-    var link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "exercises_grades.csv");
-    document.body.appendChild(link);
-    link.click();
-}
-
-function currentSubmissionView(...submissionsId) {
-    json = JSON.stringify({
-        submissions_id: submissionsId
-    })
-    doPostJSON(json, "retreive_submissions", "json", displayCurrentSubmissions)
-}
-
-function mossCommand(exerciseId) {
-    doPostJSON(null, "moss_command/" + exerciseId, "text", onCheckPlagiatFinish, 7000) // Async
-}
-
-function onCheckPlagiatFinish(data) {
-    window.open(data)
-}
-
-function downloadStatistics(exerciseId) {
-    doPostJSON(null, "download_statistics/" + exerciseId, "text", onSubmissionReceive)
-}
-
-function downloadSubmissions(exerciseId, exerciseName) {
-    doGETJSON(null, "download_submissions/" + exerciseId + "/" + exerciseName, '', onSubmissionsReceive) // Async
-}
-
-function displayCurrentSubmissions(data) {
-    let html = '<div id="submissions">'
-    for (submission of data.submissions) {
-        html += '<button class="btn btn-link" onclick="focusSubmission(' +
-            "'" + submission[0].exercise_id + "','" +
-            submission[0].grade + "','" +
-            submission[0].manual_grade + "','" +
-            submission[0].uid + "','" +
-            submission[1] + "','" +
-            submission[2] + "'" +
-            ')">' +
-            submission[2] + '</button><br>'
-    }
-
-    html += '<br><button class="btn btn_submission" onclick="runSubmissions(' + "'" + data.submissions[0][0].exercise_id + "'" + ')" style="border:1px solid green"><span>Run Submissions</button></div>'
-    Swal.fire({
-        title: 'Current submissions',
-        html: html,
-        focusConfirm: false,
-    })
-}
-
-function myStringify(submissions) {
-    stringify = ""
-    for (submission of Object.values(submissions)) {
-        stringify += "'" + submission + "', ";
-    }
-    return stringify
-}
-
-function focusSubmission(exerciseId, grade, manualGrade, submiterId, submissionId, submiterCountryId) {
-    let html = '<div id="submission">' +
-        '<button class="btn btn_submission" onclick="runSubmission(' + "'" + exerciseId + "','" + submiterId + "'" + ')" style="border:1px solid green"><span>Run Submission</button><br>' +
-        '<button class="btn btn_submission" onclick="downloadSubmission(' + "'" + exerciseId + "','" + submiterId + "'" + ')" style="border:1px solid orange"><span>Download Submission</button><br>' +
-        '<button class="btn btn_submission" onclick="editGrade(' + "'" + submissionId + "','" + grade + "','" +
-        (manualGrade ? manualGrade + "'" : "") +
-        ')" style="border:1px solid red"><span>Edit Grade</button><br>' +
-        '<button class="btn btn_submission" onclick="manualGrade(' + "'" + submissionId + "','" + grade + "'" + ')" style="border:1px solid grey"><span>Grade Manually</button>' +
-        '<div>'
-    Swal.fire({
-        title: 'Submission of ' + submiterCountryId,
-        html: html,
-        focusConfirm: false,
-    })
-}
-
-function editGrade(submissionId, grade, manualGrade) {
-    Swal.fire({
-        title: 'Choose a new grade',
-        html: '<div class="edit_grade">The actual grade is ' + grade + '<br><br>' +
-            '<label for="new_grade">Enter the new grade</label>' +
-            '<input id="new_grade" class="courseExerciseInputEdit" placeholder="' + grade + '"></input><br><br>' +
-            (manualGrade != "undefined" ?
-                '<br>The actual manual grade is ' + manualGrade + '<br><br>' +
-                '<label for="new_manual_grade">Enter the new manual grade</label>' +
-                '<input id="new_manual_grade" class="courseExerciseInputEdit" placeholder="' + manualGrade + '"></input><br><br>' :
-                "") +
-            '<div/>',
-        focusConfirm: false,
-        showCancelButton: true,
-        preConfirm: function () {
-            const newGrade = escapeHtml($("#new_grade").val())
-            const newManualGrade = escapeHtml($("#new_manual_grade").val())
-            if (newGrade != "") {
-                if (newManualGrade == "") {
-                    doPostJSON(null, "edit_grade/" + submissionId + "/" + newGrade, "text", reloadManage)
-                } else {
-                    doPostJSON(null, "edit_grade_and_manual_grade/" + submissionId + "/" + newGrade + "/" + newManualGrade, "text", reloadManage)
-                }
-            } else {
-                Swal.showValidationMessage(
-                    `Please enter a new grade.`
-                )
-            }
-        }
-    })
-}
-
-function downloadSubmission(exerciseId, submiterId) {
-    doPostJSON(null, "download_submission/" + exerciseId + "/" + submiterId, "text", onSubmissionReceive)
-}
-
-function onSubmissionReceive(data) {
-    window.open(data)
-}
-
-function onSubmissionsReceive(data) {
-    const blob = new Blob([data], {
-        type: "application/zip"
-    });
-    var link = document.createElement('a');
-    document.body.appendChild(link);
-    link.href = window.URL.createObjectURL(blob);
-    link.download = "submissions.zip";
-    link.click();
-}
-
-function manualGrade(submissionId, grade) {
-    Swal.fire({
-        title: 'Manual Grade',
-        html: '<div class="manual_grade">The actual grade given by the badkan is ' + grade + '<br><br>' +
-            '<label for="manual_grade">Enter the manual grade</label>' +
-            '<input id="manual_grade" class="courseExerciseInputEdit"></input><br><br>' +
-            '<div/>',
-        focusConfirm: false,
-        showCancelButton: true,
-        preConfirm: function () {
-            const manualGrade = escapeHtml($("#manual_grade").val())
-            if (manualGrade != "") {
-                doPostJSON(null, "manual_grade/" + submissionId + "/" + manualGrade, "text", reloadManage)
-            } else {
-                Swal.showValidationMessage(
-                    `Please enter a manual grade.`
-                )
-            }
-        }
-    })
-}
-
-function runSubmissions(exerciseId) {
-    json = JSON.stringify({
-        target: "run_submissions_admin",
-        exercise_id: exerciseId,
-    })
-    sendWebsocket(json, onOpen, onMessage, onClose, onError)
-}
-
-function runSubmission(exerciseId, submiterId) {
-    json = JSON.stringify({
-        target: "run_submission_admin",
-        exercise_id: exerciseId,
-        uid: submiterId
-    })
-    sendWebsocket(json, onOpen, onMessage, onClose, onError)
-}
-
-function onOpen(_event) {
-    Swal.fire({
-        title: 'Running submission(s)',
-        html: ' <div id="submissionResult">' +
-            '<h2>Submission(s) result</h2>' +
-            '<div id="output" dir="ltr">' +
-            '</div>',
-        focusConfirm: false,
-    })
-    logServer("color:blue", "Submission(s) starting!");
-}
-
-function onError(_event) {
-    logServer("color:red", "Error in websocket.");
-}
-
-function onMessage(_event) {
-    if (_event.data.includes('Submission of the student')) {
-        logServer("color:green", _event.data);
-    } else {
-        logServer("color:black", _event.data);
-    }
-}
-
-function onClose(event) {
-    if (event.code === 1000) {
-        logServer("color:blue", "Submission completed!");
-    } else {
-        logServer("color:red", "Connection closed abnormally!");
-    }
 }

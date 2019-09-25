@@ -28,7 +28,7 @@ function onFinishRetreiveData(data) {
         $("#exerciseName").html(data.exercise_name);
         $("#userId").val(userDetails.country_id);
         $("#userId").attr('readonly', true);
-        $('#main').show();
+        hideLoader()
     }
 }
 

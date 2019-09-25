@@ -42,6 +42,8 @@ Then, you need to add to the project the private key that you download here:
 
 Then put the file in the folder database_exports and change its name to private_key.json.
 
+From the firebase storage, upload manually the badkan_guide.pdf in a bucket named guide.
+
 Then, go to the Database onglet from your firebase project.
 Create a database and then start in test mode.
 
@@ -51,13 +53,17 @@ open the terminal in the firebase folder and dl the firebase tools:
 
 Then, you need to login with:
 
-    firebase login
+    firebase login --no-localhost
 
 Follow the instructions.
 
 To verify if it's worked:
 
     firebase list
+
+If the current project is not your actual project use:
+
+    firebase use <project_id>
 
 Now need to test if init or deployement.
 
@@ -85,6 +91,8 @@ Finally, initialize the gcloud environment:
 To check if everything worked fine, you can test the gsutil command with:
 
     gsutil -m cp -R gs://<bucket_name>.appspot.com .
+
+Add your domain in firebase authentification/sign-in method authorized domain onlget.
 
 Once Firebase is initialized you need to install all the network stuff.
 
@@ -155,12 +163,12 @@ Since we use contrab for the backup, from the database_exports folder please run
 
 Please, check that in the files crontab-backup, the cd is sending you to the good place.
 
-We also use crontab to send notification, then from the notifications folder please run:
+To receive the email sended by the users, please, create two files in the backend/server/stmp folder:
 
-    crontab crontab-notifications
+    nano backend/servers/smtp/address.txt <your address email>
+    nano backend/servers/smtp/password.txt <your password>
 
-Please, check that in the files crontab-notifications, the cd is sending you to the good place.
-
+Please, check that the stmp server correspond to your email.
 
 ## Installing the Apache server
 
@@ -312,7 +320,7 @@ If not, you should change the location of the first line at backend/moss.pl and 
 
 Next, you need to execute permission for the file by giving this command on shell:
 
-    chmod ug+x moss/moss.pl
+    chmod ug+x backend/servers/moss/moss.pl
 
 Now Get all the files which you need to check for plagiarism, in a given directory.
 
@@ -363,6 +371,7 @@ To restart the badkan server, you can do:
 
     start/backend_frontend.sh
 
+In the export.sh file, change the bucket name.
 
 ## Logs
 
@@ -543,3 +552,11 @@ To check the number of current connection:   https://console.firebase.google.com
 To see all the information about the spark plan:  
 https://firebase.google.com/pricing/?authuser=0
 Notice that at any moment, it's possible to change the plan.
+
+## Clean up
+
+To clean up the data of the whole project:
+
+- Delete the data of the firebase realtime db, storage and authentification from the firebase console.
+- Delete all the subfolders of the folder backend/submissions/
+

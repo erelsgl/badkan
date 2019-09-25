@@ -8,6 +8,9 @@ import re
 from datetime import datetime
 import os 
 import concurrent.futures
+import multiprocessing as mp
+
+import time
 
 import sys
 
@@ -21,9 +24,10 @@ with open('../../frontend/util/firebaseConfig.js') as dataFile:
     data = dataFile.read()
 
 id = re.search('projectId: "(.+?)",', data)
+project_name =  id.group(1)
 
-url = 'https://' + id.group(1) + '.firebaseio.com'
-bucket_name = id.group(1) + '.appspot.com'
+url = 'https://' + project_name + '.firebaseio.com'
+bucket_name = project_name + '.appspot.com'
 
 cred = credentials.Certificate('../../database_exports/private_key.json')
 firebase_admin.initialize_app(

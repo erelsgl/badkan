@@ -11,6 +11,9 @@ function showPublic() {
   $('a[href="#public"]').addClass("current");
   $(".public").show()
   $(".myCourse").hide()
+  if ($('.public')[0]) {
+    $('.public')[0].click();
+  }
 }
 
 function showMyCourses() {
@@ -18,10 +21,12 @@ function showMyCourses() {
   $('a[href="#mycourses"]').addClass("current");
   $(".myCourse").show()
   $(".public").hide()
+  if ($('.myCourse')[0]) {
+    $('.myCourse')[0].click();
+  }
 }
 
 function onLoadMain() {
-  // TODO: Make this part much more secure...
   if (userDetails.instructor == "False") {
     $("#becomeInstructor").show()
   } else {
@@ -31,25 +36,18 @@ function onLoadMain() {
 }
 
 function onFinishRetreiveData(data) {
-  // TODO: make the first active at the beginning.
   if (data.courses) {
-    if (data.courses[0].length == 0) {
-      noMyCourseAvailable()
+    for (course of data.courses) {
+      createAccordionHome(course, data.exercises, Object.values(data.submissions))
     }
-    if (data.courses[1].length == 0) {
-      noPublicCourseAvailable()
-    }
-    for (let course of data.courses[0]) {
-      createAccordionHome(course, "myCourse"); // myCourse
-    }
-    for (let course of data.courses[1]) {
-      createAccordionHome(course, "public"); // public
-    }
-  } else {
+  }
+  if (($('.public').length) == 0) {
     noPublicCourseAvailable()
+  }
+  if (($('.myCourse').length) == 0) {
     noMyCourseAvailable()
   }
-  $('#main').show();
+  hideLoader()
   showPublic()
 }
 
@@ -61,21 +59,42 @@ function noMyCourseAvailable() {
   $(".nacc").append('<div class="myCourse myCourse_msg"><img class=warning src="images/msg-err.png">No my course available</div>')
 }
 
-function createAccordionHome(courseObj, myClass) {
+function noExerciseAvailable() {
+  return '<div class="no_exercise"><img class=warning src="images/msg-err.png">No exercise available</div>'
+}
+
+function createAccordionHome(courseObj, exercises, submissions) {
   let courseId = courseObj[0]
   let course = courseObj[1]
+  let myClass = "public"
+  if (course.uids) {
+    myClass = getClass(course.uids, userUid)
+  }
   createAccordionMenu(course.course_name, myClass)
   let panel = "<li>";
-  for (exerciseObj of Object.entries(course.exercises)) {
-    let exerciseId = exerciseObj[0]
-    let exercise = exerciseObj[1]
-    if (myClass == "myCourse") {
-      panel += createAccordionBodyHomeSolve(exerciseId, exercise)
-    } else if (myClass == "public") {
-      panel += createAccordionBodyHomeRegister(courseId, exercise)
+  let index = getExercisesItem(exercises, courseId)
+  if (index != -1) {
+    for (exerciseObj of Object.entries(exercises[index])) {
+      let exerciseId = exerciseObj[0]
+      let exercise = exerciseObj[1]
+      if (myClass == "myCourse") {
+        panel += createAccordionBodyHomeSolve(exerciseId, exercise, submissions)
+      } else if (myClass == "public") {
+        panel += createAccordionBodyHomeRegister(courseId, exercise)
+      }
     }
+  } else {
+    panel += noExerciseAvailable()
   }
   $(".nacc").append(panel + "</li>")
+}
+
+function getClass(uids, id) {
+  if (Object.values(uids).includes(id)) {
+    return "myCourse"
+  } else {
+    return "public"
+  }
 }
 
 function createAccordionBodyHomeRegister(courseId, exercise) {
@@ -84,8 +103,6 @@ function createAccordionBodyHomeRegister(courseId, exercise) {
     '<div class="description">Compiler : </div>' + '<div class="test">' + exercise.exercise_compiler + '</div><br><br>' +
     (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="test">' +
       exercise.exercise_description + '</div><br><br>' : "") +
-    (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction +
-      '" style="">Current pdf</a><br><br>' : "") +
     (exercise.deadline ? '<div class=timestamp>Deadline : ' +
       exercise.deadline + '</div><br><br>' : "") +
     '<button class="btn btn_edit" onclick="registeringToCourse(' + "'" + courseId + "'" +
@@ -93,29 +110,39 @@ function createAccordionBodyHomeRegister(courseId, exercise) {
     '</div>';
 }
 
-function createAccordionBodyHomeSolve(exerciseId, exercise) {
+function createAccordionBodyHomeSolve(exerciseId, exercise, submissions) {
   return '<div class="exercise panel myCourse">' + // Check in the class here for the style
     '<div class="exerciseName title_font">' + exercise.exercise_name + '</div><br><br>' +
-    '<div class="description">Compiler : </div>'+'<div class="test">' + exercise.exercise_compiler + '</div><br><br>' +
-    (exercise.exercise_description ? '<div class="description"> Description : </div>' +'<div class="test">' +
+    '<div class="description">Compiler : </div>' + '<div class="test">' + exercise.exercise_compiler + '</div><br><br>' +
+    (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="test">' +
       exercise.exercise_description + '</div><br><br>' : "") +
-    (exercise.pdf_instruction ? '<a href="' + exercise.pdf_instruction +
-      '"class="btn btn-link">Current pdf</a><br><br>' : "") +
+    (exercise.pdf_instruction ? '<button class="btn btn-link"  onclick="downloadPdfInstruction(' + "'" + exerciseId + "'" + ')">Current pdf</button><br><br>' : "") +
     (exercise.deadline ? '<div class=timestamp>Deadline : ' +
       exercise.deadline + '</div><br><br>' : "") +
     '<div class="description">The main function of your submission must be : </div>' + '<div class="test">' + exercise.main_file + '</div><br><br>' +
     '<div class="description">You need to read the input from : </div>' + '<div class="test">' + exercise.input_file_name + '</div><br><br>' +
     '<div class="description">You need to read the output from : </div>' + '<div class="test">' + exercise.output_file_name + '</div><br><br><br><br>' +
-    (exercise.owner_submission ?
-      '<div class=lastSubmission><div class="timestamp text_lastSubmission">Your last stored submission timestamp is : ' + exercise.owner_submission.timestamp + '</div><br><br>' +
-      (exercise.owner_submission.url == "zip" ?
-        '<div class="timestamp text_lastSubmission">Your solution was submitted via a ZIP file.</div><br><br>' :
-        '<div class="timestamp text_lastSubmission">You solution was submitted via a GitHub url :' + exercise.owner_submission.url + '</div><br><br>') +
-      '<div class="timestamp text_lastSubmission grade">Your current grade : </div>' + '<div class="timestamp text_lastSubmission grade">' + exercise.owner_submission.grade + '</div><br><br></div><br><br>' :
-      '') +
+    getSubmission(submissions, exerciseId) +
     '<button class="btn btn_edit" onclick="solveExercise(' + "'" + exerciseId + "'" +
     ')">Solve <i class="glyphicon glyphicon-fire"></i></button>' +
     '</div>';
+}
+
+function getSubmission(submissions, exerciseId) {
+  for (submission of submissions) {
+    if (submission.exercise_id == exerciseId) {
+      return '<div class=lastSubmission><div class="timestamp text_lastSubmission">Your last stored submission timestamp is: ' + submission.timestamp + '</div><br><br>' +
+        (submission.url == "zip" ?
+          '<div class="timestamp text_lastSubmission">Your solution was submitted via a ZIP file.</div><br><br>' :
+          '<div class="timestamp text_lastSubmission">You solution was submitted via a GitHub url :' + submission.url + '</div><br><br>') +
+        '<div class="timestamp text_lastSubmission grade">Your current grade: ' + submission.grade + '</div><br><br>' +
+        (submission.manual_grade ? '<div class="timestamp text_lastSubmission grade">Your current manual grade: ' + submission.manual_grade + '</div><br><br>' :
+          '') +
+        (submission.comment ? '<div class="timestamp text_lastSubmission">comment :' + submission.comment + '</div><br><br></div><br><br>' :
+          '</div><br><br>')
+    }
+  }
+  return ""
 }
 
 function registeringToCourse(courseId) {
@@ -130,457 +157,3 @@ function reloadHome() {
 function solveExercise(exerciseId) {
   document.location.href = 'badkan.html?exercise=' + exerciseId;
 }
-
-// var $template = $('.template');
-// let hash = 2;
-
-// var numRegistered = 0,
-//   numUnregistered = 0
-
-// var exercisesMap = new Map();
-// var peerExercisesMap = new Map();
-// var submissionsArray = []
-
-// /**
-//  * ON STATE CHANGE.
-//  * Every time the state of the user is changed, this function is called.
-//  */
-// firebase.auth().onAuthStateChanged(authUser => {
-//   localStorage.clear()
-//   /*** This code runs if there is a logged-in user. ***/
-//   if (authUser) {
-//     var userId = authUser.uid
-//     // For the next pages
-//     localStorage.setItem('homeUserId', JSON.stringify(userId))
-//     // For the Home page.
-//     window.uid = userId;
-//     loadCurrentUser(userId, (homeUser) => {   // in utils/Firebase.js
-
-//       document.getElementById("name").innerHTML =
-//         "Hello " + homeUser.name + " " + homeUser.lastName + "! <br />" +
-//         "ID number: " + homeUser.id + "<br />" +
-//         "Email: " + homeUser.email + "<br />";
-//       if (homeUser.admin) {
-//         if (homeUser.admin === true) {
-//           document.getElementById("name").innerHTML += "You have access to the \"instructor privilege\"."
-//           $("#btnManageCourses").show()
-//         }
-//       }
-
-//       // For the next pages
-//       localStorage.setItem('homeUser', JSON.stringify(homeUser))
-//       // For the Home page.
-//       window.homeUser = homeUser;
-
-//       if (exercisesObject) {  // defined in file data/exercises.js
-//         // synchronous
-//         for (key in exercisesObject) {
-//           exercisesMap.set(key, exercisesObject[key].exercise)
-//         }
-//       } else {
-//         alert("Exercises object not found - please try again or contact the programmer")
-//         finishLoading()  // defined in util/Loading.js
-//       }
-//       loadAllPeerExercisesAsync(peerExercisesMap); // TODO: Change this like the "exercises" above.
-//       loadAllSubmissionsByUserAsync(submissionsArray, homeUser.submissionsId, () => {
-//         if (coursesObject) {  // defined in file data/courses.js
-//           // synchronous
-//           for (key in coursesObject) {
-//             course = coursesObject[key].course
-//             addCourseHTML(key, course)
-//           }
-
-//           // on all courses loaded:
-//           if (numUnregistered == 0) {
-//             $('#accordion-unregistered').append('<p>No other courses!</p>');
-//           }
-//           if (numRegistered == 0) {
-//             $('#accordion-registered')
-//               .append('<p>You are not registered to any course yet!</p>');
-//           }
-
-//           // Finally, stop the loading
-//           finishLoading()
-//    try to sign in again!
-//    try to sign in again!found - please try again or contact the programmer")
-//    try to sign in again!
-//    try to sign in again!
-//    try to sign in again!
-//    try to sign in again!
-//   }try to sign in again!
-//   /*** This code runs if there is NO logged-in user. ***/
-//   else {
-//     alert("You're not connected, try to sign in again!")
-//     document.location.href = "index.html"
-//   }
-// })
-
-// function addCourseHTML(key, course) {
-//   //  First see if course if private or not:
-//   if (course.ids) {
-//     // The course is private
-//     let arrayIds = course.ids.split(' ')
-//     if (arrayIds.includes(window.homeUser.id)) {
-//       if (isRegistered(course)) {
-//         numRegistered++;
-//         showRegisteredCourse(course);
-//       } else {
-//         let courseId = key;
-//         registerSuccess(course, courseId);
-//       }
-//     }
-//   } else {
-//     // The course is public
-//     if (isRegistered(course)) {
-//       numRegistered++;
-//       showRegisteredCourse(course)
-//     } else {
-//       numUnregistered++;
-//       showUnregisteredCourse(key, course);
-//     }
-//   }
-// }
-
-
-// function isRegistered(course) {
-//   if (course.students.indexOf(window.uid) > -1) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// }
-
-// function registerSuccess(course, courseId) {
-//   course.students.push(window.uid);
-//   editCourse(course, courseId, "home.html")
-// }
-
-// // Show a course to which the current user is not registered.
-// function showUnregisteredCourse(key, course) {
-//   var $newPanel = $template.clone();
-//   $newPanel.find('.collapse').removeClass('in');
-//   $newPanel.find('.accordion-toggle')
-//     .attr('href', '#' + (hash))
-//     .text(course.name);
-//   $newPanel.find('.panel-collapse')
-//     .attr('id', hash++)
-//     .addClass('collapse')
-//     .removeClass('in');
-//   $newPanel.find('.panel-body').text('')
-//   text_html = '';
-//   text_html += '<button name ="' + key +
-//     '" id="register" class="btn btn-success"">Register to ' + course.name +
-//     '</button>';
-//   if (course.exercises.length === 1 &&
-//     course.exercises[0] === 'dummyExerciseId') {
-//     text_html += '<p>There are no available exercises for this course!</p>'
-//   } else {
-//     text_html += '<h3>Exercises in ' + course.name + '</h3>'
-//     for (var i = 0; i < course.exercises.length; i++) {
-//       if (course.exercises[i] != 'dummyExerciseId') {
-//         let exerciseObj = exercisesMap.get(course.exercises[i]);
-//         let peerExerciseObj = peerExercisesMap.get(course.exercises[i]);
-//         if (exerciseObj) {
-//           text_html += '<div class=\'exercise\'>'
-//           text_html += '<h4>' + exerciseObj.name + '</h4>';
-//           text_html += '<p>' + exerciseObj.description + '</p>';
-//           if (exerciseObj.deadline && exerciseObj.deadline.date) {
-//             text_html += '<br />';
-//             text_html +=
-//               'Exercise deadline: ' + exerciseObj.deadline.date + '<br />';
-//             let penalities = exerciseObj.deadline.penalities;
-//             if (penalities) {
-//               text_html += '<strong> Penalties </strong>: <br />';
-//               for (var p = 0; p < penalities.length; p++) {
-//                 text_html += 'Submitted with ' + penalities[p].late +
-//                   ' day(s) late is penalized with ' + penalities[p].point +
-//                   ' point(s)' +
-//                   '<br />';
-//               }
-//             }
-//           }
-//           text_html += '</div><!--exercise-->'
-//         }
-
-//         if (peerExerciseObj) {
-//           text_html += '<div class=\'exercise\'>'
-//           text_html += '<h4>' +
-//             '<span class="glyphicon glyphicon-transfer"></span>  ' +
-//             peerExerciseObj.name +
-//             '  <span class="glyphicon glyphicon-transfer"></span>' +
-//             '</h4>';
-//           text_html += '<p>' + peerExerciseObj.description + '</p>';
-//           text_html +=
-//             'Test deadline: ' + peerExerciseObj.deadlineTest + '<br />';
-//           text_html +=
-//             'Solution deadline: ' + peerExerciseObj.deadlineSolution +
-//             '<br />';
-//           text_html +=
-//             'Conflicts deadline: ' + peerExerciseObj.deadlineConflicts +
-//             '<br />';
-//           text_html += '</div><!--exercise-->'
-//         }
-//       }
-//     }
-//   }
-//   $newPanel.find('.panel-body').append(text_html);
-//   $('#accordion-unregistered').append($newPanel.fadeIn());
-// }
-
-// // Show a course to which the current user is registered.
-// function showRegisteredCourse(course) {
-//   var $newPanel = $template.clone();
-//   $newPanel.find('.collapse').removeClass('in');
-//   $newPanel.find('.accordion-toggle')
-//     .attr('href', '#' + (hash))
-//     .text(course.name);
-//   $newPanel.find('.panel-collapse')
-//     .attr('id', hash++)
-//     .addClass('collapse')
-//     .removeClass('in');
-//   $newPanel.find('.panel-body').text('')
-//   text_html = '';
-//   if (!course.exercises) {
-//     text_html += '<h5>There are no available exercises for this course!</h5>'
-//   } else {
-//     text_html += '<h3>Exercises in ' + course.name + '</h3>'
-//     for (var i = 0; i < course.exercises.length; i++) {
-//       let exerciseId = course.exercises[i];
-//       let exerciseObj = exercisesMap.get(exerciseId);
-//       if (exerciseObj) {
-//         text_html += htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj)
-//       }
-//       let peerExerciseObj = peerExercisesMap.get(exerciseId);
-//       if (peerExerciseObj) {
-//         text_html += htmlOfPeerExerciseInRegisteredCourse(exerciseId, peerExerciseObj)
-//       }
-//     }
-//   }
-//   $newPanel.find('.panel-body').append(text_html);
-//   $('#accordion-registered').append($newPanel.fadeIn());
-// }
-
-// function solveButton(exerciseId) {
-//   return '<button name ="' + exerciseId + '" class="btn btn-success btn-solve">Solve</button>';
-// }
-
-// function htmlOfExerciseInRegisteredCourse(exerciseId, exerciseObj) {
-//   text_html = ''
-//   text_html += '<div class=\'exercise\'>'
-//   text_html += '<h4>' + exerciseObj.name + '</h4>';
-//   text_html += '<p>' + exerciseObj.description + '</p>';
-//   if (exerciseObj.example === 'PDF') {
-//     text_html += '<button name ="' + exerciseId +
-//       '" id="dl" class="btn btn-link"">Download PDF</button>';
-//     text_html += '<br /> <br />'
-//   }
-
-//   if (exerciseObj.deadline && exerciseObj.deadline.date) {
-//     text_html += '<br />';
-//     text_html +=
-//       'Exercise deadline: ' + exerciseObj.deadline.date + '<br />';
-
-//     let penalities = exerciseObj.deadline.penalities;
-
-//     if (penalities) {
-//       text_html += '<strong> Penalties </strong>: <br />';
-//       for (var p = 0; p < penalities.length; p++) {
-//         text_html += 'Submitted with ' + penalities[p].late +
-//           ' day(s) late is penalized with ' + penalities[p].point +
-//           ' point(s)' +
-//           '<br />';
-//       }
-//     }
-//   }
-//   let grade = -1;
-//   if (submissionsArray) {
-//     for (value of submissionsArray) {
-//       if (value.exerciseId === exerciseId) {
-//         grade = parseInt(value.grade)
-//         text_html += '<pre>For the submission with the id(s): ' + value.collaboratorsId + '. <br />';
-//         text_html += 'Your current grade is: <strong> <font color="dc2f0a">' + grade + '</font></strong>. <br />';
-//         text_html += 'Submitted on: ' + value.timestamp + '. </pre>';
-//       }
-//     }
-//   }
-//   text_html += '<p>';
-//   if (grade === -1) {
-//     text_html += 'You have not solved this exercise yet. ';
-//   }
-//   text_html += solveButton(exerciseId);
-//   text_html += '</p>';
-//   text_html += '</div><!--exercise-->'
-//   return text_html
-// }
-
-
-// function htmlOfPeerExerciseInRegisteredCourse(exerciseId, peerExerciseObj) {
-//   text_html = ''
-//   text_html += '<div class=\'exercise\'>'
-//   text_html += '<h4>' +
-//     '<span class="glyphicon glyphicon-transfer"></span>  ' +
-//     peerExerciseObj.name +
-//     '  <span class="glyphicon glyphicon-transfer"></span>' +
-//     '</h4>';
-
-//   text_html += '<p>' + peerExerciseObj.description + '</p>';
-//   text_html += '<button name ="' + exerciseId +
-//     '" id="dl" class="btn btn-link"">Download PDF</button>';
-//   text_html += '<br /> <br />'
-
-
-//   text_html +=
-//     'Test deadline: ' + peerExerciseObj.deadlineTest + '<br />';
-//   text_html +=
-//     'Solution deadline: ' + peerExerciseObj.deadlineSolution +
-//     '<br />';
-//   text_html +=
-//     'Conflicts deadline: ' + peerExerciseObj.deadlineConflicts +
-//     '<br />';
-
-//   text_html +=
-//     'Test language: ' + peerExerciseObj.compilerTest + '<br />';
-//   text_html +=
-//     'Solution language: ' + peerExerciseObj.compilerSolution +
-//     '<br />';
-
-//   let phase = whichPhase(peerExerciseObj);
-//   text_html += '<h5><strong>' + phase + ':</strong></h5>'
-
-//   switch (phase) {
-//     case 'Test Phase':
-//       testPhase(peerExerciseObj, exerciseId);
-//       break;
-//     case 'Solution Phase':
-//       solutionPhase(peerExerciseObj, exerciseId);
-//       break;
-//     case 'Conflicts Phase':
-//       conflictsPhase(exerciseId);
-//       break;
-//     default:
-//       endGame(exerciseId);
-//   }
-
-//   text_html += '</p>';
-//   text_html += '</div><!--exercise-->'
-//   return text_html
-// }
-
-// /*
-//  * @param {int} minTest
-//  * @param {map} signatureMap
-//  */
-// function testPhase(peerExerciseObj, exerciseId) {
-//   text_html += 'You need to implement at least : ' + peerExerciseObj.minTest +
-//     ' tests.' +
-//     '<br />';
-//   text_html += 'Here is the list of the function you have to test: <br />';
-//   for (let sign of peerExerciseObj.signatureMap) {
-//     text_html += 'The function signature is: <strong>' + sign.func +
-//       '</strong> -> The class where the function reside is: <strong>' +
-//       sign.cla + '</strong> <br />';
-//   }
-//   text_html += '<button name ="' + exerciseId +
-//     '" id="btnTestPhase" class="btn btn-primary"">Submit test</button>';
-// }
-
-// /*
-//  * @param {map} signatureMap
-//  */
-// function solutionPhase(peerExerciseObj, exerciseId) {
-//   text_html +=
-//     'Here is the list of the function you have to implements: <br />';
-//   for (let sign of peerExerciseObj.signatureMap) {
-//     text_html += 'The function signature is: <strong>' + sign.func +
-//       '</strong> -> The class where the function reside is: <strong>' +
-//       sign.cla + '</strong> <br />';
-//   }
-
-//   text_html += '<button name ="' + exerciseId +
-//     '" id="btnSolutionPhase" class="btn btn-success"">Submit Solution</button>';
-// }
-
-// function conflictsPhase(exerciseId) {
-//   text_html += '<button name ="' + exerciseId +
-//     '" id="btnConflictsPhase" class="btn btn-danger"">Check for conflicts</button>';
-// }
-
-// /* @param {Object} peerGrades // exerciseObject we created with the grades. */
-// // TODO: Fix the bug includes notexercise fun
-// function endGame(exerciseId) {
-//   // if (homeUser.peerExerciseSolved) {
-//   //   if (homeUser.peerExerciseSolved.includes(exerciseId)) {
-//   //     // The user has been graded.
-//   //     // The show the grades.
-//   //   } else {
-//   //     text_html += 'You will receive a grade soon.'
-//   //   }
-//   // } else {
-//   //   text_html += 'You will receive a grade soon.'
-//   // }
-// }
-
-// // /**
-// //  * BUTTON MANAGE COURSE.
-// //  * Send he user to the manage course page.
-// //  */
-// // document.getElementById('btnManageCourses').addEventListener('click', e => {
-// //   document.location.href = 'manageCourses.html';
-// // });
-
-
-// $('body').on('click', '#btnTestPhase', function (e) {
-//   let exerciseId = e.target.name;
-//   let exercise = peerExercisesMap.get(exerciseId);
-//   localStorage.setItem('exercise', JSON.stringify(exercise));
-//   document.location.href = 'badkan.html?peerTestExercise=' + exerciseId;
-// });
-
-
-// $('body').on('click', '#btnSolutionPhase', function (e) {
-//   let exerciseId = e.target.name;
-//   let exercise = peerExercisesMap.get(exerciseId);
-//   localStorage.setItem('exercise', JSON.stringify(exercise));
-//   document.location.href = 'badkan.html?peerSolutionExercise=' + exerciseId;
-// });
-
-
-// $('body').on('click', '#btnConflictsPhase', function (e) {
-//   let exerciseId = e.target.name;
-//   document.location.href = 'conflicts.html?exercise=' + exerciseId;
-// });
-
-// $('body').on('click', '#dl', function (e) {
-//   let exerciseId = e.target.name;
-//   const file = firebase.storage().ref().child(exerciseId);
-//   file.getDownloadURL()
-//     .then((url) => {
-//       window.open(url);
-//     })
-//     .catch(function (error) {
-//       alert('There is no PDF for this exercise!')
-//     })
-// });
-
-// $('body').on('click', '.btn-solve', function (e) {
-//   let exerciseId = e.target.name;
-//   let exercise = exercisesMap.get(exerciseId);
-//   if (exercise.deadline && exercise.deadline.date) {
-//     if (isOpen(exercise.deadline)) {
-//       localStorage.setItem('exercise', JSON.stringify(exercise));
-//       document.location.href = 'badkan.html?exercise=' + exerciseId;
-//     } else {
-//       alert('The deadline for this exercise is over.')
-//     }
-//   } else {
-//     localStorage.setItem('exercise', JSON.stringify(exercise));
-//     document.location.href = 'badkan.html?exercise=' + exerciseId;
-//   }
-// });
-
-// $('body').on('click', '#register', function (e) {
-//   onLoading();
-//   let courseId = e.target.name;
-//   let course = coursesObject[courseId].course;
-//   registerSuccess(course, courseId);
-// });
