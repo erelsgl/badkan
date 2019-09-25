@@ -7,7 +7,8 @@
   <title>Submit exercise</title>
 
   <!-- Import js. -->
-  <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-auth.js"></script>
   <script src="util/firebaseConfig.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="util/html/accordion.js"></script>
@@ -23,70 +24,74 @@
 
 <body>
   <div id="header"></div>
+  <div id="loader"></div>
 
   <div id="main">
-    <div class="container">
-      <br>
-      <h1><b><span id="exerciseName" class="title_font"></span></b></h1>
-      <br>
-      <div class="menuArea git_zip">
-      <div class="naccs">
-        <div class="grid">
-          <div class="gc gc--1-of-3">
-            <div class="menu">
-              <div class="active github"><span class="light"></span><span>GitHub</span></div>
-              <div class="zip"><span class="light"></span><span>Zip</span></div>
-            </div>
-          </div>
-          <div class="gc gc--2-of-3">
-            <ul class="nacc">
-              <li class="active github">
-                <div>
-                  <label for="githubUrl">Enter here the Github URL. <br> Must begin with https and end with .git</label>
-                  <br>
-                  <input id="githubUrl" type="text" class="form-control" />
-                </div>
-              </li>
-              <li class="zip">
-                <div>
-                  <label for="zipFile">Upload here the zip file.</label>
-                  <br>
-                  <input id="zipFile" type="file" />
+    <form onsubmit="return false">
+      <div class="container">
+        <br>
+        <h1><b><span id="exerciseName" class="title_font"></span></b></h1>
+        <br>
+        <div class="menuArea git_zip">
+          <div class="naccs">
+            <div class="grid">
+              <div class="gc gc--1-of-3">
+                <div class="menu">
+                  <div class="active github"><span class="light"></span><span>GitHub</span></div>
+                  <div class="zip"><span class="light"></span><span>Zip</span></div>
                 </div>
               </div>
+              <div class="gc gc--2-of-3">
+                <ul class="nacc">
+                  <li class="active github">
+                    <div>
+                      <label for="githubUrl">Enter here the Github URL. <br> Must begin with https and end with
+                        .git</label>
+                      <br>
+                      <input id="githubUrl" type="text" class="form-control" />
+                    </div>
+                  </li>
+                  <li class="zip">
+                    <div>
+                      <label for="zipFile">Upload here the zip file.</label>
+                      <br>
+                      <input id="zipFile" type="file" />
+                    </div>
+              </div>
               </li>
-            </ul>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div id="submitterIds" class="container menuArea inputId" style="margin-top:1.5%">
-      <label for="userId">Your id:</label>
-      <input id="userId" type="text" class="form-control" /> <br>
-      <label for="collab1">Enter here the id of your first collaborator (if exists):</label>
-      <input id="collab1" type="text" class="form-control" /> <br>
-      <label for="collab2">Enter here the id of your second collaborator (if exists):</label>
-      <input id="collab2" type="text" class="form-control" /> <br>
-    </div>
-    <br>
-    <div class="menuArea gradeMenu">
-      <div id="saveGradeCheck" class="container">
-      <label for="saveGrade">Check it if you want the grade to be save</label> <br>
-      <input id="saveGrade" name="BoxSelect[]" type="checkbox"><label>Save the grade</label>
-    </div>
-    <div id="pad" class="container">
-      <button id="submit" class="btn btn_edit">Send <i class="glyphicon glyphicon-envelope"></i> </button>
-      <button id="clear" class="btn btn_edit">Clean <i class="glyphicon glyphicon-erase"></i></button>
-      <button id="clear_and_submit" class="btn btn_edit">Clean+Send <i class="glyphicon glyphicon-refresh"></i></button>
+      <div id="submitterIds" class="container menuArea inputId" style="margin-top:1.5%">
+        <label for="userId">Your id:</label>
+        <input id="userId" type="text" class="form-control" /> <br>
+        <label for="collab1">Enter here the id of your first collaborator (if exists):</label>
+        <input id="collab1" type="text" class="form-control" /> <br>
+        <label for="collab2">Enter here the id of your second collaborator (if exists):</label>
+        <input id="collab2" type="text" class="form-control" /> <br>
+      </div>
+      <br>
+      <div class="menuArea gradeMenu">
+        <div id="saveGradeCheck" class="container">
+          <label for="saveGrade">Check it if you want the grade to be save</label> <br>
+          <input id="saveGrade" name="BoxSelect[]" type="checkbox"><label>Save the grade</label>
+        </div>
+        <div id="pad" class="container">
+          <button id="submit" type="submit" class="btn btn_edit">Send <i class="glyphicon glyphicon-envelope"></i>
+          </button>
+          <button id="clear" class="btn btn_edit">Clean <i class="glyphicon glyphicon-erase"></i></button>
+          <button id="clear_and_submit" type="submit" class="btn btn_edit">Clean+Send <i
+              class="glyphicon glyphicon-refresh"></i></button>
+        </div>
+    </form>
+  </div>
+  <div id="submissionResult" class="container">
+    <h2>Submission result</h2>
+    <div id='output' dir='ltr'>
     </div>
   </div>
-
-    <div id="submissionResult" class="container">
-      <h2>Submission result</h2>
-      <div id='output' dir='ltr'>
-      </div>
-    </div>
-
   </div>
 
   <script type="text/javascript" src="app/badkan.js"></script>

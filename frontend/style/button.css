@@ -22,10 +22,13 @@
   transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
 }
 
-.enjoy-css:hover, .btn-solve, button.btn_edit, button.btn_delete:hover{
+.enjoy-css:hover,
+.btn-solve,
+button.btn_edit,
+button.btn_delete:hover {
   color: rgba(255, 255, 255, 1);
   background: #00bfff;
-  
+
   -webkit-transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
   -moz-transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
   -o-transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
@@ -75,7 +78,9 @@
 }
 
 
-div.btn-solve:hover, button.btn_edit:hover, button.btn_delete{
+div.btn-solve:hover,
+button.btn_edit:hover,
+button.btn_delete {
   background-color: transparent;
   color: #00bfff;
   border: 1px solid #00bfff;
@@ -85,6 +90,14 @@ div.btn-solve:hover, button.btn_edit:hover, button.btn_delete{
   transition: background-color 0.3s cubic-bezier(0, 0, 0, 0), color 0.3s cubic-bezier(0, 0, 0, 0), width 0.3s cubic-bezier(0, 0, 0, 0), border-width 0.3s cubic-bezier(0, 0, 0, 0), border-color 0.3s cubic-bezier(0, 0, 0, 0);
 }
 
-button.btn_delete{
-  float: right; 
+button.btn_delete {
+  float: right;
+}
+
+.astext {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
 }

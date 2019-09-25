@@ -107,9 +107,6 @@ ENV/
 #manualy added
 .vscode
 trace_table.csv
-exercises/*/
-statistics/*/
 database_exports/*
-moss/*/
 frontend/util/firebaseConfig.js
-restore/*.csv
+backend/servers/smtp/*txt

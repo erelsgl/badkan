@@ -45,7 +45,6 @@ async def save_grade(submission, websocket, grade, timestamp):
         url = submission["github_url"]
     create_or_update_submission(grade, submission["exercise_id"], submission["uid"], submission["country_id"],
                                 submission["collab1"], submission["collab2"], url, timestamp)
-    # TODO: eventually put the name of the collab if exists.
     await tee(websocket, "Your grade is successfully stored.")
 
 
@@ -84,7 +83,9 @@ async def run_submission(websocket, exercise, folder_name, output=None):
                                                 exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(
                                                     exercise["input_output_points"]),
                                                 exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], folder_name,
-                                                get_running_command(exercise["exercise_compiler"], exercise["main_file"])], websocket, output)
+                                                get_running_command(
+                                                    exercise["exercise_compiler"], exercise["main_file"])], websocket,
+                                               exercise["show_input"], exercise["show_output"], output)
 
 
 def dict_to_string(my_dicts):

@@ -90,15 +90,6 @@ function instructorPrivilege(checked) {
     }
 }
 
-function displayNoneById(id) {
-    document.getElementById(id).style.display = "none";
-}
-
-
-function displayBlockById(id) {
-    document.getElementById(id).style.display = "block";
-}
-
 function showSnackbar(message) {
     $('#snackbar').html(message);
     myClass = $('#snackbar')[0]
@@ -129,7 +120,7 @@ function checkEmptyFieldsAlert(args) {
             'An error occured!',
             'Please fill all the fields.',
             'error'
-          )
+        )
         return false;
     }
     return true;
@@ -140,6 +131,9 @@ function checkEmptyFieldsAlert(args) {
  * @param {String} unsafe 
  */
 function escapeHtml(unsafe) {
+    if (!unsafe) {
+        return ''
+    }
     return unsafe
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -158,4 +152,22 @@ function escapeHtmlWithRespectGit(unsafe) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+function showLoader() {
+    $('#main').hide();
+    $('#loader').show();
+}
+
+function hideLoader() {
+    $('#loader').hide();
+    $('#main').show();
+}
+
+function downloadGuide() {
+    doPostJSON("", "download_guide", "text", onFinishDownloadGuide)
+}
+
+function onFinishDownloadGuide(data) {
+    window.open(data)
 }

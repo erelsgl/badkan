@@ -26,3 +26,15 @@ body {
     display: none;
     position: relative;
 }
+
+#loader {
+    position: absolute;
+    /* This field can't be handle in "%" */
+    top:100px;  
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 100px;
+    height: 100px;
+}

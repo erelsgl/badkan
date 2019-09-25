@@ -18,12 +18,12 @@ $input
 EOF
 }
 
-run_standart_and_read_standart() {
+run_standard_and_read_standard() {
     input=$1
     return $(echo "$input" | $RUNNER)
 }
 
-run_standart_and_read_file() {
+run_standard_and_read_file() {
     input=$1
     $(echo "$input" | $RUNNER)
     return $(cat $OUTPUT_FILE_NAME)
@@ -36,7 +36,7 @@ run_file_and_read_file() {
     return $(cat $OUTPUT_FILE_NAME)
 }
 
-run_file_and_read_standart() {
+run_file_and_read_standard() {
     input=$1
     create_file $input
     return $($RUNNER)
@@ -68,21 +68,22 @@ for item in $INPUT_OUTPUT_POINTS; do
     iter=$(echo $item | tr "@*@" "\n")
     arr=($iter)
     input=${arr[0]}
+    echo "The input is" $input 
     expected_output=${arr[1]}
     points=${arr[2]}
-    if [[ ( $INPUT_FILE_NAME == "standart" ) &&  ( $OUTPUT_FILE_NAME == "standart") ]]; then
-        run_standart_and_read_standart $input
-    elif [[ ( $INPUT_FILE_NAME == "standart" ) && ( $OUTPUT_FILE_NAME != "standart" ) ]]; then
-        run_standart_and_read_file $input
-    elif [[ ( $INPUT_FILE_NAME != "standart" ) &&  ( $OUTPUT_FILE_NAME == "standart" ) ]]; then
-        run_file_and_read_standart $input
-    elif [[ ( $INPUT_FILE_NAME != "standart" ) &&  ( $OUTPUT_FILE_NAME != "standart" ) ]]; then
+    if [[ ( $INPUT_FILE_NAME == "standard" ) &&  ( $OUTPUT_FILE_NAME == "standard") ]]; then
+        run_standard_and_read_standard $input
+    elif [[ ( $INPUT_FILE_NAME == "standard" ) && ( $OUTPUT_FILE_NAME != "standard" ) ]]; then
+        run_standard_and_read_file $input
+    elif [[ ( $INPUT_FILE_NAME != "standard" ) &&  ( $OUTPUT_FILE_NAME == "standard" ) ]]; then
+        run_file_and_read_standard $input
+    elif [[ ( $INPUT_FILE_NAME != "standard" ) &&  ( $OUTPUT_FILE_NAME != "standard" ) ]]; then
         run_file_and_read_file $input
-    else  # If the input is not standart.
+    else  # If the input is not standard.
         echo "error..."
     fi;
     output=$?
-    echo "Your output is" $output  # Make this parameter.
+    echo "Your output is" $output  
     edit_grade $output $expected_output $points
 done
 
