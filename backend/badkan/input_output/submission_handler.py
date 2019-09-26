@@ -72,8 +72,11 @@ async def save_github_private_submission(zip_filename, curl_url, uid):
     print(token)
     if token is not None:
         authorization = "Authorization: token " + token
-        await terminal_command_log(["curl", "-L", "-o", zip_filename, "-H", authorization, curl_url])
-        return True
+        result = await terminal_command_return(["curl", "-L", "-o", zip_filename, "-H", authorization, "-w '%{http_code}'", curl_url])
+        if "404" in result: 
+            return False
+        else:
+            return True
     else:
         return False
 
