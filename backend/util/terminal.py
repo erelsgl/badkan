@@ -45,7 +45,7 @@ async def tee_process(proc, websocket):
 
 
 def terminal_command(args):
-    return subprocess.Popen(args, stdout=subprocess.PIPE)
+    return subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
 
 async def docker_command(args):

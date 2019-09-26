@@ -186,6 +186,12 @@ def download_guide():
     return download_guide_instructor()
 
 
+@app.route('/add_github_token/<uid>/<token>/', methods=["POST"])
+def add_github_token(uid, token):
+    update_user_github_token(uid, token)
+    return 'OK'
+
+
 @app.after_request
 def add_headers(response):
     response.headers.add('Access-Control-Allow-Origin', '*')

@@ -87,11 +87,12 @@ async function settings() {
         allowOutsideClick: false,
         title: 'Settings',
         html: '<label for="name">Name: </label>' +
-            '<input id="name" class="swal2-input" value=' + userDetails["name"] + '>' + // Retreive here the data.
+            '<input id="name" class="swal2-input" value=' + userDetails["name"] + '>' +
             '<label for="lastname">Last name: </label>' +
-            '<input id="lastname" class="swal2-input" value=' + userDetails["last_name"] + '>' + // Retreive here the data.
+            '<input id="lastname" class="swal2-input" value=' + userDetails["last_name"] + '>' +
             '<label for="user_country_id">Id</label>' +
-            '<input id="user_country_id" class="swal2-input" value=' + userDetails["country_id"] + '>' + // Retreive here the data.
+            '<input id="user_country_id" class="swal2-input" value=' + userDetails["country_id"] + '>' +
+            '<a class="btn btn-primary" onclick="addGitHubToken();">Add GitHub token</a><br><br>' +
             '<a class="btn btn-danger" onclick="deleteConfirmation();">Delete account</a>',
         showCancelButton: true,
         focusConfirm: false,
@@ -123,6 +124,27 @@ function deleteConfirmation() {
             doPostJSON(JSON.stringify({
                 uid: userUid,
             }), "delete_account", "text", signOut)
+        }
+    })
+}
+
+function addGitHubToken() {
+    Swal.fire({
+        title: 'Add GitHub personal access token.',
+        html: 'Once added, you will be able to upload link of GitHub private repository. To generate the token, please, follow the instructions: <a class="btn btn-link" href="https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line">here</a>',
+        input: 'text',
+        inputPlaceholder: 'Enter your token',
+        showCancelButton: true,
+        preConfirm: (result) => {
+            if (!result) {
+                Swal.showValidationMessage(
+                    `Please enter the token.`
+                )
+            }
+        }
+    }).then((result) => {
+        if (result.value) {
+            doPostJSON("", "add_github_token/" + userUid + "/" + result.value, "text", () => {})
         }
     })
 }
@@ -176,5 +198,5 @@ function reformatText(text) {
         "user instructor: " + userDetails.instructor + "\n" +
         "user name: " + userDetails.name + "\n" +
         "user last_name: " + userDetails.last_name + "\n" +
-        "user email: " + userEmail + "\n" 
+        "user email: " + userEmail + "\n"
 }
