@@ -1,5 +1,5 @@
 // Here are all the links needed by the header
-var links = ["style/header.css", "style/shape.css", "style/loader.css",
+var links = ["style/header.css?version=1", "style/shape.css?version=1", "style/loader.css?version=1",
     "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css", "https://www.w3schools.com/w3css/4/w3.css"
 ];
 for (index = 0; index < links.length; ++index) {
@@ -16,8 +16,8 @@ for (index = 0; index < links.length; ++index) {
 }
 
 // Here are all the script needed by the header
-var scripts = ["util/utils.js",
-    "util/protocols/httpProtocol.js", "https://cdn.jsdelivr.net/npm/sweetalert2@8", "data/retreiveUser.js"
+var scripts = ["util/utils.js?version=1",
+    "util/protocols/httpProtocol.js?version=1", "https://cdn.jsdelivr.net/npm/sweetalert2@8", "data/retreiveUser.js?version=1"
 ];
 for (index = 0; index < scripts.length; ++index) {
     var script = document.createElement('script');
