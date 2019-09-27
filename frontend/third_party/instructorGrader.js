@@ -38,14 +38,13 @@ function currentSubmissionView(exerciseId) {
 }
 
 function displayCurrentSubmissions(data) {
+    let ids = data.ids
     let html = '<div id="submissions">'
     let exerciseId = ""
-    for (submissionObj of Object.entries(data)) {
+    for (submissionObj of Object.entries(data.submissions)) {
         let submission_id = submissionObj[0]
         let submission = submissionObj[1]
-        let collaborators_filtered = submission.collaborators.filter(function (el) {
-            return el != "";
-        });
+        let collaborators_filtered = deleteBlank(submission.collaborators)
         html += '<button class="btn btn-link" onclick="focusSubmission(' +
             "'" + submission.exercise_id + "','" +
             submission.grade + "','" +
@@ -53,9 +52,9 @@ function displayCurrentSubmissions(data) {
             submission.comment + "','" +
             submission.uid + "','" +
             submission_id + "','" +
-            collaborators_filtered.join(" && ") + "'" +
+            "Submitter: " + ids[submission.uid] + "<br> Team: " + collaborators_filtered.join(" && ") + "'" +
             ')">' +
-            collaborators_filtered.join(" && ") + '</button><br>'
+            "Submitter: " + ids[submission.uid] + "<br> Team: " + collaborators_filtered.join(" && ") + '</button><br>'
         exerciseId = submission.exercise_id
     }
     html += '<br><button class="btn btn_submission" onclick="runSubmissions(' + "'" + exerciseId + "'" + ')" style="border:1px solid green"><span>Run Submissions</button></div>'
@@ -155,7 +154,7 @@ function manualGrade(submissionId, grade) {
             const manualGrade = escapeHtml($("#manual_grade").val())
             const comment = escapeHtml($("#comment").val())
             let json = JSON.stringify({
-                "manual_grade" : manualGrade,
+                "manual_grade": manualGrade,
                 "comment": comment
             })
             doPostJSON(json, "manual_grade/" + submissionId, "text", reload)

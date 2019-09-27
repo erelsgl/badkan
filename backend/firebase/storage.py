@@ -3,8 +3,20 @@ from google.cloud import storage
 
 
 def upload_pdf_instruction(pdf_instruction, exercise_id):
+    print(pdf_instruction)
+    if not check_pdf_size(pdf_instruction):
+        return False
     blob = bucket.blob("pdf_instruction/"+exercise_id)
     blob.upload_from_file(pdf_instruction)
+    return True
+
+
+def check_pdf_size(pdf_instruction):
+    pdf_instruction.flush()
+    size = os.fstat(pdf_instruction.fileno()).st_size
+    if size > 1000000:
+        return False
+    return True
 
 
 def download_pdf_instruction(exercise_id):
@@ -37,9 +49,9 @@ def download_pdf_instruction(exercise_id):
 
 
 def download_guide_instructor():
-	blob = bucket.blob("guide/badkan_guide.pdf")
-	if blob.exists():
-		return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=badkan_guide.pdf')
+    blob = bucket.blob("guide/badkan_guide.pdf")
+    if blob.exists():
+        return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=badkan_guide.pdf')
 
 
 async def download_submissions_zip(exercise_id):

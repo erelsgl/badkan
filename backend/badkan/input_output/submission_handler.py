@@ -27,11 +27,13 @@ async def check_submission(websocket, submission):
             await tee(websocket, "If your repository is private, make sure you provided your personal GitHub token.")
             await tee(websocket, "To do so, go to settings and click on the button 'Add GitHub token'")
             return
-        await upload_submission_to_docker_and_firebase(submission["exercise_id"], submission["uid"], zip_filename)
     else:
         edit_csv_trace(str(currentDT), "zip", submitters,
                        "START", exercise["exercise_name"], zip_filename)
-        await upload_submission_to_docker_and_firebase(submission["exercise_id"], submission["uid"], zip_filename)
+    if not await check_submission_size(zip_filename):
+        await tee(websocket, "Your submission takes too much place. Please submit a smaller file (less than 4MB).")
+        return
+    await upload_submission_to_docker_and_firebase(submission["exercise_id"], submission["uid"], zip_filename)
     output = []
     grade = await run_submission(websocket, exercise, submission["uid"], output)
     if "save_grade" in submission:
@@ -42,6 +44,14 @@ async def check_submission(websocket, submission):
     else:
         await tee(websocket, "This submission is meaningless, any grade has been stored. <br> < If you want the grade to be stored, please check the \"Save the grade\" button.")
     return 'OK'
+
+
+async def check_submission_size(zip_filename):
+    statinfo = os.stat(zip_filename)
+    if statinfo.st_size > 4194304:
+        await terminal_command_log(["rm", zip_filename])
+        return False
+    return True
 
 
 async def save_grade(submission, websocket, grade, timestamp):
@@ -73,7 +83,7 @@ async def save_github_private_submission(zip_filename, curl_url, uid):
     if token is not None:
         authorization = "Authorization: token " + token
         result = await terminal_command_return(["curl", "-L", "-o", zip_filename, "-H", authorization, "-w '%{http_code}'", curl_url])
-        if "404" in result: 
+        if "404" in result:
             return False
         else:
             return True

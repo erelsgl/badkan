@@ -44,6 +44,7 @@ let divHeader = '<div class="container">' +
     '<button id=button_profile class="dropbtn"></button>' +
     '<div class="dropdown-content">' +
     '<a href="profile.html" style="text-decoration: none; color: black;"><i class="glyphicon glyphicon-user"></i> Profile</a>' +
+    '<a id=manage_header href="manage.html" style="text-decoration: none; color: black; display: none;"><i class="glyphicon glyphicon-education"></i> Manage</a>' +
     '<a href="#settings" style="text-decoration: none; color: black;"><i class="glyphicon glyphicon-cog"></i> Settings</a>' +
     '<a href="#logout" style="text-decoration: none; color: black;"><i class="glyphicon glyphicon-off"></i> Log Out</a>' +
     '</div>' +

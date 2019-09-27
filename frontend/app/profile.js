@@ -86,11 +86,12 @@ function createHistoryTable(submissions, exercise_name) {
     content += '<tr><th>Exercise</th><th>Grade</th><th>Manual Grade</th><th>Comment</th><th>Collaborators</th><th>URL</th><th>Timestamp</th><th></th></tr></thead><tbody>'
     for (submissionObj of Object.entries(submissions)) {
         submission = submissionObj[1]
+        let collaborators_filtered = deleteBlank(submission.collaborators)
         content += '<tr><td>' + exercise_name[submission.exercise_id] +
             '</td><td>' + submission.grade +
             '</td><td>' + (submission.manual_grade ? submission.manual_grade : "None") +
             '</td><td>' + (submission.comment ? submission.comment : "None") +
-            '</td><td>' + submission.collaborators +
+            '</td><td>' + collaborators_filtered +
             '</td><td>' + submission.url +
             '</td><td>' + submission.timestamp +
             '</td><td><button class="btn btn_edit" onclick="solveExercise(' + "'" + submission.exercise_id + "'" +
