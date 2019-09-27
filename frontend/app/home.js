@@ -1,10 +1,10 @@
 $('a[href="#mycourses"]').click(function () {
   showMyCourses()
-});
+})
 
 $('a[href="#public"]').click(function () {
   showPublic()
-});
+})
 
 function showPublic() {
   $('a[href="#mycourses"]').removeClass("current");

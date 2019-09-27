@@ -21,7 +21,12 @@ async def check_submission(websocket, submission):
         wget_url = "https://github.com/"+username+"/"+repository+"/archive/master.zip"
         edit_csv_trace(str(
             currentDT), submission["github_url"], submitters, "START", exercise["exercise_name"], zip_filename)
-        await save_github_submission(submission, zip_filename, wget_url)
+        if not await save_github_submission(submission, zip_filename, wget_url, submission["uid"]):
+            await tee(websocket, "A problem with the GitHub URL occured.")
+            await tee(websocket, "Please, check that your repository exists.")
+            await tee(websocket, "If your repository is private, make sure you provided your personal GitHub token.")
+            await tee(websocket, "To do so, go to settings and click on the button 'Add GitHub token'")
+            return
         await upload_submission_to_docker_and_firebase(submission["exercise_id"], submission["uid"], zip_filename)
     else:
         edit_csv_trace(str(currentDT), "zip", submitters,
@@ -54,9 +59,26 @@ def save_zip_submission(zip_file, exercise_id, uid):
                   exercise_id + "/" + uid + ".zip")
 
 
-async def save_github_submission(submission, zip_filename, wget_url):
+async def save_github_submission(submission, zip_filename, wget_url, uid):
     create_folder_if_not_exists(submission["exercise_id"], submission["uid"])
-    await terminal_command_log(["wget", wget_url, "-O", zip_filename])
+    result = await terminal_command_return(["wget", wget_url, "-O", zip_filename])
+    if "ERROR 404: Not Found" in result:
+        return await save_github_private_submission(zip_filename, wget_url, uid)
+    return True
+
+
+async def save_github_private_submission(zip_filename, curl_url, uid):
+    token = check_and_retreive_github_token(uid)
+    print(token)
+    if token is not None:
+        authorization = "Authorization: token " + token
+        result = await terminal_command_return(["curl", "-L", "-o", zip_filename, "-H", authorization, "-w '%{http_code}'", curl_url])
+        if "404" in result: 
+            return False
+        else:
+            return True
+    else:
+        return False
 
 
 def create_folder_if_not_exists(exercise_id, uid):

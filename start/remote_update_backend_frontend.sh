@@ -5,4 +5,5 @@
 #
 
 git push
+echo "don't forget to update the script version"
 ssh root@104.248.40.179 "cd /root/badkan; bash start/update_backend_frontend.sh"

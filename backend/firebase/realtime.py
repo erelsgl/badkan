@@ -294,7 +294,7 @@ def edit_grade_of_submission(submission_id, grade, manual_grade, comment):
 def new_manual_grade(submission_id, manual_grade, comment):
     ref = db.reference('submissions/'+submission_id)
     ref.update({
-        "manual_grade":False if manual_grade == "" else manual_grade,
+        "manual_grade": False if manual_grade == "" else manual_grade,
         "comment": False if comment == "" else comment
     })
     return 'OK'
@@ -348,7 +348,7 @@ def get_submissions_and_grader_priviliege(uid):
     graders = courses_ref.order_by_child('grader_uid').equal_to(uid).get()
     submissions = submissions_ref.order_by_child('uid').equal_to(uid).get()
     answer = dict()
-    answer["graders"] = graders  # TODO: Check grader
+    answer["graders"] = graders  
     answer["submissions"] = submissions
     course_ids = []
     for course_id in graders:
@@ -371,3 +371,15 @@ def get_exercise_name_by_id(exercise_id):
 def is_instructor(uid):
     user = get_user_details_data(uid)
     return user["instructor"] == "True"
+
+
+def update_user_github_token(uid, token):
+    user_ref = db.reference('userDetails/' + uid)
+    user_ref.update({
+        "github_token": token
+    })
+
+
+def check_and_retreive_github_token(uid):
+    user_ref = db.reference('userDetails/' + uid + "/github_token")
+    return user_ref.get()
