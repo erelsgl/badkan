@@ -76,7 +76,8 @@ def delete_course(course_id):
 def create_exercise():
     exercise_id = create_new_exercise(json.loads(request.form["json"]))
     if "file" in request.files:
-        upload_pdf_instruction(request.files["file"], exercise_id)
+        if not  upload_pdf_instruction(request.files["file"], exercise_id):
+            return abort(403)
     return 'OK'
 
 
@@ -84,7 +85,8 @@ def create_exercise():
 def edit_exercise(exercise_id):
     edit_old_exercise(json.loads(request.form["json"]), exercise_id)
     if "file" in request.files:
-        upload_pdf_instruction(request.files["file"], exercise_id)
+        if not upload_pdf_instruction(request.files["file"], exercise_id):
+            return abort(403)
     return 'OK'
 
 
