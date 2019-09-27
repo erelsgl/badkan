@@ -185,6 +185,29 @@ def get_country_ids_by_uids_key_value(uids):
     return country_ids
 
 
+async def retreive_country_id(uid, event_loop):
+    user_ref = db.reference('userDetails/' + uid + "/country_id")
+    return await event_loop.run_in_executor(executor, user_ref.get), uid
+
+
+async def retreive_country_ids(uids, event_loop):
+    coroutines = [retreive_country_id(
+        uid, event_loop) for uid in uids]
+    completed, pending = await asyncio.wait(coroutines)
+    ids = dict()
+    for item in completed:
+        ids[item.result()[1]] = item.result()[0]
+    return ids
+
+
+def get_country_ids_by_uids_key_value_async(uids):
+    event_loop = asyncio.new_event_loop()
+    try:
+        return event_loop.run_until_complete(retreive_country_ids(uids, event_loop))
+    finally:
+        event_loop.close()
+
+
 def create_new_exercise(json):
     ref = db.reference('exercises')
     new_ref = ref.push(json)
@@ -277,8 +300,15 @@ def new_submission_to_exercise(exercise_id, submission_id):
 
 def retreive_exercise_submissions(exercise_id):
     submissions_ref = db.reference('submissions/')
-    return submissions_ref.order_by_child(
+    submissions = submissions_ref.order_by_child(
         'exercise_id').equal_to(exercise_id).get()
+    uids = []
+    for submission in submissions.values():
+        uids.append(submission["uid"])
+    answer = dict()
+    answer["ids"] = get_country_ids_by_uids_key_value_async(uids)
+    answer["submissions"] = submissions
+    return answer
 
 
 def edit_grade_of_submission(submission_id, grade, manual_grade, comment):
@@ -348,7 +378,7 @@ def get_submissions_and_grader_priviliege(uid):
     graders = courses_ref.order_by_child('grader_uid').equal_to(uid).get()
     submissions = submissions_ref.order_by_child('uid').equal_to(uid).get()
     answer = dict()
-    answer["graders"] = graders  
+    answer["graders"] = graders
     answer["submissions"] = submissions
     course_ids = []
     for course_id in graders:

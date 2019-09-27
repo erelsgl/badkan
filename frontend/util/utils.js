@@ -171,3 +171,9 @@ function downloadGuide() {
 function onFinishDownloadGuide(data) {
     window.open(data)
 }
+
+function deleteBlank(array) {
+    return array.filter(function (el) {
+        return el != "";
+    });
+}

@@ -141,7 +141,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
             '<button class="btn btn_manage" onclick="mossCommand(' + "'" + exerciseId + "'" + ')" style="border:1px solid red"><span>Check Plagiarism</button>' +
             '<button class="btn btn_manage" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')" style="border:1px solid grey"><span>Download Statistics</button>' +
             '<button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button>' +
-            '</div>' : "");
+            '</div>' : '<div class="manage_button">No submission available</div>');
     return html;
 }
 

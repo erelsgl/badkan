@@ -17,16 +17,10 @@ function doPostJSON(data, target, dataType, onFinish, port = 9000, onBlobFinish 
         data: data,
         dataType: dataType,
         complete: function (xmlHttp) {
-            if (xmlHttp.status != 200) {
-                top.location.href = 'index.html';
-            }
+            handleStatus(xmlHttp.status)
         }
     }).done(function (data) {
-        if (data == "OK") { // If the return is OK, there is no need to use the data.
-            onFinish();
-        } else {
-            onFinish(data)
-        }
+        onFinish(data)
     });
 }
 
@@ -45,16 +39,10 @@ function doPostJSONAndFile(data, target, dataType, onFinish) {
         data: data,
         dataType: dataType,
         complete: function (xmlHttp) {
-            if (xmlHttp.status != 200) {
-                top.location.href = 'index.html';
-            }
+            handleStatus(xmlHttp.status)
         }
     }).done(function (data) {
-        if (data == "OK") { // If the return is OK, there is no need to use the data.
-            onFinish();
-        } else {
-            onFinish(data)
-        }
+        onFinish(data)
     });
 }
 
@@ -77,15 +65,22 @@ function doGETJSON(data, target, dataType, onFinish, type = "GET") {
         data: data,
         dataType: dataType,
         complete: function (xmlHttp) {
-            if (xmlHttp.status != 200) {
-                top.location.href = 'index.html';
-            }
+            handleStatus(xmlHttp.status)
         }
     }).done(function (data) {
-        if (data == "OK") { // If the return is OK, there is no need to use the data.
-            onFinish();
-        } else {
-            onFinish(data)
-        }
+        onFinish(data)
     });
+}
+
+function handleStatus(status) {
+    if (status == 404) {
+        top.location.href = 'index.html';
+    }
+    if (status == 403) {
+        alert("The pdf file is too large, please upload a smaller file.")
+    }
+    if (status != 200) {
+        alert("An error occured.")
+        location.reload()
+    }
 }
