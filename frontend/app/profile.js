@@ -9,6 +9,8 @@ function onFinishRetreiveData(data) {
     }
     if (!jQuery.isEmptyObject(data.submissions)) {
         createHistoryTable(data.submissions, data.exercise_name)
+    } else {
+        noTableGrades()
     }
     if (data.exercises && !jQuery.isEmptyObject(data.exercises[0])) {
         graderPrivilege(data.graders, data.exercises)
@@ -20,10 +22,13 @@ function displayGuide() {
     $('#guide').append('<button class="btn btn-link" onclick="downloadGuide()">Download Guide</button>');
 }
 
+function noTableGrades() {
+    $("#submissions_table").append('<div class="grades_msg"><img class=warning src="images/msg-err.png"> No grade available</div>')
+}
 function displayDataUser() {
     consoleText([userDetails.name + " " + userDetails.last_name, "id " + userDetails.country_id, userEmail,
-            (userDetails.instructor == "True" ? "Instructor access" : "")
-        ],
+    (userDetails.instructor == "True" ? "Instructor access" : "")
+    ],
         'user_data',
         ['white']);
 }
@@ -109,18 +114,18 @@ function graderPrivilege(courses, exercises) {
 }
 
 function createGraderTable(courseName, exercises) {
-    let content = '<label  class="label_grader_table"><h1>Grader Privilege for the course ' + courseName + '.</h1></label>' +
+    let content = '<label  class="label_grader_table"><h1 style="border-bottom: 2px solid black">Grader Privilege for the course ' + courseName + ' :</h1></label>' +
         '<label id=><div class="grader_table"><table class="pure-table pure-table-bordered"><tbody>'
     for (exercisesObj of Object.entries(exercises)) {
         let exerciseId = exercisesObj[0]
         let exercise = exercisesObj[1]
         if (exercise.submissions) {
             content += '<tr><td>' + exercise.exercise_name +
-                '</td><td><button class="btn btn_manage" onclick="downloadGradesExercise(' + myStringify(exercise.submissions) + "'" + exercise.exercise_name + "'" + ')" style="border:1px solid green"><span>Download Grades</button>' +
-                '</td><td><button class="btn btn_manage" onclick="currentSubmissionView(' + "'" + exerciseId + "'" + ')" style="border:1px solid blue"><span>Current Submissions</button>' +
-                '</td><td><button class="btn btn_manage" onclick="mossCommand(' + "'" + exerciseId + "'" + ')" style="border:1px solid red"><span>Check Plagiarism</button>' +
-                '</td><td><button class="btn btn_manage" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')" style="border:1px solid grey"><span>Download Statistics</button>' +
-                '</td><td><button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button></tr>'
+                '</td><td><button class="btn btn_submission" onclick="downloadGradesExercise(' + myStringify(exercise.submissions) + "'" + exercise.exercise_name + "'" + ')" style="border:1px solid green"><span>Download Grades</button>' +
+                '</td><td><button class="btn btn_submission" onclick="currentSubmissionView(' + "'" + exerciseId + "'" + ')" style="border:1px solid blue"><span>Current Submissions</button>' +
+                '</td><td><button class="btn btn_submission" onclick="mossCommand(' + "'" + exerciseId + "'" + ')" style="border:1px solid red"><span>Check Plagiarism</button>' +
+                '</td><td><button class="btn btn_submission" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')" style="border:1px solid grey"><span>Download Statistics</button>' +
+                '</td><td><button class="btn btn_submission" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button></tr>'
         }
     }
     content += "</tbody></table></div>"

@@ -50,17 +50,6 @@
 }
 
 
-select.input, textarea.input {
-    /* just "box-shadow" it's not possible to convert to % */
-    -webkit-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
-    -moz-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
-    box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
-    overflow: auto;
-    border: 1px solid #aaa;
-}
-
-
-
 /* Cachons la case à cocher */
 .radio_checkbox {
     position: relative;
@@ -143,59 +132,4 @@ div.panel {
 
 .gc--3-of-4-manage {
     width: 75%;
-}
-
-div.manage_button {
-    width: 20%;
-    float: right;
-    margin-right: 5%;
-}
-
-button.btn_manage, button.btn_submission{
-    margin-top:3%;
-    margin-bottom: 27%;
-    border-radius: 4px;
-    text-align: center;
-    font-size: 14px;
-    padding: 15px;
-    width: 120%;
-    transition: all 0.4s;
-    cursor: pointer;
-    background:whitesmoke;
-}
-button.btn_submission{
-    margin-bottom: 3%;
-}
-button.btn_course, button.btn_submission{
-    background: white;
-}
-
-button.btn_manage span, button.btn_submission span{
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.4s;
-}
-
-button.btn_manage span:after, button.btn_submission span:after{
-    content: '\00bb';
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -20px;
-    transition: 0.5s;
-}
-
-button.btn_manage:hover span, button.btn_submission:hover span{
-    padding-right: 25px;
-}
-
-button.btn_manage:hover span:after, button.btn_submission:hover span:after{
-    opacity: 1;
-    right: 0;
-}
-
-button.btn_submission{
-    margin-top: 10%;
-    width: 100%;
 }

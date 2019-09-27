@@ -13,3 +13,20 @@
 #label_submissions_table {
     margin-top: 15%;
 }
+
+#guide{
+    background-color: whitesmoke;
+    text-align: center;
+    width: 58%;
+    margin-left: 19%;
+}
+
+.grades_msg{
+    background-color: whitesmoke;
+    border: 1px solid grey;
+    margin: 0 20% 0 20%;
+    padding: 10px 20px 5px 42px;
+    text-align: center;
+    border-radius: 4%/35%;
+    box-shadow: 5px 10px 18px grey;
+}
