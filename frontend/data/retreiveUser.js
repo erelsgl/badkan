@@ -34,6 +34,9 @@ function onFinishRetreiveUser(data) {
     let display_name = data["display_name"].split(" ");
     userDetails["name"] = display_name[0];
     userDetails["last_name"] = display_name[1];
+    if (userDetails.instructor == "True") {
+        $("#manage_header").show()
+    }
     $("#button_profile").html(userDetails["name"]);
     $('#header').show();
     onLoadMain();
