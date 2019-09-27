@@ -558,5 +558,6 @@ Notice that at any moment, it's possible to change the plan.
 To clean up the data of the whole project:
 
 - Delete the data of the firebase realtime db, storage and authentification from the firebase console.
-- Delete all the subfolders of the folder backend/submissions/
+- Delete all the subfolders of the folder backend/submissions/ (sudo rm -r ./*)
+
 

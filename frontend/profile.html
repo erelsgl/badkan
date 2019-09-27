@@ -21,6 +21,8 @@
     <link rel="stylesheet" href="style/app/profile.css?version=1">
     <link rel="stylesheet" href="style/button.css?version=1">
     <link rel="stylesheet" href="style/terminaltext.css?version=1">
+    <link rel="stylesheet" href="style/thirdparty.css?version=1">
+    <link rel="stylesheet" href="style/third_party/instructorGrader.css?version=1">
 </head>
 
 <body>
@@ -29,13 +31,13 @@
 
     <div id="main">
         <div class="container">
-            <div id="guide"></div>
             <div class='console-container'><span id='user_data'></span>
                 <div class='console-underscore' id='console'>&#95;</div>
             </div>
 
             <label id="label_submissions_table" for="submissions_table">
-                <h1>Your grades history.</h1>
+                <h1 style="border-bottom: 2px solid black">Your grades history :</h1>
+                <br>
             </label>
             <div id="submissions_table">
             </div>
@@ -43,6 +45,9 @@
             </div>
         </div>
     </div>
+    <br>
+    <br>
+    <div id="guide"></div>
 
 
     <script type="text/javascript" src="app/profile.js?version=1"></script>

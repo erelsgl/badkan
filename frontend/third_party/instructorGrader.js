@@ -86,16 +86,16 @@ function editGrade(submissionId, grade, manualGrade, comment) {
     Swal.fire({
         title: 'Choose a new grade',
         html: '<div class="edit_grade">The actual grade is ' + grade + '<br><br>' +
-            '<label for="new_grade">Enter the new grade</label>' +
+            '<label for="new_grade" class="text">Enter the new grade</label>' +
             '<input id="new_grade" class="courseExerciseInputEdit" value="' + grade + '"></input><br><br>' +
             (manualGrade != "false" ?
                 '<br>The actual manual grade is ' + manualGrade + '<br><br>' +
-                '<label for="new_manual_grade">Enter the new manual grade</label>' +
+                '<label for="new_manual_grade" class="text">Enter the new manual grade</label>' +
                 '<input id="new_manual_grade" class="courseExerciseInputEdit" value="' + manualGrade + '"></input><br><br>' :
                 "") +
             (comment != "false" ?
-                '<label for="new_comment">Enter the new comment</label>' +
-                '<textarea id="new_comment" class="courseExerciseInputEdit">' + comment + '</textarea><br><br>' :
+                '<label for="new_comment" class="text">Enter the new comment</label>' +
+                '<textarea id="new_comment" class="instructorGrader input">' + comment + '</textarea><br><br>' :
                 '') +
             '<div/>',
         focusConfirm: false,
@@ -143,10 +143,10 @@ function manualGrade(submissionId, grade) {
     Swal.fire({
         title: 'Manual Grade',
         html: '<div class="manual_grade">The actual grade given by the badkan is ' + grade + '<br><br>' +
-            '<label for="manual_grade">Enter the manual grade</label>' +
+            '<label for="manual_grade" class="text">Enter the manual grade</label>' +
             '<input id="manual_grade" class="courseExerciseInputEdit"></input><br><br>' +
-            '<label for="comment">Enter a comment</label>' +
-            '<textarea id="comment" class="courseExerciseInputEdit"></textarea><br><br>' +
+            '<label for="comment" class="text">Enter a comment</label>' +
+            '<textarea id="comment" class="instructorGrader input"></textarea><br><br>' +
             '<div/>',
         focusConfirm: false,
         showCancelButton: true,
