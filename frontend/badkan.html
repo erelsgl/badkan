@@ -62,36 +62,37 @@
             </div>
           </div>
         </div>
-      </div>
-      <div id="submitterIds" class="container menuArea inputId" style="margin-top:1.5%">
-        <label for="userId">Your id:</label>
-        <input id="userId" type="text" class="form-control" /> <br>
-        <label for="collab1">Enter here the id of your first collaborator (if exists):</label>
-        <input id="collab1" type="text" class="form-control" /> <br>
-        <label for="collab2">Enter here the id of your second collaborator (if exists):</label>
-        <input id="collab2" type="text" class="form-control" /> <br>
-      </div>
-      <br>
-      <div class="menuArea gradeMenu">
-        <div id="saveGradeCheck" class="container">
-          <label for="saveGrade">Check it if you want the grade to be save</label> <br>
-          <input id="saveGrade" name="BoxSelect[]" type="checkbox"><label>Save the grade</label>
+        <div id="submitterIds" class="menuArea inputId">
+          <label for="userId">Your id:</label>
+          <input id="userId" type="text" class="form-control" /> <br>
+          <label for="collab1">Enter here the id of your first collaborator (if exists):</label>
+          <input id="collab1" type="text" class="form-control" /> <br>
+          <label for="collab2">Enter here the id of your second collaborator (if exists):</label>
+          <input id="collab2" type="text" class="form-control"/> <br>
         </div>
-        <div id="pad" class="container">
-          <button id="submit" type="submit" class="btn btn_edit">Send <i class="glyphicon glyphicon-envelope"></i>
-          </button>
-          <button id="clear" class="btn btn_edit">Clean <i class="glyphicon glyphicon-erase"></i></button>
-          <button id="clear_and_submit" type="submit" class="btn btn_edit">Clean+Send <i
-              class="glyphicon glyphicon-refresh"></i></button>
-        </div>
+        <br>
+        <div class="menuArea gradeMenu">
+          <div id="saveGradeCheck">
+            <label for="saveGrade">Check it if you want the grade to be save</label> <br>
+            <input id="saveGrade" name="BoxSelect[]" type="checkbox"><label>Save the grade</label>
+          </div>
+          <div id="pad">
+            <button id="submit" type="submit" class="btn btn_edit">Send <i class="glyphicon glyphicon-envelope"></i>
+            </button>
+            <button id="clear" class="btn btn_edit">Clean <i class="glyphicon glyphicon-erase"></i></button>
+            <button id="clear_and_submit" type="submit" class="btn btn_edit">Clean+Send <i
+                class="glyphicon glyphicon-refresh"></i></button>
+          </div>
     </form>
   </div>
-  <div id="submissionResult" class="container">
+  <div id="submissionResult">
     <h2>Submission result</h2>
     <div id='output' dir='ltr'>
     </div>
   </div>
   </div>
+  </div>
+
 
   <script type="text/javascript" src="app/badkan.js?version=1"></script>
   <script type="text/javascript" src="third_party/header.js?version=1"></script>
