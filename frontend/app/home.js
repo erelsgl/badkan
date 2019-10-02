@@ -59,8 +59,8 @@ function noMyCourseAvailable() {
   $(".nacc").append('<div class="myCourse myCourse_msg"><img class=warning src="images/msg-err.png">No my course available</div>')
 }
 
-function noExerciseAvailable() {
-  return '<div class="no_exercise"><img class=warning src="images/msg-err.png">No exercise available</div>'
+function noExerciseAvailable(myClass) {
+  return '<div class="' + myClass + ' no_exercise"><img class=warning src="images/msg-err.png">No exercise available</div>'
 }
 
 function createAccordionHome(courseObj, exercises, submissions) {
@@ -84,7 +84,7 @@ function createAccordionHome(courseObj, exercises, submissions) {
       }
     }
   } else {
-    panel += noExerciseAvailable()
+    panel += noExerciseAvailable(myClass)
   }
   $(".nacc").append(panel + "</li>")
 }
