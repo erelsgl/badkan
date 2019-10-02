@@ -9,7 +9,7 @@ export MAIN_FILE=$4
 export INPUT_FILE_NAME=$5
 export OUTPUT_FILE_NAME=$6
 export FOLDER_NAME=$7
-export RUNNER=$8
+export RUNNER='timeout 20 '$8
 export SIGNATURE=$9
 export GRADE=0
 
@@ -93,5 +93,3 @@ echo $SIGNATURE $GRADE
 
 cd ../../
 rm -R $FOLDER_NAME
-
-echo "*** $GRADE ***"
