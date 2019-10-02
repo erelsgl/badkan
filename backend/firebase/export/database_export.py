@@ -10,17 +10,18 @@ scopes = [
 
 # Authenticate a credential with the service account
 credentials = service_account.Credentials.from_service_account_file(
-    "../../../database_exports/private_key.json", scopes=scopes)
+    "../private_key.json", scopes=scopes)
 
-with open('../../../frontend/util/firebaseConfig.js') as dataFile:
+with open("../private_key.json") as dataFile:
     data = dataFile.read()
 
-id = re.search('projectId: "(.+?)",', data)
+id = re.search('"project_id": "(.+?)",', data)
 project_name = id.group(1)
 
 # Use the credentials object to authenticate a Requests session.
 authed_session = AuthorizedSession(credentials)
 response = authed_session.get(
     "https://" + project_name + ".firebaseio.com/.json")
+
 
 print(response.json())

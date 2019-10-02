@@ -40,7 +40,7 @@ Then, you need to add to the project the private key that you download here:
        
     Go to settings -> Service Account -> Generate New private key.
 
-Then put the file in the folder database_exports and change its name to private_key.json.
+Then put the file in the folder backend/firebase/ and change its name to private_key.json.
 
 From the firebase storage, upload manually the badkan_guide.pdf in a bucket named guide.
 

@@ -20,16 +20,16 @@ from terminal import *
 
 executor = concurrent.futures.ThreadPoolExecutor(max_workers=20)
 
-with open('../../frontend/util/firebaseConfig.js') as dataFile:
+with open("../firebase/private_key.json") as dataFile:
     data = dataFile.read()
 
-id = re.search('projectId: "(.+?)",', data)
-project_name =  id.group(1)
+id = re.search('"project_id": "(.+?)",', data)
+project_name = id.group(1)
 
 url = 'https://' + project_name + '.firebaseio.com'
 bucket_name = project_name + '.appspot.com'
 
-cred = credentials.Certificate('../../database_exports/private_key.json')
+cred = credentials.Certificate('../firebase/private_key.json')
 firebase_admin.initialize_app(
     cred, {'databaseURL': url, 'storageBucket': bucket_name})
 

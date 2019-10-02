@@ -111,3 +111,4 @@ database_exports/*
 frontend/util/firebaseConfig.js
 backend/servers/smtp/*txt
 backend/submissions
+backend/firebase/private_key.json
