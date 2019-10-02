@@ -110,3 +110,4 @@ trace_table.csv
 database_exports/*
 frontend/util/firebaseConfig.js
 backend/servers/smtp/*txt
+backend/submissions
