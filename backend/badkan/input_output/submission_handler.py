@@ -43,6 +43,8 @@ async def check_submission(websocket, submission):
         x.start()
     else:
         await tee(websocket, "This submission is meaningless, any grade has been stored. <br> < If you want the grade to be stored, please check the \"Save the grade\" button.")
+    edit_csv_trace(str(currentDT), grade, submitters,
+                       "FINISH", exercise["exercise_name"], zip_filename)
     return 'OK'
 
 

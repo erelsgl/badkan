@@ -1,16 +1,10 @@
-from google.oauth2 import service_account
-from google.auth.transport.requests import AuthorizedSession
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import db
+from firebase_admin import storage
+
 import re
-
-# Define the required scopes
-scopes = [
-    "https://www.googleapis.com/auth/userinfo.email",
-    "https://www.googleapis.com/auth/firebase.database"
-]
-
-# Authenticate a credential with the service account
-credentials = service_account.Credentials.from_service_account_file(
-    "../private_key.json", scopes=scopes)
+import json
 
 with open("../private_key.json") as dataFile:
     data = dataFile.read()
@@ -18,10 +12,23 @@ with open("../private_key.json") as dataFile:
 id = re.search('"project_id": "(.+?)",', data)
 project_name = id.group(1)
 
-# Use the credentials object to authenticate a Requests session.
-authed_session = AuthorizedSession(credentials)
-response = authed_session.get(
-    "https://" + project_name + ".firebaseio.com/.json")
+url = 'https://' + project_name + '.firebaseio.com'
+bucket_name = project_name + '.appspot.com'
 
+cred = credentials.Certificate('../private_key.json')
+firebase_admin.initialize_app(
+    cred, {'databaseURL': url, 'storageBucket': bucket_name})
 
-print(response.json())
+bucket = storage.bucket()
+
+filename = input() + '.json'
+
+export_file_location = "../../../database_exports/" + filename
+
+ref = db.reference('')
+
+with open(export_file_location, "w+") as export_file:
+    export_file.write(json.dumps(ref.get()))
+
+blob = bucket.blob('database_exports/'+filename)
+blob.upload_from_filename(export_file_location)

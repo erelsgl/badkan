@@ -157,7 +157,7 @@ Please, install flask and quart in the server by running the next command:
     sudo pip3 install flask
     sudo pip3 install quart
 
-Since we use contrab for the backup, from the database_exports folder please run:
+Since we use contrab for the backup, from the backend/firebase/export folder please run:
 
     crontab crontab-backup
 
@@ -371,7 +371,6 @@ To restart the badkan server, you can do:
 
     start/backend_frontend.sh
 
-In the export.sh file, change the bucket name.
 
 ## Logs
 
