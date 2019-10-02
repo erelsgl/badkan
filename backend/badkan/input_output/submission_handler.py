@@ -64,13 +64,13 @@ async def save_grade(submission, websocket, grade, timestamp):
 
 
 def save_zip_submission(zip_file, exercise_id, uid):
-    create_folder_if_not_exists(exercise_id, uid)
+    create_folder_if_not_exists(exercise_id)
     zip_file.save("../submissions/" +
                   exercise_id + "/" + uid + ".zip")
 
 
 async def save_github_submission(submission, zip_filename, wget_url, uid):
-    create_folder_if_not_exists(submission["exercise_id"], submission["uid"])
+    create_folder_if_not_exists(submission["exercise_id"])
     result = await terminal_command_return(["wget", wget_url, "-O", zip_filename])
     if "ERROR 404: Not Found" in result:
         return await save_github_private_submission(zip_filename, wget_url, uid)
@@ -91,7 +91,7 @@ async def save_github_private_submission(zip_filename, curl_url, uid):
         return False
 
 
-def create_folder_if_not_exists(exercise_id, uid):
+def create_folder_if_not_exists(exercise_id):
     try:
         os.mkdir("../submissions/" + exercise_id)
     except FileExistsError:
