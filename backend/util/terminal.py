@@ -86,12 +86,12 @@ async def docker_command_tee(args, websocket):
     await proc.wait()
 
 
-async def docker_command_tee_with_grade(args, websocket, show_input, show_output, output=None):
+async def docker_command_tee_with_grade(args, websocket, show_input, show_output, signature, output=None):
     proc = await docker_command(args)
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
-        match_grade = GRADE_REGEXP.search(line)
-        if not match_grade:
+        print(line)
+        if not signature in line:
             match_output = OUTPUT_REGEXP.search(line)
             match_input = INPUT_REGEXP.search(line)
             if output is not None and match_output:
@@ -102,6 +102,7 @@ async def docker_command_tee_with_grade(args, websocket, show_input, show_output
                 continue
             await tee(websocket, line)
         else:
-            grade = match_grade.group(1)
+            grade = line[line.find(' '):]
+            await tee(websocket, 'Your final grade is: ' + grade)
             return grade
     await proc.wait()

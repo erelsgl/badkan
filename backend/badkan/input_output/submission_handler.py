@@ -111,13 +111,19 @@ async def upload_submission_to_docker(uid, zip_filename):
 
 
 async def run_submission(websocket, exercise, folder_name, output=None):
+    signature = random_string()
     return await docker_command_tee_with_grade(["exec", "badkan", "bash", "grade.sh",
                                                 exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(
                                                     exercise["input_output_points"]),
                                                 exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], folder_name,
                                                 get_running_command(
-                                                    exercise["exercise_compiler"], exercise["main_file"])], websocket,
-                                               exercise["show_input"], exercise["show_output"], output)
+                                                    exercise["exercise_compiler"], exercise["main_file"]), signature], websocket,
+                                               exercise["show_input"], exercise["show_output"], signature, output)
+
+
+def random_string(stringLength=20):
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(stringLength))
 
 
 def dict_to_string(my_dicts):
