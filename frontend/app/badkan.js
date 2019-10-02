@@ -96,7 +96,13 @@ function onError(_event) {
 }
 
 function onMessage(_event) {
-    logServer("color:black", _event.data);
+    let message = _event.data
+    try {
+        let json = JSON.parse(message)
+        logServer(json.style, json.message);
+    } catch (e) {
+        logServer("color:black", message);
+    }
 }
 
 function onClose(event) {

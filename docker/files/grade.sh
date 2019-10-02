@@ -53,8 +53,6 @@ edit_grade() {
     fi;
 }
 
-echo "Grade exercise $EXERCISE_NAME"
-
 cd grading_room/$FOLDER_NAME
 unzip -qq $FOLDER_NAME
 
@@ -62,7 +60,6 @@ cd */
 
 # Handle conflict with python that don't need compile.
 if [ $COMPILER != "python3" ] ; then
-    echo $COMPILER $MAIN_FILE
     $COMPILER $MAIN_FILE 
 fi;
 
