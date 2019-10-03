@@ -40,7 +40,7 @@ Then, you need to add to the project the private key that you download here:
        
     Go to settings -> Service Account -> Generate New private key.
 
-Then put the file in the folder database_exports and change its name to private_key.json.
+Then put the file in the folder backend/firebase/ and change its name to private_key.json.
 
 From the firebase storage, upload manually the badkan_guide.pdf in a bucket named guide.
 
@@ -157,7 +157,7 @@ Please, install flask and quart in the server by running the next command:
     sudo pip3 install flask
     sudo pip3 install quart
 
-Since we use contrab for the backup, from the database_exports folder please run:
+Since we use contrab for the backup, from the backend/firebase/export folder please run:
 
     crontab crontab-backup
 
@@ -371,7 +371,6 @@ To restart the badkan server, you can do:
 
     start/backend_frontend.sh
 
-In the export.sh file, change the bucket name.
 
 ## Logs
 

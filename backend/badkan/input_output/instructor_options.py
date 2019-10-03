@@ -14,17 +14,16 @@ async def run_submission_admin(websocket, submission):
 
 
 async def save_firebase_submission(submission, firebase_path, zip_file):
-    create_folder_if_not_exists(
-        submission["exercise_id"], submission["uid"])
+    create_folder_if_not_exists(submission["exercise_id"])
     download_and_save_submission(firebase_path, zip_file)
 
 
 async def run_submissions_admin(websocket, exercise_id):
     await download_submissions_zip(exercise_id)
     exercise = get_exercise_by_id(exercise_id)
-    # TODO: Worried about directory not empty:
-    # Error message: mv: cannot move './-Lo0hixQdaOVcA1SA5GT' to
-    # '../submissions/-Lo0hixQdaOVcA1SA5GT': Directory not empty
+    await terminal_command_log(["rm", "-r", "../submissions/"])
+    await terminal_command_log(["mkdir", "../submissions/"])
+    create_folder_if_not_exists(exercise_id)
     await terminal_command_log(["mv", "./"+exercise_id, "../submissions/"])
     submission_list = os.listdir("../submissions/"+exercise_id)
     for uid in submission_list:

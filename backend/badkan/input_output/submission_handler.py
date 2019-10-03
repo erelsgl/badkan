@@ -43,6 +43,8 @@ async def check_submission(websocket, submission):
         x.start()
     else:
         await tee(websocket, "This submission is meaningless, any grade has been stored. <br> < If you want the grade to be stored, please check the \"Save the grade\" button.")
+    edit_csv_trace(str(currentDT), grade, submitters,
+                       "FINISH", exercise["exercise_name"], zip_filename)
     return 'OK'
 
 
@@ -64,13 +66,13 @@ async def save_grade(submission, websocket, grade, timestamp):
 
 
 def save_zip_submission(zip_file, exercise_id, uid):
-    create_folder_if_not_exists(exercise_id, uid)
+    create_folder_if_not_exists(exercise_id)
     zip_file.save("../submissions/" +
                   exercise_id + "/" + uid + ".zip")
 
 
 async def save_github_submission(submission, zip_filename, wget_url, uid):
-    create_folder_if_not_exists(submission["exercise_id"], submission["uid"])
+    create_folder_if_not_exists(submission["exercise_id"])
     result = await terminal_command_return(["wget", wget_url, "-O", zip_filename])
     if "ERROR 404: Not Found" in result:
         return await save_github_private_submission(zip_filename, wget_url, uid)
@@ -91,7 +93,7 @@ async def save_github_private_submission(zip_filename, curl_url, uid):
         return False
 
 
-def create_folder_if_not_exists(exercise_id, uid):
+def create_folder_if_not_exists(exercise_id):
     try:
         os.mkdir("../submissions/" + exercise_id)
     except FileExistsError:
@@ -111,13 +113,19 @@ async def upload_submission_to_docker(uid, zip_filename):
 
 
 async def run_submission(websocket, exercise, folder_name, output=None):
+    signature = random_string()
     return await docker_command_tee_with_grade(["exec", "badkan", "bash", "grade.sh",
                                                 exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(
                                                     exercise["input_output_points"]),
                                                 exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], folder_name,
                                                 get_running_command(
-                                                    exercise["exercise_compiler"], exercise["main_file"])], websocket,
-                                               exercise["show_input"], exercise["show_output"], output)
+                                                    exercise["exercise_compiler"], exercise["main_file"]), signature], websocket,
+                                               exercise["show_input"], exercise["show_output"], signature, output)
+
+
+def random_string(stringLength=20):
+    letters = string.ascii_lowercase
+    return ''.join(random.choice(letters) for i in range(stringLength))
 
 
 def dict_to_string(my_dicts):

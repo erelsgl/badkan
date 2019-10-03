@@ -9,8 +9,10 @@ export MAIN_FILE=$4
 export INPUT_FILE_NAME=$5
 export OUTPUT_FILE_NAME=$6
 export FOLDER_NAME=$7
-export RUNNER=$8
+export RUNNER='timeout 20 '$8
+export SIGNATURE=$9
 export GRADE=0
+
 
 create_file () {
 cat <<EOF >$INPUT_FILE_NAME
@@ -51,8 +53,6 @@ edit_grade() {
     fi;
 }
 
-echo "Grade exercise $EXERCISE_NAME"
-
 cd grading_room/$FOLDER_NAME
 unzip -qq $FOLDER_NAME
 
@@ -60,7 +60,6 @@ cd */
 
 # Handle conflict with python that don't need compile.
 if [ $COMPILER != "python3" ] ; then
-    echo $COMPILER $MAIN_FILE
     $COMPILER $MAIN_FILE 
 fi;
 
@@ -87,9 +86,7 @@ for item in $INPUT_OUTPUT_POINTS; do
     edit_grade $output $expected_output $points
 done
 
-echo "Your final grade is" $GRADE
+echo $SIGNATURE $GRADE
 
 cd ../../
 rm -R $FOLDER_NAME
-
-echo "*** $GRADE ***"

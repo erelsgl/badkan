@@ -1,51 +1,38 @@
 #submitterIds {
-    margin-top: 4%;
+    margin-top: 2%;
 }
-
-/* #saveGradeCheck {
-    margin-top: 3%;
-   
-} */
 
 #pad {
     margin-top: 2%;
-
 }
 
 #submissionResult {
     margin-top: 2%;
 }
 
+.menuArea {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 1%/4%;
+}
+
+.git_zip {
+    padding: 3%;
+}
+
+.inputId {
+    padding: 3%;
+}
+
+.gradeMenu {
+    padding: 3%;
+}
+
 #output {
-    border: dashed 1px; 
-    padding: 5px; 
+    border: dashed 1px;
+    padding: 5px;
     font-family: courier;
     background-color: white;
     border: 1px solid black;
     border-radius: 1%/4%;
-}
-
-.git_zip{
-    width: 102%;
-    margin-left: -1%;
-    padding: 3%;
-}
-.menuArea{
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 1%/4%;
-}
-.inputId{
-    padding-top: 1.5%;
-    padding-bottom: 1%;
-    padding-left: 3%;
-    padding-right: 3%;
-    
-}
-
-.gradeMenu{
-    padding:1%;
-    border-radius: 1%/6%;
-    width: 64%;
-    margin-left: 18%;
 }

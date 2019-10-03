@@ -6,6 +6,7 @@ import subprocess
 from subprocess import call
 import asyncio
 import re
+import json
 
 GRADE_REGEXP = re.compile("\*\*\* ([0-9]+) \*\*\*", re.IGNORECASE)
 OUTPUT_REGEXP = re.compile("Your output is (.*)", re.IGNORECASE)
@@ -86,12 +87,13 @@ async def docker_command_tee(args, websocket):
     await proc.wait()
 
 
-async def docker_command_tee_with_grade(args, websocket, show_input, show_output, output=None):
+async def docker_command_tee_with_grade(args, websocket, show_input, show_output, signature, output=None):
     proc = await docker_command(args)
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
-        match_grade = GRADE_REGEXP.search(line)
-        if not match_grade:
+        print(line)
+        if not signature in line:
+            answer = {'message': line}
             match_output = OUTPUT_REGEXP.search(line)
             match_input = INPUT_REGEXP.search(line)
             if output is not None and match_output:
@@ -100,8 +102,16 @@ async def docker_command_tee_with_grade(args, websocket, show_input, show_output
                 continue
             if match_output and not show_output:
                 continue
-            await tee(websocket, line)
+            if not match_input and not match_output:
+                answer["style"] = "color:red"
+                await tee(websocket,  json.dumps(answer))
+            else:
+                answer["style"] = "color:black"
+                await tee(websocket, json.dumps(answer))
         else:
-            grade = match_grade.group(1)
+            grade = line[line.find(' '):]
+            answer["message"] = 'Your final grade is: ' + grade
+            answer["style"] = "color:green"
+            await tee(websocket, json.dumps(answer))
             return grade
     await proc.wait()
