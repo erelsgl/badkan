@@ -6,11 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Instructor</title>
 
+    <!-- Import js. -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-auth.js"></script>
     <script src="util/firebaseConfig.js?version=1"></script>
 
+    <!-- Import header -->
+    <script src="util/utils.js?version=1"></script>
+    <script src="util/protocols/httpProtocol.js?version=1"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="data/retreiveUser.js?version=1"></script>
+    <link rel="stylesheet" href="style/header.css?version=1">
+    <link rel="stylesheet" href="style/shape.css?version=1">
+    <link rel="stylesheet" href="style/loader.css?version=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
 
 <body>
@@ -21,9 +32,10 @@
             <div id="presentation">
                 <h3>Becoming instructor will allow you to create your own courses and exercises. <br>
                     Teaching will never be so easy. <br>
-                    Here is a <button class="btn btn-link" onclick="downloadGuide()">guide</button> to help you to familiarize with the website. <br>
+                    Here is a <button class="btn btn-link" onclick="downloadGuide()">guide</button> to help you to
+                    familiarize with the website. <br>
                     <!-- Here is our prices. <br> -->
-                    To become instructor, please contact us by clicking 
+                    To become instructor, please contact us by clicking
                     <button class="btn btn-link" onclick="contactUs()">here</button>.
                 </h3>
             </div>
