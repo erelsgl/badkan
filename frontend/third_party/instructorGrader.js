@@ -87,11 +87,11 @@ function editGrade(submissionId, grade, manualGrade, comment) {
         title: 'Choose a new grade',
         html: '<div class="edit_grade">The actual grade is ' + grade + '<br><br>' +
             '<label for="new_grade" class="text">Enter the new grade</label>' +
-            '<input id="new_grade" class="courseExerciseInputEdit" value="' + grade + '"></input><br><br>' +
+            '<input id="new_grade" class="my_input" value="' + grade + '"></input><br><br>' +
             (manualGrade != "false" ?
                 '<br>The actual manual grade is ' + manualGrade + '<br><br>' +
                 '<label for="new_manual_grade" class="text">Enter the new manual grade</label>' +
-                '<input id="new_manual_grade" class="courseExerciseInputEdit" value="' + manualGrade + '"></input><br><br>' :
+                '<input id="new_manual_grade" class="my_input" value="' + manualGrade + '"></input><br><br>' :
                 "") +
             (comment != "false" ?
                 '<label for="new_comment" class="text">Enter the new comment</label>' +
@@ -144,7 +144,7 @@ function manualGrade(submissionId, grade) {
         title: 'Manual Grade',
         html: '<div class="manual_grade">The actual grade given by the badkan is ' + grade + '<br><br>' +
             '<label for="manual_grade" class="text">Enter the manual grade</label>' +
-            '<input id="manual_grade" class="courseExerciseInputEdit"></input><br><br>' +
+            '<input id="manual_grade" class="my_input"></input><br><br>' +
             '<label for="comment" class="text">Enter a comment</label>' +
             '<textarea id="comment" class="instructorGrader input"></textarea><br><br>' +
             '<div/>',

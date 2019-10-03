@@ -52,11 +52,11 @@ function onFinishRetreiveData(data) {
 }
 
 function noPublicCourseAvailable() {
-  $(".nacc").append('<div class="public public_msg"><img class=warning src="images/msg-err.png">No public course available</div>')
+  $(".nacc").append('<div class="public no_course"><img class=warning src="images/msg-err.png">No public course available</div>')
 }
 
 function noMyCourseAvailable() {
-  $(".nacc").append('<div class="myCourse myCourse_msg"><img class=warning src="images/msg-err.png">No my course available</div>')
+  $(".nacc").append('<div class="myCourse no_course"><img class=warning src="images/msg-err.png">No my course available</div>')
 }
 
 function noExerciseAvailable(myClass) {
@@ -98,32 +98,32 @@ function getClass(uids, id) {
 }
 
 function createAccordionBodyHomeRegister(courseId, exercise) {
-  return '<div class="exercise panel public">' + // Check in the class here for the style
+  return '<div class="white_square_1 public">' + // Check in the class here for the style
     '<div class="exerciseName title_font">' + exercise.exercise_name + '</div><br><br>' +
-    '<div class="description">Compiler : </div>' + '<div class="test">' + exercise.exercise_compiler + '</div><br><br>' +
-    (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="test">' +
+    '<div class="description">Compiler : </div>' + '<div class="data">' + exercise.exercise_compiler + '</div><br><br>' +
+    (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="data">' +
       exercise.exercise_description + '</div><br><br>' : "") +
     (exercise.deadline ? '<div class=timestamp>Deadline : ' +
       exercise.deadline + '</div><br><br>' : "") +
-    '<button class="btn btn_edit" onclick="registeringToCourse(' + "'" + courseId + "'" +
+    '<button class="btn blue_enjoy" onclick="registeringToCourse(' + "'" + courseId + "'" +
     ')">Register to the course <i class="glyphicon glyphicon-plus"></i></button>' +
     '</div>';
 }
 
 function createAccordionBodyHomeSolve(exerciseId, exercise, submissions) {
-  return '<div class="exercise panel myCourse">' + // Check in the class here for the style
+  return '<div class="white_square_1 myCourse">' + // Check in the class here for the style
     '<div class="exerciseName title_font">' + exercise.exercise_name + '</div><br><br>' +
-    '<div class="description">Compiler : </div>' + '<div class="test">' + exercise.exercise_compiler + '</div><br><br>' +
-    (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="test">' +
+    '<div class="description">Compiler : </div>' + '<div class="data">' + exercise.exercise_compiler + '</div><br><br>' +
+    (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="data">' +
       exercise.exercise_description + '</div><br><br>' : "") +
     (exercise.pdf_instruction ? '<button class="btn btn-link"  onclick="downloadPdfInstruction(' + "'" + exerciseId + "'" + ')">Current pdf</button><br><br>' : "") +
     (exercise.deadline ? '<div class=timestamp>Deadline : ' +
       exercise.deadline + '</div><br><br>' : "") +
-    '<div class="description">The main function of your submission must be : </div>' + '<div class="test">' + exercise.main_file + '</div><br><br>' +
-    '<div class="description">You need to read the input from : </div>' + '<div class="test">' + exercise.input_file_name + '</div><br><br>' +
-    '<div class="description">You need to read the output from : </div>' + '<div class="test">' + exercise.output_file_name + '</div><br><br><br><br>' +
+    '<div class="description">The main function of your submission must be : </div>' + '<div class="data">' + exercise.main_file + '</div><br><br>' +
+    '<div class="description">You need to read the input from : </div>' + '<div class="data">' + exercise.input_file_name + '</div><br><br>' +
+    '<div class="description">You need to read the output from : </div>' + '<div class="data">' + exercise.output_file_name + '</div><br><br><br><br>' +
     getSubmission(submissions, exerciseId) +
-    '<button class="btn btn_edit" onclick="solveExercise(' + "'" + exerciseId + "'" +
+    '<button class="btn blue_enjoy" onclick="solveExercise(' + "'" + exerciseId + "'" +
     ')">Solve <i class="glyphicon glyphicon-fire"></i></button>' +
     '</div>';
 }
@@ -131,7 +131,7 @@ function createAccordionBodyHomeSolve(exerciseId, exercise, submissions) {
 function getSubmission(submissions, exerciseId) {
   for (submission of submissions) {
     if (submission.exercise_id == exerciseId) {
-      return '<div class=lastSubmission><div class="timestamp text_lastSubmission">Your last stored submission timestamp is: ' + submission.timestamp + '</div><br><br>' +
+      return '<div class=white_smoke_square><div class="timestamp text_lastSubmission">Your last stored submission timestamp is: ' + submission.timestamp + '</div><br><br>' +
         (submission.url == "zip" ?
           '<div class="timestamp text_lastSubmission">Your solution was submitted via a ZIP file.</div><br><br>' :
           '<div class="timestamp text_lastSubmission">You solution was submitted via a GitHub url :' + submission.url + '</div><br><br>') +

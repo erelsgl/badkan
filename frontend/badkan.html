@@ -16,18 +16,21 @@
 
   <!-- Import css. -->
   <link rel="stylesheet" href="style/app/badkan.css?version=1">
-  <link rel="stylesheet" href="style/accordion.css?version=1">
-  <link rel="stylesheet" href="style/button.css?version=1">
-  <link rel="stylesheet" href="style/thirdparty.css?version=1">
+  <link rel="stylesheet" href="style/shared/accordion.css?version=1">
+  <link rel="stylesheet" href="style/shared/button.css?version=1">
+  <link rel="stylesheet" href="style/third_party/title.css">
+  <link rel="stylesheet" href="style/shared/square.css?version=1">
+  <link rel="stylesheet" href="style/shared/input.css">
+  
 
   <!-- Import header -->
   <script src="util/utils.js?version=1"></script>
   <script src="util/protocols/httpProtocol.js?version=1"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
   <script src="data/retreiveUser.js?version=1"></script>
-  <link rel="stylesheet" href="style/header.css?version=1">
-  <link rel="stylesheet" href="style/shape.css?version=1">
-  <link rel="stylesheet" href="style/loader.css?version=1">
+  <link rel="stylesheet" href="style/shared/header.css?version=1">
+  <link rel="stylesheet" href="style/shared/shape.css?version=1">
+  <link rel="stylesheet" href="style/shared/loader.css?version=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 </head>
@@ -42,7 +45,7 @@
         <br>
         <h1><b><span id="exerciseName" class="title_font"></span></b></h1>
         <br>
-        <div class="menuArea git_zip">
+        <div class="white_square_1">
           <div class="naccs">
             <div class="grid">
               <div class="gc gc--1-of-3">
@@ -55,7 +58,8 @@
                 <ul class="nacc">
                   <li class="active github">
                     <div>
-                      <label for="githubUrl">Enter here the Github URL. <br> Must begin with https and end with .git</label>
+                      <label for="githubUrl">Enter here the Github URL. <br> Must begin with https and end with
+                        .git</label>
                       <br>
                       <input id="githubUrl" type="text" class="form-control" />
                     </div>
@@ -72,7 +76,7 @@
             </div>
           </div>
         </div>
-        <div id="submitterIds" class="menuArea inputId">
+        <div class="white_square_1 margin_top">
           <label for="userId">Your id:</label>
           <input id="userId" type="text" class="form-control" /> <br>
           <label for="collab1">Enter here the id of your first collaborator (if exists):</label>
@@ -81,23 +85,23 @@
           <input id="collab2" type="text" class="form-control" /> <br>
         </div>
         <br>
-        <div class="menuArea gradeMenu">
+        <div class="white_square_1">
           <div id="saveGradeCheck">
             <label for="saveGrade">Check it if you want the grade to be save</label> <br>
             <input id="saveGrade" name="BoxSelect[]" type="checkbox"><label>Save the grade</label>
           </div>
-          <div id="pad">
-            <button id="submit" type="submit" class="btn btn_edit">Send <i class="glyphicon glyphicon-envelope"></i>
+          <div class="margin_top">
+            <button id="submit" type="submit" class="btn blue_enjoy">Send <i class="glyphicon glyphicon-envelope"></i>
             </button>
-            <button id="clear" class="btn btn_edit">Clean <i class="glyphicon glyphicon-erase"></i></button>
-            <button id="clear_and_submit" type="submit" class="btn btn_edit">Clean+Send <i
+            <button id="clear" class="btn blue_enjoy">Clean <i class="glyphicon glyphicon-erase"></i></button>
+            <button id="clear_and_submit" type="submit" class="btn blue_enjoy">Clean+Send <i
                 class="glyphicon glyphicon-refresh"></i></button>
           </div>
     </form>
   </div>
-  <div id="submissionResult">
+  <div class="margin_top">
     <h2>Submission result</h2>
-    <div id='output' dir='ltr'>
+    <div id='output' class="white_square_2" dir='ltr'>
     </div>
   </div>
   </div>

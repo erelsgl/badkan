@@ -1,14 +1,18 @@
-.lastSubmission {
-    background-color: whitesmoke;
-    border: 1px solid #D3D3D3;
+.white_smoke_square {
     border-radius: 4%/20%;
-    margin-top: 5%;
+    margin-top: 3%;
     text-align: center;
 }
 
-.text_lastSubmission {
-    float: left;
-    margin-left: 2%;
-    margin-top: 1%;
+.instructorText {
+    font-family: Arial;
+    font-size: 130%;
+    font-weight: bold;
 }
 
+.video {
+    margin-left: 5%;
+    margin-top: 3%;
+    height: 90%;
+    width: 90%;
+}
