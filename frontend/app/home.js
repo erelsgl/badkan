@@ -52,11 +52,11 @@ function onFinishRetreiveData(data) {
 }
 
 function noPublicCourseAvailable() {
-  $(".nacc").append('<div class="public public_msg"><img class=warning src="images/msg-err.png">No public course available</div>')
+  $(".nacc").append('<div class="public no_course"><img class=warning src="images/msg-err.png">No public course available</div>')
 }
 
 function noMyCourseAvailable() {
-  $(".nacc").append('<div class="myCourse myCourse_msg"><img class=warning src="images/msg-err.png">No my course available</div>')
+  $(".nacc").append('<div class="myCourse no_course"><img class=warning src="images/msg-err.png">No my course available</div>')
 }
 
 function noExerciseAvailable(myClass) {
@@ -98,7 +98,7 @@ function getClass(uids, id) {
 }
 
 function createAccordionBodyHomeRegister(courseId, exercise) {
-  return '<div class="exercise panel public">' + // Check in the class here for the style
+  return '<div class="white_square_1 public">' + // Check in the class here for the style
     '<div class="exerciseName title_font">' + exercise.exercise_name + '</div><br><br>' +
     '<div class="description">Compiler : </div>' + '<div class="test">' + exercise.exercise_compiler + '</div><br><br>' +
     (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="test">' +
@@ -111,7 +111,7 @@ function createAccordionBodyHomeRegister(courseId, exercise) {
 }
 
 function createAccordionBodyHomeSolve(exerciseId, exercise, submissions) {
-  return '<div class="exercise panel myCourse">' + // Check in the class here for the style
+  return '<div class="white_square_1 myCourse">' + // Check in the class here for the style
     '<div class="exerciseName title_font">' + exercise.exercise_name + '</div><br><br>' +
     '<div class="description">Compiler : </div>' + '<div class="test">' + exercise.exercise_compiler + '</div><br><br>' +
     (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="test">' +
@@ -131,7 +131,7 @@ function createAccordionBodyHomeSolve(exerciseId, exercise, submissions) {
 function getSubmission(submissions, exerciseId) {
   for (submission of submissions) {
     if (submission.exercise_id == exerciseId) {
-      return '<div class=lastSubmission><div class="timestamp text_lastSubmission">Your last stored submission timestamp is: ' + submission.timestamp + '</div><br><br>' +
+      return '<div class=white_smoke_square><div class="timestamp text_lastSubmission">Your last stored submission timestamp is: ' + submission.timestamp + '</div><br><br>' +
         (submission.url == "zip" ?
           '<div class="timestamp text_lastSubmission">Your solution was submitted via a ZIP file.</div><br><br>' :
           '<div class="timestamp text_lastSubmission">You solution was submitted via a GitHub url :' + submission.url + '</div><br><br>') +

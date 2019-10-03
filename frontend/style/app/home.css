@@ -32,6 +32,14 @@
     width: 200px;
 }
 
+ul {
+    display: block;
+    list-style: none;
+    margin: 0;
+    padding: 12px 10px;
+    height: 45px;
+}
+
 .li {
     float: left;
     border-bottom: 1px solid #bbb;
@@ -76,20 +84,7 @@
     width: 83%;
 }
 
-.exercise.panel {
-    border-radius: 1%/2%;
-    padding: 2%;
-    background-color: white;
-    border: 1px solid black;
-}
-
-div.panel {
-    background: transparent;
-}
-
-.lastSubmission {
-    background-color: whitesmoke;
-    border: 1px solid #D3D3D3;
+.white_smoke_square {
     border-radius: 4%/20%;
 }
 
@@ -103,15 +98,9 @@ div.panel {
     color: green;
 }
 
-/* Aspect message quand les courses sont vides */
-.public_msg, .myCourse_msg, .no_exercise {
-    background-color: whitesmoke;
-    border: 1px solid grey;
+.no_course,
+.no_exercise {
     margin: 5% 40% 0 -15%;
-    padding: 10px 20px 5px 42px;
-    text-align: center;
-    border-radius: 4%/35%;
-    box-shadow: 5px 10px 18px grey;
 }
 
 .no_exercise {
@@ -123,14 +112,10 @@ div.panel {
     margin-right: 5%;
 }
 
-ul {
-    display: block;
-    list-style: none;
-    margin: 0;
-    padding: 12px 10px;
-    height: 45px;
+.white_square_1 {
+    border-radius: 1%/2%;
+    padding: 2%;
+    margin-right: 5%;
+    margin-bottom: 3%;
 }
 
-.exercise.panel{
-    margin-right: 5%;
-}

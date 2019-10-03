@@ -2,10 +2,6 @@
     background: #FFF;
 }
 
-.grader_table {
-    background: #FFF;
-}
-
 .label_grader_table {
     margin-top: 5%;
 }
@@ -21,12 +17,42 @@
     margin-left: 19%;
 }
 
-.grades_msg{
-    background-color: whitesmoke;
-    border: 1px solid grey;
-    margin: 0 20% 0 20%;
-    padding: 10px 20px 5px 42px;
-    text-align: center;
+.no_grade{
     border-radius: 4%/35%;
-    box-shadow: 5px 10px 18px grey;
+}
+
+/* terminal text */
+
+@import url(https://fonts.googleapis.com/css?family=Khula:700);
+
+body {
+    background: #111;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.console-container {
+    font-family: Khula;
+    font-size: 4em;
+    text-align: center;
+    height: 200px;
+    width: 600px;
+    display: block;
+    position: absolute;
+    color: white;
+    padding-top: 3%;
+    /* top: 0; */
+    /* bottom: 0; */
+    left: 0;
+    right: 10%;
+    margin: auto;
+}
+
+.console-underscore {
+    display: inline-block;
+    position: relative;
+    top: -0.14em;
+    left: 10px;
 }

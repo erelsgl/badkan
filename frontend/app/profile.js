@@ -23,7 +23,7 @@ function displayGuide() {
 }
 
 function noTableGrades() {
-    $("#submissions_table").append('<div class="grades_msg"><img class=warning src="images/msg-err.png"> No grade available</div>')
+    $("#submissions_table").append('<div class="no_grade"><img src="images/msg-err.png"> No grade available</div>')
 }
 function displayDataUser() {
     consoleText([userDetails.name + " " + userDetails.last_name, "id " + userDetails.country_id, userEmail,
@@ -115,8 +115,8 @@ function graderPrivilege(courses, exercises) {
 }
 
 function createGraderTable(courseName, exercises) {
-    let content = '<label  class="label_grader_table"><h1 style="border-bottom: 2px solid black">Grader Privilege for the course ' + courseName + ' :</h1></label>' +
-        '<label id=><div class="grader_table"><table class="pure-table pure-table-bordered"><tbody>'
+    let content = '<label class="label_grader_table"><h1 style="border-bottom: 2px solid black">Grader Privilege for the course ' + courseName + ' :</h1></label>' +
+        '<div><table class="pure-table pure-table-bordered"><tbody>'
     for (exercisesObj of Object.entries(exercises)) {
         let exerciseId = exercisesObj[0]
         let exercise = exercisesObj[1]

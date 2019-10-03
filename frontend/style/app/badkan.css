@@ -1,38 +1,15 @@
-#submitterIds {
-    margin-top: 2%;
-}
-
-#pad {
-    margin-top: 2%;
-}
-
-#submissionResult {
-    margin-top: 2%;
-}
-
-.menuArea {
-    background-color: white;
-    border: 1px solid black;
+.white_square_1 {
     border-radius: 1%/4%;
-}
-
-.git_zip {
     padding: 3%;
 }
 
-.inputId {
-    padding: 3%;
-}
-
-.gradeMenu {
-    padding: 3%;
-}
-
-#output {
+.white_square_2 {
     border: dashed 1px;
     padding: 5px;
     font-family: courier;
-    background-color: white;
-    border: 1px solid black;
     border-radius: 1%/4%;
+}
+
+.margin_top {
+    margin-top: 2%;
 }
