@@ -1,37 +1,3 @@
-// Here are all the links needed by the header
-var links = ["style/header.css?version=1", "style/shape.css?version=1", "style/loader.css?version=1",
-    "https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css", "https://www.w3schools.com/w3css/4/w3.css"
-];
-for (index = 0; index < links.length; ++index) {
-    var link = document.createElement('link');
-    link.href = links[index];
-    link.rel = 'stylesheet';
-    var done = false;
-    link.onload = link.onreadystatechange = function () {
-        if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
-            done = true;
-        }
-    };
-    document.getElementsByTagName("head")[0].appendChild(link);
-}
-
-// Here are all the script needed by the header
-var scripts = ["util/utils.js?version=1",
-    "util/protocols/httpProtocol.js?version=1", "https://cdn.jsdelivr.net/npm/sweetalert2@8", "data/retreiveUser.js?version=1"
-];
-for (index = 0; index < scripts.length; ++index) {
-    var script = document.createElement('script');
-    script.src = scripts[index];
-    script.type = 'text/javascript';
-    var done = false;
-    script.onload = script.onreadystatechange = function () {
-        if (!done && (!this.readyState || this.readyState == "loaded" || this.readyState == "complete")) {
-            done = true;
-        }
-    };
-    document.getElementsByTagName("head")[0].appendChild(script);
-}
-
 // Here is the html code needed in the body.
 let divHeader = '<div class="container">' +
     '<input id = "logo" type = "image" src = "logo/logo.png" onclick = "document.location.href=\'home.html\'">' +
