@@ -94,7 +94,7 @@ function createHistoryTable(submissions, exercise_name) {
             '</td><td>' + collaborators_filtered +
             '</td><td>' + submission.url +
             '</td><td>' + submission.timestamp +
-            '</td><td><button class="btn btn_edit" onclick="solveExercise(' + "'" + submission.exercise_id + "'" +
+            '</td><td><button class="btn blue_enjoy" onclick="solveExercise(' + "'" + submission.exercise_id + "'" +
             ')">Solve Again <i class="glyphicon glyphicon-fire"></i></button></tr>'
     }
     content += "</tbody></table>"

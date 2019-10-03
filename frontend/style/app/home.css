@@ -119,3 +119,13 @@ ul {
     margin-bottom: 3%;
 }
 
+.data {
+    padding-left: 1%;
+    font-family: monospace;
+    font-size: 120%;
+    float: left;
+}
+
+.timestamp {
+    font-family: 'URW Chancery L', cursive;
+}

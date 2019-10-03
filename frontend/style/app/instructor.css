@@ -3,3 +3,9 @@
     margin-top: 5%;
     text-align: center;
 }
+
+.instructorText {
+    font-family: Arial;
+    font-size: 130%;
+    font-weight: bold;
+}

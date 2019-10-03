@@ -63,8 +63,8 @@ function createAccordionBodyManageCourse(courseId, course, ids) {
         '<label for="course_ids' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Student ids *</div></label>' +
         '<input id="course_ids' + courseId + '" class="ids my_input" value="' + (course.uids ? uidToCountryIds(course.uids, ids) : course.uids) + '" value="000000000 000000000""></input><br><br><br><br>' +
         '</div>' + '<br>' +
-        '<button class="btn btn_edit" onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
-        '<button class="btn btn_delete" onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
+        '<button class="btn blue_enjoy" onclick="editCourse(' + "'" + courseId + "'" + ')">Edit course <i class="glyphicon glyphicon-edit"></i></button>' +
+        '<button class="btn white_enjoy" onclick="deleteCourse(' + "'" + courseId + "'" + ')">Delete course <i class="glyphicon glyphicon-trash"></i></button>' +
         '</div></div>' +
         '<div class="manage_button"><button class="btn btn_manage btn_course" onclick="downloadGradesCourse(' + "'" + courseId + "'" + ')" style="border:1px solid green"><span>Download Course Grades</button></div>';
     return html;
@@ -131,8 +131,8 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
             '<label for="points_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The number of point for a good answer.">Points number * </div></label>' +
             '<input id="points_' + exerciseId + item + '" class="my_input" type="number" value="' + exercise.input_output_points[item].point + '"></input><br><br>'
     }
-    html += '<button class="btn btn_edit" onclick="editExercise(' + "'" + exerciseId + "','" + exercise.input_output_points.length + "'" + ')">Edit exercise <i class="glyphicon glyphicon-edit"></i></button>' +
-        '<button class="btn btn_delete" onclick="deleteExercise(' + "'" + exerciseId + "'" + ')">Delete exercise <i class="glyphicon glyphicon-trash"></i></button>' +
+    html += '<button class="btn blue_enjoy" onclick="editExercise(' + "'" + exerciseId + "','" + exercise.input_output_points.length + "'" + ')">Edit exercise <i class="glyphicon glyphicon-edit"></i></button>' +
+        '<button class="btn white_enjoy" onclick="deleteExercise(' + "'" + exerciseId + "'" + ')">Delete exercise <i class="glyphicon glyphicon-trash"></i></button>' +
         '</div></div>' +
         (exercise.submissions ?
             '<div class="manage_button">' +
