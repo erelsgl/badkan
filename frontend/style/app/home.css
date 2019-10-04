@@ -129,3 +129,9 @@ ul {
 .timestamp {
     font-family: 'URW Chancery L', cursive;
 }
+
+.tuto {
+    height: 250%;
+    width: 250%;
+    margin-left: -75%;
+}
