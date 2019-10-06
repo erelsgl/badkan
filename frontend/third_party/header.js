@@ -159,7 +159,7 @@ async function contactUs() {
 
 function onEmailReceived() {
     Swal.fire({
-        title: "Your message is sent.",
+        title: "Your message has been sent.",
         text: "Our team will contact you soon.",
     })
 }
