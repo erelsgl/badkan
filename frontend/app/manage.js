@@ -48,7 +48,7 @@ function createAccordionBodyManageCourse(courseId, course, ids) {
         '<input id="course_name' + courseId + '" class="my_input" value="' + course.course_name + '"></input><br><br>' +
         '<label for="course_grader' + courseId + '"><div class="explanation" data-toggle="tooltip" title="The grader must be admin. \nGives an access to the manage course.">Grader id \n </div></label>' +
         '<input id="course_grader' + courseId + '" class="my_input" value="' + (course.grader_uid ? ids[course.grader_uid] : course.grader_uid) + '" style="margin-left:88px"></input><br><br>' +
-        '<label for="privacyEdit"><div class="explanation" data-toggle="tooltip" title="The course is shared only with the students you want.">Privacy</div></label><br>' +
+        '<label for="privacyEdit"><div class="explanation" data-toggle="tooltip" title="Share this course only with specific students.">Privacy</div></label><br>' +
         '<div class="radio_checkbox border_radio">' +
         '<input id="radio_public' + courseId + '" class="btn_radio" type="radio" name="privacy' + courseId + '" value="public" onclick=\'$(\"#pass' + courseId + '\").hide()\'' +
         ((course.privacy == 'public') ? "checked" : "") +
@@ -89,8 +89,8 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
         '<option  value="g++"' + (exercise.exercise_compiler == "g++" ? "selected" : "") + '>g++ (c or c++)</option>' +
         '<option  value="python3"' + (exercise.exercise_compiler == "python3" ? "selected" : "") + '>python3</option>' +
         '</select>' +
-        '<label for="submission_option' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="For each method checked, the student will be able to submit his exercise via the method.' +
-        'If you want the student only submit via GitHub, then check only the GitHub button .">Submission option *</div></label>' +
+        '<label for="submission_option' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The student can submit his exercise via each method checked.' +
+        'If you want the student to submit only via GitHub, check only the GitHub box .">Submission option *</div></label>' +
         '<div id="submission_option' + exerciseId + '" ></div>' +
         '<div class="radio_checkbox"><input class="btn_checkbox"  id="github' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="github" required="" ' +
         (exercise.submission_via_github ? "checked" : "") +
@@ -109,7 +109,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
         '<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
         '<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
         '<input id="deadline' + exerciseId + '" class="my_input" type="date" name="dealine" value="' + exercise.deadline + '"></input><br><br>' +
-        '<label for="show' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="For each option checked, the student will be able to see the option when submitting.' +
+        '<label for="show' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The student will be able to see every option checked while submitting.' +
         'If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
         '<div id="show' + exerciseId + '" ></div>' +
         '<div class="radio_checkbox"><input class="btn_checkbox" id="input' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="input" required="" ' +
@@ -118,9 +118,9 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
         '<input class="btn_checkbox"  id="output' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="output" required="" ' +
         (exercise.show_output ? "checked" : "") +
         '/><label class="btn_checkbox" for="output' + exerciseId + '">Output</label></div> <br>' +
-        '<label for="input_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default input is the standard input. Let standard if you do not want to change it.">Input file name *</div></label>' +
+        '<label for="input_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default input is the standard input.">Input file name *</div></label>' +
         '<input id="input_file_name' + exerciseId + '" class="my_input" value="' + exercise.input_file_name + '"></input><br><br>' +
-        '<label for="output_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default output is the standard output.  Let standard if you do not want to change it.">Output file name *</div></label>' +
+        '<label for="output_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default output is the standard output.">Output file name *</div></label>' +
         '<input id="output_file_name' + exerciseId + '" class="my_input" value="' + exercise.output_file_name + '"></input><br><br>';
     for (item in exercise.input_output_points) {
         html +=
@@ -128,7 +128,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
             '<textarea id="input_' + exerciseId + item + '" class="swal2-input input">' + exercise.input_output_points[item].input + '</textarea><br><br>' +
             '<label for="output_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The first given output.">Given output *</div></label>' +
             '<textarea id="output_' + exerciseId + item + '" class="swal2-input input">' + exercise.input_output_points[item].output + '</textarea><br><br>' +
-            '<label for="points_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The number of point for a good answer.">Points number * </div></label>' +
+            '<label for="points_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="Number of points per correct answer.">Points number * </div></label>' +
             '<input id="points_' + exerciseId + item + '" class="my_input" type="number" value="' + exercise.input_output_points[item].point + '"></input><br><br>'
     }
     html += '<button class="btn blue_enjoy" onclick="editExercise(' + "'" + exerciseId + "','" + exercise.input_output_points.length + "'" + ')">Edit exercise <i class="glyphicon glyphicon-edit"></i></button>' +
@@ -170,15 +170,15 @@ $("#newCourse").click(function () {
         title: 'New course',
         html: '<label for="course_name"><div class="explanation" data-toggle="tooltip" title="Required field">Course name *</div></label>' +
             '<input id="course_name" class="swal2-input" placeholder="C++...">' +
-            '<label for="grader"><div class="explanation" data-toggle="tooltip" title="The grader must be admin. \nGives an access to the manage course.">Grader id \n </div></label>' +
+            '<label for="grader"><div class="explanation" data-toggle="tooltip" title="Give access to the manage course.">Grader id \n </div></label>' +
             '<input id="grader" class="swal2-input" placeholder="000000000">' +
-            '<label for="privacy"><div class="explanation" data-toggle="tooltip" title="The course is shared only with the students you want.">Privacy</div></label>' +
+            '<label for="privacy"><div class="explanation" data-toggle="tooltip" title="Share this course only with specific students.">Privacy</div></label>' +
             '<div id=privacy>' +
             '<input type="radio" name="privacy" value="public" onclick=\'$(\"#pass\").hide()\' checked> Public<br>' +
             '<input type="radio" name="privacy" value="private" onclick=\'$(\"#pass\").show()\'> Private<br><br>' +
             '</div>' +
             '<div id="pass" style=display:none;>' +
-            '<label for="ids"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Student ids *</div></label>' +
+            '<label for="ids"><div class="explanation" data-toggle="tooltip" title="Please respect the format \nRequired field.">Students ids *</div></label>' +
             '<input id="ids" class="swal2-input" placeholder="000000000 000000000">' +
             '</div>',
         showCancelButton: true,
@@ -311,8 +311,8 @@ async function newNormalExercise(courseId) {
                 '<option value="g++">g++ (c or c++)</option>' +
                 '<option value="python3">python3</option>' +
                 '</select>' +
-                '<label for="submission_option"><div class="explanation" data-toggle="tooltip" title="For each method checked, the student will be able to submit his exercise via the method.' +
-                'If you want the student only submit via GitHub, then check only the GitHub button .">Submission option *</div></label>' +
+                '<label for="submission_option"><div class="explanation" data-toggle="tooltip" title="The student can submit his exercise via each method checked.' +
+                'If you want the student to submit only via GitHub, check only the GitHub box .">Submission option *</div></label>' +
                 '<div id="submission_option" class="swal2-input" >' +
                 '<input id="github" name="BoxSelect[]" type="checkbox" value="github" required="" checked>GitHub</input> <br>' +
                 '<input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required="" checked>Zip</input>' +
@@ -343,8 +343,8 @@ async function newNormalExercise(courseId) {
                 '<label for="deadline"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
                 '<input id="deadline" class="swal2-input" type="date" name="dealine"></input>' +
 
-                '<label for="show"><div class="explanation" data-toggle="tooltip" title="For each option checked, the student will be able to see the option when submitting.' +
-                'If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
+                '<label for="show"><div class="explanation" data-toggle="tooltip" title="The student will see every option checked while submitting.' +
+                '.If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
                 '<div id="show" class="swal2-input" >' +
                 '<input id="input" name="BoxSelect[]" type="checkbox" value="input" required="">Input</input> <br>' +
                 '<input id="output" name="BoxSelect[]" type="checkbox" value="output" required="">Output</input>' +
@@ -361,9 +361,9 @@ async function newNormalExercise(courseId) {
         {
             confirmButtonText: 'Next &rarr;',
             title: 'New exercise 3/4',
-            html: '<label for="input_file_name"><div class="explanation" data-toggle="tooltip" title="The default input is the standard input. Let standard if you do not want to change it.">Input file name *</div></label>' +
+            html: '<label for="input_file_name"><div class="explanation" data-toggle="tooltip" title="The default input is the standard input.">Input file name *</div></label>' +
                 '<input id="input_file_name" class="swal2-input" value="standard" placeholder="input.txt, input.csv...">' +
-                '<label for="output_file_name"><div class="explanation" data-toggle="tooltip" title="The default output is the standard output.  Let standard if you do not want to change it.">Output file name *</div></label>' +
+                '<label for="output_file_name"><div class="explanation" data-toggle="tooltip" title="The default output is the standard output.">Output file name *</div></label>' +
                 '<input id="output_file_name" class="swal2-input" value="standard" placeholder="output.txt, output.csv...">',
             focusConfirm: false,
             preConfirm: () => {
@@ -414,10 +414,10 @@ function moreIO(i) {
             '<textarea id="input_' + i + '" class="swal2-input" placeholder="2, abcd..."></textarea>' +
             '<label for="output_' + i + '"><div class="explanation" data-toggle="tooltip" title="The first expected output.">Expected output *</div></label>' +
             '<textarea id="output_' + i + '" class="swal2-input" placeholder="4, a b c d..."></textarea>' +
-            '<label for="points_' + i + '"><div class="explanation" data-toggle="tooltip" title="The number of point for a good answer.">Points number * </div></label>' +
+            '<label for="points_' + i + '"><div class="explanation" data-toggle="tooltip" title="Number of point per correct answer.">Points number * </div></label>' +
             '<input id="points_' + i + '"s class="swal2-input" type="number" ></input><br>' +
             '<button data-toggle="tooltip" title="More input output" class="plus-button" onclick=addMoreIO(' + i + ')></button>',
-        confirmButtonText: "Finish",
+        confirmButtonText: "Done",
         preConfirm: function () {
             let input = escapeHtml($("#input_" + i).val())
             let output = escapeHtml($("#output_" + i).val())

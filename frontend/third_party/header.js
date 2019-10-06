@@ -80,7 +80,7 @@ async function settings() {
 function deleteConfirmation() {
     Swal.fire({
         title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        text: "You won't be able to revert this ...",
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -98,7 +98,7 @@ function deleteConfirmation() {
 function addGitHubToken() {
     Swal.fire({
         title: 'Add GitHub personal access token.',
-        html: 'Once added, you will be able to upload link of GitHub private repository. To generate the token, please, follow the instructions: <a class="btn btn-link" href="https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line">here</a>',
+        html: 'Once added, you will be able to upload the GitHub private repository link. To generate the token, please, follow the instructions: <a class="btn btn-link" href="https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line">here</a>',
         input: 'text',
         inputPlaceholder: 'Enter your token',
         showCancelButton: true,
@@ -123,7 +123,7 @@ function signOut() {
         console.log(error)
         Swal.fire(
             'Error',
-            'There was an error in sign out. Please try again. If the problem persists, please contact the programmer.',
+            'There was a technical issue with the sign out. Please try again. If the problem persists, please contact the programmer.',
             'error'
         )
     });
