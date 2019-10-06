@@ -42,7 +42,7 @@ Then, you need to add to the project the private key that you download here:
 
 Then put the file in the folder backend/firebase/ and change its name to private_key.json.
 
-From the firebase storage, upload manually the badkan_guide.pdf in a bucket named guide.
+From the firebase storage, upload manually the badkan_guide.pdf and the badkan_price_plan.pdf in a bucket named marketing.
 
 Then, go to the Database onglet from your firebase project.
 Create a database and then start in test mode.
