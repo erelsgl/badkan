@@ -3,21 +3,25 @@ PATH=/bin:/usr/bin:/usr/local/bin
 
 # Backup test after 1 minutes
 
-# * * * * * echo "test" | python3 database_export.py 
+# * * * * * python3 $HOME/Desktop/badkan/backend/firebase/export/database_export.py "test"
+# * * * * * python3 $HOME/badkan/backend/firebase/export/database_export.py "test"
 
 # Backup each two hours:
 
-1 */2 * * * echo "02-hours" | python3 database_export.py 
+1 */2 * * * python3 $HOME/Desktop/badkan/backend/firebase/export/database_export.py "02-hours"
+1 */2 * * * python3 $HOME/badkan/backend/firebase/export/database_export.py "02-hours"
 
 # Backup each 8 hours:
 
-21 */8 * * * echo "08-hours" | python3 database_export.py 
+21 */8 * * * python3 $HOME/Desktop/badkan/backend/firebase/export/database_export.py "08-hours"
+21 */8 * * * python3 $HOME/badkan/backend/firebase/export/database_export.py "08-hours"
 
 # Backup each day:
 
-41 1 * * * echo "24-hours" | python3 database_export.py 
+41 1 * * * python3 $HOME/Desktop/badkan/backend/firebase/export/database_export.py "24-hours"
+41 1 * * * python3 $HOME/badkan/backend/firebase/export/database_export.py "24-hours"
 
 # Backup each 4 days:
 
-41 3 */4 * * echo "96-hours" | python3 database_export.py 
-
+41 3 */4 * * python3 $HOME/Desktop/badkan/backend/firebase/export/database_export.py "96-hours"
+41 3 */4 * * python3 $HOME/badkan/backend/firebase/export/database_export.py "96-hours"

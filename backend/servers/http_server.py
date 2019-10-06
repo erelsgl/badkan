@@ -76,7 +76,7 @@ def delete_course(course_id):
 def create_exercise():
     exercise_id = create_new_exercise(json.loads(request.form["json"]))
     if "file" in request.files:
-        if not  upload_pdf_instruction(request.files["file"], exercise_id):
+        if not upload_pdf_instruction(request.files["file"], exercise_id):
             return abort(403)
     return 'OK'
 
@@ -183,6 +183,11 @@ def contact_us():
 @app.route('/download_guide/', methods=["POST"])
 def download_guide():
     return download_guide_instructor()
+
+
+@app.route('/download_price_plan/', methods=["POST"])
+def download_price_plan():
+    return download_price_plan_instructor()
 
 
 @app.route('/add_github_token/<uid>/<token>/', methods=["POST"])

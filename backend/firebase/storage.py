@@ -49,9 +49,15 @@ def download_pdf_instruction(exercise_id):
 
 
 def download_guide_instructor():
-    blob = bucket.blob("guide/badkan_guide.pdf")
+    blob = bucket.blob("marketing/badkan_guide.pdf")
     if blob.exists():
         return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=badkan_guide.pdf')
+
+
+def download_price_plan_instructor():
+    blob = bucket.blob("marketing/badkan_price_plan.pdf")
+    if blob.exists():
+        return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=badkan_price_plan.pdf')
 
 
 async def download_submissions_zip(exercise_id):

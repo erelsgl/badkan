@@ -82,8 +82,12 @@ $("#btnSignUp").click(function () {
             id: id,
             checked: false
         });
-        let onSuccess = () => { signIn(email, pass) }
-        doPostJSON(json, "create_auth", "text", (data) => { onMessageCreateAuth(data, onSuccess) })
+        let onSuccess = () => {
+            signIn(email, pass, true)
+        }
+        doPostJSON(json, "create_auth", "text", (data) => {
+            onMessageCreateAuth(data, onSuccess)
+        })
     }
 });
 
@@ -113,7 +117,9 @@ $("#github").click(function () {
                     country_id: prom[0],
                     checked: false
                 });
-                doPostJSON(json, "create_auth_github", "text", (data) => { onMessageCreateAuth(data, signInSuccess) })
+                doPostJSON(json, "create_auth_github", "text", (data) => {
+                    onMessageCreateAuth(data, signInSuccessNewUser)
+                })
             });
         } else {
             signInSuccess();
@@ -144,12 +150,20 @@ function onMessageCreateAuth(data, onSuccess) {
     }
 }
 
-function signIn(email, pass) {
+function signIn(email, pass, newUser = false) {
     firebase.auth().signInWithEmailAndPassword(email, pass).then(function () {
-        signInSuccess();
+        if (newUser) {
+            signInSuccessNewUser()
+        } else {
+            signInSuccess();
+        }
     }).catch(error => {
         showSnackbar(error.message);
     })
+}
+
+function signInSuccessNewUser() {
+    document.location.href = "home.html#tutorial"
 }
 
 function signInSuccess() {

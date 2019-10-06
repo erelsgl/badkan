@@ -151,10 +151,16 @@ async function contactUs() {
                     subject: subject,
                     message: reformatText(message)
                 })
-                doPostJSON(json, "contact_us", "text", () => {})
+                doPostJSON(json, "contact_us", "text", onEmailReceived)
             }
-
         }
+    })
+}
+
+function onEmailReceived() {
+    Swal.fire({
+        title: "Your message is sent.",
+        text: "Our team will contact you soon.",
     })
 }
 
