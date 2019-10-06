@@ -1,3 +1,9 @@
+$(document).ready(function () {
+  console.log(location.hash)
+  if (location.hash === "#tutorial")
+    playTutorialVideo()
+});
+
 $('a[href="#mycourses"]').click(function () {
   showMyCourses()
 })
@@ -156,4 +162,15 @@ function reloadHome() {
 
 function solveExercise(exerciseId) {
   document.location.href = 'badkan.html?exercise=' + exerciseId;
+}
+
+function playTutorialVideo() {
+  let html = '<video class="tuto" autoplay muted controls>' +
+    '<source src="video/video_tutorial.mp4" type="video/mp4">' +
+    '</video>'
+  Swal.fire({
+    title: 'Tutorial',
+    html: html,
+    showConfirmButton: false
+  });
 }

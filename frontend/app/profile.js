@@ -25,10 +25,11 @@ function displayGuide() {
 function noTableGrades() {
     $("#submissions_table").append('<div class="no_grade"><img src="images/msg-err.png"> No grade available</div>')
 }
+
 function displayDataUser() {
     consoleText([userDetails.name + " " + userDetails.last_name, "id " + userDetails.country_id, userEmail,
-    (userDetails.instructor == "True" ? "Instructor access" : "")
-    ],
+            (userDetails.instructor == "True" ? "Instructor access" : "")
+        ],
         'user_data',
         ['white']);
 }
@@ -72,10 +73,8 @@ function consoleText(words, id, colors) {
         if (visible === true) {
             con.className = 'console-underscore hidden'
             visible = false;
-
         } else {
             con.className = 'console-underscore'
-
             visible = true;
         }
     }, 400)

@@ -165,10 +165,14 @@ function hideLoader() {
 }
 
 function downloadGuide() {
-    doPostJSON("", "download_guide", "text", onFinishDownloadGuide)
+    doPostJSON("", "download_guide", "text", onFinishDownloadMarketing)
 }
 
-function onFinishDownloadGuide(data) {
+function downloadPricePlan() {
+    doPostJSON("", "download_price_plan", "text", onFinishDownloadMarketing)
+}
+
+function onFinishDownloadMarketing(data) {
     window.open(data)
 }
 

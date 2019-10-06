@@ -11,6 +11,8 @@ PASSWORD = password.read()
 
 
 def send_mail(message, subject):
+    print(MY_ADDRESS)
+    print(PASSWORD)
     s = smtplib.SMTP(host='smtp-mail.outlook.com', port=587)
     s.starttls()
     s.login(MY_ADDRESS, PASSWORD)
