@@ -165,8 +165,8 @@ Please, check that in the files crontab-backup, the cd is sending you to the goo
 
 To receive the email sended by the users, please, create two files in the backend/server/stmp folder:
 
-    nano backend/servers/smtp/address.txt <your address email>
-    nano backend/servers/smtp/password.txt <your password>
+    nano -L backend/servers/smtp/address.txt <your address email>
+    nano -L backend/servers/smtp/password.txt <your password>
 
 Please, check that the stmp server correspond to your email.
 
