@@ -134,7 +134,7 @@ function getSubmission(submissions, exerciseId) {
       return '<div class=white_smoke_square><div class="timestamp text_lastSubmission">Your last stored submission timestamp is: ' + submission.timestamp + '</div><br><br>' +
         (submission.url == "zip" ?
           '<div class="timestamp text_lastSubmission">Your solution was submitted via a ZIP file.</div><br><br>' :
-          '<div class="timestamp text_lastSubmission">You solution was submitted via a GitHub url :' + submission.url + '</div><br><br>') +
+          '<div class="timestamp text_lastSubmission">Your solution was submitted via a GitHub URL :' + submission.url + '</div><br><br>') +
         '<div class="timestamp text_lastSubmission grade">Your current grade: ' + submission.grade + '</div><br><br>' +
         (submission.manual_grade ? '<div class="timestamp text_lastSubmission grade">Your current manual grade: ' + submission.manual_grade + '</div><br><br>' :
           '') +
