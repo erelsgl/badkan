@@ -1,5 +1,5 @@
 $(document).ready(function () {
-  console.log(location.hash )
+  console.log(location.hash)
   if (location.hash === "#tutorial")
     playTutorialVideo()
 });
@@ -164,10 +164,9 @@ function solveExercise(exerciseId) {
   document.location.href = 'badkan.html?exercise=' + exerciseId;
 }
 
-// TODO: change here the video and make a little pop up (new user?) that introduce the video.
 function playTutorialVideo() {
   let html = '<video class="tuto" autoplay muted controls>' +
-    '<source src="video/video_instructor.mp4" type="video/mp4">' +
+    '<source src="video/video_tutorial.mp4" type="video/mp4">' +
     '</video>'
   Swal.fire({
     title: 'Tutorial',
