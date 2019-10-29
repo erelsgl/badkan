@@ -1,4 +1,4 @@
-$(document).ready(function () {
+function flashlight() {
 	let widthShow = 400
 	let widthShadow1 = 350
 	let widthShadow2 = 300
@@ -6,7 +6,7 @@ $(document).ready(function () {
 	var spotLight2 = $('<div>').addClass('spotLight2');
 	var spotLight3 = $('<div>').addClass('spotLight3');
 	$('body').append(spotLight3, spotLight2, spotLight);
-	event.preventDefault();
+	// event.preventDefault();
 	$('.spotLight3').toggleClass('shadow_2').width(widthShadow2).height(widthShadow2);
 	$('.spotLight2').toggleClass('shadow_1').width(widthShadow1).height(widthShadow1);
 	$('.spotLight').toggleClass('show').width(widthShow).height(widthShow);
@@ -42,4 +42,4 @@ $(document).ready(function () {
 			transform: 'translate(-' + offsetShow + 'px , -' + offsetShow + 'px)'
 		});
 	});
-});
+}

@@ -1,3 +1,9 @@
+flashlight()
+
+function onLoadMain() {
+    
+}
+
 $('#instruction').click(function () {
     alert("The instruction is: multiply a number by two.")
 })

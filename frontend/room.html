@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
-	<meta charset="UTF-8" />
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Room</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+	<!-- Import js. -->
+	<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-auth.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="util/firebaseConfig.js"></script>
 	<script src="util/html/flashlight.js"></script>
-	<link rel="stylesheet" href="style/app/room.css" />
+	<script src="util/protocols/wsProtocol.js?version=2"></script>
+
+	<!-- Import css. -->
+	<link rel="stylesheet" href="style/app/room.css">
+
+	<!-- Import header -->
+	<script src="util/utils.js?version=2"></script>
+	<script src="util/protocols/httpProtocol.js?version=2"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+	<script src="data/retreiveUser.js?version=2"></script>
 </head>
 
 <body>
@@ -36,13 +51,14 @@
 		<img src="images/room/letter.jpg" width="100px" height="100px">
 	</a>
 	<div id="s" class="submit_letter"></div>
-	<div id="u"  class="submit_letter"></div>
+	<div id="u" class="submit_letter"></div>
 	<div id="b" class="submit_letter"></div>
 	<div id="m" class="submit_letter"></div>
 	<div id="i" class="submit_letter"></div>
 	<div id="t" class="submit_letter"></div>
 
 	<script src="app/room.js"></script>
+	<script type="text/javascript" src="third_party/header.js?version=2"></script>
 </body>
 
 </html>
