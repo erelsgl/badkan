@@ -166,7 +166,7 @@ function solveExercise(exerciseId) {
 
 function playTutorialVideo() {
   let html = '<video class="tuto" autoplay muted controls>' +
-    '<source src="video/video_tutorial.mp4" type="video/mp4">' +
+    '<source src="videos/video_tutorial.mp4" type="video/mp4">' +
     '</video>'
   Swal.fire({
     title: 'Tutorial',

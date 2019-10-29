@@ -1,0 +1,135 @@
+.html {
+  width: 100%;
+  overflow: scroll;
+  position: relative;
+}
+
+#background {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  max-height: 100%;
+  border: 0;
+  z-index: -1;
+}
+
+.shadow_1, .shadow_2, .show {
+  position: absolute;
+  top: 10px;
+  left: 50px;
+  width: 120px;
+  height: 120px;
+  background-color: rgba(255, 255, 255. 0.1);
+  border-radius: 50%;
+  box-sizing: none;
+  pointer-events: none;
+}
+
+.submit_letter{
+  top: 0;
+  position: absolute;
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-size: 30px;
+  letter-spacing: -1.4px;
+  word-spacing: 2.8px;
+  color: #16664F;
+  font-weight: 400;
+  text-decoration: none;
+  font-style: oblique;
+  font-variant: small-caps;
+  text-transform: uppercase;
+}
+
+#u {
+  left: 30px;
+}
+
+#b {
+  left: 60px;
+}
+
+#m {
+  left: 90px;
+}
+
+#i {
+  left: 120px;
+}
+
+#t {
+  left: 150px;
+}
+
+#s_image {
+  position: absolute;
+  left: 500px;
+  width: 100px;
+  height: 100px;
+}
+
+#u_image {
+  position: absolute;
+  left: 600px;
+  width: 100px;
+  height: 100px;
+}
+
+#b_image {
+  position: absolute;
+  left: 700px;
+  width: 100px;
+  height: 100px;
+}
+
+#m_image {
+  position: absolute;
+  left: 800px;
+  width: 100px;
+  height: 100px;
+}
+
+#i_image {
+  position: absolute;
+  left: 900px;
+  width: 100px;
+  height: 100px;
+}
+
+#t_image {
+  position: absolute;
+  left: 1000px;
+  width: 100px;
+  height: 100px;
+}
+
+#instruction {
+  margin: 10%;
+}
+
+#letter {
+  display: none;
+}
+
+/* Disallow selection. */
+#s,
+#u,
+#b,
+#m,
+#i,
+#t,
+#s_image,
+#u_image,
+#b_image,
+#m_image,
+#i_image,
+#t_image,
+#instruction,
+#background,
+#letter {
+  user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
