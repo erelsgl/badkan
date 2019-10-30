@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  console.log(location.hash)
   if (location.hash === "#tutorial")
     playTutorialVideo()
 });

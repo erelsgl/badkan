@@ -12,10 +12,17 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="util/firebaseConfig.js"></script>
 	<script src="util/html/flashlight.js"></script>
+	<script src="util/html/accordion.js?version=2"></script>
 	<script src="util/protocols/wsProtocol.js?version=2"></script>
+	<script src="third_party/badkanRoom.js?version=2"></script>
 
 	<!-- Import css. -->
 	<link rel="stylesheet" href="style/app/room.css">
+	<link rel="stylesheet" href="style/app/badkan.css?version=2">
+	<link rel="stylesheet" href="style/shared/accordion.css?version=2">
+	<link rel="stylesheet" href="style/shared/button.css?version=2">
+	<link rel="stylesheet" href="style/shared/square.css?version=2">
+	<link rel="stylesheet" href="style/shared/input.css">
 
 	<!-- Import header -->
 	<script src="util/utils.js?version=2"></script>
@@ -25,38 +32,49 @@
 </head>
 
 <body>
-	<img id="background" src="images/room/background.jpeg">
-	<a id="instruction">
-		<img src="images/room/pdf_display.jpg">
-	</a>
-	<a id="s_image">
-		<img src="images/room/s.png" width="100px" height="100px">
-	</a>
-	<a id="u_image">
-		<img src="images/room/s.png" width="100px" height="100px">
-	</a>
-	<a id="b_image">
-		<img src="images/room/s.png" width="100px" height="100px">
-	</a>
-	<a id="m_image">
-		<img src="images/room/s.png" width="100px" height="100px">
-	</a>
-	<a id="i_image">
-		<img src="images/room/s.png" width="100px" height="100px">
-	</a>
-	<a id="t_image">
-		<img src="images/room/s.png" width="100px" height="100px">
-	</a>
-	<a id="letter">
-		<img src="images/room/letter.jpg" width="100px" height="100px">
-	</a>
-	<div id="s" class="submit_letter"></div>
-	<div id="u" class="submit_letter"></div>
-	<div id="b" class="submit_letter"></div>
-	<div id="m" class="submit_letter"></div>
-	<div id="i" class="submit_letter"></div>
-	<div id="t" class="submit_letter"></div>
+	<div id="main">
+		<img id="background" src="images/room/background.jpg">
+		<a id="instruction">
+			<img src="images/room/instructions.png">
+		</a>
+		<a id="light_switch">
+			<img src="images/room/light_switch.png">
+		</a>
+		<a id="s_image">
+			<img src="images/room/s.png">
+		</a>
+		<a id="u_image">
+			<img src="images/room/u.png">
+		</a>
+		<a id="b_image">
+			<img src="images/room/b.png">
+		</a>
+		<a id="m_image">
+			<img src="images/room/m.png">
+		</a>
+		<a id="i_image">
+			<img src="images/room/i.png">
+		</a>
+		<a id="t_image">
+			<img src="images/room/t.png">
+		</a>
+		<a id="letter">
+			<img src="images/room/letter.png">
+		</a>
+		<div id="s" class="submit_letter"></div>
+		<div id="u" class="submit_letter"></div>
+		<div id="b" class="submit_letter"></div>
+		<div id="m" class="submit_letter"></div>
+		<div id="i" class="submit_letter"></div>
+		<div id="t" class="submit_letter"></div>
 
+		<a id="feedback">
+			<img src="images/room/feedback.png">
+		</a>
+
+		<div id='output' dir='ltr'>
+		</div>
+	</div>
 	<script src="app/room.js"></script>
 	<script type="text/javascript" src="third_party/header.js?version=2"></script>
 </body>
