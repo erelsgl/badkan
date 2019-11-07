@@ -1,4 +1,4 @@
-function doPostJSON(data, target, dataType, onFinish, port = 9000, onBlobFinish = false) {
+function doPostJSON(data, target, dataType, onFinish, port = 8080, onBlobFinish = false) {
     // Maybe change this design. This is the solution to the problem of the asynchronous with utils.
     var BACKEND_FILE_PORTS = [port];
     var backendPort = getParameterByName("backend"); // in utils.js
@@ -26,7 +26,7 @@ function doPostJSON(data, target, dataType, onFinish, port = 9000, onBlobFinish 
 
 function doPostJSONAndFile(data, target, dataType, onFinish) {
     // Maybe change this design. This is the solution to the problem of the asynchronous with utils.
-    var BACKEND_FILE_PORTS = [9000];
+    var BACKEND_FILE_PORTS = [8080];
     var backendPort = getParameterByName("backend"); // in utils.js
     if (!backendPort)
         backendPort = BACKEND_FILE_PORTS[Math.floor(Math.random() * BACKEND_FILE_PORTS.length)];
