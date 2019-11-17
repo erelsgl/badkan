@@ -144,5 +144,7 @@ def get_running_command(compiler, main_file):
         return "./a.out"
     elif compiler == "python3":
         return "python3 " + main_file
+    elif compiler == "perl":
+        return "perl " + main_file
     else:
         return "unknown compiler."

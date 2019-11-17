@@ -337,6 +337,8 @@ def get_language_by_exercise_id(exercise_id):
         return "java"
     elif compiler == "python3":
         return "python"
+    elif compiler == "perl":
+        return "perl"
     elif compiler == "g++":
         return "c"  # TODO: Correct this: it could be c or c++.
     else:

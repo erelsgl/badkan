@@ -58,9 +58,9 @@ unzip -qq $FOLDER_NAME
 
 cd */
 
-# Handle conflict with python that don't need compile.
-if [ $COMPILER != "python3" ] ; then
-    $COMPILER $MAIN_FILE 
+# Handle conflict with python and perl that don't need compile.
+if [[ ( $COMPILER != "python3" ) || ( $COMPILER != "perl" ) ]] ; then
+    $COMPILER $MAIN_FILE > /dev/null 2>&1
 fi;
 
 for item in $INPUT_OUTPUT_POINTS; do

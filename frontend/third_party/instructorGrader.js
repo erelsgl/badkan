@@ -196,10 +196,12 @@ function onError(_event) {
 }
 
 function onMessage(_event) {
-    if (_event.data.includes('Submission of the student')) {
-        logServer("color:green", _event.data);
-    } else {
-        logServer("color:black", _event.data);
+    let message = _event.data
+    try {
+        let json = JSON.parse(message)
+        logServer(json.style, json.message);
+    } catch (e) {
+        logServer("color:black", message);
     }
 }
 
