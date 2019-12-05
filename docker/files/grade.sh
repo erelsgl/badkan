@@ -22,12 +22,12 @@ EOF
 
 run_standard_and_read_standard() {
     input=$1
-    return $(echo "$input" | $RUNNER)
+    return $(echo -e "$input" | $RUNNER)
 }
 
 run_standard_and_read_file() {
     input=$1
-    $(echo "$input" | $RUNNER)
+    $(echo -e "$input" | $RUNNER)
     return $(cat $OUTPUT_FILE_NAME)
 }
 
@@ -64,7 +64,7 @@ if [[ ( $COMPILER != "python3" ) || ( $COMPILER != "perl" ) ]] ; then
 fi;
 
 for item in $INPUT_OUTPUT_POINTS; do
-    iter=$(echo $item | tr "@*@" "\n")
+    iter=$(echo -e $item | tr "@*@" "\n")
     arr=($iter)
     input=${arr[0]}
     echo "The input is" $input 
