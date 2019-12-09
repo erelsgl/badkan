@@ -23,6 +23,14 @@
   width: 66.66666%;
 }
 
+.gc--2-of-5 {
+  width: 40%;
+}
+
+.gc--3-of-5 {
+  width: 60%;
+}
+
 .naccs {
   position: relative;
 }

@@ -89,6 +89,7 @@ async def docker_command_tee(args, websocket):
 
 async def docker_command_tee_with_grade(args, websocket, show_input, show_output, signature, output=None):
     proc = await docker_command(args)
+
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         print(line)

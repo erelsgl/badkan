@@ -88,6 +88,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
         '<option  value="javac"' + (exercise.exercise_compiler == "javac" ? "selected" : "") + '>javac</option>' +
         '<option  value="g++"' + (exercise.exercise_compiler == "g++" ? "selected" : "") + '>g++ (c or c++)</option>' +
         '<option  value="python3"' + (exercise.exercise_compiler == "python3" ? "selected" : "") + '>python3</option>' +
+        '<option  value="perl"' + (exercise.exercise_compiler == "perl" ? "selected" : "") + '>perl</option>' +
         '</select>' +
         '<label for="submission_option' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The student can submit his exercise via each method checked.' +
         'If you want the student to submit only via GitHub, check only the GitHub box .">Submission option *</div></label>' +
@@ -310,6 +311,7 @@ async function newNormalExercise(courseId) {
                 '<option value="javac">javac</option>' +
                 '<option value="g++">g++ (c or c++)</option>' +
                 '<option value="python3">python3</option>' +
+                '<option value="perl">perl</option>' +
                 '</select>' +
                 '<label for="submission_option"><div class="explanation" data-toggle="tooltip" title="The student can submit his exercise via each method checked.' +
                 'If you want the student to submit only via GitHub, check only the GitHub box .">Submission option *</div></label>' +
@@ -342,7 +344,6 @@ async function newNormalExercise(courseId) {
                 '<input id="exercise_instruction" class="swal2-input" type="file" accept="application/pdf">' +
                 '<label for="deadline"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
                 '<input id="deadline" class="swal2-input" type="date" name="dealine"></input>' +
-
                 '<label for="show"><div class="explanation" data-toggle="tooltip" title="The student will see every option checked while submitting.' +
                 '.If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
                 '<div id="show" class="swal2-input" >' +

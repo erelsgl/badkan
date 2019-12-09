@@ -1,6 +1,6 @@
 // Here is the html code needed in the body.
 let divHeader = '<div class="container">' +
-    '<input id = "logo" type = "image" src = "logo/logo.png" onclick = "document.location.href=\'home.html\'">' +
+    '<input id = "logo" type = "image" src = "images/logo/logo.png" onclick = "document.location.href=\'home.html\'">' +
     '<div id="pagename">' +
     document.title +
     '</div>' +
