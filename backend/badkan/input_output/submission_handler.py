@@ -44,7 +44,7 @@ async def check_submission(websocket, submission):
     else:
         await tee(websocket, "This submission is meaningless, any grade has been stored. <br> < If you want the grade to be stored, please check the \"Save the grade\" button.")
     edit_csv_trace(str(currentDT), grade, submitters,
-                       "FINISH", exercise["exercise_name"], zip_filename)
+                   "FINISH", exercise["exercise_name"], zip_filename)
     return 'OK'
 
 
@@ -132,6 +132,8 @@ def dict_to_string(my_dicts):
     answer = ''
     for my_dict in my_dicts:
         for item in my_dict.values():
+            item = item.replace("\n", "^,^").strip()
+            item = item.replace(" ", "&-&").strip()
             answer += item + '@*@'
         answer += ' '
     return answer

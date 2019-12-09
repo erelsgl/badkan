@@ -22,7 +22,7 @@ EOF
 
 run_standard_and_read_standard() {
     input=$1
-    return $(echo -e "$input" | $RUNNER)
+    echo -e "$(echo $input | tr -s "^,^" "\n" | tr -s '&\-&' ' ' | $RUNNER)"
 }
 
 run_standard_and_read_file() {
@@ -44,15 +44,6 @@ run_file_and_read_standard() {
     return $($RUNNER)
 }
 
-edit_grade() {
-    output=$1
-    expected_output=$2
-    points=$3
-    if [ $output == $expected_output ]; then
-                ((GRADE+=$points))
-    fi;
-}
-
 cd grading_room/$FOLDER_NAME
 unzip -qq $FOLDER_NAME
 
@@ -63,27 +54,34 @@ if [[ ( $COMPILER != "python3" ) || ( $COMPILER != "perl" ) ]] ; then
     $COMPILER $MAIN_FILE > /dev/null 2>&1
 fi;
 
+
+
 for item in $INPUT_OUTPUT_POINTS; do
-    iter=$(echo -e $item | tr "@*@" "\n")
+    iter=$(echo $item | tr "@*@" "\n")
     arr=($iter)
     input=${arr[0]}
-    echo "The input is" $input 
     expected_output=${arr[1]}
     points=${arr[2]}
+    echo "The input is" $input | tr -s "^,^" " " | tr -s '&\-&' ' '
     if [[ ( $INPUT_FILE_NAME == "standard" ) &&  ( $OUTPUT_FILE_NAME == "standard") ]]; then
-        run_standard_and_read_standard $input
+        output=$(run_standard_and_read_standard $input)
     elif [[ ( $INPUT_FILE_NAME == "standard" ) && ( $OUTPUT_FILE_NAME != "standard" ) ]]; then
-        run_standard_and_read_file $input
+        output=$(run_standard_and_read_file $input)
     elif [[ ( $INPUT_FILE_NAME != "standard" ) &&  ( $OUTPUT_FILE_NAME == "standard" ) ]]; then
-        run_file_and_read_standard $input
+        output=$(run_file_and_read_standard $input)
     elif [[ ( $INPUT_FILE_NAME != "standard" ) &&  ( $OUTPUT_FILE_NAME != "standard" ) ]]; then
-        run_file_and_read_file $input
+        output=$(run_file_and_read_file $input)
     else  # If the input is not standard.
         echo "error..."
     fi;
-    output=$?
     echo "Your output is" $output  
-    edit_grade $output $expected_output $points
+
+    expected_output=$(echo $expected_output | tr -s '&\-&' ' ' | tr -s "^,^" "\n")
+
+    if [ "$output" == "$expected_output" ]; then
+                ((GRADE+=$points))
+    fi;
+
 done
 
 echo $SIGNATURE $GRADE
