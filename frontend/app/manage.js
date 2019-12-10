@@ -343,7 +343,7 @@ async function newNormalExercise(courseId) {
                 '<label for="exercise_instruction"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
                 '<input id="exercise_instruction" class="swal2-input" type="file" accept="application/pdf">' +
                 '<label for="deadline"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
-                '<input id="deadline" class="swal2-input" type="date" name="dealine"></input>' +
+                '<input id="deadline" class="swal2-input" type="date" name="dealine"></input> <input id="deadline_hours" class="swal2-input" type="time" name="dealine_hours"></input>' +
                 '<label for="show"><div class="explanation" data-toggle="tooltip" title="The student will see every option checked while submitting.' +
                 '.If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
                 '<div id="show" class="swal2-input" >' +
