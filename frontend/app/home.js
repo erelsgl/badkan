@@ -109,7 +109,8 @@ function createAccordionBodyHomeRegister(courseId, exercise) {
     (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="data">' +
       exercise.exercise_description + '</div><br><br>' : "") +
     (exercise.deadline ? '<div class=timestamp>Deadline : ' +
-      exercise.deadline + '</div><br><br>' : "") +
+      exercise.deadline + '</div>' + (exercise.deadline_hours ? '<div class=timestamp>' +
+        exercise.deadline_hours + '</div><br><br>' : "") : "") +
     '<button class="btn blue_enjoy" onclick="registeringToCourse(' + "'" + courseId + "'" +
     ')">Register to the course <i class="glyphicon glyphicon-plus"></i></button>' +
     '</div>';
@@ -123,7 +124,8 @@ function createAccordionBodyHomeSolve(exerciseId, exercise, submissions) {
       exercise.exercise_description + '</div><br><br>' : "") +
     (exercise.pdf_instruction ? '<button class="btn btn-link"  onclick="downloadPdfInstruction(' + "'" + exerciseId + "'" + ')">Current pdf</button><br><br>' : "") +
     (exercise.deadline ? '<div class=timestamp>Deadline : ' +
-      exercise.deadline + '</div><br><br>' : "") +
+      exercise.deadline + '</div>' + (exercise.deadline_hours ? '<div class=timestamp>' +
+        exercise.deadline_hours + '</div><br><br>' : "") : "") +
     '<div class="description">The main function of your submission must be : </div>' + '<div class="data">' + exercise.main_file + '</div><br><br>' +
     '<div class="description">You need to read the input from : </div>' + '<div class="data">' + exercise.input_file_name + '</div><br><br>' +
     '<div class="description">You need to read the output from : </div>' + '<div class="data">' + exercise.output_file_name + '</div><br><br><br><br>' +

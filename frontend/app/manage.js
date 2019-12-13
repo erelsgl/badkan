@@ -392,6 +392,7 @@ async function newNormalExercise(courseId) {
                 main_file: mainFile,
                 exercise_description: exerciseDescription,
                 deadline: deadline,
+                deadline_hours: deadline_hours,
                 input_file_name: inputFileName,
                 output_file_name: outputFileName,
                 input_output_points: inputOutputPointsNew,
