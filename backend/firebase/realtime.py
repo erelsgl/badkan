@@ -233,8 +233,12 @@ def retreive_exercise_for_submission(exercise_id):
     ref = db.reference('exercises/'+exercise_id)
     exercise = ref.get()
     if "deadline" in exercise and exercise["deadline"] != "":
+        if not "deadline_hours" in exercise:
+            exercise["deadline_hours"] = '23:59'
         deadline = datetime.strptime(
-            exercise["deadline"] + ' 23:59:59.59', '%Y-%m-%d %H:%M:%S.%f')
+            exercise["deadline"] + ' '+ exercise["deadline_hours"] + ':59.59', '%Y-%m-%d %H:%M:%S.%f')
+        print(deadline)
+        print(datetime.now())
         if deadline < datetime.now():
             return {"error": "The submissions are over."}
     return exercise

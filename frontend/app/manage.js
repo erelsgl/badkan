@@ -109,7 +109,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
         '<label for="exercise_instruction' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
         '<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
         '<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
-        '<input id="deadline' + exerciseId + '" class="my_input" type="date" name="dealine" value="' + exercise.deadline + '"></input><br><br>' +
+        '<input id="deadline' + exerciseId + '" class="my_input" type="date" name="dealine" value="' + exercise.deadline + '"></input> <input id="deadline_hours' + exerciseId + '" type="time" name="dealine_hours" value="' + exercise.deadline_hours + '"></input><br><br>' +
         '<label for="show' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The student will be able to see every option checked while submitting.' +
         'If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
         '<div id="show' + exerciseId + '" ></div>' +
@@ -343,7 +343,7 @@ async function newNormalExercise(courseId) {
                 '<label for="exercise_instruction"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
                 '<input id="exercise_instruction" class="swal2-input" type="file" accept="application/pdf">' +
                 '<label for="deadline"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
-                '<input id="deadline" class="swal2-input" type="date" name="dealine"></input>' +
+                '<input id="deadline" class="swal2-input" type="date" name="dealine"></input> <input id="deadline_hours" class="swal2-input" type="time" name="dealine_hours"></input>' +
                 '<label for="show"><div class="explanation" data-toggle="tooltip" title="The student will see every option checked while submitting.' +
                 '.If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
                 '<div id="show" class="swal2-input" >' +
@@ -355,6 +355,7 @@ async function newNormalExercise(courseId) {
                 exerciseDescription = escapeHtml($("#exercise_description").val())
                 instructionPdf = $('#exercise_instruction').prop('files')[0];
                 deadline = $("#deadline").val()
+                deadline_hours = $("#deadline_hours").val()
                 showInput = $("input[id='input']:checked").val()
                 showOutput = $("input[id='output']:checked").val()
             }
@@ -391,6 +392,7 @@ async function newNormalExercise(courseId) {
                 main_file: mainFile,
                 exercise_description: exerciseDescription,
                 deadline: deadline,
+                deadline_hours: deadline_hours,
                 input_file_name: inputFileName,
                 output_file_name: outputFileName,
                 input_output_points: inputOutputPointsNew,
@@ -480,6 +482,7 @@ function editExercise(exerciseId, inputOutputPointsSize) {
             exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
             instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
             deadline = $("#deadline" + exerciseId).val()
+            deadline_hours = $("#deadline_hours" + exerciseId).val()
             const showInput = $('input[id="input' + exerciseId + '"]:checked').val()
             const showOutput = $('input[id="output' + exerciseId + '"]:checked').val()
             $("#main").hide()
@@ -500,6 +503,7 @@ function editExercise(exerciseId, inputOutputPointsSize) {
                 main_file: mainFile,
                 exercise_description: exerciseDescription,
                 deadline: deadline,
+                deadline_hours:deadline_hours,
                 input_file_name: inputFileName,
                 output_file_name: outputFileName,
                 input_output_points: inputOutputPoints,
