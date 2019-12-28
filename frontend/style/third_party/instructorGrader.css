@@ -1,0 +1,18 @@
+select.input,
+textarea.input {
+    /*  There is no possibility for "box-shadow" to be convert in % */
+    -webkit-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
+    -moz-box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
+    box-shadow: inset 1px 1px 1px rgb(189, 184, 184);
+    overflow: auto;
+    border: 1px solid #aaa;
+}
+
+.instructorGrader.input {
+    width: 80%;
+    margin-left: 10%;
+}
+
+.text {
+    margin-left: 8%;
+}

@@ -1,0 +1,15 @@
+.white_square_1 {
+    border-radius: 1%/4%;
+    padding: 3%;
+}
+
+.white_square_2 {
+    border: dashed 1px;
+    padding: 5px;
+    font-family: courier;
+    border-radius: 1%/4%;
+}
+
+.margin_top {
+    margin-top: 2%;
+}

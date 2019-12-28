@@ -1,0 +1,58 @@
+.pure-table {
+    background: #FFF;
+}
+
+.label_grader_table {
+    margin-top: 5%;
+}
+
+#label_submissions_table {
+    margin-top: 15%;
+}
+
+#guide {
+    background-color: whitesmoke;
+    text-align: center;
+    width: 58%;
+    margin-left: 19%;
+}
+
+.no_grade {
+    border-radius: 4%/35%;
+}
+
+/* terminal text */
+
+@import url(https://fonts.googleapis.com/css?family=Khula:700);
+
+body {
+    background: #111;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+.console-container {
+    font-family: Khula;
+    font-size: 4em;
+    text-align: center;
+    height: 200px;
+    width: 600px;
+    display: block;
+    position: absolute;
+    color: white;
+    padding-top: 3%;
+    /* top: 0; */
+    /* bottom: 0; */
+    left: 0;
+    right: 10%;
+    margin: auto;
+}
+
+.console-underscore {
+    display: inline-block;
+    position: relative;
+    top: -0.14em;
+    left: 10px;
+}

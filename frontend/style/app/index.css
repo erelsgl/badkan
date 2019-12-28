@@ -1,0 +1,114 @@
+#logo {
+    padding-top: 1%;
+    float: left;
+    width: 20%;
+    height: auto;
+}
+
+#pagename {
+    float: left;
+    padding-left: 1%;
+    padding-top: 1%;
+    width: 80%;
+    color: #fff;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-style: italic;
+    font-size: 35px;
+}
+
+#list {
+    float: left;
+    padding-top: 8%;
+    padding-left: 4%;
+}
+
+#form {
+    float: right;
+    padding-top: 9%;
+}
+
+.sofia {
+    font-family: 'Sofia';
+    font-size: 40px;
+    text-align: center;
+}
+
+.container {
+    width: 1220px;
+    padding-bottom: 1%
+}
+
+.byline {
+    color: #9799a7;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-style: italic;
+}
+
+.enum {
+    color: #ffffff;
+    ;
+    font-family: Georgia, Times, "Times New Roman", serif;
+    font-size: 30px;
+}
+
+/* List */
+
+.list-type1 {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.list-type1 ol {
+    counter-reset: li;
+    list-style: none;
+    *list-style: decimal;
+    font-size: 25px;
+    font-family: 'Raleway', sans-serif;
+    padding: 0;
+    margin-bottom: 4em;
+}
+
+.list-type1 ol ol {
+    margin: 0 0 0 2em;
+}
+
+.list-type1 a {
+    position: relative;
+    display: block;
+    padding: .4em .4em .4em 2em;
+    *padding: .4em;
+    margin: .5em 0;
+    background: #00bfff;
+    color: #000;
+    text-decoration: none;
+    -moz-border-radius: .3em;
+    -webkit-border-radius: .3em;
+    border-radius: 10em;
+    transition: all .2s ease-in-out;
+}
+
+.list-type1 a:hover {
+    background: #D3D3D3;
+    text-decoration: none;
+    transform: scale(1.1);
+}
+
+.list-type1 a:before {
+    content: counter(li);
+    counter-increment: li;
+    position: absolute;
+    left: -1.3em;
+    top: 60%;
+    margin-top: -1.3em;
+    background: #00bfff;
+    height: 2.3em;
+    width: 2.3em;
+    line-height: 2em;
+    border: .2em solid rgb(211, 230, 241);
+    text-align: center;
+    font-weight: bold;
+    -moz-border-radius: 2em;
+    -webkit-border-radius: 2em;
+    border-radius: 2em;
+    color: rgb(211, 230, 241);
+}

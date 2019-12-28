@@ -5,16 +5,12 @@ Utility functions: clone git repository, pull git repository, remove path
 import subprocess
 from subprocess import call
 import asyncio
+import re
+import json
 
-
-async def old_docker_command(command_words):
-    """
-    :param command_words: a list of words to be executed by docker.
-    :return: a stream that contains all output of the command (stdout and stderr together)
-    """
-    return await asyncio.subprocess.create_subprocess_exec(
-        *(["docker"] + command_words),
-        stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.STDOUT)
+GRADE_REGEXP = re.compile("\*\*\* ([0-9]+) \*\*\*", re.IGNORECASE)
+OUTPUT_REGEXP = re.compile("Your output is (.*)", re.IGNORECASE)
+INPUT_REGEXP = re.compile("The input is (.*)", re.IGNORECASE)
 
 
 async def tee(websocket, message):
@@ -50,7 +46,7 @@ async def tee_process(proc, websocket):
 
 
 def terminal_command(args):
-    return subprocess.Popen(args, stdout=subprocess.PIPE)
+    return subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
 
 async def docker_command(args):
@@ -63,6 +59,14 @@ async def terminal_command_log(args):
     proc = terminal_command(args)
     log_process(proc)
     proc.wait()
+
+
+async def terminal_command_return(args):
+    proc = terminal_command(args)
+    answer = ""
+    for line in proc.stdout:
+        answer += line.decode('utf-8').strip()
+    return answer
 
 
 async def terminal_command_tee(args, websocket):
@@ -80,4 +84,35 @@ async def docker_command_log(args):
 async def docker_command_tee(args, websocket):
     proc = await docker_command(args)
     await tee_process_async(proc, websocket)
+    await proc.wait()
+
+
+async def docker_command_tee_with_grade(args, websocket, show_input, show_output, signature, output=None):
+    proc = await docker_command(args)
+
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        print(line)
+        if not signature in line:
+            answer = {'message': line}
+            match_output = OUTPUT_REGEXP.search(line)
+            match_input = INPUT_REGEXP.search(line)
+            if output is not None and match_output:
+                output.append(match_output.group(1))
+            if match_input and not show_input:
+                continue
+            if match_output and not show_output:
+                continue
+            if not match_input and not match_output:
+                answer["style"] = "color:red"
+                await tee(websocket,  json.dumps(answer))
+            else:
+                answer["style"] = "color:black"
+                await tee(websocket, json.dumps(answer))
+        else:
+            grade = line[line.find(' '):]
+            answer["message"] = 'Your final grade is: ' + grade
+            answer["style"] = "color:green"
+            await tee(websocket, json.dumps(answer))
+            return grade
     await proc.wait()

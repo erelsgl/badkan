@@ -2,72 +2,176 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Register</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Register</title>
 
-  <!-- Import js. -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
-  <script src='util/FirebaseConfig.js'></script>
-  <script type="text/javascript" src="util/Firebase.js"></script>
-  <script type="text/javascript" src="objects/User.js"></script>
-  <script type="text/javascript" src="objects/MyNotification.js"></script>
-  <script type="text/javascript" src="util/EmptyFields.js"></script>
-  <script type="text/javascript" src="util/utils.js"></script>
+    <!-- Import js. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src='util/firebaseConfig.js?version=5'></script>
+    <script type="text/javascript" src="util/utils.js?version=5"></script>
+    <script type="text/javascript" src="util/protocols/httpProtocol.js?version=5"></script>
 
-  <!-- Import css. -->
-  <link rel="stylesheet" href="style/snackbar.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="style/style.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr"
-    crossorigin="anonymous">
-
+    <!-- Import css. -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
+    <link rel="stylesheet" href="style/font.css?version=5">
+    <link rel="stylesheet" href="style/list.css?version=5">
+    <link rel="stylesheet" href="style/shared/shape.css?version=5">
+    <link rel="stylesheet" href="style/app/index.css?version=5">
+    <link rel="stylesheet" href="style/third_party/snackbar.css?version=5">
 </head>
 
 <body>
-  <h3>Welcome to the Badkan !</h3>
-  <ul class="nav nav-pills">
-    <li class="active"><a data-toggle="pill" href="#home">Sign In</a></li>
-    <li><a data-toggle="pill" href="#menu1">Register</a></li>
-  </ul>
-  <div class="tab-content">
-    <div id="home" class="tab-pane fade in active">
-      <br />
-      <input type="email" id="txtEmail" placeholder="Enter email" /> <br />
-      <input type="password" id="txtPassword" placeholder="Enter password" /><br />
-      <button id="btnLogin" type="button" class="btn btn-success">Sign in</button>
+    <div id="header">
+        <div class="container">
+            <input id="logo" type="image" src="images/logo/banner.png" onclick="location.reload();">
+            <div id="pagename">Automatic checking and grading of programming assignments...</div>
+        </div>
     </div>
-    <div id="menu1" class="tab-pane fade">
-      <br />
-      <input type="email" id="txtEmailSignIn" placeholder="Enter email" /> <br />
-      <input type="password" id="txtPasswordSignIn" placeholder="Enter password" /><br />
-      <input id="txtName" placeholder="Enter name" /> <br />
-      <input id="txtLastName" placeholder="Enter last name" /> <br />
-      <input id="txtId" placeholder="Enter id" /><br />
-      <input id="admin" type="checkbox" name="admin" value="Admin"> Register as admin<br>
-      <button id="btnSignUp" type="button" class="btn btn-success">Register</button>
+
+    <div id="main">
+        <div class="container">
+            <div id="list">
+                <h4>
+                    <div class="list-type1">
+                        <ol>
+                            <li>
+                                <a href="#githubSubmission">
+                                    <p class="enum">Efficient use of Github</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#grade">
+                                    <p class="enum">Automatic Grade</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#instructor">
+                                    <p class="enum">Save instructor's time</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#peer">
+                                    <p class="enum">Peer grading</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#realtime">
+                                    <p class="enum">Real time grading</p>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#other">
+                                    <p class="enum">And more features...</p>
+                                </a>
+                            </li>
+                        </ol>
+                    </div>
+                </h4>
+            </div>
+
+            <div id="form">
+                <div class="w3-tag w3-card-4 w3-light-grey w3-text-blue">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#signin">Sign In</a></li>
+                        <li><a data-toggle="tab" href="#menu1">Register</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="signin" class="tab-pane fade in active" style="background-color:rgb(211, 230, 241);">
+                            <p>
+                                <div class="w3-row w3-section">
+                                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i>
+                                    </div>
+                                    <div class="w3-rest">
+                                        <input type="email" class="w3-input w3-border" id="txtEmail" name="email"
+                                            type="text" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="w3-row w3-section">
+                                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-key"></i></div>
+                                    <div class="w3-rest">
+                                        <input class="w3-input w3-border" type="password" id="txtPassword"
+                                            name="password" type="text" placeholder="Password">
+                                    </div>
+                                </div>
+                                <button id="btnLogin" type="button"
+                                    class="w3-button w3-block w3-section w3-blue w3-ripple">Sign
+                                    in</button>
+                            </p>
+                        </div>
+                        <div id="menu1" class="tab-pane fade" style="background-color:rgb(211, 230, 241);">
+                            <p>
+                                <div class="w3-row w3-section">
+                                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i>
+                                    </div>
+                                    <div class="w3-rest">
+                                        <input type="email" class="w3-input w3-border" id="txtEmailSignIn" name="email"
+                                            type="text" placeholder="Email">
+                                    </div>
+                                </div>
+                                <div class="w3-row w3-section">
+                                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-key"></i></div>
+                                    <div class="w3-rest">
+                                        <input class="w3-input w3-border" type="password" id="txtPasswordSignIn"
+                                            name="password" type="text" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="w3-row w3-section">
+                                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
+                                    <div class="w3-rest">
+                                        <input class="w3-input w3-border" id="txtName" name="first" type="text"
+                                            placeholder="First Name">
+                                    </div>
+                                </div>
+                                <div class="w3-row w3-section">
+                                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
+                                    <div class="w3-rest">
+                                        <input class="w3-input w3-border" id="txtLastName" name="last" type="text"
+                                            placeholder="Last Name">
+                                    </div>
+                                </div>
+                                <div class="w3-row w3-section">
+                                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-id-card"></i>
+                                    </div>
+                                    <div class="w3-rest">
+                                        <input class="w3-input w3-border" id="txtId" name="last" type="text"
+                                            placeholder="Id">
+                                    </div>
+                                </div>
+                                
+                                <button id="btnSignUp" type="button"
+                                    class="w3-button w3-block w3-section w3-blue w3-ripple">Register</button>
+                            </p>
+                        </div>
+                        <h4>
+                            <p class="byline">
+                                If you have a GitHub account: Sign in or register by clicking on the icon.
+                            </p>
+                        </h4>
+                        <button id="github" class="btn">
+                            <font size="10"><i class="fab fa-github"></i></font>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <h4>If you have a github account: Sign in or register by clicking on the icon.</h4>
-    <button id="github" class="btn">
-      <font size="10"><i class="fab fa-github"></i></font>
-    </button>
-  </div>
 
-  <!-- snackbar. -->
-  <div id="emptyField">Please fill all the fields.</div>
-  <div id="mailUsed">The email address is already in use by another account.</div>
-  <div id="passShort">Password should be at least 6 characters.</div>
-  <div id="mailGithub">The Github mail is already associated with another account.</div>
-  <div id="wrongData">The data is wrong.</div>
-  <div id="badMail">The mail is badly formated.</div>
+    <div class="sofia"> Badkan</div>
 
-  <script type="text/javascript" src="app/Index.js"></script>
-  <p class="footer">
-    Badkan 2.0 by <a href="https://github.com/SamuelBismuth">Samuel Bismuth</a>, samuelbismuth101@gmail.com.
-    <script>document.write("Last modified: " + document.lastModified)</script>
-  </p>
+    <div id="snackbar"></div>
+    
+    <script type="text/javascript" src="app/index.js?version=5"></script>
+
 </body>
 
 </html>

@@ -69,8 +69,8 @@ function websocketCloseReason(code) {
 }
 
 /**
-* From https://stackoverflow.com/a/901144/827927
-*/
+ * From https://stackoverflow.com/a/901144/827927
+ */
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;
     name = name.replace(/[\[\]]/g, "\\$&");
@@ -81,33 +81,103 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function adminPrivilege(checked) {
+function instructorPrivilege(checked) {
     if (checked) {
-        var response = prompt("Please enter the password to get admin privilege:");
-        if (response === "3ubf2e9-cb") {
-            return true;
-        } else {
-            alert("wrong password");
-            return false;
-        }
+        alert("Currently everyone can be instructor, we'll change this by redirecting the user to a payment page.")
+        return true;
     } else {
         return true;
     }
 }
 
-function displayNoneById(id) {
-    document.getElementById(id).style.display = "none";
-}
-
-
-function displayBlockById(id) {
-    document.getElementById(id).style.display = "block";
-}
-
-function showSnackbar(myClass) {
+function showSnackbar(message) {
+    $('#snackbar').html(message);
+    myClass = $('#snackbar')[0]
     myClass.className = "show";
     setTimeout(function () {
         myClass.className = myClass.className.replace("show", "");
     }, 2500);
     return;
+}
+
+/**
+ * This method check that all the field are filed.
+ * @param {String} name 
+ * @param {String} lastName 
+ * @param {Stirng} id 
+ */
+function checkEmptyFieldsSnackbar(args) {
+    if (args.includes(undefined) || args.includes("")) {
+        showSnackbar("Please fill all the fields.")
+        return false;
+    }
+    return true;
+}
+
+function checkEmptyFieldsAlert(args) {
+    if (args.includes(undefined) || args.includes("")) {
+        Swal.fire(
+            'An error occured!',
+            'Please fill all the fields.',
+            'error'
+        )
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Sanitize the input of any user.
+ * @param {String} unsafe 
+ */
+function escapeHtml(unsafe) {
+    if (!unsafe) {
+        return ''
+    }
+    return unsafe
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+/**
+ * Sanitize the input of any user with respect to git.
+ * @param {String} unsafe 
+ */
+function escapeHtmlWithRespectGit(unsafe) {
+    return unsafe
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function showLoader() {
+    $('#main').hide();
+    $('#loader').show();
+}
+
+function hideLoader() {
+    $('#loader').hide();
+    $('#main').show();
+}
+
+function downloadGuide() {
+    doPostJSON("", "download_guide", "text", onFinishDownloadMarketing)
+}
+
+function downloadPricePlan() {
+    doPostJSON("", "download_price_plan", "text", onFinishDownloadMarketing)
+}
+
+function onFinishDownloadMarketing(data) {
+    window.open(data)
+}
+
+function deleteBlank(array) {
+    return array.filter(function (el) {
+        return el != "";
+    });
 }

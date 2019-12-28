@@ -1,0 +1,18 @@
+.white_smoke_square {
+    border-radius: 4%/20%;
+    margin-top: 3%;
+    text-align: center;
+}
+
+.instructorText {
+    font-family: Arial;
+    font-size: 130%;
+    font-weight: bold;
+}
+
+.video {
+    margin-left: 5%;
+    margin-top: 3%;
+    height: 90%;
+    width: 90%;
+}

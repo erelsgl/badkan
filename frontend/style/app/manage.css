@@ -1,0 +1,149 @@
+#coursesContent {
+    display: block;
+    margin-top: 2%;
+    float: left;
+    width: 100%;
+}
+
+.addCourse {
+    margin-left: 37%;
+}
+
+.addExercise {
+    margin-left: 33%;
+}
+
+.course {
+    border-radius: 2%/2%;
+    padding: 2%;
+    background-color: white;
+    border: 1px solid black;
+}
+
+.exercise {
+    padding: 2%;
+    border-radius: 2%/1%;
+    background-color: whitesmoke;
+    border: 1px solid grey;
+}
+
+/* Hiding the square of the original checkbox. */
+.radio_checkbox {
+    position: relative;
+}
+
+input.btn_radio,
+input.btn_checkbox {
+    display: none;
+
+}
+
+/* Border of the case. */
+label.btn_radio,
+label.btn_checkbox {
+    display: block;
+    position: relative;
+    margin: 10px;
+    padding: 15px 30px 15px 62px;
+    border: 3px solid white;
+    border-radius: 100px;
+    color: white;
+    cursor: pointer;
+    transition: background-color .2s, box-shadow .2s;
+    width: 95%;
+}
+
+/* Before to be checked. */
+label.btn_radio:before,
+label.btn_checkbox:before {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: 32px;
+    border: 3px solid white;
+    border-radius: 100px;
+    transition: background-color .2s;
+}
+
+label.btn_radio:hover,
+input.btn_radio:focus+label,
+label.btn_checkbox:hover,
+input.btn_checkbox:focus+label {
+    box-shadow: 0 0 20px rgba(0, 0, 0, .6);
+}
+
+input.btn_radio:checked+label,
+input.btn_checkbox:checked+label {
+    background-color: #00bfff;
+}
+
+input.btn_radio:not(:checked)+label,
+input.btn_checkbox:not(:checked)+label {
+    background-color: whitesmoke;
+    border-color: #D3D3D3;
+    color: #D3D3D3;
+}
+
+input.btn_radio:checked+label:before,
+input.btn_checkbox:checked+label:before {
+    background-color: white;
+}
+
+input.btn_radio:not(:checked)+label:before,
+input.btn_checkbox:not(:checked)+label:before {
+    border-color: #D3D3D3;
+}
+
+div.panel {
+    width: 70%;
+    float: left;
+    background: transparent;
+}
+
+.gc--1-of-4-manage {
+    width: 25%;
+}
+
+.gc--3-of-4-manage {
+    width: 75%;
+}
+
+.explanation:hover {
+    color: #00bfff;
+}
+
+/* Plus button. */
+
+.plus-button {
+    border: 2px solid lightgrey;
+    background-color: #fff;
+    font-size: 16px;
+    height: 2.5em;
+    width: 2.5em;
+    border-radius: 999px;
+    position: relative;
+}
+
+.plus-button:after,
+.plus-button:before {
+    content: "";
+    display: block;
+    background-color: grey;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.plus-button:before {
+    height: 1em;
+    width: 0.2em;
+}
+
+.plus-button:after {
+    height: 0.2em;
+    width: 1em;
+}

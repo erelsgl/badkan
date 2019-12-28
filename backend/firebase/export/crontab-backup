@@ -1,0 +1,27 @@
+SHELL=/bin/bash
+PATH=/bin:/usr/bin:/usr/local/bin
+
+# Backup test after 1 minutes
+
+# * * * * * python3 $HOME/Desktop/badkan/backend/firebase/export/database_export.py "test"
+# * * * * * python3 $HOME/badkan/backend/firebase/export/database_export.py "test"
+
+# Backup each two hours:
+
+1 */2 * * * python3 $HOME/Desktop/badkan/backend/firebase/export/database_export.py "02-hours"
+1 */2 * * * python3 $HOME/badkan/backend/firebase/export/database_export.py "02-hours"
+
+# Backup each 8 hours:
+
+21 */8 * * * python3 $HOME/Desktop/badkan/backend/firebase/export/database_export.py "08-hours"
+21 */8 * * * python3 $HOME/badkan/backend/firebase/export/database_export.py "08-hours"
+
+# Backup each day:
+
+41 1 * * * python3 $HOME/Desktop/badkan/backend/firebase/export/database_export.py "24-hours"
+41 1 * * * python3 $HOME/badkan/backend/firebase/export/database_export.py "24-hours"
+
+# Backup each 4 days:
+
+41 3 */4 * * python3 $HOME/Desktop/badkan/backend/firebase/export/database_export.py "96-hours"
+41 3 */4 * * python3 $HOME/badkan/backend/firebase/export/database_export.py "96-hours"

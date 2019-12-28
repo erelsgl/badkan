@@ -16,7 +16,7 @@ After your project is initialized, add a web app by clicking on "</>".
 Copy the script code from the text box, and paste it in the file:
 
     frontend/util/FirebaseConfig.js
- 
+
 If you want to add the feature "Sign in with GitHub" you need to enable the sign in method.
 In firebase go to Authentication, in the "Sign-in method" enable GitHub.
 
@@ -30,7 +30,7 @@ Go to Authentication, in the "Sign-in method" enable GitHub.
 
 You also need to initialize the storage database by clicking on it and clicking on the confirmation button.
 
-Enable the admin privilege (for the backup):
+Enable the admin privilege (for the backup): 
 
 First download the package with:
 
@@ -40,15 +40,62 @@ Then, you need to add to the project the private key that you download here:
        
     Go to settings -> Service Account -> Generate New private key.
 
-Then put the file in the folder database_exports and change its name to private_key.json.
+Then put the file in the folder backend/firebase/ and change its name to private_key.json.
+
+From the firebase storage, upload manually the badkan_guide.pdf and the badkan_price_plan.pdf in a bucket named marketing.
 
 Then, go to the Database onglet from your firebase project.
 Create a database and then start in test mode.
 
-Go to rules pages, and change the read and write option from false to true. 
-Publish the changes.
+open the terminal in the firebase folder and dl the firebase tools:
+
+    sudo npm install -g firebase-tools a
+
+Then, you need to login with:
+
+    firebase login --no-localhost
+
+Follow the instructions.
+
+To verify if it's worked:
+
+    firebase list
+
+If the current project is not your actual project use:
+
+    firebase use <project_id>
+
+Now need to test if init or deployement.
+
+if deployement:
+
+    firebase deploy -m "Deploying the best new feature ever."
+
+if init:
+
+    firebase init
+
+The system is also using the CLI from google "gsutil"
+To initialize it, first, in the terminal enter:
+
+    curl https://sdk.cloud.google.com | bash
+
+Then restart your shell:
+
+    exec -l $SHELL
+
+Finally, initialize the gcloud environment: 
+
+    gcloud init
+
+To check if everything worked fine, you can test the gsutil command with:
+
+    gsutil -m cp -R gs://<bucket_name>.appspot.com .
+
+Add your domain in firebase authentification/sign-in method authorized domain onlget.
 
 Once Firebase is initialized you need to install all the network stuff.
+
 
 ## Installing the server
 
@@ -105,17 +152,23 @@ Please, install pandas in the server by running the next command:
 
     pip3 install pandas
 
-Since we use contrab for the backup, from the database_exports folder please run:
+Please, install flask and quart in the server by running the next command:
+
+    sudo pip3 install flask
+    sudo pip3 install quart
+
+Since we use contrab for the backup, from the backend/firebase/export folder please run:
 
     crontab crontab-backup
 
 Please, check that in the files crontab-backup, the cd is sending you to the good place.
 
-We also use crontab to send notification, then from the notifications folder please run:
+To receive the email sended by the users, please, create two files in the backend/server/stmp folder:
 
-    crontab crontab-notifications
+    nano -L backend/servers/smtp/address.txt <your address email>
+    nano -L backend/servers/smtp/password.txt <your password>
 
-Please, check that in the files crontab-notifications, the cd is sending you to the good place.
+Please, check that the stmp server correspond to your email.
 
 ## Installing the Apache server
 
@@ -267,7 +320,7 @@ If not, you should change the location of the first line at backend/moss.pl and 
 
 Next, you need to execute permission for the file by giving this command on shell:
 
-    chmod ug+x moss/moss.pl
+    chmod ug+x backend/servers/moss/moss.pl
 
 Now Get all the files which you need to check for plagiarism, in a given directory.
 
@@ -498,3 +551,12 @@ To check the number of current connection:   https://console.firebase.google.com
 To see all the information about the spark plan:  
 https://firebase.google.com/pricing/?authuser=0
 Notice that at any moment, it's possible to change the plan.
+
+## Clean up
+
+To clean up the data of the whole project:
+
+- Delete the data of the firebase realtime db, storage and authentification from the firebase console.
+- Delete all the subfolders of the folder backend/submissions/ (sudo rm -r ./*)
+
+

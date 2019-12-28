@@ -1,0 +1,22 @@
+.white_square_1,
+.white_square_2 {
+    background-color: white;
+    border: 1px solid black;
+}
+
+.white_smoke_square {
+    background-color: whitesmoke;
+    border: 1px solid #D3D3D3;
+}
+
+.no_course,
+.no_exercise,
+.no_grade {
+    background-color: whitesmoke;
+    border: 1px solid grey;
+    box-shadow: 5px 10px 18px grey;
+    text-align: center;
+    /* Change this to % */
+    padding: 10px 20px 5px 42px;
+    border-radius: 4%/35%;
+}

@@ -26,6 +26,7 @@ sudo nohup python3 -u ws_server.py 5677 &
 sudo nohup python3 -u ws_server.py 5678 &
 sudo nohup python3 -u ws_server.py 5679 &
 
-sudo nohup python3 -u http_server.py 9000 &
+sudo nohup python3 -u http_server.py 8080 &
+sudo nohup python3 -u http_server_async.py 7000 &
 
 sudo less nohup.out
