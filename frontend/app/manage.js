@@ -98,10 +98,12 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
         '/><label class="btn_checkbox" for="github' + exerciseId + '">GitHub</label> <br>' +
         '<input class="btn_checkbox"  id="zip' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="zip" required="" ' +
         (exercise.submission_via_zip ? "checked" : "") +
-        '/><label class="btn_checkbox" for="zip' + exerciseId + '">Zip</label></div> <br>' +
-        '<label for="main_file' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
-        '<input id="main_file' + exerciseId + '" class="my_input" value="' + exercise.main_file + '"></input><br><br>' +
-        '<label for="exercise_description' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
+        '/><label class="btn_checkbox" for="zip' + exerciseId + '">Zip</label></div> <br>'
+    if (!exercise.input_output_points) {} else {
+        html += '<label for="main_file' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
+            '<input id="main_file' + exerciseId + '" class="my_input" value="' + exercise.main_file + '"></input><br><br>'
+    }
+    html += '<label for="exercise_description' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
         '<textarea id="exercise_description' + exerciseId + '" class="swal2-input input">' + exercise.exercise_description + ' </textarea><br><br>' +
         (exercise.pdf_instruction ? '<button id="current_pdf' + exerciseId + '" class="btn btn-link"  onclick="downloadPdfInstruction(' + "'" + exerciseId + "'" + ')">Current pdf</button>' +
             '<button id="delete_pdf' + exerciseId + '" class="astext" onclick="deletePdfInstruction(' + "'" + exerciseId + "'" + ')"><i class="glyphicon glyphicon-remove-circle"></i></button><br><br>' :
@@ -109,31 +111,41 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
         '<label for="exercise_instruction' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
         '<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
         '<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
-        '<input id="deadline' + exerciseId + '" class="my_input" type="date" name="dealine" value="' + exercise.deadline + '"></input> <input id="deadline_hours' + exerciseId + '" type="time" name="dealine_hours" value="' + exercise.deadline_hours + '"></input><br><br>' +
-        '<label for="show' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The student will be able to see every option checked while submitting.' +
-        'If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
-        '<div id="show' + exerciseId + '" ></div>' +
-        '<div class="radio_checkbox"><input class="btn_checkbox" id="input' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="input" required="" ' +
-        (exercise.show_input ? "checked" : "") +
-        '/><label class="btn_checkbox" for="input' + exerciseId + '">Input</label> <br>' +
-        '<input class="btn_checkbox"  id="output' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="output" required="" ' +
-        (exercise.show_output ? "checked" : "") +
-        '/><label class="btn_checkbox" for="output' + exerciseId + '">Output</label></div> <br>' +
-        '<label for="input_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default input is the standard input.">Input file name *</div></label>' +
-        '<input id="input_file_name' + exerciseId + '" class="my_input" value="' + exercise.input_file_name + '"></input><br><br>' +
-        '<label for="output_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default output is the standard output.">Output file name *</div></label>' +
-        '<input id="output_file_name' + exerciseId + '" class="my_input" value="' + exercise.output_file_name + '"></input><br><br>';
-    for (item in exercise.input_output_points) {
-        html +=
-            '<label for="input_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The first given input.">Given input *</div></label>' +
-            '<textarea id="input_' + exerciseId + item + '" class="swal2-input input">' + exercise.input_output_points[item].input + '</textarea><br><br>' +
-            '<label for="output_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The first given output.">Given output *</div></label>' +
-            '<textarea id="output_' + exerciseId + item + '" class="swal2-input input">' + exercise.input_output_points[item].output + '</textarea><br><br>' +
-            '<label for="points_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="Number of points per correct answer.">Points number * </div></label>' +
-            '<input id="points_' + exerciseId + item + '" class="my_input" type="number" value="' + exercise.input_output_points[item].point + '"></input><br><br>'
+        '<input id="deadline' + exerciseId + '" class="my_input" type="date" name="dealine" value="' + exercise.deadline + '"></input> <input id="deadline_hours' + exerciseId + '" type="time" class="my_input" name="dealine_hours" value="' + exercise.deadline_hours + '"></input><br><br>'
+    if (!exercise.input_output_points) {
+        html += '<label for="input_url_exercise' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The URL from the instructor">URL from the instructor *</div></label>' +
+            '<input id="input_url_exercise' + exerciseId + '"  class="my_input" value="' + exercise.url_exercise + '"></input><br><br>'
+    } else {
+        html += '<label for="show' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The student will be able to see every option checked while submitting.' +
+            'If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
+            '<div id="show' + exerciseId + '" ></div>' +
+            '<div class="radio_checkbox"><input class="btn_checkbox" id="input' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="input" required="" ' +
+            (exercise.show_input ? "checked" : "") +
+            '/><label class="btn_checkbox" for="input' + exerciseId + '">Input</label> <br>' +
+            '<input class="btn_checkbox"  id="output' + exerciseId + '" name="BoxSelect[]" type="checkbox" value="output" required="" ' +
+            (exercise.show_output ? "checked" : "") +
+            '/><label class="btn_checkbox" for="output' + exerciseId + '">Output</label></div> <br>' +
+            '<label for="input_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default input is the standard input.">Input file name *</div></label>' +
+            '<input id="input_file_name' + exerciseId + '" class="my_input" value="' + exercise.input_file_name + '"></input><br><br>' +
+            '<label for="output_file_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The default output is the standard output.">Output file name *</div></label>' +
+            '<input id="output_file_name' + exerciseId + '" class="my_input" value="' + exercise.output_file_name + '"></input><br><br>'
+        for (item in exercise.input_output_points) {
+            html +=
+                '<label for="input_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The first given input.">Given input *</div></label>' +
+                '<textarea id="input_' + exerciseId + item + '" class="swal2-input input">' + exercise.input_output_points[item].input + '</textarea><br><br>' +
+                '<label for="output_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="The first given output.">Given output *</div></label>' +
+                '<textarea id="output_' + exerciseId + item + '" class="swal2-input input">' + exercise.input_output_points[item].output + '</textarea><br><br>' +
+                '<label for="points_' + exerciseId + item + '"><div class="explanation" data-toggle="tooltip" title="Number of points per correct answer.">Points number * </div></label>' +
+                '<input id="points_' + exerciseId + item + '" class="my_input" type="number" value="' + exercise.input_output_points[item].point + '"></input><br><br>'
+        }
     }
-    html += '<button class="btn blue_enjoy" onclick="editExercise(' + "'" + exerciseId + "','" + exercise.input_output_points.length + "'" + ')">Edit exercise <i class="glyphicon glyphicon-edit"></i></button>' +
-        '<button class="btn white_enjoy" onclick="deleteExercise(' + "'" + exerciseId + "'" + ')">Delete exercise <i class="glyphicon glyphicon-trash"></i></button>' +
+    if (!exercise.input_output_points) {
+        let temp = 0
+        html += '<button class="btn blue_enjoy" onclick="editExercise(' + "'" + exerciseId + "','" + temp + "'" + ')">Edit exercise <i class="glyphicon glyphicon-edit"></i></button>'
+    } else {
+        html += '<button class="btn blue_enjoy" onclick="editExercise(' + "'" + exerciseId + "','" + exercise.input_output_points.length + "'" + ')">Edit exercise <i class="glyphicon glyphicon-edit"></i></button>'
+    }
+    html += '<button class="btn white_enjoy" onclick="deleteExercise(' + "'" + exerciseId + "'" + ')">Delete exercise <i class="glyphicon glyphicon-trash"></i></button>' +
         '</div></div>' +
         (exercise.submissions ?
             '<div class="manage_button">' +
@@ -143,6 +155,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
             '<button class="btn btn_manage" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')" style="border:1px solid grey"><span>Download Statistics</button>' +
             '<button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button>' +
             '</div>' : '<div class="manage_button">No submission available</div>');
+
     return html;
 }
 
@@ -165,7 +178,7 @@ function uidToCountryIds(uids, ids) {
     return answer
 }
 
-$("#newCourse").click(function () {
+$("#newCourse").click(function() {
     Swal.fire({
         allowOutsideClick: false,
         title: 'New course',
@@ -211,10 +224,9 @@ $("#newCourse").click(function () {
 
 })
 
-$('input[type=radio][name=privacy]').change(function () {
+$('input[type=radio][name=privacy]').change(function() {
     var x = document.getElementById("pass");
     if (this.value == 'public') {
-        alert("hi")
         public = true;
         x.style.display = "none";
     } else if (this.value == 'private') {
@@ -262,13 +274,14 @@ function newExercise(courseId) {
         allowOutsideClick: false,
         showConfirmButton: true,
         showCancelButton: true,
+        cancelButtonColor: '#3085d6',
         confirmButtonText: "Normal exercise",
-        cancelButtonText: "Peer exercise",
+        cancelButtonText: "Custom exercise",
     }).then(result => {
         if (result.value) {
             newNormalExercise(courseId)
         } else {
-            alert("Available soon.")
+            newCustomExercise(courseId)
         }
     })
 }
@@ -294,6 +307,102 @@ function newExercise(courseId) {
  * Penatlies (TODO if needed)
  * @param {string} courseId 
  */
+
+htmlStepCreateExercise = (step) => {
+    if (step == 'New exercise 1/4' || step == 'New exercise 1/3') {
+        return '<label for="exercise_name"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +
+            '<input id="exercise_name" class="swal2-input" placeholder="First assignment...">' +
+            '<label for="exercise_compiler"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise. ">Exercise compiler *</div></label>' +
+            '<select id="exercise_compiler" class="swal2-input">' +
+            '<option value="javac">javac</option>' +
+            '<option value="g++">g++ (c or c++)</option>' +
+            '<option value="python3">python3</option>' +
+            '<option value="perl">perl</option>' +
+            '</select>' +
+            '<label for="submission_option"><div class="explanation" data-toggle="tooltip" title="The student can submit his exercise via each method checked.' +
+            'If you want the student to submit only via GitHub, check only the GitHub box .">Submission option *</div></label>' +
+            '<div id="submission_option" class="swal2-input" >' +
+            '<input id="github" name="BoxSelect[]" type="checkbox" value="github" required="" checked>GitHub</input> <br>' +
+            '<input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required="" checked>Zip</input>' +
+            '</div>'
+    } else if (step == 'New exercise 2/4' || step == 'New exercise 2/3') {
+        return '<label for="exercise_description"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
+            '<textarea id="exercise_description" class="swal2-input" placeholder="Your short description of the exercise... "></textarea>' +
+            '<label for="exercise_instruction"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
+            '<input id="exercise_instruction" class="swal2-input" type="file" accept="application/pdf">' +
+            '<label for="deadline"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
+            '<input id="deadline" class="swal2-input" type="date" name="dealine"></input> <input id="deadline_hours" class="swal2-input" type="time" name="dealine_hours"></input>'
+    }
+
+}
+async function newCustomExercise(courseId) {
+    let exerciseName, exerciseCompiler, submissionViaGithub, submissionViaZip,
+        exerciseDescription, instructionPdf, deadline, urlExercise
+    Swal.mixin({
+        allowOutsideClick: false,
+        showCancelButton: true,
+        progressSteps: ['1', '2', '3']
+    }).queue([{
+        confirmButtonText: 'Next &rarr;',
+        title: 'New exercise 1/3',
+        html: htmlStepCreateExercise('New exercise 1/3'),
+        focusConfirm: false,
+        preConfirm: () => {
+            exerciseName = escapeHtml($("#exercise_name").val())
+            exerciseCompiler = escapeHtml($("#exercise_compiler").val())
+            submissionViaGithub = $("input[id='github']:checked").val()
+            submissionViaZip = $("input[id='zip']:checked").val()
+
+        }
+    }, {
+        confirmButtonText: 'Next &rarr;',
+        title: 'New exercise 2/3',
+        html: htmlStepCreateExercise('New exercise 2/3'),
+        focusConfirm: false,
+        preConfirm: () => {
+            exerciseDescription = escapeHtml($("#exercise_description").val())
+            instructionPdf = $('#exercise_instruction').prop('files')[0];
+            deadline = $("#deadline").val()
+            deadline_hours = $("#deadline_hours").val()
+
+        }
+    }, {
+        confirmButtonText: 'Next &rarr;',
+        title: 'New exercise 3/3',
+        html: '<label for="urlExercise">Enter the URL.</label>' +
+            '<input id="urlExercise" type="text" class="form-control" />',
+        focusConfirm: false,
+        preConfirm: () => {
+            urlExercise = escapeHtml($("#urlExercise").val())
+            if ($("#urlExercise").val() == 0) {
+                Swal.showValidationMessage(
+                    `Please fill all the required fields.`
+                )
+            }
+        }
+    }]).then((result) => {
+        if (result.value) {
+            $("#main").hide()
+            let json = JSON.stringify({
+                course_id: courseId,
+                exercise_name: exerciseName,
+                exercise_compiler: exerciseCompiler,
+                submission_via_github: submissionViaGithub,
+                submission_via_zip: submissionViaZip,
+                exercise_description: exerciseDescription,
+                deadline: deadline,
+                deadline_hours: deadline_hours,
+                url_exercise: urlExercise,
+                pdf_instruction: (instructionPdf ? true : false)
+            })
+            var fd = new FormData();
+            fd.append("file", instructionPdf);
+            fd.append("json", json);
+            doPostJSONAndFile(fd, "create_exercise", "text", reload)
+        }
+    })
+}
+
 async function newNormalExercise(courseId) {
     let exerciseName, exerciseCompiler, submissionViaGithub, submissionViaZip, mainFile,
         exerciseDescription, instructionPdf, deadline, inputFileName, outputFileName, showInput, showOutput
@@ -304,22 +413,7 @@ async function newNormalExercise(courseId) {
     }).queue([{
             confirmButtonText: 'Next &rarr;',
             title: 'New exercise 1/4',
-            html: '<label for="exercise_name"><div class="explanation" data-toggle="tooltip" title="Required field">Exercise name *</div></label>' +
-                '<input id="exercise_name" class="swal2-input" placeholder="First assignment...">' +
-                '<label for="exercise_compiler"><div class="explanation" data-toggle="tooltip" title="The compiler for the exercise. ">Exercise compiler *</div></label>' +
-                '<select id="exercise_compiler" class="swal2-input">' +
-                '<option value="javac">javac</option>' +
-                '<option value="g++">g++ (c or c++)</option>' +
-                '<option value="python3">python3</option>' +
-                '<option value="perl">perl</option>' +
-                '</select>' +
-                '<label for="submission_option"><div class="explanation" data-toggle="tooltip" title="The student can submit his exercise via each method checked.' +
-                'If you want the student to submit only via GitHub, check only the GitHub box .">Submission option *</div></label>' +
-                '<div id="submission_option" class="swal2-input" >' +
-                '<input id="github" name="BoxSelect[]" type="checkbox" value="github" required="" checked>GitHub</input> <br>' +
-                '<input id="zip" name="BoxSelect[]" type="checkbox" value="zip" required="" checked>Zip</input>' +
-                '</div>' +
-                '<label for="main_file"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
+            html: htmlStepCreateExercise('New exercise 1/4') + '<label for="main_file"><div class="explanation" data-toggle="tooltip" title="The file where the main function resides">Main file *</div></label>' +
                 '<input id="main_file" class="swal2-input" placeholder="Main.java, Ex01.cpp, a.c...">',
             focusConfirm: false,
             preConfirm: () => {
@@ -338,12 +432,7 @@ async function newNormalExercise(courseId) {
         {
             confirmButtonText: 'Next &rarr;',
             title: 'New exercise 2/4',
-            html: '<label for="exercise_description"><div class="explanation" data-toggle="tooltip" title="A short description of the exercise.">Exercise description</div></label>' +
-                '<textarea id="exercise_description" class="swal2-input" placeholder="Your short description of the exercise... "></textarea>' +
-                '<label for="exercise_instruction"><div class="explanation" data-toggle="tooltip" title="Must be a pdf file.">Pdf instruction file</div></label>' +
-                '<input id="exercise_instruction" class="swal2-input" type="file" accept="application/pdf">' +
-                '<label for="deadline"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
-                '<input id="deadline" class="swal2-input" type="date" name="dealine"></input> <input id="deadline_hours" class="swal2-input" type="time" name="dealine_hours"></input>' +
+            html: htmlStepCreateExercise('New exercise 2/4') +
                 '<label for="show"><div class="explanation" data-toggle="tooltip" title="The student will see every option checked while submitting.' +
                 '.If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
                 '<div id="show" class="swal2-input" >' +
@@ -421,7 +510,7 @@ function moreIO(i) {
             '<input id="points_' + i + '"s class="swal2-input" type="number" ></input><br>' +
             '<button data-toggle="tooltip" title="More input output" class="plus-button" onclick=addMoreIO(' + i + ')></button>',
         confirmButtonText: "Done",
-        preConfirm: function () {
+        preConfirm: function() {
             let input = escapeHtml($("#input_" + i).val())
             let output = escapeHtml($("#output_" + i).val())
             let point = escapeHtml($("#points_" + i).val())
@@ -451,72 +540,114 @@ function addMoreIO(i) {
 }
 
 function editExercise(exerciseId, inputOutputPointsSize) {
-    const exerciseName = escapeHtml($("#exercise_name" + exerciseId).val())
-    const exerciseCompiler = escapeHtml($("#exercise_compiler" + exerciseId).val())
-    const submissionViaGithub = $('input[id="github' + exerciseId + '"]:checked').val()
-    const submissionViaZip = $('input[id="zip' + exerciseId + '"]:checked').val()
-    const mainFile = escapeHtml($("#main_file" + exerciseId).val())
-    const inputFileName = escapeHtml($("#input_file_name" + exerciseId).val())
-    const outputFileName = escapeHtml($("#output_file_name" + exerciseId).val())
-    let inputOutputPoints = [];
-    for (let i = 0; i < inputOutputPointsSize; i++) {
-        const input = escapeHtml($("#input_" + exerciseId + i).val())
-        const output = escapeHtml($("#output_" + exerciseId + i).val())
-        const point = escapeHtml($("#points_" + exerciseId + i).val())
-        if (checkEmptyFieldsAlert([input, output, point])) {
-            inputOutputPoints.push({
-                input: input,
-                output: output,
-                point: point
-            })
+    if (inputOutputPointsSize == 0) {
+        const exerciseName = escapeHtml($("#exercise_name" + exerciseId).val())
+        const exerciseCompiler = escapeHtml($("#exercise_compiler" + exerciseId).val())
+        const submissionViaGithub = $('input[id="github' + exerciseId + '"]:checked').val()
+        const submissionViaZip = $('input[id="zip' + exerciseId + '"]:checked').val()
+        if (!submissionViaGithub && !submissionViaZip) {
+            alert("Please check at least one of the two submission option.")
         } else {
-            return;
-        }
-    }
-    if (!submissionViaGithub && !submissionViaZip) {
-        alert("Please check at least one of the two submission option.")
-    } else {
-        if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler,
-                mainFile, inputFileName, outputFileName
-            ])) {
-            exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
-            instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
-            deadline = $("#deadline" + exerciseId).val()
-            deadline_hours = $("#deadline_hours" + exerciseId).val()
-            const showInput = $('input[id="input' + exerciseId + '"]:checked').val()
-            const showOutput = $('input[id="output' + exerciseId + '"]:checked').val()
-            $("#main").hide()
-            let is_pdf_exists = false
-            if ($("#delete_pdf" + exerciseId).html()) {
-                if ($("#delete_pdf" + exerciseId).html().includes('remove')) {
-                    is_pdf_exists = true
-                } else {
-                    is_pdf_exists = false
+            if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler])) {
+                exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
+                instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
+                deadline = $("#deadline" + exerciseId).val()
+                deadline_hours = $("#deadline_hours" + exerciseId).val()
+                $("#main").hide()
+                let is_pdf_exists = false
+                if ($("#delete_pdf" + exerciseId).html()) {
+                    if ($("#delete_pdf" + exerciseId).html().includes('remove')) {
+                        is_pdf_exists = true
+                    } else {
+                        is_pdf_exists = false
+                    }
                 }
+                let json = JSON.stringify({
+                    // No need to update the course id since the exercise can't move.
+                    exercise_name: exerciseName,
+                    exercise_compiler: exerciseCompiler,
+                    submission_via_github: (submissionViaGithub ? true : false),
+                    submission_via_zip: (submissionViaZip ? true : false),
+                    exercise_description: exerciseDescription,
+                    deadline: deadline,
+                    deadline_hours: deadline_hours,
+                    pdf_instruction: (instructionPdf ? true : is_pdf_exists)
+                })
+                var fd = new FormData();
+                fd.append("file", instructionPdf);
+                fd.append("json", json);
+                doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", reload)
             }
-            let json = JSON.stringify({
-                // No need to update the course id since the exercise can't move.
-                exercise_name: exerciseName,
-                exercise_compiler: exerciseCompiler,
-                submission_via_github: (submissionViaGithub ? true : false),
-                submission_via_zip: (submissionViaZip ? true : false),
-                main_file: mainFile,
-                exercise_description: exerciseDescription,
-                deadline: deadline,
-                deadline_hours:deadline_hours,
-                input_file_name: inputFileName,
-                output_file_name: outputFileName,
-                input_output_points: inputOutputPoints,
-                show_input: (showInput ? true : false),
-                show_output: (showOutput ? true : false),
-                pdf_instruction: (instructionPdf ? true : is_pdf_exists)
-            })
-            var fd = new FormData();
-            fd.append("file", instructionPdf);
-            fd.append("json", json);
-            doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", reload)
+        }
+    } else {
+        const exerciseName = escapeHtml($("#exercise_name" + exerciseId).val())
+        const exerciseCompiler = escapeHtml($("#exercise_compiler" + exerciseId).val())
+        const submissionViaGithub = $('input[id="github' + exerciseId + '"]:checked').val()
+        const submissionViaZip = $('input[id="zip' + exerciseId + '"]:checked').val()
+        const mainFile = escapeHtml($("#main_file" + exerciseId).val())
+        const inputFileName = escapeHtml($("#input_file_name" + exerciseId).val())
+        const outputFileName = escapeHtml($("#output_file_name" + exerciseId).val())
+        let inputOutputPoints = [];
+        for (let i = 0; i < inputOutputPointsSize; i++) {
+            const input = escapeHtml($("#input_" + exerciseId + i).val())
+            const output = escapeHtml($("#output_" + exerciseId + i).val())
+            const point = escapeHtml($("#points_" + exerciseId + i).val())
+            if (checkEmptyFieldsAlert([input, output, point])) {
+                inputOutputPoints.push({
+                    input: input,
+                    output: output,
+                    point: point
+                })
+            } else {
+                return;
+            }
+        }
+        if (!submissionViaGithub && !submissionViaZip) {
+            alert("Please check at least one of the two submission option.")
+        } else {
+            if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler,
+                    mainFile, inputFileName, outputFileName
+                ])) {
+                exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
+                instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
+                deadline = $("#deadline" + exerciseId).val()
+                deadline_hours = $("#deadline_hours" + exerciseId).val()
+                const showInput = $('input[id="input' + exerciseId + '"]:checked').val()
+                const showOutput = $('input[id="output' + exerciseId + '"]:checked').val()
+                $("#main").hide()
+                let is_pdf_exists = false
+                if ($("#delete_pdf" + exerciseId).html()) {
+                    if ($("#delete_pdf" + exerciseId).html().includes('remove')) {
+                        is_pdf_exists = true
+                    } else {
+                        is_pdf_exists = false
+                    }
+                }
+                let json = JSON.stringify({
+                    // No need to update the course id since the exercise can't move.
+                    exercise_name: exerciseName,
+                    exercise_compiler: exerciseCompiler,
+                    submission_via_github: (submissionViaGithub ? true : false),
+                    submission_via_zip: (submissionViaZip ? true : false),
+                    main_file: mainFile,
+                    exercise_description: exerciseDescription,
+                    deadline: deadline,
+                    deadline_hours: deadline_hours,
+                    input_file_name: inputFileName,
+                    output_file_name: outputFileName,
+                    input_output_points: inputOutputPoints,
+                    show_input: (showInput ? true : false),
+                    show_output: (showOutput ? true : false),
+                    pdf_instruction: (instructionPdf ? true : is_pdf_exists)
+                })
+                var fd = new FormData();
+                fd.append("file", instructionPdf);
+                fd.append("json", json);
+                doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", reload)
+            }
         }
     }
+
 }
 
 function deleteExercise(exerciseId) {
