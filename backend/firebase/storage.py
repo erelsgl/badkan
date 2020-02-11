@@ -11,6 +11,7 @@ def upload_pdf_instruction(pdf_instruction, exercise_id):
     return True
 
 
+
 def check_pdf_size(pdf_instruction):
     pdf_instruction.flush()
     size = os.fstat(pdf_instruction.fileno()).st_size
