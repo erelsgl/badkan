@@ -116,3 +116,19 @@ async def docker_command_tee_with_grade(args, websocket, show_input, show_output
             await tee(websocket, json.dumps(answer))
             return grade
     await proc.wait()
+
+
+async def docker_command_custom_exercise(folder_name, correction_url, websocket):
+    proc = await docker_command(["exec", "badkan", "cd", "grading_room/" + folder_name])
+    # git clone on the path: cd grading_room/folder_name.
+    proc = await docker_command(["exec", "badkan", "unzip", "-q", folder_name + ".zip"])
+    # git clone on the path: cd grading_room/folder_name.
+    proc = await docker_command(["exec", "badkan", "git", "clone", correction_url, "grading_room/" + folder_name])
+    # bash grade.
+    proc = await docker_command(["exec", "badkan", "bash", "grade.sh"])
+
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        print(line)
+    # return grade
+    return -1

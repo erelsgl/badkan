@@ -543,12 +543,13 @@ function editExercise(exerciseId, inputOutputPointsSize) {
     if (inputOutputPointsSize == 0) {
         const exerciseName = escapeHtml($("#exercise_name" + exerciseId).val())
         const exerciseCompiler = escapeHtml($("#exercise_compiler" + exerciseId).val())
+        const urlExercise = escapeHtml($("#urlExercise" + exerciseId).val())
         const submissionViaGithub = $('input[id="github' + exerciseId + '"]:checked').val()
-        const submissionViaZip = $('input[id="zip' + exerciseId + '"]:checked').val()
+        const submissionViaZip = $('input[id="github' + exerciseId + '"]:checked').val()
         if (!submissionViaGithub && !submissionViaZip) {
             alert("Please check at least one of the two submission option.")
         } else {
-            if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler])) {
+            if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler, urlExercise])) {
                 exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
                 instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
                 deadline = $("#deadline" + exerciseId).val()
@@ -571,6 +572,7 @@ function editExercise(exerciseId, inputOutputPointsSize) {
                     exercise_description: exerciseDescription,
                     deadline: deadline,
                     deadline_hours: deadline_hours,
+                    url_exercise: urlExercise,
                     pdf_instruction: (instructionPdf ? true : is_pdf_exists)
                 })
                 var fd = new FormData();
