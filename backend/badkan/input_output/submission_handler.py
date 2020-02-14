@@ -113,14 +113,20 @@ async def upload_submission_to_docker(uid, zip_filename):
 
 
 async def run_submission(websocket, exercise, folder_name, output=None):
-    signature = random_string()
-    return await docker_command_tee_with_grade(["exec", "badkan", "bash", "grade.sh",
-                                                exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(
-                                                    exercise["input_output_points"]),
-                                                exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], folder_name,
-                                                get_running_command(
-                                                    exercise["exercise_compiler"], exercise["main_file"]), signature], websocket,
-                                               exercise["show_input"], exercise["show_output"], signature, output)
+    # check if the submission is normal or custom.
+    # easy checking using the fields of the exercise?
+    # if normal:
+    if "input_file_name" in exercise:
+        signature = random_string()
+        return await docker_command_tee_with_grade(["exec", "badkan", "bash", "grade.sh",
+                                                    exercise["exercise_name"],  exercise["exercise_compiler"], dict_to_string(
+                                                        exercise["input_output_points"]),
+                                                    exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], folder_name,
+                                                    get_running_command(
+                                                        exercise["exercise_compiler"], exercise["main_file"]), signature], websocket,
+                                                exercise["show_input"], exercise["show_output"], signature, output)
+    else:
+        return await docker_command_custom_exercise(folder_name, exercise["url_exercise"], websocket)
 
 
 def random_string(stringLength=20):

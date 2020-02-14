@@ -114,7 +114,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
         '<input id="deadline' + exerciseId + '" class="my_input" type="date" name="dealine" value="' + exercise.deadline + '"></input> <input id="deadline_hours' + exerciseId + '" type="time" class="my_input" name="dealine_hours" value="' + exercise.deadline_hours + '"></input><br><br>'
     if (!exercise.input_output_points) {
         html += '<label for="input_url_exercise' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The URL from the instructor">URL from the instructor *</div></label>' +
-            '<input id="input_url_exercise' + exerciseId + '"  class="my_input" value="' + exercise.url_exercise + '"></input><br><br>'
+            '<input id="url_exercise' + exerciseId + '"  class="my_input" value="' + exercise.url_exercise + '"></input><br><br>'
     } else {
         html += '<label for="show' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The student will be able to see every option checked while submitting.' +
             'If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
@@ -543,8 +543,9 @@ function editExercise(exerciseId, inputOutputPointsSize) {
     if (inputOutputPointsSize == 0) {
         const exerciseName = escapeHtml($("#exercise_name" + exerciseId).val())
         const exerciseCompiler = escapeHtml($("#exercise_compiler" + exerciseId).val())
+        const urlExercise = escapeHtml($("#url_exercise" + exerciseId).val())
         const submissionViaGithub = $('input[id="github' + exerciseId + '"]:checked').val()
-        const submissionViaZip = $('input[id="zip' + exerciseId + '"]:checked').val()
+        const submissionViaZip = $('input[id="github' + exerciseId + '"]:checked').val()
         if (!submissionViaGithub && !submissionViaZip) {
             alert("Please check at least one of the two submission option.")
         } else {
@@ -553,6 +554,7 @@ function editExercise(exerciseId, inputOutputPointsSize) {
                 instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
                 deadline = $("#deadline" + exerciseId).val()
                 deadline_hours = $("#deadline_hours" + exerciseId).val()
+                    // urlExercise = escapeHtml($("#urlExercise" + exerciseId).val())
                 $("#main").hide()
                 let is_pdf_exists = false
                 if ($("#delete_pdf" + exerciseId).html()) {
@@ -571,6 +573,7 @@ function editExercise(exerciseId, inputOutputPointsSize) {
                     exercise_description: exerciseDescription,
                     deadline: deadline,
                     deadline_hours: deadline_hours,
+                    url_exercise: urlExercise,
                     pdf_instruction: (instructionPdf ? true : is_pdf_exists)
                 })
                 var fd = new FormData();
