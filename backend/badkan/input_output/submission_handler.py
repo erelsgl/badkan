@@ -1,6 +1,5 @@
 from imports_input_output import *
 
-# TODO: Checked about Erel works: long line, signature, valgrind...
 # Example https: https://github.com/SamuelBismuth/badkan.git
 # Example ssh: git@github.com:SamuelBismuth/badkan.git
 GIT_REGEXP = re.compile(".*github[.]com.(.*)/(.*)", re.IGNORECASE)
@@ -42,7 +41,7 @@ async def check_submission(websocket, submission):
             output, submission["country_id"], submission["exercise_id"],))
         x.start()
     else:
-        await tee(websocket, "This submission is meaningless, any grade has been stored. <br> < If you want the grade to be stored, please check the \"Save the grade\" button.")
+        await tee(websocket, "Your grade has not been stored. To store your grade, please check the \"Save the grade\" button")
     edit_csv_trace(str(currentDT), grade, submitters,
                    "FINISH", exercise["exercise_name"], zip_filename)
     return 'OK'
@@ -124,7 +123,7 @@ async def run_submission(websocket, exercise, folder_name, output=None):
                                                     exercise["main_file"], exercise["input_file_name"], exercise["output_file_name"], folder_name,
                                                     get_running_command(
                                                         exercise["exercise_compiler"], exercise["main_file"]), signature], websocket,
-                                                exercise["show_input"], exercise["show_output"], signature, output)
+                                                   exercise["show_input"], exercise["show_output"], signature, output)
     else:
         return await docker_command_custom_exercise(folder_name, exercise["url_exercise"], websocket)
 

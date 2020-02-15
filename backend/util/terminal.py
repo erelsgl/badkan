@@ -89,7 +89,6 @@ async def docker_command_tee(args, websocket):
 
 async def docker_command_tee_with_grade(args, websocket, show_input, show_output, signature, output=None):
     proc = await docker_command(args)
-
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         print(line)
@@ -119,16 +118,20 @@ async def docker_command_tee_with_grade(args, websocket, show_input, show_output
 
 
 async def docker_command_custom_exercise(folder_name, correction_url, websocket):
-    proc = await docker_command(["exec", "badkan", "cd", "grading_room/" + folder_name])
-    # git clone on the path: cd grading_room/folder_name.
-    proc = await docker_command(["exec", "badkan", "unzip", "-q", folder_name + ".zip"])
-    # git clone on the path: cd grading_room/folder_name.
-    proc = await docker_command(["exec", "badkan", "git", "clone", correction_url, "grading_room/" + folder_name])
-    # bash grade.
-    proc = await docker_command(["exec", "badkan", "bash", "grade.sh"])
+    proc = await docker_command(["exec", "badkan", "bash", "run_custom.sh", folder_name, correction_url])
 
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
-        print(line)
-    # return grade
+        await tee(websocket, line)
+        # TODO: JEREMY.
+        # check if the line include "grade: x" and return the grade.
+        # make it flexible to include a secure scheme in the future.
+        # save the grade on the firebase database and check if it's stored.
+        # check if the submission is stored on the firebase storage.
+        # check if the options in the manage page still work: run submission, download submission...
+        # make tests (check for example if submit twice in a raw).
+        # compte badkan: https://github.com/badkan
+        # one answer for the test exercise is: https://github.com/AtaraZohar/Cpp-binaryTree (should get 100).
+        # change the home page render.
     return -1
+    # await proc.wait()
