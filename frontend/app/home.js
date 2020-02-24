@@ -53,7 +53,7 @@ function onFinishRetreiveData(data) {
         noMyCourseAvailable()
     }
     hideLoader()
-    showPublic()
+    showMyCourses()
 }
 
 function noPublicCourseAvailable() {
