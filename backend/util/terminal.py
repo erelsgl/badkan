@@ -8,7 +8,7 @@ import asyncio
 import re
 import json
 
-GRADE_REGEXP = re.compile("\*\*\* ([0-9]+) \*\*\*", re.IGNORECASE)
+GRADE_REGEXP = re.compile("Grade: ([0-9]+)", re.IGNORECASE)
 OUTPUT_REGEXP = re.compile("Your output is (.*)", re.IGNORECASE)
 INPUT_REGEXP = re.compile("The input is (.*)", re.IGNORECASE)
 
@@ -122,16 +122,31 @@ async def docker_command_custom_exercise(folder_name, correction_url, websocket)
 
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
+        GRADE_REGEXP = re.findall("Grade: ([0-9]+)",line)
+        substring = "Grade:"
+
+        count = line.count(substring)
+
+        if GRADE_REGEXP:
+            grade = int(GRADE_REGEXP[0])
+            line = line.replace("Grade:","Your grade is ")
+        if count>1:
+            grade=0
+        
+        
         await tee(websocket, line)
+
+        # regex
         # TODO: JEREMY.
         # check if the line include "grade: x" and return the grade.
         # make it flexible to include a secure scheme in the future.
-        # save the grade on the firebase database and check if it's stored.
+        # save the grade on the firebase realtime database and check if it's stored.
         # check if the submission is stored on the firebase storage.
         # check if the options in the manage page still work: run submission, download submission...
         # make tests (check for example if submit twice in a raw).
         # compte badkan: https://github.com/badkan
+        # https://gitlab.com/erelsgl/ariel-cpp-5779-homework -> erel exercises.
         # one answer for the test exercise is: https://github.com/AtaraZohar/Cpp-binaryTree (should get 100).
         # change the home page render.
-    return -1
+    return grade
     # await proc.wait()
