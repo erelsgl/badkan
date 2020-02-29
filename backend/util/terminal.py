@@ -119,25 +119,6 @@ async def docker_command_tee_with_grade(args, websocket, show_input, show_output
 
 async def docker_command_custom_exercise(folder_name, correction_url, websocket):
     proc = await docker_command(["exec", "badkan", "bash", "run_custom.sh", folder_name, correction_url])
-
-    async for line in proc.stdout:
-        line = line.decode('utf-8').strip()
-        GRADE_REGEXP = re.findall("Grade: ([0-9]+)",line)
-        substring = "Grade:"
-
-        count = line.count(substring)
-
-        if GRADE_REGEXP:
-            grade = int(GRADE_REGEXP[0])
-            line = line.replace("Grade:","Your grade is ")
-        if count>1:
-            grade=0
-        
-        
-        await tee(websocket, line)
-
-        # regex
-        # TODO: JEREMY.
         # check if the line include "grade: x" and return the grade.
         # make it flexible to include a secure scheme in the future.
         # save the grade on the firebase realtime database and check if it's stored.
@@ -148,5 +129,15 @@ async def docker_command_custom_exercise(folder_name, correction_url, websocket)
         # https://gitlab.com/erelsgl/ariel-cpp-5779-homework -> erel exercises.
         # one answer for the test exercise is: https://github.com/AtaraZohar/Cpp-binaryTree (should get 100).
         # change the home page render.
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        GRADE_REGEXP = re.findall("Grade: ([0-9]+)",line)
+        substring = "Grade:"
+        count = line.count(substring)
+        if GRADE_REGEXP:
+            grade = int(GRADE_REGEXP[0])
+            line = line.replace("Grade:","Your grade is ")
+        if count > 1:
+            grade=0
+        await tee(websocket, line)
     return grade
-    # await proc.wait()

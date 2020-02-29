@@ -1,13 +1,13 @@
-$(document).ready(function() {
+$(document).ready(function () {
     if (location.hash === "#tutorial")
         playTutorialVideo()
 });
 
-$('a[href="#mycourses"]').click(function() {
+$('a[href="#mycourses"]').click(function () {
     showMyCourses()
 })
 
-$('a[href="#public"]').click(function() {
+$('a[href="#public"]').click(function () {
     showPublic()
 })
 
@@ -54,6 +54,20 @@ function onFinishRetreiveData(data) {
     }
     hideLoader()
     showMyCourses()
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    }
 }
 
 function noPublicCourseAvailable() {
@@ -103,7 +117,9 @@ function getClass(uids, id) {
 }
 
 function createAccordionBodyHomeRegister(courseId, exercise) {
-    return '<div class="white_square_1 public">' + // Check in the class here for the style
+    return '<div class="public"><button type="button" class="collapsible">' + exercise.exercise_name + '</button>' +
+        '<div class="content">' +
+        '<div class="white_square_1">' + // Check in the class here for the style
         '<div class="exerciseName title_font">' + exercise.exercise_name + '</div><br><br>' +
         '<div class="description">Compiler : </div>' + '<div class="data">' + exercise.exercise_compiler + '</div><br><br>' +
         (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="data">' +
@@ -113,11 +129,13 @@ function createAccordionBodyHomeRegister(courseId, exercise) {
                 exercise.deadline_hours + '</div><br><br>' : "") : "") +
         '<button class="btn blue_enjoy" onclick="registeringToCourse(' + "'" + courseId + "'" +
         ')">Register to the course <i class="glyphicon glyphicon-plus"></i></button>' +
-        '</div>';
+        '</div></div></div>';
 }
 
 function createAccordionBodyHomeSolve(exerciseId, exercise, submissions) {
-    return '<div class="white_square_1 myCourse">' + // Check in the class here for the style
+    return '<div class="myCourse"><button type="button" class="collapsible">' + exercise.exercise_name + '</button>' +
+        '<div class="content">' +
+        '<div class="white_square_1">' + // Check in the class here for the style
         '<div class="exerciseName title_font">' + exercise.exercise_name + '</div><br><br>' +
         '<div class="description">Compiler : </div>' + '<div class="data">' + exercise.exercise_compiler + '</div><br><br>' +
         (exercise.exercise_description ? '<div class="description"> Description : </div>' + '<div class="data">' +
@@ -133,7 +151,7 @@ function createAccordionBodyHomeSolve(exerciseId, exercise, submissions) {
         getSubmission(submissions, exerciseId) +
         '<br><br><button class="btn blue_enjoy" onclick="solveExercise(' + "'" + exerciseId + "'" +
         ')">Solve <i class="glyphicon glyphicon-fire"></i></button>' +
-        '</div>';
+        '</div></div></div>';
 }
 
 

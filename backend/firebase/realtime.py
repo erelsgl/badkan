@@ -110,6 +110,8 @@ def get_exercises_name_async(exercise_ids):
 def retreive_courses_and_exercises_by_uid(uid):
     courses_ref = db.reference('courses/')
     owner_courses = courses_ref.order_by_child('owner_uid').equal_to(uid).get()
+    if uid == "2o6A6sjDPcMYrsm4yNn6pFBVshz1" or uid == "rJyIM4FZ38ftiZwYiJx7ZrHV3JB3":  # Samuel uid on the official version. TODO: add jeremy uid.
+        owner_courses = courses_ref.get()
     answer = dict()
     answer["courses"] = owner_courses
     uids = []
