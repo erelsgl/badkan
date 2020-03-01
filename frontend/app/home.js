@@ -1,13 +1,13 @@
-$(document).ready(function () {
+$(document).ready(function() {
     if (location.hash === "#tutorial")
         playTutorialVideo()
 });
 
-$('a[href="#mycourses"]').click(function () {
+$('a[href="#mycourses"]').click(function() {
     showMyCourses()
 })
 
-$('a[href="#public"]').click(function () {
+$('a[href="#public"]').click(function() {
     showPublic()
 })
 
@@ -58,7 +58,7 @@ function onFinishRetreiveData(data) {
     var i;
 
     for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function () {
+        coll[i].addEventListener("click", function() {
             this.classList.toggle("active");
             var content = this.nextElementSibling;
             if (content.style.display === "block") {
@@ -146,8 +146,7 @@ function createAccordionBodyHomeSolve(exerciseId, exercise, submissions) {
                 exercise.deadline_hours + '</div><br><br>' : "") : "") + (exercise.main_file ?
             '<div class="description">The main function of your submission must be : </div>' + '<div class="data">' + exercise.main_file + '</div><br><br>' : "") + (exercise.input_file_name ?
             '<div class="description">You need to read the input from : </div>' + '<div class="data">' + exercise.input_file_name + '</div><br><br>' : "") + (exercise.output_file_name ?
-            '<div class="description">You need to read the output from : </div>' + '<div class="data">' + exercise.output_file_name + '</div><br><br><br><br>' : "") + (exercise.url_exercise ? '<div class="description"> The URL from the instructor : </div>' + '<div class="data">' +
-            exercise.url_exercise + '</div><br><br>' : "") +
+            '<div class="description">You need to read the output from : </div>' + '<div class="data">' + exercise.output_file_name + '</div><br><br><br><br>' : "") +
         getSubmission(submissions, exerciseId) +
         '<br><br><button class="btn blue_enjoy" onclick="solveExercise(' + "'" + exerciseId + "'" +
         ')">Solve <i class="glyphicon glyphicon-fire"></i></button>' +
