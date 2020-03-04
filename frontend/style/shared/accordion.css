@@ -37,8 +37,8 @@
 .naccs .menu div {
     padding: 15px 20px 15px 40px;
     margin-bottom: 10px;
-    color: #FFF;
-    background: #00bfff;
+    color: #D3D3D3;
+    background: whitesmoke;
     -webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     cursor: pointer;
@@ -60,7 +60,7 @@
     position: absolute;
     top: 24px;
     left: 15px;
-    background-color: #FFF;
+    background-color: #D3D3D3;
     border-radius: 100%;
     -webkit-transition: 1s all cubic-bezier(0.075, 0.82, 0.165, 1);
     transition: 1s all cubic-bezier(0.075, 0.82, 0.165, 1);
@@ -76,6 +76,7 @@
 }
 
 .naccs .menu div.active {
+    background-color: #00bfff;
     color: #FFF;
     padding: 15px 20px 15px 20px;
 }
