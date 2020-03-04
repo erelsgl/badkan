@@ -135,12 +135,10 @@ async def docker_command_custom_exercise(folder_name, correction_url, websocket)
         substring = "Grade:"
         count = line.count(substring)
         if GRADE_REGEXP:
-            if GRADE_REGEXP[0]:
-                print(GRADE_REGEXP[0])
-                grade = int(GRADE_REGEXP[0])
-            else:
-                print("there is not grade.")
-                grade = 0
+             grade = int(GRADE_REGEXP[0])
+        else:
+            print("there is not grade.")
+            grade = 0
         line = line.replace("Grade:","Your grade is ")
         if count > 1:
             grade=0
