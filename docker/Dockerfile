@@ -3,7 +3,7 @@ FROM ubuntu:latest
 
 # Install any needed packages specified in requirements.txt
 RUN apt-get update --fix-missing
-RUN apt-get -y install git build-essential clang++-5.0 clang-tidy-5.0 valgrind python3 unzip default-jdk
+RUN apt-get -y install git build-essential clang++-9 bc clang-tidy-5.0 valgrind python3 unzip default-jdk
 
 RUN mkdir grading_room
 RUN mkdir www
