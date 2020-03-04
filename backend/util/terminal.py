@@ -135,7 +135,6 @@ async def docker_command_custom_exercise(folder_name, correction_url, websocket)
         substring = "Grade:"
         count = line.count(substring)
         if GRADE_REGEXP:
-            print(GRADE_REGEXP)
             if GRADE_REGEXP[0]:
                 print(GRADE_REGEXP[0])
                 grade = int(GRADE_REGEXP[0])

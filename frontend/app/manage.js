@@ -545,7 +545,7 @@ function editExercise(exerciseId, inputOutputPointsSize) {
         const exerciseCompiler = escapeHtml($("#exercise_compiler" + exerciseId).val())
         const urlExercise = escapeHtml($("#url_exercise" + exerciseId).val())
         const submissionViaGithub = $('input[id="github' + exerciseId + '"]:checked').val()
-        const submissionViaZip = $('input[id="github' + exerciseId + '"]:checked').val()
+        const submissionViaZip = $('input[id="zip' + exerciseId + '"]:checked').val()
         if (!submissionViaGithub && !submissionViaZip) {
             alert("Please check at least one of the two submission option.")
         } else {
