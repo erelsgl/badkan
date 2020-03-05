@@ -132,16 +132,22 @@ async def docker_command_custom_exercise(folder_name, correction_url, websocket)
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         GRADE_REGEXP = re.findall("Grade: ([0-9]+)",line)
+        print(GRADE_REGEXP)
         substring = "Grade:"
         count = line.count(substring)
+
         if GRADE_REGEXP:
             grade = int(GRADE_REGEXP[0])
-
+            tmpGrade = int(GRADE_REGEXP[0])
+            print("1")
         else:
-            print("there is not grade.")
-            grade = 0
+            grade=0
         line = line.replace("Grade:","Your grade is ")
         if count > 1:
-            grade=0
+            grade=tmpGrade
+            print("cheat")
         await tee(websocket, line)
-    return grade
+    if tmpGrade == grade:
+        return grade
+    else :
+        return tmpGrade
