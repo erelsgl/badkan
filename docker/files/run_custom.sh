@@ -14,18 +14,13 @@ mv */ $FOLDER_NAME
 
 # clone the correction on the folder "git_clone_correction"
 git clone --quiet $CORRECTION_URL git_clone_correction 
-
-cd git_clone_correction
-git log -1
-cd ..
-
 # move all the correction files on the "FOLDER_NAME" for the grade process.
 mv git_clone_correction/* $FOLDER_NAME
 
 cd $FOLDER_NAME
+
 # process the grade.
 bash grade
 
 cd ../../
-
-rm -R $FOLDER_NAME
+rm -R $FOLDER_NAME 
