@@ -23,4 +23,4 @@ cd $FOLDER_NAME
 bash grade
 
 cd ../../
-rm -R $FOLDER_NAME
+rm -R $FOLDER_NAME 

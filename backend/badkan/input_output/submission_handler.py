@@ -17,10 +17,10 @@ async def check_submission(websocket, submission):
         matches = GIT_REGEXP.search(submission["github_url"])
         username = matches.group(1)
         repository = GIT_CLEAN.sub("", matches.group(2))
-        wget_url = "https://github.com/"+username+"/"+repository+"/archive/master.zip"
+        git_clone_url = "https://github.com/"+username+"/"+repository+".git"
         edit_csv_trace(str(
             currentDT), submission["github_url"], submitters, "START", exercise["exercise_name"], zip_filename)
-        if not await save_github_submission(submission, zip_filename, wget_url, submission["uid"]):
+        if not await save_github_submission(submission, zip_filename, git_clone_url, submission["uid"], websocket):
             await tee(websocket, "A problem with the GitHub URL occured.")
             await tee(websocket, "Please, check that your repository exists.")
             await tee(websocket, "If your repository is private, make sure you provided your personal GitHub token.")
@@ -70,11 +70,25 @@ def save_zip_submission(zip_file, exercise_id, uid):
                   exercise_id + "/" + uid + ".zip")
 
 
-async def save_github_submission(submission, zip_filename, wget_url, uid):
+async def save_github_submission(submission, zip_filename, git_clone_url, uid, websocket):
+    path = "../submissions/" + submission["exercise_id"]
     create_folder_if_not_exists(submission["exercise_id"])
-    result = await terminal_command_return(["wget", wget_url, "-O", zip_filename])
-    if "ERROR 404: Not Found" in result:
-        return await save_github_private_submission(zip_filename, wget_url, uid)
+    result = await terminal_command_return(["git", "clone", git_clone_url, path + "/" + submission["uid"]])
+    git_log=""
+    # os.chdir(os.path.abspath(os.path.expanduser("../submissions/" + submission["exercise_id"])))
+    # await terminal_command_log(["pwd"])
+    # test = await terminal_command_return(["git", "clone", git_clone_url, path + "/" + submission["uid"]])
+    print(result)
+    # if "ERROR 404: Not Found" in result:
+        # return await save_github_private_submission(zip_filename, git_clone_url, uid)
+    
+    # os.chdir(os.path.abspath(os.path.expanduser("../submissions/" + submission["exercise_id"])))
+    # await terminal_command_log(["pwd"])
+    # sudo zip -rj ../submissions/-M2yswIPg2yUBG3qpJgW/cMCxy6WyNiPUqQtePoRrVFViTY32.zip ../submissions/-M2yswIPg2yUBG3qpJgW/cMCxy6WyNiPUqQtePoRrVFViTY32/*
+
+    await terminal_command_tee(["bash", "zip.sh", path, submission["uid"], git_log], websocket)
+    print("git log : ", git_log)
+    await terminal_command_log(["rm", "-R", path + "/" + submission["uid"]])
     return True
 
 
@@ -106,6 +120,8 @@ async def upload_submission_to_docker_and_firebase(exercise_id, uid, zip_filenam
 
 
 async def upload_submission_to_docker(uid, zip_filename):
+    await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+uid])
+    print("the uid : ", uid)
     await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+uid])
     await docker_command_log(["cp", zip_filename, "badkan:/grading_room/"+uid])
     await terminal_command_log(["rm", zip_filename])
