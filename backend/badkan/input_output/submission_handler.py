@@ -49,6 +49,7 @@ async def check_submission(websocket, submission):
 
 async def check_submission_size(zip_filename):
     statinfo = os.stat(zip_filename)
+    print("SIZE : ", statinfo)
     if statinfo.st_size > 4194304:
         await terminal_command_log(["rm", zip_filename])
         return False
