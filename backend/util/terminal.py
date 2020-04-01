@@ -7,6 +7,7 @@ from subprocess import call
 import asyncio
 import re
 import json
+import sys
 
 GRADE_REGEXP = re.compile("Grade: ([0-9]+)", re.IGNORECASE)
 OUTPUT_REGEXP = re.compile("Your output is (.*)", re.IGNORECASE)
@@ -131,24 +132,25 @@ async def docker_command_custom_exercise(folder_name, correction_url, websocket)
         # one answer for the test exercise is: https://github.com/AtaraZohar/Cpp-binaryTree (should get 100).
         # change the home page render.
     async for line in proc.stdout:
-        line = line.decode('utf-8').strip()
-        GRADE_REGEXP = re.findall("Grade: ([0-9]+)",line)
-        print(GRADE_REGEXP)
-        substring = "Grade:"
-        count = line.count(substring)
+        try:
+            line = line.decode('utf-8').strip()
+            GRADE_REGEXP = re.findall("Grade: ([0-9]+)",line)
+            substring = "Grade:"
+            count = line.count(substring)
 
-        if GRADE_REGEXP:
-            grade = int(GRADE_REGEXP[0])
-            tmpGrade = int(GRADE_REGEXP[0])
-            print("1")
-        else:
-            grade=0
-        line = line.replace("Grade:","Your grade is ")
-        if count > 1:
-            grade=tmpGrade
-            print("cheat")
-        await tee(websocket, line)
-    if tmpGrade == grade:
-        return grade
-    else :
-        return tmpGrade
+            if GRADE_REGEXP:
+                grade = int(GRADE_REGEXP[0])
+                tmpGrade = int(GRADE_REGEXP[0])
+            else:
+                grade=0
+            line = line.replace("Grade:","Your grade is ")
+            if count > 1:
+                grade=tmpGrade
+                print("cheat")
+            await tee(websocket, line)
+            if tmpGrade == grade:
+                return grade
+            else :
+                return tmpGrade
+        except:
+            await tee(websocket, str(sys.exc_info()[0]))
