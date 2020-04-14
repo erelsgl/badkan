@@ -365,18 +365,20 @@ async def get_grades_exercise(submissions_id, exercise_name, event_loop):
     for item in completed:
         submission = item.result()
         if submission:
-            if "manual_grade" in submission:
+            if "manual_grade" in submission and 'grade' in submission and 'uid' in submission:
                 lines.append([
                     get_country_id_by_uid(submission["uid"]),
                     submission["grade"],
                     submission["manual_grade"]
                 ])
-            else:
+            elif 'grade' in submission and 'uid' in submission:
                 lines.append([
                     get_country_id_by_uid(submission["uid"]),
                     submission["grade"],
                     ""
                 ])
+            else:
+                continue
     return lines
 
 
