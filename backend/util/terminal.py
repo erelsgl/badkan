@@ -121,36 +121,31 @@ async def docker_command_tee_with_grade(args, websocket, show_input, show_output
 
 async def docker_command_custom_exercise(folder_name, correction_url, websocket):
     proc = await docker_command(["exec", "badkan", "bash", "run_custom.sh", folder_name, correction_url])
-        # check if the line include "grade: x" and return the grade.
-        # make it flexible to include a secure scheme in the future.
-        # save the grade on the firebase realtime database and check if it's stored.
-        # check if the submission is stored on the firebase storage.
-        # check if the options in the manage page still work: run submission, download submission...
-        # make tests (check for example if submit twice in a raw).
-        # compte badkan: https://github.com/badkan
-        # https://gitlab.com/erelsgl/ariel-cpp-5779-homework -> erel exercises.
-        # one answer for the test exercise is: https://github.com/AtaraZohar/Cpp-binaryTree (should get 100).
-        # change the home page render.
+    count_cheat = 0
+    grade=0
     async for line in proc.stdout:
         try:
+            
             line = line.decode('utf-8').strip()
-            GRADE_REGEXP = re.findall("Grade: ([0-9]+)",line)
-            substring = "Grade:"
-            count = line.count(substring)
 
+            GRADE_REGEXP = re.findall("Grade: ([0-9]+)",line)
+            line = line.replace("Grade:","Your grade is ")
+            
             if GRADE_REGEXP:
                 grade = int(GRADE_REGEXP[0])
-                tmpGrade = int(GRADE_REGEXP[0])
-            else:
-                grade=0
-            line = line.replace("Grade:","Your grade is ")
-            if count > 1:
-                grade=tmpGrade
-                print("cheat")
-            await tee(websocket, line)
-            if tmpGrade == grade:
+
+            substring = "Your grade is"
+            if line.count(substring):
+               count_cheat+=1 
+
+            if count_cheat > 1:
+                print("CHEATING")
+                grade = 0
+                await tee(websocket, "You tried to cheat, your stored grade is 0")
                 return grade
-            else :
-                return tmpGrade
+
+            await tee(websocket, line)
         except:
             await tee(websocket, str(sys.exc_info()[0]))
+
+    return grade
