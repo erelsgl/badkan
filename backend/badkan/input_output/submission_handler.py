@@ -13,7 +13,7 @@ async def check_submission(websocket, submission):
                   submission["collab1"], submission["collab2"]]
     zip_filename = "../submissions/" + \
         submission["exercise_id"]+"/"+submission["uid"]+".zip"
-    if not await collaborator_not_exist(submission["collab1"], submission["collab2"], websocket) :
+    if not await collaborator_not_exist(submission["collab1"], submission["collab2"], websocket):
         return
     if "github_url" in submission:
         matches = GIT_REGEXP.search(submission["github_url"])
@@ -72,46 +72,36 @@ def save_zip_submission(zip_file, exercise_id, uid):
     zip_file.save("../submissions/" +
                   exercise_id + "/" + uid + ".zip")
 
+
 async def collaborator_not_exist(collab1, collab2, websocket):
-    if collab1=="" and collab2=="":
-        return True
-    elif collab2=="":
-        if get_uid_by_country_id(collab1) == None :
-            await tee(websocket, "The first collaborator id is not exist.")
-            await tee(websocket, "Please, check if your collaborator have a badkan account, and that his id match.")
-            return False
-    elif collab1=="":
-        if get_uid_by_country_id(collab2) == None :
-            await tee(websocket, "The second collaborator id is not exist.")
-            await tee(websocket, "Please, check if your collaborator have a badkan account, and that his id match.")
-            return False
-    else :
-        if get_uid_by_country_id(collab2) == None and get_uid_by_country_id(collab1) == None:
-            await tee(websocket, "The first and the second collaborators ids are not exist.")
-            await tee(websocket, "Please, check if yours collaborators have a badkan account, and that their ids match.")
-            return False
-        if get_uid_by_country_id(collab1) == None :
-            await tee(websocket, "The first collaborator id is not exist.")
-            await tee(websocket, "Please, check if your collaborator have a badkan account, and that his id match.")
-            return False
-        if get_uid_by_country_id(collab2) == None :
-            await tee(websocket, "The second collaborator id is not exist.")
-            await tee(websocket, "Please, check if your collaborator have a badkan account, and that his id match.")
-            return False
-    return True
+    answer = True
+    if collab1 != '' and get_uid_by_country_id(collab1) == None:
+        await print_not_exist_message('first', collab1, websocket)
+        answer = False
+    if collab2 != '' and get_uid_by_country_id(collab2) == None:
+        await print_not_exist_message('second', collab2, websocket)
+        answer = False
+    return answer
+
+
+async def print_not_exist_message(collborator_number, collaborator_false_id, websocket):
+    await tee(websocket, 'The ' + collborator_number + ' collaborator id (' + collaborator_false_id + ') is not exist.')
+    await tee(websocket, "Please, check if your collaborator have a badkan account, and that the ids match.")
+    return False
+
 
 async def save_github_submission(submission, zip_filename, git_clone_url, uid, websocket):
     path = "../submissions/" + submission["exercise_id"]
     create_folder_if_not_exists(submission["exercise_id"])
     result = await terminal_command_return(["git", "clone", git_clone_url, path + "/" + submission["uid"]])
-    git_log=""
+    git_log = ""
     # os.chdir(os.path.abspath(os.path.expanduser("../submissions/" + submission["exercise_id"])))
     # await terminal_command_log(["pwd"])
     # test = await terminal_command_return(["git", "clone", git_clone_url, path + "/" + submission["uid"]])
     print(result)
     # if "ERROR 404: Not Found" in result:
-        # return await save_github_private_submission(zip_filename, git_clone_url, uid)
-    
+    # return await save_github_private_submission(zip_filename, git_clone_url, uid)
+
     # os.chdir(os.path.abspath(os.path.expanduser("../submissions/" + submission["exercise_id"])))
     # await terminal_command_log(["pwd"])
     # sudo zip -rj ../submissions/-M2yswIPg2yUBG3qpJgW/cMCxy6WyNiPUqQtePoRrVFViTY32.zip ../submissions/-M2yswIPg2yUBG3qpJgW/cMCxy6WyNiPUqQtePoRrVFViTY32/*
