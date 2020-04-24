@@ -95,7 +95,9 @@ async def retreive_exercises_name(exercise_ids, event_loop):
     completed, pending = await asyncio.wait(coroutines)
     exercises = dict()
     for item in completed:
-        if item.result()[0]["exercise_name"]:
+        print("000000", item.result()[0]["exercise_name"])
+        print("11111111", item.result()[1]["exercise_name"])
+        if item.result()[1]["exercise_name"]:
             exercises[item.result()[1]] = item.result()[0]["exercise_name"]
         else:
             continue
