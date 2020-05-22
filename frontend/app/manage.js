@@ -8,6 +8,9 @@ function onLoadMain() {
 }
 
 function onFinishRetreiveData(data) {
+
+    console.log('Retrieve0')
+
     // TODO: use form to save the input.
     if (data.courses) {
         for (courseObj of Object.entries(data.courses)) {
@@ -25,6 +28,20 @@ function onFinishRetreiveData(data) {
         $('.courseName')[0].click();
     }
     hideLoader()
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    }
 }
 
 function createAccordionManage(courseId, course, exercises, ids) {
@@ -79,7 +96,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
             allSubmissions.get(courseId).push([Object.values(exercise.submissions), exercise.exercise_name])
         }
     }
-    let html = '<div class="panel">' +
+    let html = '<button type="button" class="collapsible">' + exercise.exercise_name + '</button>' + '<div class="content">' + '<div class="panel">' +
         '<div class="exercise">' +
         '<label for="exercise_name' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Required field" style="margin-top: 17px">Exercise name *</div></label>' +
         '<input id="exercise_name' + exerciseId + '" class="my_input" value="' + exercise.exercise_name + '"></input><br><br>' +
@@ -154,7 +171,7 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
             '<button class="btn btn_manage" onclick="mossCommand(' + "'" + exerciseId + "'" + ')" style="border:1px solid red"><span>Check Plagiarism</button>' +
             '<button class="btn btn_manage" onclick="downloadStatistics(' + "'" + exerciseId + "'" + ')" style="border:1px solid grey"><span>Download Statistics</button>' +
             '<button class="btn btn_manage" onclick="downloadSubmissions(' + "'" + exerciseId + "','" + exercise.exercise_name + "'" + ')" style="border:1px solid orange"><span>Download Submissions</button>' +
-            '</div>' : '<div class="manage_button">No submission available</div>');
+            '</div></div></div>' : '<div class="manage_button">No submission available</div></div>');
 
     return html;
 }
