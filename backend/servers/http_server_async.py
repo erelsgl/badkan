@@ -56,4 +56,4 @@ def add_headers(response):
 
 
 if __name__ == '__main__':
-    app.run(ssl_context='adhoc')
+    app.run(host='0.0.0.0', port=7000)
