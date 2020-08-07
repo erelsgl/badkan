@@ -44,7 +44,7 @@ def rename_folder(exercise_id):
     submission_list = os.listdir(exercise_id)
     dict_ids = get_country_ids_by_uids_key_value(submission_list)
     for uid, country_id in dict_ids.items():
-        os.rename(exercise_id+"/"+uid, exercise_id+"/"+country_id)
+        os.rename(exercise_id+"/"+uid, exercise_id+"/"+country_id+".zip")
 
 
 @app.after_request
