@@ -1,7 +1,6 @@
 from import_firebase import *
 from storage import download_pdf_instruction
 
-
 def edit_admin(uid, checked, user_country_id):
     user_update(uid, {'instructor': str(checked),
                       'country_id': user_country_id})
@@ -95,7 +94,10 @@ async def retreive_exercises_name(exercise_ids, event_loop):
     completed, pending = await asyncio.wait(coroutines)
     exercises = dict()
     for item in completed:
-        exercises[item.result()[1]] = item.result()[0]["exercise_name"]
+        if item and item.result() and item.result()[0] and item.result()[0]["exercise_name"] and item.result()[1]:
+            exercises[item.result()[1]] = item.result()[0]["exercise_name"]
+        else:
+            continue
     return exercises
 
 
@@ -110,7 +112,7 @@ def get_exercises_name_async(exercise_ids):
 def retreive_courses_and_exercises_by_uid(uid):
     courses_ref = db.reference('courses/')
     owner_courses = courses_ref.order_by_child('owner_uid').equal_to(uid).get()
-    if uid == "2o6A6sjDPcMYrsm4yNn6pFBVshz1" or uid == "rJyIM4FZ38ftiZwYiJx7ZrHV3JB3":  # Samuel uid on the official version. TODO: add jeremy uid.
+    if uid == "2o6A6sjDPcMYrsm4yNn6pFBVshz1" or uid == "rJyIM4FZ38ftiZwYiJx7ZrHV3JB3":
         owner_courses = courses_ref.get()
     answer = dict()
     answer["courses"] = owner_courses
@@ -172,11 +174,15 @@ def get_country_id_by_uid(uid):
     user_country_id = db.reference('userDetails/'+uid+'/country_id')
     return user_country_id.get()
 
+def get_user_details():
+    user_country_id = db.reference('userDetails/')
+    return user_country_id.get()
 
 def get_country_ids_by_uids(uids):
     country_ids = []
+    user_details = get_user_details()
     for uid in uids:
-        country_ids.append(get_country_id_by_uid(uid))
+        country_ids.append(user_details[uid]['country_id'])
     return country_ids
 
 

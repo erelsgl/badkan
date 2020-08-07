@@ -8,7 +8,7 @@
 $('#header').show();
 $('#main').show();
 
-$('a[href="#githubSubmission"]').click(function () {
+$('a[href="#githubSubmission"]').click(function() {
     Swal.fire({
         title: 'Efficient use of GitHub',
         text: "Badkan allows users to submit both entire programming projects (through github)" +
@@ -16,7 +16,7 @@ $('a[href="#githubSubmission"]').click(function () {
     });
 });
 
-$('a[href="#grade"]').click(function () {
+$('a[href="#grade"]').click(function() {
     Swal.fire({
         title: 'Automatic grade',
         text: "To get the grade, the system runs the code provided by the student with" +
@@ -26,14 +26,14 @@ $('a[href="#grade"]').click(function () {
     });
 });
 
-$('a[href="#instructor"]').click(function () {
+$('a[href="#instructor"]').click(function() {
     Swal.fire({
         title: "Save instructor's time",
         text: "Badkan provides an easy graphical interface that lets the instructor customize the input/output system."
     });
 });
 
-$('a[href="#peer"]').click(function () {
+$('a[href="#peer"]').click(function() {
     Swal.fire({
         title: 'Peer grading',
         text: "Another interesting way to grade student is to use peer to peer grading: in" +
@@ -45,7 +45,7 @@ $('a[href="#peer"]').click(function () {
     });
 });
 
-$('a[href="#realtime"]').click(function () {
+$('a[href="#realtime"]').click(function() {
     Swal.fire({
         title: 'Real time grading',
         text: "The student’s screen displays the grade in real time." +
@@ -53,7 +53,7 @@ $('a[href="#realtime"]').click(function () {
     });
 });
 
-$('a[href="#other"]').click(function () {
+$('a[href="#other"]').click(function() {
     Swal.fire({
         title: 'More features',
         text: "The instructor is able to upload a pdf, to check fraud, to download all the grades, " +
@@ -67,7 +67,7 @@ $('a[href="#other"]').click(function () {
  * then we register the user in the realtime database,
  * then we redirect the user to the home page.
  */
-$("#btnSignUp").click(function () {
+$("#btnSignUp").click(function() {
     const email = escapeHtml($("#txtEmailSignIn").val())
     const pass = escapeHtml($("#txtPasswordSignIn").val())
     const name = escapeHtml($("#txtName").val())
@@ -92,6 +92,36 @@ $("#btnSignUp").click(function () {
 });
 
 /**
+ * Button Forgot password.
+ */
+
+$("#btnReset").click(function() {
+    $(".nav-tabs").hide()
+    var auth = firebase.auth()
+    var email = $("#emailForgetPass").val()
+    console.log(email)
+    if (email == undefined) {
+        window.alert("Please write your email first")
+
+    } else {
+        auth.sendPasswordResetEmail(email).then(function() {
+                window.alert("Email has been sent to you. Please check it.")
+            })
+            .catch(function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+
+                console.log(errorCode);
+                console.log(errorMessage);
+
+                window.alert("Message : " + errorMessage)
+            });
+    }
+
+});
+
+
+/**
  * Button GitHub.
  * Attention !! Must use an HTTP or HTTPS adress.
  * It can't be on the local server but with a web server.
@@ -101,7 +131,7 @@ $("#btnSignUp").click(function () {
  * Then, in the bowser, write: http://localhost/
  * and go to the html file and we're done.
  */
-$("#github").click(function () {
+$("#github").click(function() {
     const provider = new firebase.auth.GithubAuthProvider();
     firebase.auth().signInWithPopup(provider).then((result) => {
         /**
@@ -124,7 +154,7 @@ $("#github").click(function () {
         } else {
             signInSuccess();
         }
-    }).catch(function (error) {
+    }).catch(function(error) {
         showSnackbar(error.message);
     });
 });
@@ -134,7 +164,7 @@ $("#github").click(function () {
  * Here we're checking if the mail and password correspond
  * and send he user to the home page.
  */
-$("#btnLogin").click(function () {
+$("#btnLogin").click(function() {
     const email = escapeHtml($("#txtEmail").val())
     const pass = escapeHtml($("#txtPassword").val())
     signIn(email, pass)
@@ -151,7 +181,7 @@ function onMessageCreateAuth(data, onSuccess) {
 }
 
 function signIn(email, pass, newUser = false) {
-    firebase.auth().signInWithEmailAndPassword(email, pass).then(function () {
+    firebase.auth().signInWithEmailAndPassword(email, pass).then(function() {
         if (newUser) {
             signInSuccessNewUser()
         } else {
