@@ -364,27 +364,19 @@ async def get_grade_line(key, event_loop):
 
 async def get_grades_exercise(submissions_id, exercise_name, event_loop):
     lines = [["exercise name:", exercise_name],
-             ["id", "grade", "manual grade"]]
+             ["id", "grade", "manual grade", "github link", "date"]]
     coroutines = [get_grade_line(submission_id, event_loop)
                   for submission_id in submissions_id]
     completed, pending = await asyncio.wait(coroutines)
     for item in completed:
         submission = item.result()
         if submission:
-            if "manual_grade" in submission and 'grade' in submission and 'uid' in submission:
-                lines.append([
-                    get_country_id_by_uid(submission["uid"]),
-                    submission["grade"],
-                    submission["manual_grade"]
-                ])
-            elif 'grade' in submission and 'uid' in submission:
-                lines.append([
-                    get_country_id_by_uid(submission["uid"]),
-                    submission["grade"],
-                    ""
-                ])
-            else:
-                continue
+            line_to_append = [get_country_id_by_uid(submission["uid"])]
+            line_to_append.append(submission["grade"]) if 'grade' in submission else line_to_append.append('None')
+            line_to_append.append(submission["manual_grade"]) if 'manual_grade' in submission else line_to_append.append('None')
+            line_to_append.append(submission["url"]) if 'url' in submission else line_to_append.append('None')
+            line_to_append.append(submission["timestamp"]) if 'timestamp' in submission else line_to_append.append('None')
+            lines.append(line_to_append)
     return lines
 
 
