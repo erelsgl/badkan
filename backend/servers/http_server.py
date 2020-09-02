@@ -1,6 +1,7 @@
 from imports_servers import *
 from flask import Flask, request, jsonify, abort
 
+
 app = Flask(__name__)
 
 
@@ -152,8 +153,7 @@ def download_grades_course():
     response = request.get_json()
     answer = dict()
     answer["grades"] = []
-    for exercise in response["all_submissions"]:
-        answer["grades"].extend(download_grades(exercise[0], exercise[1]))
+    answer["grades"].extend(download_all_grades(response["all_submissions"]))
     return answer
 
 

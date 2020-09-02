@@ -693,5 +693,7 @@ function downloadGradesCourse(courseId) {
     json = JSON.stringify({
         all_submissions: allSubmissions.get(courseId)
     })
+
     doPostJSON(json, "download_grades_course", 'json', onDownloadGradeFinish)
+
 }

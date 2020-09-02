@@ -1,6 +1,7 @@
 from import_firebase import *
 from storage import download_pdf_instruction
 
+
 def edit_admin(uid, checked, user_country_id):
     user_update(uid, {'instructor': str(checked),
                       'country_id': user_country_id})
@@ -362,6 +363,10 @@ async def get_grade_line(key, event_loop):
     return await event_loop.run_in_executor(executor, ref.get)
 
 
+async def get_all_grades(submissionId, ref, event_loop):
+    res = ref.child(submissionId)
+    return await event_loop.run_in_executor(executor, res.get)
+
 async def get_grades_exercise(submissions_id, exercise_name, event_loop):
     lines = [["exercise name:", exercise_name],
              ["id", "grade", "manual grade", "github link", "date"]]
@@ -379,6 +384,52 @@ async def get_grades_exercise(submissions_id, exercise_name, event_loop):
             lines.append(line_to_append)
     return lines
 
+
+async def get_grades_course(allSubmissions, event_loop):
+    lines=[]
+    ref = db.reference('submissions')
+    allUserDetails = db.reference('userDetails')
+    for submission_data in allSubmissions:
+        lines.append([["exercise name:", submission_data[1]],
+             ["id", "grade", "manual grade", "github link", "date"]])
+
+        coroutines = [get_all_grades(submission_id, ref, event_loop)
+                        for submission_id in submission_data[0]]
+        completed, pending = await asyncio.wait(coroutines)
+
+        allCountryId = get_all_country_id(allUserDetails)
+        allKey = get_all_keys_country_id(allUserDetails)
+       
+        for item in completed:
+            submission = item.result()
+            if submission:
+                i=0
+                line_to_append = [" "]
+                line_to_append.append(" ")
+                for key in allKey :
+                    if key==submission["uid"]:
+                        line_to_append.append(allCountryId[i])
+                        line_to_append.append(submission["grade"]) if 'grade' in submission else line_to_append.append('None')
+                        line_to_append.append(submission["manual_grade"]) if 'manual_grade' in submission else line_to_append.append('None')
+                        line_to_append.append(submission["url"]) if 'url' in submission else line_to_append.append('None')
+                        line_to_append.append(submission["timestamp"]) if 'timestamp' in submission else line_to_append.append('None')
+                        lines.append(line_to_append)
+                    i+=1
+    return lines
+
+
+def get_all_country_id(allUserDetails):
+    allCountryId = []
+    for values in allUserDetails.get().values():
+        for key in values.keys():
+            if key=='country_id':
+                allCountryId.append(values[key])
+    return list(allCountryId)
+
+def get_all_keys_country_id(allUserDetails):
+    allKey = []
+    allKey = allUserDetails.get().keys()
+    return list(allKey)
 
 def get_submissions_and_grader_priviliege(uid):
     courses_ref = db.reference('courses/')
