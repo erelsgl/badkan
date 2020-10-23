@@ -354,7 +354,7 @@ htmlStepCreateExercise = (step) => {
 }
 async function newCustomExercise(courseId) {
     let exerciseName, exerciseCompiler, submissionViaGithub, submissionViaZip,
-        exerciseDescription, instructionPdf, deadline, urlExercise
+        exerciseDescription, instructionPdf, deadline, urlExercise, zipExercise
     Swal.mixin({
         allowOutsideClick: false,
         showCancelButton: true,
@@ -387,19 +387,30 @@ async function newCustomExercise(courseId) {
         confirmButtonText: 'Next &rarr;',
         title: 'New exercise 3/3',
         html: '<label for="urlExercise">Enter the URL.</label>' +
-            '<input id="urlExercise" type="text" class="form-control" />',
+            '<input id="urlExercise" type="text" class="form-control" />' +
+            '<h5>Or</h5>' +
+            '<label for="custom_ex_zip">Exercise Zip File</label>' +
+            '<input id="custom_ex_zip" class="swal2-input" type="file" accept="application/zip">',
         focusConfirm: false,
         preConfirm: () => {
             urlExercise = escapeHtml($("#urlExercise").val())
-            if ($("#urlExercise").val() == 0) {
+            if ($("#urlExercise").val() == 0 && $('#custom_ex_zip').prop('files')[0] == undefined) {
                 Swal.showValidationMessage(
                     `Please fill all the required fields.`
                 )
+            }
+            if ($('#custom_ex_zip').prop('files')[0] != 0) {
+                console.log($('#custom_ex_zip').prop('files')[0])
+                zipExercise = $('#custom_ex_zip').prop('files')[0]
+            } else {
+                console.log('None')
             }
         }
     }]).then((result) => {
         if (result.value) {
             $("#main").hide()
+                // console.log(zipExercise)
+                // console.log(urlExercise)
             let json = JSON.stringify({
                 course_id: courseId,
                 exercise_name: exerciseName,
@@ -409,11 +420,13 @@ async function newCustomExercise(courseId) {
                 exercise_description: exerciseDescription,
                 deadline: deadline,
                 deadline_hours: deadline_hours,
-                url_exercise: urlExercise,
+                url_exercise: (urlExercise ? urlExercise : false),
+                zip_exercise: (zipExercise ? true : false),
                 pdf_instruction: (instructionPdf ? true : false)
             })
             var fd = new FormData();
             fd.append("file", instructionPdf);
+            fd.append("zip", zipExercise);
             fd.append("json", json);
             doPostJSONAndFile(fd, "create_exercise", "text", reload)
         }

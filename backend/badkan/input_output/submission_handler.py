@@ -1,5 +1,6 @@
 from imports_input_output import *
 
+
 # Example https: https://github.com/SamuelBismuth/badkan.git
 # Example ssh: git@github.com:SamuelBismuth/badkan.git
 GIT_REGEXP = re.compile(".*github[.]com.(.*)/(.*)", re.IGNORECASE)
@@ -36,7 +37,10 @@ async def check_submission(websocket, submission):
         return
     await upload_submission_to_docker_and_firebase(submission["exercise_id"], submission["uid"], zip_filename)
     output = []
-    grade = await run_submission(websocket, exercise, submission["uid"], output)
+    if "github_url" in submission:
+        grade = await run_submission(websocket, exercise, submission["uid"], submission["exercise_id"], True, output)
+    else:
+        grade = await run_submission(websocket, exercise, submission["uid"], submission["exercise_id"], False, output)
     if "save_grade" in submission:
         await save_grade(submission, websocket, grade, str(currentDT))
         x = threading.Thread(target=edit_statistics, args=(
@@ -73,6 +77,12 @@ def save_zip_submission(zip_file, exercise_id, uid):
                   exercise_id + "/" + uid + ".zip")
 
 
+def save_zip_exercise(zip_file, exercise_id):
+    create_folder_custom_if_not_exists(exercise_id)
+    zip_file.save("../custom_by_zip_exercise/" +
+                  exercise_id + ".zip")
+
+
 async def collaborator_not_exist(collab1, collab2, websocket):
     answer = True
     if collab1 != '' and get_uid_by_country_id(collab1) == None:
@@ -95,19 +105,7 @@ async def save_github_submission(submission, zip_filename, git_clone_url, uid, w
     create_folder_if_not_exists(submission["exercise_id"])
     result = await terminal_command_return(["git", "clone", git_clone_url, path + "/" + submission["uid"]])
     git_log = ""
-    # os.chdir(os.path.abspath(os.path.expanduser("../submissions/" + submission["exercise_id"])))
-    # await terminal_command_log(["pwd"])
-    # test = await terminal_command_return(["git", "clone", git_clone_url, path + "/" + submission["uid"]])
-    print(result)
-    # if "ERROR 404: Not Found" in result:
-    # return await save_github_private_submission(zip_filename, git_clone_url, uid)
-
-    # os.chdir(os.path.abspath(os.path.expanduser("../submissions/" + submission["exercise_id"])))
-    # await terminal_command_log(["pwd"])
-    # sudo zip -rj ../submissions/-M2yswIPg2yUBG3qpJgW/cMCxy6WyNiPUqQtePoRrVFViTY32.zip ../submissions/-M2yswIPg2yUBG3qpJgW/cMCxy6WyNiPUqQtePoRrVFViTY32/*
-
     await terminal_command_tee(["bash", "zip.sh", path, submission["uid"], git_log], websocket)
-    print("git log : ", git_log)
     await terminal_command_log(["rm", "-R", path + "/" + submission["uid"]])
     return True
 
@@ -132,6 +130,12 @@ def create_folder_if_not_exists(exercise_id):
     except FileExistsError:
         print("Directory already exists")
 
+def create_folder_custom_if_not_exists(exercise_id):
+    try:
+        os.mkdir("../custom_by_zip_exercise")
+    except FileExistsError:
+        print("Directory already exists")
+
 
 async def upload_submission_to_docker_and_firebase(exercise_id, uid, zip_filename):
     upload_zip_solution(
@@ -141,13 +145,17 @@ async def upload_submission_to_docker_and_firebase(exercise_id, uid, zip_filenam
 
 async def upload_submission_to_docker(uid, zip_filename):
     await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+uid])
-    print("the uid : ", uid)
     await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+uid])
     await docker_command_log(["cp", zip_filename, "badkan:/grading_room/"+uid])
     await terminal_command_log(["rm", zip_filename])
 
+async def upload_exercise_by_zip_to_docker(exercise_id, zip_name):
+    await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+exercise_id])
+    await docker_command_log(["cp", zip_name, "badkan:/grading_room/"+ exercise_id])
+    # await terminal_command_log(["rm", zip_name])
 
-async def run_submission(websocket, exercise, folder_name, output=None):
+
+async def run_submission(websocket, exercise, folder_name, exerciseId, github_submission, output=None):
     # check if the submission is normal or custom.
     # easy checking using the fields of the exercise?
     # if normal:
@@ -161,7 +169,15 @@ async def run_submission(websocket, exercise, folder_name, output=None):
                                                         exercise["exercise_compiler"], exercise["main_file"]), signature], websocket,
                                                    exercise["show_input"], exercise["show_output"], signature, output)
     else:
-        return await docker_command_custom_exercise(folder_name, exercise["url_exercise"], websocket)
+        print(exercise)
+        if 'url_exercise' in exercise and exercise["url_exercise"]!='false' and exercise["url_exercise"]:
+            return await docker_command_custom_exercise(folder_name, exercise["url_exercise"], websocket, False, github_submission)
+        elif 'zip_exercise' in exercise and exercise["zip_exercise"]:
+            zip_name = "../custom_by_zip_exercise/" + exerciseId +".zip"
+            await upload_exercise_by_zip_to_docker(exerciseId, zip_name)
+            return await docker_command_custom_exercise(folder_name, exerciseId, websocket, True, github_submission)
+        else:
+            return
 
 
 def random_string(stringLength=20):
