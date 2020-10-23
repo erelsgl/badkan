@@ -119,8 +119,17 @@ async def docker_command_tee_with_grade(args, websocket, show_input, show_output
     await proc.wait()
 
 
-async def docker_command_custom_exercise(folder_name, correction_url, websocket):
-    proc = await docker_command(["exec", "badkan", "bash", "run_custom.sh", folder_name, correction_url])
+async def docker_command_custom_exercise(folder_name, correction_url, websocket, isZip, github_submission):
+    if isZip:
+        exercise_id = correction_url
+        if github_submission:
+            proc = await docker_command(["exec", "badkan", "bash", "run_custom_by_zip.sh", folder_name, exercise_id])
+
+        else:
+            proc = await docker_command(["exec", "badkan", "bash", "run_zip_submission_with_zip_exercise.sh", folder_name, exercise_id])
+
+    else:
+        proc = await docker_command(["exec", "badkan", "bash", "run_custom.sh", folder_name, correction_url])
     count_cheat = 0
     grade=0
     async for line in proc.stdout:

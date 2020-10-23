@@ -10,6 +10,13 @@ def upload_pdf_instruction(pdf_instruction, exercise_id):
     blob.upload_from_file(pdf_instruction)
     return True
 
+def upload_zip_custom_exercise(zip_file, exercise_id):
+    print(zip_file)
+    print('work')
+    blob = bucket.blob("custom_exercise_by_zip/"+exercise_id+".zip")
+    blob.upload_from_file(zip_file)
+    return True
+
 
 
 def check_pdf_size(pdf_instruction):
@@ -24,6 +31,13 @@ def download_pdf_instruction(exercise_id):
     blob = bucket.blob("pdf_instruction/"+exercise_id)
     if blob.exists():
         return blob.generate_signed_url(100000000000)
+
+def download_zip_custom_exercise(exercise_id):
+    print('heeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeere')
+    blob = bucket.blob("custom_exercise_by_zip/"+exercise_id)
+    if blob.exists():
+        return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=' + exercise_id + '.zip')
+
 
 
 def upload_zip_solution(zip_filename, exercise_id, uid):

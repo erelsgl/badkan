@@ -75,7 +75,12 @@ def delete_course(course_id):
 
 @app.route('/create_exercise/', methods=["POST"])
 def create_exercise():
+    print(request.form["json"])
     exercise_id = create_new_exercise(json.loads(request.form["json"]))
+    if "zip" in request.files:
+        save_zip_exercise(request.files["zip"], exercise_id)
+            # upload_zip_custom_exercise(zip_file, exercise_id)
+
     if "file" in request.files:
         if not upload_pdf_instruction(request.files["file"], exercise_id):
             return abort(403)
