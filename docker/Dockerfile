@@ -14,6 +14,8 @@ WORKDIR /
 # Copy required files into the container:
 COPY files/grade.sh   /
 COPY files/run_custom.sh   /
+COPY files/run_custom_by_zip.sh /
+COPY files/run_zip_submission_with_zip_exercise.sh /
 COPY www-readme.md       /www/README.md
 
 # Run bash when the container launches

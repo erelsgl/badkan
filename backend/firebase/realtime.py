@@ -113,6 +113,9 @@ def get_exercises_name_async(exercise_ids):
 def retreive_courses_and_exercises_by_uid(uid):
     courses_ref = db.reference('courses/')
     owner_courses = courses_ref.order_by_child('owner_uid').equal_to(uid).get()
+    grader_courses = courses_ref.order_by_child('grader_uid').equal_to(uid).get()
+    if grader_courses:
+        owner_courses.update(grader_courses)
     if uid == "2o6A6sjDPcMYrsm4yNn6pFBVshz1" or uid == "rJyIM4FZ38ftiZwYiJx7ZrHV3JB3":
         owner_courses = courses_ref.get()
     answer = dict()
@@ -144,7 +147,11 @@ def create_new_course(json):
 
 
 def edit_old_course(json, course_id):
+    print('IN edit old course, BEFORE')
+    print(json["grader_uid"])
     json["grader_uid"] = get_uid_by_country_id(json["grader_uid"])
+    print('IN edit old course, AFTER')
+    print(json["grader_uid"])
     json["uids"] = get_uids_by_country_ids(json["uids"])
     ref = db.reference('courses/'+course_id)
     ref.update(json)
@@ -156,8 +163,12 @@ def delete_old_course(course_id):
 
 
 def get_uid_by_country_id(id):
+    print('In get uid by country id, BEFORE')
+    print(id)
     user = db.reference('userDetails/')
     snapshot = user.order_by_child('country_id').equal_to(id).get()
+    print('In get uid by country id, AFTER')
+    print(snapshot)
     for key in snapshot:
         if key is None:
             return "id unknown"
@@ -183,7 +194,10 @@ def get_country_ids_by_uids(uids):
     country_ids = []
     user_details = get_user_details()
     for uid in uids:
-        country_ids.append(user_details[uid]['country_id'])
+        try:
+            country_ids.append(user_details[uid]['country_id'])
+        except:
+            pass
     return country_ids
 
 

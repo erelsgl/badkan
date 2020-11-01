@@ -63,6 +63,8 @@ def create_course():
 @app.route('/edit_course/<course_id>/', methods=["POST"])
 def edit_course(course_id):
     response = request.get_json()
+    print('IN edit course')
+    print(response)
     edit_old_course(response, course_id)
     return 'OK'
 
