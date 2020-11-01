@@ -63,8 +63,6 @@ def create_course():
 @app.route('/edit_course/<course_id>/', methods=["POST"])
 def edit_course(course_id):
     response = request.get_json()
-    print('IN edit course')
-    print(response)
     edit_old_course(response, course_id)
     return 'OK'
 
@@ -77,7 +75,6 @@ def delete_course(course_id):
 
 @app.route('/create_exercise/', methods=["POST"])
 def create_exercise():
-    print(request.form["json"])
     exercise_id = create_new_exercise(json.loads(request.form["json"]))
     if "zip" in request.files:
         save_zip_exercise(request.files["zip"], exercise_id)

@@ -9,8 +9,6 @@ function onLoadMain() {
 
 function onFinishRetreiveData(data) {
 
-    console.log('Retrieve0')
-
     // TODO: use form to save the input.
     if (data.courses) {
         for (courseObj of Object.entries(data.courses)) {
@@ -64,7 +62,7 @@ function createAccordionBodyManageCourse(courseId, course, ids) {
         '<label for="course_name' + courseId + '"><div class="explanation" data-toggle="tooltip" title="Required field" style="margin-top: 17px">Course name *</div></label>' +
         '<input id="course_name' + courseId + '" class="my_input" value="' + course.course_name + '"></input><br><br>' +
         '<label for="course_grader' + courseId + '"><div class="explanation" data-toggle="tooltip" title="The grader must be admin. \nGives an access to the manage course.">Grader id \n </div></label>' +
-        '<input id="course_grader' + courseId + '" class="my_input" value="' + (course.grader_uid ? ids[course.grader_uid] : course.grader_uid) + '" style="margin-left:88px"></input><br><br>' +
+        '<input id="course_grader' + courseId + '" class="my_input" value="' + (course.grader_uid ? extract_grader_id(course.grader_uid, ids) : course.grader_uid) + '" style="margin-left:88px"></input><br><br>' +
         '<label for="privacyEdit"><div class="explanation" data-toggle="tooltip" title="Share this course only with specific students.">Privacy</div></label><br>' +
         '<div class="radio_checkbox border_radio">' +
         '<input id="radio_public' + courseId + '" class="btn_radio" type="radio" name="privacy' + courseId + '" value="public" onclick=\'$(\"#pass' + courseId + '\").hide()\'' +
@@ -85,6 +83,17 @@ function createAccordionBodyManageCourse(courseId, course, ids) {
         '</div></div>' +
         '<div class="manage_button"><button class="btn btn_manage btn_course" onclick="downloadGradesCourse(' + "'" + courseId + "'" + ')" style="border:1px solid green"><span>Download Course Grades</button></div>';
     return html;
+}
+
+function extract_grader_id(grader_uid, ids) {
+    answer = ""
+    if (Array.isArray(grader_uid))
+        for (grader of grader_uid) {
+            answer += ids[grader] + " "
+        }
+    else
+        answer += ids[grader_uid]
+    return answer
 }
 
 function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
