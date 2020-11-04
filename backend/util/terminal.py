@@ -165,11 +165,17 @@ async def docker_command_custom_exercise(folder_name, correction_url, websocket,
     #         await tee(websocket, str(sys.exc_info()[0]))
     for line in all_line:
         ctn_line+=1
+        if ctn_line == len(all_line)-1:
+            GRADE_REGEXP = re.findall("Grade: ([0-9]+)",line)
+            if GRADE_REGEXP:
+                line = line.replace("Grade:","Your grade is ")
+                grade = int(GRADE_REGEXP[0])
         if ctn_line == len(all_line):
             GRADE_REGEXP = re.findall("Grade: ([0-9]+)",line)
-            line = line.replace("Grade:","Your grade is ")
-            grade = int(GRADE_REGEXP[0])
+            if GRADE_REGEXP:
+                line = line.replace("Grade:","Your grade is ")
+                grade = int(GRADE_REGEXP[0])
         time.sleep(0.25)
         await tee(websocket, line)
-            
+
     return grade
