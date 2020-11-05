@@ -119,24 +119,41 @@ async def docker_command_tee_with_grade(args, websocket, show_input, show_output
             return grade
     await proc.wait()
 
-
-async def docker_command_custom_exercise(folder_name, correction_url, websocket, isZip, github_submission):
+async def run_grade(isZip, folder_name, correction_url, github_submission):
     if isZip:
         exercise_id = correction_url
         if github_submission:
-            proc = await docker_command(["exec", "badkan", "bash", "run_custom_by_zip.sh", folder_name, exercise_id])
+            return await docker_command(["exec", "badkan", "bash", "run_custom_by_zip.sh", folder_name, exercise_id])
 
         else:
-            proc = await docker_command(["exec", "badkan", "bash", "run_zip_submission_with_zip_exercise.sh", folder_name, exercise_id])
+            return await docker_command(["exec", "badkan", "bash", "run_zip_submission_with_zip_exercise.sh", folder_name, exercise_id])
 
     else:
-        proc = await docker_command(["exec", "badkan", "bash", "run_custom.sh", folder_name, correction_url])
+        return await docker_command(["exec", "badkan", "bash", "run_custom.sh", folder_name, correction_url])
+
+async def docker_command_custom_exercise(folder_name, correction_url, websocket, isZip, github_submission):
+
+    exercise_id = correction_url
+
+    proc = await run_grade(isZip, folder_name, correction_url, github_submission)
+
     ctn_line = 0
     grade=0
     all_line = []
+    bug_pattern = ['bash: grade: No such file or directory', 'rm: cannot remove', 'unzip:  cannot find or open', 'mv: cannot stat']
+
+    await tee(websocket, "Check of your submission ...")
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         all_line.append(line)
+    
+    for patt in bug_pattern:
+        for line in all_line:
+            if line.find(patt) != -1:
+                await docker_command(["exec", "badkan", "bash", "clean_docker.sh", exercise_id+folder_name])
+                await docker_command(["exec", "badkan", "bash", "clean_docker.sh", folder_name])
+                await tee(websocket, "Just 1 seconde ...")
+                proc = await run_grade(isZip, folder_name, correction_url, github_submission)
 
     for line in all_line:
         ctn_line+=1
@@ -148,3 +165,4 @@ async def docker_command_custom_exercise(folder_name, correction_url, websocket,
         time.sleep(0.25)
         await tee(websocket, line)
     return grade
+
