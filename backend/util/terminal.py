@@ -58,7 +58,6 @@ async def docker_command(args):
 
 
 async def terminal_command_log(args):
-    print(args)
     proc = terminal_command(args)
     log_process(proc)
     proc.wait()
