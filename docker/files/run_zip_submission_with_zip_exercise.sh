@@ -33,5 +33,5 @@ cd ../..
 
 # mv ./$EXERCISE_ID ./$FOLDER_NAME
 
-rm -R ./$EXERCISE_ID
-rm -R $FOLDER_NAME
+# rm -R ./$EXERCISE_ID
+# rm -R $FOLDER_NAME
