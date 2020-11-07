@@ -30,5 +30,8 @@ cd ../$FOLDER_NAME/$FOLDER_NAME
 bash grade
 
 cd ../..
-rm -R ./$EXERCISE_ID
-rm -R $FOLDER_NAME
+
+# mv ./$EXERCISE_ID ./$FOLDER_NAME
+
+# rm -R ./$EXERCISE_ID
+# rm -R $FOLDER_NAME
