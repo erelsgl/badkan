@@ -16,6 +16,7 @@ COPY files/grade.sh   /
 COPY files/run_custom.sh   /
 COPY files/run_custom_by_zip.sh /
 COPY files/run_zip_submission_with_zip_exercise.sh /
+COPY files/clean_docker.sh /
 COPY www-readme.md       /www/README.md
 
 # Run bash when the container launches
