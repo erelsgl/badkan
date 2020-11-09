@@ -77,6 +77,7 @@ for item in $INPUT_OUTPUT_POINTS; do
     echo "Your output is" $output  
 
     expected_output=$(echo $expected_output | tr -s '&\-&' ' ' | tr -s "^,^" "\n")
+    output=$(echo $output | tr -s '&\-&' ' ' | tr -s "^,^" "\n")
 
     if [ "$output" == "$expected_output" ]; then
                 ((GRADE+=$points))
@@ -85,6 +86,5 @@ for item in $INPUT_OUTPUT_POINTS; do
 done
 
 echo $SIGNATURE $GRADE
-
 cd ../../
 rm -R $FOLDER_NAME

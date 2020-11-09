@@ -169,7 +169,6 @@ async def run_submission(websocket, exercise, folder_name, exerciseId, github_su
                                                         exercise["exercise_compiler"], exercise["main_file"]), signature], websocket,
                                                    exercise["show_input"], exercise["show_output"], signature, output)
     else:
-        print(exercise)
         if 'url_exercise' in exercise and exercise["url_exercise"]!='false' and exercise["url_exercise"]:
             return await docker_command_custom_exercise(folder_name, exercise["url_exercise"], websocket, False, github_submission)
         elif 'zip_exercise' in exercise and exercise["zip_exercise"]:
