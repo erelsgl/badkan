@@ -6,7 +6,7 @@ export FOLDER_NAME=$1
 export EXERCISE_ID=$2
 
 # unzip the submission.
-cd grading_room/$EXERCISE_ID
+cd grading_room/$FOLDER_NAME/$EXERCISE_ID
 
 unzip -qq ./$EXERCISE_ID.zip
 
@@ -29,7 +29,7 @@ cd ../$EXERCISE_ID/$EXERCISE_ID
 # process the grade.
 bash grade
 
-cd ../..
+cd ../../..
 
-rm -R ./$EXERCISE_ID
+# rm -R ./$EXERCISE_ID
 rm -R $FOLDER_NAME

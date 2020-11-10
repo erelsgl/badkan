@@ -147,8 +147,10 @@ async def docker_command_custom_exercise(folder_name, correction_url, websocket,
     for patt in bug_pattern:
         for line in all_line:
             if line.find(patt) != -1:
-                await tee(websocket, "Just 1 second ...")
-                proc = await run_grade(isZip, folder_name, correction_url, github_submission)
+                await tee(websocket, "Please run again")
+                docker_command(["exec", "badkan", "bash", "clean_docker.sh", correction_url])
+                docker_command(["exec", "badkan", "bash", "clean_docker.sh", folder_name])
+                return 0
 
     for line in all_line:
         ctn_line+=1

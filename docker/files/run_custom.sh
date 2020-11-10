@@ -5,8 +5,10 @@
 export FOLDER_NAME=$1
 export CORRECTION_URL=$2
 
+
 # unzip the submission.
-cd grading_room/$FOLDER_NAME
+cd grading_room/$FOLDER_NAME/$FOLDER_NAME
+ls
 unzip -qq $FOLDER_NAME.zip
 
 # make the name of the submission be "FOLDER_NAME"
@@ -22,5 +24,6 @@ cd $FOLDER_NAME
 # process the grade.
 bash grade
 
-cd ../../
+cd ../../../
+
 rm -R $FOLDER_NAME 

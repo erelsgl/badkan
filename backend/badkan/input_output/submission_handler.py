@@ -145,13 +145,13 @@ async def upload_submission_to_docker_and_firebase(exercise_id, uid, zip_filenam
 
 async def upload_submission_to_docker(uid, zip_filename):
     await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+uid])
-    await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+uid])
-    await docker_command_log(["cp", zip_filename, "badkan:/grading_room/"+uid])
+    await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+uid+"/"+uid])
+    await docker_command_log(["cp", zip_filename, "badkan:/grading_room/"+uid+"/"+uid])
     await terminal_command_log(["rm", zip_filename])
 
-async def upload_exercise_by_zip_to_docker(exercise_id, zip_name):
-    await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+exercise_id])
-    await docker_command_log(["cp", zip_name, "badkan:/grading_room/"+ exercise_id])
+async def upload_exercise_by_zip_to_docker(exercise_id, zip_name, uid):
+    await docker_command_log(["exec", "badkan", "mkdir", "grading_room/"+uid+"/"+exercise_id])
+    await docker_command_log(["cp", zip_name, "badkan:/grading_room/"+uid+"/"+ exercise_id])
     # await terminal_command_log(["rm", zip_name])
 
 
@@ -173,7 +173,7 @@ async def run_submission(websocket, exercise, folder_name, exerciseId, github_su
             return await docker_command_custom_exercise(folder_name, exercise["url_exercise"], websocket, False, github_submission)
         elif 'zip_exercise' in exercise and exercise["zip_exercise"]:
             zip_name = "../custom_by_zip_exercise/" + exerciseId +".zip"
-            await upload_exercise_by_zip_to_docker(exerciseId, zip_name)
+            await upload_exercise_by_zip_to_docker(exerciseId, zip_name, folder_name)
             return await docker_command_custom_exercise(folder_name, exerciseId, websocket, True, github_submission)
         else:
             return
