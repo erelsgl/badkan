@@ -77,9 +77,10 @@ def delete_course(course_id):
 def create_exercise():
     exercise_id = create_new_exercise(json.loads(request.form["json"]))
     if "zip" in request.files:
+        # upload_zip_custom_exercise(request.files["zip"], exercise_id)
+        print('----------------------------------')
+        print(exercise_id)
         save_zip_exercise(request.files["zip"], exercise_id)
-            # upload_zip_custom_exercise(zip_file, exercise_id)
-
     if "file" in request.files:
         if not upload_pdf_instruction(request.files["file"], exercise_id):
             return abort(403)
@@ -89,6 +90,8 @@ def create_exercise():
 @app.route('/edit_exercise/<exercise_id>/', methods=["POST"])
 def edit_exercise(exercise_id):
     edit_old_exercise(json.loads(request.form["json"]), exercise_id)
+    if "zip" in request.files:
+        save_zip_exercise(request.files["zip"], exercise_id)
     if "file" in request.files:
         if not upload_pdf_instruction(request.files["file"], exercise_id):
             return abort(403)
@@ -97,6 +100,8 @@ def edit_exercise(exercise_id):
 
 @app.route('/delete_exercise/<exercise_id>/', methods=["POST"])
 def delete_exercise(exercise_id):
+    print("BEFORE FUNCTION")
+    # delete_zip_exercise(exercise_id)
     delete_old_exercise(exercise_id)
     return 'OK'
 
@@ -170,6 +175,10 @@ def download_statistics(exercise_id):
 @app.route('/download_instruction/<exercise_id>/', methods=["POST"])
 def download_instruction(exercise_id):
     return download_pdf_instruction(exercise_id)
+
+@app.route('/download_zip_exercise/<exercise_id>/', methods=["POST"])
+def download_zip_exercise(exercise_id):
+    return download_zip_custom_exercise(exercise_id)
 
 
 @app.route('/get_profile_data/<uid>/', methods=["POST"])
