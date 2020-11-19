@@ -138,9 +138,13 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
         '<input id="exercise_instruction' + exerciseId + '" type="file" accept="application/pdf"><br><br>' +
         '<label for="deadline' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The deadline of the exercise.">Deadline</div></label>' +
         '<input id="deadline' + exerciseId + '" class="my_input" type="date" name="dealine" value="' + exercise.deadline + '"></input> <input id="deadline_hours' + exerciseId + '" type="time" class="my_input" name="dealine_hours" value="' + exercise.deadline_hours + '"></input><br><br>'
-    if (!exercise.input_output_points) {
+    if (!exercise.input_output_points && exercise.url_exercise) {
         html += '<label for="input_url_exercise' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The URL from the instructor">URL from the instructor *</div></label>' +
             '<input id="url_exercise' + exerciseId + '"  class="my_input" value="' + exercise.url_exercise + '"></input><br><br>'
+    } else if (!exercise.input_output_points && exercise.zip_exercise) {
+        html += '<label for="exercise_zip' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="Must be a zip file.">Zip Exercise File</div></label><br><br>' +
+            '<button id="exercise_zip' + exerciseId + '" class="btn btn-link" >Current Zip Exercise</button><br><br>' +
+            '<input id="custom_ex_zip' + exerciseId + '" type="file" accept="application/zip"><br><br>'
     } else {
         html += '<label for="show' + exerciseId + '"><div class="explanation" data-toggle="tooltip" title="The student will be able to see every option checked while submitting.' +
             'If you want the student to see the output of his program, check output.">Show input/output</div></label>' +
@@ -184,6 +188,8 @@ function createAccordionBodyManageExercise(exerciseId, exercise, courseId) {
 
     return html;
 }
+
+
 
 function deletePdfInstruction(exerciseId) {
     if ($("#delete_pdf" + exerciseId).html().includes('remove')) {
@@ -409,7 +415,6 @@ async function newCustomExercise(courseId) {
                 )
             }
             if ($('#custom_ex_zip').prop('files')[0] != 0) {
-                console.log($('#custom_ex_zip').prop('files')[0])
                 zipExercise = $('#custom_ex_zip').prop('files')[0]
             } else {
                 console.log('None')
@@ -591,6 +596,7 @@ function editExercise(exerciseId, inputOutputPointsSize) {
             if (checkEmptyFieldsAlert([exerciseName, exerciseCompiler])) {
                 exerciseDescription = escapeHtml($("#exercise_description" + exerciseId).val())
                 instructionPdf = $("#exercise_instruction" + exerciseId).prop('files')[0];
+                zipExercise = $("#custom_ex_zip" + exerciseId).prop('files')[0];
                 deadline = $("#deadline" + exerciseId).val()
                 deadline_hours = $("#deadline_hours" + exerciseId).val()
                     // urlExercise = escapeHtml($("#urlExercise" + exerciseId).val())
@@ -612,11 +618,13 @@ function editExercise(exerciseId, inputOutputPointsSize) {
                     exercise_description: exerciseDescription,
                     deadline: deadline,
                     deadline_hours: deadline_hours,
-                    url_exercise: urlExercise,
+                    url_exercise: (urlExercise ? urlExercise : false),
+                    zip_exercise: (zipExercise ? true : false),
                     pdf_instruction: (instructionPdf ? true : is_pdf_exists)
                 })
                 var fd = new FormData();
                 fd.append("file", instructionPdf);
+                fd.append("zip", zipExercise);
                 fd.append("json", json);
                 doPostJSONAndFile(fd, "edit_exercise/" + exerciseId, "text", reload)
             }
