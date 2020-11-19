@@ -214,6 +214,7 @@ function onClose(event) {
 }
 
 function mossCommand(exerciseId) {
+    console.log(exerciseId)
     showLoader()
     doPostJSON(null, "moss_command/" + exerciseId, "text", onCheckPlagiatFinish, 7000) // Async
 }

@@ -19,6 +19,10 @@ async def download_submissions(exercise_id, exercise_name):
 
 @app.route('/moss_command/<exercise_id>/', methods=["POST"])
 async def moss_command(exercise_id):
+    print('--------------------------')
+    print("IN @app.route")
+    print(exercise_id)
+    print('--------------------------')
     await download_submissions_zip(exercise_id)
     await rename_folder_and_unzip(exercise_id)
     language = get_language_by_exercise_id(
@@ -34,6 +38,10 @@ def remove_zip_file(filename):
 
 
 async def rename_folder_and_unzip(exercise_id):
+    print('--------------------------')
+    print('IN rename folder and unzip')
+    print(exercise_id)
+    print('--------------------------')
     submission_list = os.listdir(exercise_id)
     dict_ids = get_country_ids_by_uids_key_value(submission_list)
     for uid, country_id in dict_ids.items():

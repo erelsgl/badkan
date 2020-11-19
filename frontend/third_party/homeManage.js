@@ -16,6 +16,11 @@ function downloadPdfInstruction(exerciseId) {
     doPostJSON(null, "download_instruction/" + exerciseId, "text", onDowloadPdfFinish)
 }
 
+function downloadZipExercise(exerciseId) {
+    console.log('HERRRRRE')
+    doPostJSON(null, "download_zip_exercise/" + exerciseId, "text", onDowloadPdfFinish)
+}
+
 function onDowloadPdfFinish(data) {
     window.open(data)
 }

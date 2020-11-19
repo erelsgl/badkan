@@ -44,9 +44,8 @@ run_file_and_read_standard() {
     return $($RUNNER)
 }
 
-cd grading_room/$FOLDER_NAME
+cd grading_room/$FOLDER_NAME/$FOLDER_NAME
 unzip -qq $FOLDER_NAME
-
 cd */
 
 # Handle conflict with python and perl that don't need compile.
@@ -74,10 +73,11 @@ for item in $INPUT_OUTPUT_POINTS; do
     else  # If the input is not standard.
         echo "error..."
     fi;
-    echo "Your output is" $output  
+    echo "Your output is" $output
 
     expected_output=$(echo $expected_output | tr -s '&\-&' ' ' | tr -s "^,^" "\n")
     output=$(echo $output | tr -s '&\-&' ' ' | tr -s "^,^" "\n")
+    
 
     if [ "$output" == "$expected_output" ]; then
                 ((GRADE+=$points))
@@ -86,5 +86,5 @@ for item in $INPUT_OUTPUT_POINTS; do
 done
 
 echo $SIGNATURE $GRADE
-cd ../../
+cd ../../../
 rm -R $FOLDER_NAME

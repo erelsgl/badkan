@@ -27,6 +27,8 @@ mv -v ./$FOLDER_NAME/*  2>/dev/null ../$EXERCISE_ID/$EXERCISE_ID
 
 cd ../$EXERCISE_ID/$EXERCISE_ID
 # process the grade.
+echo "OUTPUT OF YOUR SUBMISSION: "
+echo "--------------------------"
 bash grade
 
 cd ../../..

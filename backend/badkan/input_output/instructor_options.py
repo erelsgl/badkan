@@ -40,6 +40,11 @@ async def run_submissions_admin(websocket, exercise_id):
 
 
 async def check_plagiat(exercise_id, language):
+    print('--------------------------')
+    print('IN check plagiat')
+    print(exercise_id)
+    print(language)
+    print('--------------------------')
     submission_path = "../"+exercise_id+"/*/*/*"
     line = await terminal_command_return(["bash", "moss/moss_command.sh", language, submission_path])
     return line[line.find("http"):]
