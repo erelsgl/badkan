@@ -11,6 +11,7 @@ def upload_pdf_instruction(pdf_instruction, exercise_id):
     return True
 
 
+
 def check_pdf_size(pdf_instruction):
     pdf_instruction.flush()
     size = os.fstat(pdf_instruction.fileno()).st_size
@@ -24,6 +25,27 @@ def download_pdf_instruction(exercise_id):
     if blob.exists():
         return blob.generate_signed_url(100000000000)
 
+def download_zip_custom_exercise(exercise_id):
+    blob = bucket.blob("custom_exercise_by_zip/"+exercise_id)
+    if blob.exists():
+        return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=' + exercise_id+ '.zip')
+    else:
+        print('DOES NOT EXIST')
+
+def upload_zip_custom_exercise(zip_file, exercise_id):
+    blob = bucket.blob("custom_exercise_by_zip/"+exercise_id)
+    blob.upload_from_file(zip_file)
+    return True
+
+# def delete_zip_exercise(exercise_id):
+#     print("INSIDE FUNCTION")
+#     blob = bucket.blob("custom_exercise_by_zip/"+exercise_id)
+#     if blob.exists():
+#         print("INSIDE IF FUNCTION")
+#         bucket.delete_blob("custom_exercise_by_zip/"+exercise_id)
+#         bucket.delete()
+#     return True
+
 
 def upload_zip_solution(zip_filename, exercise_id, uid):
     blob = bucket.blob("submissions/"+exercise_id+"/"+uid)
@@ -32,7 +54,7 @@ def upload_zip_solution(zip_filename, exercise_id, uid):
 
 def download_submission_zip(exercise_id, submiter_id, country_id):
     blob = bucket.blob("submissions/"+exercise_id+"/"+submiter_id)
-    if blob.exists():
+    if blob.exists() and country_id:
         return blob.generate_signed_url(100000000000, response_disposition='attachment; filename=' + country_id + '.zip')
 
 
@@ -61,6 +83,10 @@ def download_price_plan_instructor():
 
 
 async def download_submissions_zip(exercise_id):
+    print('--------------------------')
+    print("download_submissions_zip")
+    print(exercise_id)
+    print('--------------------------')
     await terminal_command_log(["bash", "download_submissions.sh", exercise_id, project_name])
 
 

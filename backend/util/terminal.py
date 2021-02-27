@@ -7,8 +7,10 @@ from subprocess import call
 import asyncio
 import re
 import json
+import sys
+import time
 
-GRADE_REGEXP = re.compile("\*\*\* ([0-9]+) \*\*\*", re.IGNORECASE)
+GRADE_REGEXP = re.compile("Grade: ([0-9]+)", re.IGNORECASE)
 OUTPUT_REGEXP = re.compile("Your output is (.*)", re.IGNORECASE)
 INPUT_REGEXP = re.compile("The input is (.*)", re.IGNORECASE)
 
@@ -89,7 +91,6 @@ async def docker_command_tee(args, websocket):
 
 async def docker_command_tee_with_grade(args, websocket, show_input, show_output, signature, output=None):
     proc = await docker_command(args)
-
     async for line in proc.stdout:
         line = line.decode('utf-8').strip()
         print(line)
@@ -116,3 +117,50 @@ async def docker_command_tee_with_grade(args, websocket, show_input, show_output
             await tee(websocket, json.dumps(answer))
             return grade
     await proc.wait()
+
+async def run_grade(isZip, folder_name, correction_url, github_submission):
+    if isZip:
+        exercise_id = correction_url
+        if github_submission:
+            return await docker_command(["exec", "badkan", "bash", "run_custom_by_zip.sh", folder_name, exercise_id])
+
+        else:
+            return await docker_command(["exec", "badkan", "bash", "run_zip_submission_with_zip_exercise.sh", folder_name, exercise_id])
+
+    else:
+        return await docker_command(["exec", "badkan", "bash", "run_custom.sh", folder_name, correction_url])
+
+async def docker_command_custom_exercise(folder_name, correction_url, websocket, isZip, github_submission):
+
+    proc = await run_grade(isZip, folder_name, correction_url, github_submission)
+
+    ctn_line = 0
+    grade=0
+    all_line = []
+    bug_pattern = ['bash: grade: No such file or directory', 'rm: cannot remove', 'unzip:  cannot find or open', 'mv: cannot stat']
+
+    await tee(websocket, "Checking your submission ...")
+    async for line in proc.stdout:
+        line = line.decode('utf-8').strip()
+        all_line.append(line)
+    
+    # for patt in bug_pattern:
+    #     for line in all_line:
+    #         if line.find(patt) != -1:
+    #             await tee(websocket, "Please run again")
+    #             docker_command(["exec", "badkan", "bash", "clean_docker.sh", correction_url])
+    #             docker_command(["exec", "badkan", "bash", "clean_docker.sh", folder_name])
+    #             return 0
+
+    for line in all_line:
+        ctn_line+=1
+        if ctn_line == len(all_line):
+            GRADE_REGEXP = re.findall("Grade: ([0-9]+)",line)
+            if GRADE_REGEXP:
+                line = line.replace("Grade:","Your grade is ")
+                grade = int(GRADE_REGEXP[0])
+        time.sleep(0.25)
+        await tee(websocket, line)
+
+    return grade
+

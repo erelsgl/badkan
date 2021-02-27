@@ -19,7 +19,7 @@ function downloadGradesExercise(...submissionsId) {
 
 function onDownloadGradeFinish(data) {
     var lineArray = [];
-    data.grades.forEach(function (infoArray, index) {
+    data.grades.forEach(function(infoArray, index) {
         var line = infoArray.join(",");
         lineArray.push(index == 0 ? "data:text/csv;charset=utf-8," + line : line);
     });
@@ -100,7 +100,7 @@ function editGrade(submissionId, grade, manualGrade, comment) {
             '<div/>',
         focusConfirm: false,
         showCancelButton: true,
-        preConfirm: function () {
+        preConfirm: function() {
             const newGrade = escapeHtml($("#new_grade").val())
             const newManualGrade = escapeHtml($("#new_manual_grade").val())
             const newComment = escapeHtml($("#new_comment").val())
@@ -150,7 +150,7 @@ function manualGrade(submissionId, grade) {
             '<div/>',
         focusConfirm: false,
         showCancelButton: true,
-        preConfirm: function () {
+        preConfirm: function() {
             const manualGrade = escapeHtml($("#manual_grade").val())
             const comment = escapeHtml($("#comment").val())
             let json = JSON.stringify({
@@ -214,6 +214,7 @@ function onClose(event) {
 }
 
 function mossCommand(exerciseId) {
+    console.log(exerciseId)
     showLoader()
     doPostJSON(null, "moss_command/" + exerciseId, "text", onCheckPlagiatFinish, 7000) // Async
 }

@@ -1,6 +1,7 @@
 from imports_servers import *
 from flask import Flask, request, jsonify, abort
 
+
 app = Flask(__name__)
 
 
@@ -75,6 +76,11 @@ def delete_course(course_id):
 @app.route('/create_exercise/', methods=["POST"])
 def create_exercise():
     exercise_id = create_new_exercise(json.loads(request.form["json"]))
+    if "zip" in request.files:
+        # upload_zip_custom_exercise(request.files["zip"], exercise_id)
+        print('----------------------------------')
+        print(exercise_id)
+        save_zip_exercise(request.files["zip"], exercise_id)
     if "file" in request.files:
         if not upload_pdf_instruction(request.files["file"], exercise_id):
             return abort(403)
@@ -84,6 +90,8 @@ def create_exercise():
 @app.route('/edit_exercise/<exercise_id>/', methods=["POST"])
 def edit_exercise(exercise_id):
     edit_old_exercise(json.loads(request.form["json"]), exercise_id)
+    if "zip" in request.files:
+        save_zip_exercise(request.files["zip"], exercise_id)
     if "file" in request.files:
         if not upload_pdf_instruction(request.files["file"], exercise_id):
             return abort(403)
@@ -92,6 +100,8 @@ def edit_exercise(exercise_id):
 
 @app.route('/delete_exercise/<exercise_id>/', methods=["POST"])
 def delete_exercise(exercise_id):
+    print("BEFORE FUNCTION")
+    # delete_zip_exercise(exercise_id)
     delete_old_exercise(exercise_id)
     return 'OK'
 
@@ -152,8 +162,7 @@ def download_grades_course():
     response = request.get_json()
     answer = dict()
     answer["grades"] = []
-    for exercise in response["all_submissions"]:
-        answer["grades"].extend(download_grades(exercise[0], exercise[1]))
+    answer["grades"].extend(download_all_grades(response["all_submissions"]))
     return answer
 
 
@@ -166,6 +175,10 @@ def download_statistics(exercise_id):
 @app.route('/download_instruction/<exercise_id>/', methods=["POST"])
 def download_instruction(exercise_id):
     return download_pdf_instruction(exercise_id)
+
+@app.route('/download_zip_exercise/<exercise_id>/', methods=["POST"])
+def download_zip_exercise(exercise_id):
+    return download_zip_custom_exercise(exercise_id)
 
 
 @app.route('/get_profile_data/<uid>/', methods=["POST"])

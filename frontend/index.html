@@ -12,22 +12,21 @@
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-auth.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-    <script src='util/firebaseConfig.js?version=5'></script>
-    <script type="text/javascript" src="util/utils.js?version=5"></script>
-    <script type="text/javascript" src="util/protocols/httpProtocol.js?version=5"></script>
+    <script src='util/firebaseConfig.js?version=6'></script>
+    <script type="text/javascript" src="util/utils.js?version=6"></script>
+    <script type="text/javascript" src="util/protocols/httpProtocol.js?version=6"></script>
 
     <!-- Import css. -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href='https://fonts.googleapis.com/css?family=Sofia' rel='stylesheet'>
-    <link rel="stylesheet" href="style/font.css?version=5">
-    <link rel="stylesheet" href="style/list.css?version=5">
-    <link rel="stylesheet" href="style/shared/shape.css?version=5">
-    <link rel="stylesheet" href="style/app/index.css?version=5">
-    <link rel="stylesheet" href="style/third_party/snackbar.css?version=5">
+    <link rel="stylesheet" href="style/font.css?version=6">
+    <link rel="stylesheet" href="style/list.css?version=6">
+    <link rel="stylesheet" href="style/shared/shape.css?version=6">
+    <link rel="stylesheet" href="style/app/index.css?version=6">
+    <link rel="stylesheet" href="style/third_party/snackbar.css?version=6">
 </head>
 
 <body>
@@ -84,6 +83,9 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a data-toggle="tab" href="#signin">Sign In</a></li>
                         <li><a data-toggle="tab" href="#menu1">Register</a></li>
+                        <h5 style="float: right;">
+                            <a data-toggle="tab" class="byline nav-tabs" style="color: #00bfff;text-decoration: underline;cursor: pointer;" href="#forgetpass">Forgot password ?</a>
+                        </h5>
                     </ul>
                     <div class="tab-content">
                         <div id="signin" class="tab-pane fade in active" style="background-color:rgb(211, 230, 241);">
@@ -92,19 +94,16 @@
                                     <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i>
                                     </div>
                                     <div class="w3-rest">
-                                        <input type="email" class="w3-input w3-border" id="txtEmail" name="email"
-                                            type="text" placeholder="Email">
+                                        <input type="email" class="w3-input w3-border" id="txtEmail" name="email" type="text" placeholder="Email">
                                     </div>
                                 </div>
                                 <div class="w3-row w3-section">
                                     <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-key"></i></div>
                                     <div class="w3-rest">
-                                        <input class="w3-input w3-border" type="password" id="txtPassword"
-                                            name="password" type="text" placeholder="Password">
+                                        <input class="w3-input w3-border" type="password" id="txtPassword" name="password" type="text" placeholder="Password">
                                     </div>
                                 </div>
-                                <button id="btnLogin" type="button"
-                                    class="w3-button w3-block w3-section w3-blue w3-ripple">Sign
+                                <button id="btnLogin" type="button" class="w3-button w3-block w3-section w3-blue w3-ripple">Sign
                                     in</button>
                             </p>
                         </div>
@@ -114,42 +113,52 @@
                                     <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i>
                                     </div>
                                     <div class="w3-rest">
-                                        <input type="email" class="w3-input w3-border" id="txtEmailSignIn" name="email"
-                                            type="text" placeholder="Email">
+                                        <input type="email" class="w3-input w3-border" id="txtEmailSignIn" name="email" type="text" placeholder="Email">
                                     </div>
                                 </div>
                                 <div class="w3-row w3-section">
                                     <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-key"></i></div>
                                     <div class="w3-rest">
-                                        <input class="w3-input w3-border" type="password" id="txtPasswordSignIn"
-                                            name="password" type="text" placeholder="Password">
+                                        <input class="w3-input w3-border" type="password" id="txtPasswordSignIn" name="password" type="text" placeholder="Password">
                                     </div>
                                 </div>
                                 <div class="w3-row w3-section">
                                     <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
                                     <div class="w3-rest">
-                                        <input class="w3-input w3-border" id="txtName" name="first" type="text"
-                                            placeholder="First Name">
+                                        <input class="w3-input w3-border" id="txtName" name="first" type="text" placeholder="First Name">
                                     </div>
                                 </div>
                                 <div class="w3-row w3-section">
                                     <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-user"></i></div>
                                     <div class="w3-rest">
-                                        <input class="w3-input w3-border" id="txtLastName" name="last" type="text"
-                                            placeholder="Last Name">
+                                        <input class="w3-input w3-border" id="txtLastName" name="last" type="text" placeholder="Last Name">
                                     </div>
                                 </div>
                                 <div class="w3-row w3-section">
                                     <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-id-card"></i>
                                     </div>
                                     <div class="w3-rest">
-                                        <input class="w3-input w3-border" id="txtId" name="last" type="text"
-                                            placeholder="Id">
+                                        <input class="w3-input w3-border" id="txtId" name="last" type="text" placeholder="Id">
                                     </div>
                                 </div>
-                                
-                                <button id="btnSignUp" type="button"
-                                    class="w3-button w3-block w3-section w3-blue w3-ripple">Register</button>
+
+                                <button id="btnSignUp" type="button" class="w3-button w3-block w3-section w3-blue w3-ripple">Register</button>
+                            </p>
+                        </div>
+                        <div id="forgetpass" class="tab-pane fade" style="background-color:rgb(211, 230, 241);">
+                            <p>
+                                <div class="w3-row w3-section">
+                                    <br>
+                                    <p>Please enter your email address below </p>
+                                    <p>and we will send you information to recover your account.</p>
+                                    <div class="w3-col" style="width:50px"><i class="w3-xxlarge fa fa-envelope-o"></i>
+                                    </div>
+                                    <div class="w3-rest">
+                                        <input type="email" class="w3-input w3-border" id="emailForgetPass" name="email" type="text" placeholder="Email">
+                                    </div>
+                                </div>
+                                <button id="btnReset" type="button" class="w3-button w3-block w3-section w3-blue w3-ripple">Reset Password</button>
+
                             </p>
                         </div>
                         <h4>
@@ -169,8 +178,8 @@
     <div class="sofia"> Badkan</div>
 
     <div id="snackbar"></div>
-    
-    <script type="text/javascript" src="app/index.js?version=5"></script>
+
+    <script type="text/javascript" src="app/index.js?version=6"></script>
 
 </body>
 
