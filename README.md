@@ -1,6 +1,7 @@
 # badkan
 A server for automatic checking and grading of programming assignments.
 
+
 ## Installing the database
 Badkan stores its data on a Firebase database.
  
